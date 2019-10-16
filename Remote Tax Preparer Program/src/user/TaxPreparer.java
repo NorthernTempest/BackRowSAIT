@@ -1,5 +1,6 @@
 package user;
 
-public class TaxPreparer {
+public class TaxPreparer 
+{
 
 }
