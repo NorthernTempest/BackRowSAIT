@@ -38,7 +38,7 @@ public class Parcel {
 	private boolean signatureRequired;
 	
 	/**
-	 * Date for when the parcel was sent.
+	 * Date for when the parcel was sent. This cannot be changed after the parcel is sent.
 	 */
 	private Date date;
 	
@@ -120,7 +120,7 @@ public class Parcel {
 	}
 	
 	/**
-	 * Sets the date for when the parcel is sent.
+	 * Sets the date for when the parcel is sent. This cannot be changed after the parcel has been sent.
 	 * @param date date sent
 	 */
 	public void setDate(Date date) {
