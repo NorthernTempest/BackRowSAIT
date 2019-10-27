@@ -9,7 +9,14 @@ package parcel;
  */
 public class Message {
 	
+	/**
+	 * The message object's subject line.
+	 */
 	private String subject;
+	
+	/**
+	 * The contents of the message object's message.
+	 */
 	private String message;
 	
 	/**

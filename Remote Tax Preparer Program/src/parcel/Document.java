@@ -2,14 +2,21 @@ package parcel;
 
 /**
  * 
- * Class Description: A class that encrypts or decrypts documents attached to a parcel object.
+ * Class Description: Class that encrypts or decrypts documents attached to a parcel object.
  *
  * @author Tristen Kreutz
  *
  */
 public class Document {
-	
+
+	/**
+	 * The information for linking data communication.
+	 */
 	private String dataLink;
+	
+	/**
+	 * Boolean for whether a signature has been provided or not.
+	 */
 	private Boolean signatureBool;
 	
 	/**
