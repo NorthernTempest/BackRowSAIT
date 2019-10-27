@@ -7,7 +7,7 @@ package parcel;
  * @author Tristen Kreutz
  *
  */
-public class Document {
+public abstract class Document {
 
 	/**
 	 * The information for linking data communication.
@@ -22,29 +22,21 @@ public class Document {
 	/**
 	 * Method to encrypt the contents within a file.
 	 */
-	public void encryptFile() {
-		
-	}
+	public abstract void encryptFile();
 	
 	/**
 	 * Method to decrypt the contents within a file.
 	 */
-	public void decryptFile() {
-		
-	}
+	public abstract void decryptFile();
 	
 	/**
 	 * Method to encrypt a data link for safe transit.
 	 */
-	public void encryptLink() {
-		
-	}
+	public abstract void encryptLink();
 	
 	/**
 	 * Method to decrypt a data link when received.
 	 */
-	public void decryptLink() {
-		
-	}
+	public abstract void decryptLink();
 }
 

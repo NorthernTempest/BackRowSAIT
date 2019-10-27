@@ -7,7 +7,7 @@ package parcel;
  * @author Tristen Kreutz
  *
  */
-public class Form {
+public class Form extends Document {
 	
 	/**
 	 * Reads the contents of an object stream.
@@ -20,6 +20,30 @@ public class Form {
 	 * Writes the contents of the form to an object stream.
 	 */
 	public void writeObject() {
+		
+	}
+
+	@Override
+	public void encryptFile() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void decryptFile() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void encryptLink() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void decryptLink() {
+		// TODO Auto-generated method stub
 		
 	}
 
