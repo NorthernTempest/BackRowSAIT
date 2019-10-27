@@ -12,7 +12,7 @@ import remoteTaxPreparerBackend.User;
  * @author Tristen Kreutz
  *
  */
-public class TaxReturns {
+public class TaxReturn {
 	
 	/**
 	 * Status of the tax return.
