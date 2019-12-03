@@ -11,151 +11,130 @@ import java.util.Date;
  *
  */
 public class Parcel {
+
+	private int parcelID;
 	
-	/**
-	 * A list containing documents that are attached to the parcel.
-	 */
 	private ArrayList<Document> documents;
 	
-	/**
-	 * A message to provide an overview or summary of the parcel's contents.
-	 */
 	private String message;
 	
-	/**
-	 * The information of the sending client.
-	 */
-	private String sender;
+	private User sender;
 	
-	/**
-	 * The information of the receiving client.
-	 */
-	private String receiver;
+	private User receiver;
 	
-	/**
-	 * Boolean for whether or not a signature is still required.
-	 */
-	private boolean signatureRequired;
+	private Date dateSent;
 	
-	/**
-	 * Date for when the parcel was sent. This cannot be changed after the parcel is sent.
-	 */
-	private Date date;
-	
-	/**
-	 * Date for when the parcel should be automatically deleted.
-	 */
 	private Date expirationDate;
-	
+
 	/**
-	 * Returns the contents of the parcel's message.
-	 * @return message
+	 * Returns the parcelID.
+	 * @return the parcelID
+	 */
+	public int getParcelID() {
+		return parcelID;
+	}
+
+	/**
+	 * Returns the documents.
+	 * @return the documents
+	 */
+	public ArrayList<Document> getDocuments() {
+		return documents;
+	}
+
+	/**
+	 * Returns the message.
+	 * @return the message
 	 */
 	public String getMessage() {
 		return message;
 	}
-	
+
 	/**
-	 * Sets the contents of the parcel's message.
-	 * @param message message contents
+	 * Returns the sender.
+	 * @return the sender
 	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	/**
-	 * Returns the information of the sending client.
-	 * @return sender information
-	 */
-	public String getSender() {
+	public User getSender() {
 		return sender;
 	}
-	
+
 	/**
-	 * Sets the information of the sending client.
-	 * @param sender sender information
+	 * Returns the receiver.
+	 * @return the receiver
 	 */
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
-	
-	/**
-	 * Returns the information of the receiving client.
-	 * @return receiver information
-	 */
-	public String getReceiver() {
+	public User getReceiver() {
 		return receiver;
 	}
-	
+
 	/**
-	 * Sets the information of the receiving client.
-	 * @param receiver receiver information
+	 * Returns the dateSent.
+	 * @return the dateSent
 	 */
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
+	public Date getDateSent() {
+		return dateSent;
 	}
-	
+
 	/**
-	 * Returns a boolean based on whether or not a signature required.
-	 * @return signatureRequired
-	 */
-	public boolean requiresSignature() {
-		return signatureRequired;
-	}
-	
-	/**
-	 * Sets the value of the signatureRequired boolean based on if the file has been signed.
-	 * @param signatureRequired signatureRequired
-	 */
-	public void setSignatureRequired(boolean signatureRequired) {
-		this.signatureRequired = signatureRequired;
-	}
-	
-	/**
-	 * Returns the date the parcel was sent.
-	 * @return date sent
-	 */
-	public Date getDate() {
-		return date;
-	}
-	
-	/**
-	 * Sets the date for when the parcel is sent. This cannot be changed after the parcel has been sent.
-	 * @param date date sent
-	 */
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
-	/**
-	 * Returns the date for when the parcel should be automatically deleted.
-	 * @return expirationDate
+	 * Returns the expirationDate.
+	 * @return the expirationDate
 	 */
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
-	
+
 	/**
-	 * Sets the expiration date for when the parcel should be automatically deleted.
-	 * @param expirationDate expirationDate
+	 * Sets the value of parcelID.
+	 * @param parcelID the parcelID to set
 	 */
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
+	public void setParcelID(int parcelID) {
+		this.parcelID = parcelID;
 	}
 
 	/**
-	 * Adds a document to the parcel.
-	 * @param d document to add
+	 * Sets the value of documents.
+	 * @param documents the documents to set
 	 */
-	public void addDocument(Document d) {
-		
+	public void setDocuments(ArrayList<Document> documents) {
+		this.documents = documents;
 	}
-	
+
 	/**
-	 * Removes a document from the parcel.
-	 * @param i index to remove
+	 * Sets the value of message.
+	 * @param message the message to set
 	 */
-	public void removeDocument(int i) {
-		
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * Sets the value of sender.
+	 * @param sender the sender to set
+	 */
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
+
+	/**
+	 * Sets the value of receiver.
+	 * @param receiver the receiver to set
+	 */
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
+	}
+
+	/**
+	 * Sets the value of dateSent.
+	 * @param dateSent the dateSent to set
+	 */
+	public void setDateSent(Date dateSent) {
+		this.dateSent = dateSent;
+	}
+
+	/**
+	 * Sets the value of expirationDate.
+	 * @param expirationDate the expirationDate to set
+	 */
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 }

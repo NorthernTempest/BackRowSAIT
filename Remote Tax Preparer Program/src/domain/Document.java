@@ -9,34 +9,76 @@ package domain;
  */
 public abstract class Document {
 
-	/**
-	 * The information for linking data communication.
-	 */
-	private String dataLink;
+	private String filePath;
 	
-	/**
-	 * Boolean for whether a signature has been provided or not.
-	 */
-	private Boolean signatureBool;
+	private boolean isSigned;
 	
-	/**
-	 * Method to encrypt the contents within a file.
-	 */
-	public abstract void encryptFile();
+	private boolean requiresSignature;
 	
+	private int parcelID;
+
 	/**
-	 * Method to decrypt the contents within a file.
+	 * Returns the filePath.
+	 * @return the filePath
 	 */
-	public abstract void decryptFile();
-	
+	public String getFilePath() {
+		return filePath;
+	}
+
 	/**
-	 * Method to encrypt a data link for safe transit.
+	 * Returns the isSigned.
+	 * @return the isSigned
 	 */
-	public abstract void encryptLink();
-	
+	public boolean isSigned() {
+		return isSigned;
+	}
+
 	/**
-	 * Method to decrypt a data link when received.
+	 * Returns the requiresSignature.
+	 * @return the requiresSignature
 	 */
-	public abstract void decryptLink();
+	public boolean isRequiresSignature() {
+		return requiresSignature;
+	}
+
+	/**
+	 * Returns the parcelID.
+	 * @return the parcelID
+	 */
+	public int getParcelID() {
+		return parcelID;
+	}
+
+	/**
+	 * Sets the value of filePath.
+	 * @param filePath the filePath to set
+	 */
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	/**
+	 * Sets the value of isSigned.
+	 * @param isSigned the isSigned to set
+	 */
+	public void setSigned(boolean isSigned) {
+		this.isSigned = isSigned;
+	}
+
+	/**
+	 * Sets the value of requiresSignature.
+	 * @param requiresSignature the requiresSignature to set
+	 */
+	public void setRequiresSignature(boolean requiresSignature) {
+		this.requiresSignature = requiresSignature;
+	}
+
+	/**
+	 * Sets the value of parcelID.
+	 * @param parcelID the parcelID to set
+	 */
+	public void setParcelID(int parcelID) {
+		this.parcelID = parcelID;
+	}
 }
 

@@ -12,66 +12,93 @@ import java.util.Date;
  */
 public class Household {
 	
-	/**
-	 * List of customers added to household.
-	 */
-	private ArrayList<User> customers;
+	private int householdID;
 	
-	/**
-	 * Date containing the value of when the household was created.
-	 */
+	private String householdName;
+	
+	private ArrayList<User> householdMembers;
+	
 	private Date startDate;
 	
-	/**
-	 * Date containing the value of when the household should be automatically deleted.
-	 */
 	private Date endDate;
-	
+
 	/**
-	 * Returns the date for when the household was created.
-	 * @return startDate
+	 * Returns the householdID.
+	 * @return the householdID
+	 */
+	public int getHouseholdID() {
+		return householdID;
+	}
+
+	/**
+	 * Returns the householdName.
+	 * @return the householdName
+	 */
+	public String getHouseholdName() {
+		return householdName;
+	}
+
+	/**
+	 * Returns the householdMembers.
+	 * @return the householdMembers
+	 */
+	public ArrayList<User> getHouseholdMembers() {
+		return householdMembers;
+	}
+
+	/**
+	 * Returns the startDate.
+	 * @return the startDate
 	 */
 	public Date getStartDate() {
 		return startDate;
 	}
-	
+
 	/**
-	 * Sets the date for when the household was created.
-	 * @param startDate startDate
-	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	
-	/**
-	 * Returns the date for when the household should be automatically deleted.
-	 * @return endDate
+	 * Returns the endDate.
+	 * @return the endDate
 	 */
 	public Date getEndDate() {
 		return endDate;
 	}
-	
+
 	/**
-	 * Sets the date for when the household should be automatically deleted.
-	 * @param endDate endDate
+	 * Sets the value of householdID.
+	 * @param householdID the householdID to set
+	 */
+	public void setHouseholdID(int householdID) {
+		this.householdID = householdID;
+	}
+
+	/**
+	 * Sets the value of householdName.
+	 * @param householdName the householdName to set
+	 */
+	public void setHouseholdName(String householdName) {
+		this.householdName = householdName;
+	}
+
+	/**
+	 * Sets the value of householdMembers.
+	 * @param householdMembers the householdMembers to set
+	 */
+	public void setHouseholdMembers(ArrayList<User> householdMembers) {
+		this.householdMembers = householdMembers;
+	}
+
+	/**
+	 * Sets the value of startDate.
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	/**
+	 * Sets the value of endDate.
+	 * @param endDate the endDate to set
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-	}
-	
-	/**
-	 * Adds a customer object to the household.
-	 * @param customer customer to add
-	 */
-	public void addCustomer(User customer) {
-		
-	}
-	
-	/**
-	 * Removes a customer object from the household.
-	 * @param i index to remove
-	 */
-	public void removeCustomer(int i) {
-		
 	}
 }
