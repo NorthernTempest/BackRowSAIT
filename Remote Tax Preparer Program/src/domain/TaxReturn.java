@@ -1,9 +1,7 @@
-package taxBundle;
+package domain;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import remoteTaxPreparerBackend.User;
 
 /**
  * 

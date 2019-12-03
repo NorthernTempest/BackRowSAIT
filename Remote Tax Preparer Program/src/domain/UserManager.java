@@ -1,4 +1,4 @@
-package remoteTaxPreparerBackend;
+package domain;
 
 /**
  * 

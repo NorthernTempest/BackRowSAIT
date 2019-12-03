@@ -1,4 +1,4 @@
-package taxBundle;
+package domain;
 
 import java.util.ArrayList;
 

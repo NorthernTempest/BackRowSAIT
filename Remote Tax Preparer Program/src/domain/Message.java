@@ -1,4 +1,4 @@
-package parcel;
+package domain;
 
 /**
  * 

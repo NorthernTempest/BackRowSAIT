@@ -1,4 +1,4 @@
-package parcel;
+package domain;
 
 import java.util.ArrayList;
 import java.util.Date;
