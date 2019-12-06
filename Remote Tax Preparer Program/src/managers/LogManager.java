@@ -25,4 +25,12 @@ public class LogManager {
 	public ArrayList<Log> getAll() {
 		return null;
 	}
+	
+	public int checkAttempts(String email) {
+		return 0;
+	}
+	
+	public void insertLogin(String email, String ip) {
+		
+	}
 }

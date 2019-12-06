@@ -17,10 +17,6 @@ public class Household {
 	private String householdName;
 	
 	private ArrayList<User> householdMembers;
-	
-	private Date startDate;
-	
-	private Date endDate;
 
 	/**
 	 * Returns the householdID.
@@ -47,22 +43,6 @@ public class Household {
 	}
 
 	/**
-	 * Returns the startDate.
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	/**
-	 * Returns the endDate.
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	/**
 	 * Sets the value of householdID.
 	 * @param householdID the householdID to set
 	 */
@@ -84,21 +64,5 @@ public class Household {
 	 */
 	public void setHouseholdMembers(ArrayList<User> householdMembers) {
 		this.householdMembers = householdMembers;
-	}
-
-	/**
-	 * Sets the value of startDate.
-	 * @param startDate the startDate to set
-	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	/**
-	 * Sets the value of endDate.
-	 * @param endDate the endDate to set
-	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
 	}
 }

@@ -36,6 +36,14 @@ public class User {
 	private String language;
 	
 	private String address;
+	
+	public User() {
+		
+	}
+	
+	public User(String email, String fname, String lname, String phone, String passHash, String language, String address) {
+		
+	}
 
 	/**
 	 * Returns the email.

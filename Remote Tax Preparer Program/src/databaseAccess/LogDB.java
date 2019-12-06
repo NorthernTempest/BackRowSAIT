@@ -22,6 +22,10 @@ public class LogDB {
 		return null;
 	}
 	
+	public ArrayList<Log> getByEmail(String email) {
+		return null;
+	}
+	
 	public ArrayList<Log> getAll() {
 		return null;
 	}

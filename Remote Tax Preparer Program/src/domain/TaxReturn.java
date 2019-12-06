@@ -14,11 +14,9 @@ public class TaxReturn {
 	
 	private int taxReturnID;
 	
-	private User taxReturnUser;
+	private User user;
 	
-	private ArrayList<User> taxPreparersList;
-	
-	private ArrayList<Document> documents;
+	private ArrayList<User> taxPreparers;
 	
 	private String status;
 	
@@ -26,7 +24,7 @@ public class TaxReturn {
 	
 	private double cost;
 	
-	private Date year;
+	private int year;
 
 	/**
 	 * Returns the taxReturnID.
@@ -37,27 +35,19 @@ public class TaxReturn {
 	}
 
 	/**
-	 * Returns the taxReturnUser.
-	 * @return the taxReturnUser
+	 * Returns the user.
+	 * @return the user
 	 */
-	public User getTaxReturnUser() {
-		return taxReturnUser;
+	public User getUser() {
+		return user;
 	}
 
 	/**
-	 * Returns the taxPreparersList.
-	 * @return the taxPreparersList
+	 * Returns the taxPreparers.
+	 * @return the taxPreparers
 	 */
-	public ArrayList<User> getTaxPreparersList() {
-		return taxPreparersList;
-	}
-
-	/**
-	 * Returns the documents.
-	 * @return the documents
-	 */
-	public ArrayList<Document> getDocuments() {
-		return documents;
+	public ArrayList<User> getTaxPreparers() {
+		return taxPreparers;
 	}
 
 	/**
@@ -88,7 +78,7 @@ public class TaxReturn {
 	 * Returns the year.
 	 * @return the year
 	 */
-	public Date getYear() {
+	public int getYear() {
 		return year;
 	}
 
@@ -101,27 +91,19 @@ public class TaxReturn {
 	}
 
 	/**
-	 * Sets the value of taxReturnUser.
-	 * @param taxReturnUser the taxReturnUser to set
+	 * Sets the value of user.
+	 * @param user the user to set
 	 */
-	public void setTaxReturnUser(User taxReturnUser) {
-		this.taxReturnUser = taxReturnUser;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	/**
-	 * Sets the value of taxPreparersList.
-	 * @param taxPreparersList the taxPreparersList to set
+	 * Sets the value of taxPreparers.
+	 * @param taxPreparers the taxPreparers to set
 	 */
-	public void setTaxPreparersList(ArrayList<User> taxPreparersList) {
-		this.taxPreparersList = taxPreparersList;
-	}
-
-	/**
-	 * Sets the value of documents.
-	 * @param documents the documents to set
-	 */
-	public void setDocuments(ArrayList<Document> documents) {
-		this.documents = documents;
+	public void setTaxPreparers(ArrayList<User> taxPreparers) {
+		this.taxPreparers = taxPreparers;
 	}
 
 	/**
@@ -152,7 +134,9 @@ public class TaxReturn {
 	 * Sets the value of year.
 	 * @param year the year to set
 	 */
-	public void setYear(Date year) {
+	public void setYear(int year) {
 		this.year = year;
 	}
+
+	
 }

@@ -1,12 +1,30 @@
 package domain;
 
+import java.util.Date;
+
 public class Log {
 
 	private int logID;
 	
-	private String userEmail;
+	private String email;
 	
-	private String logDescription;
+	private String message;
+	
+	private char type;
+	
+	private Date date;
+	
+	private String ip;
+	
+	private char LOGIN_ATTEMPT;
+	
+	public Log() {
+		
+	}
+	
+	public Log(String email, String ip, char type, Date date) {
+		
+	}
 
 	/**
 	 * Returns the logID.
@@ -17,19 +35,43 @@ public class Log {
 	}
 
 	/**
-	 * Returns the userEmail.
-	 * @return the userEmail
+	 * Returns the email.
+	 * @return the email
 	 */
-	public String getUserEmail() {
-		return userEmail;
+	public String getEmail() {
+		return email;
 	}
 
 	/**
-	 * Returns the logDescription.
-	 * @return the logDescription
+	 * Returns the message.
+	 * @return the message
 	 */
-	public String getLogDescription() {
-		return logDescription;
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * Returns the type.
+	 * @return the type
+	 */
+	public char getType() {
+		return type;
+	}
+
+	/**
+	 * Returns the date.
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * Returns the ip.
+	 * @return the ip
+	 */
+	public String getIp() {
+		return ip;
 	}
 
 	/**
@@ -41,18 +83,46 @@ public class Log {
 	}
 
 	/**
-	 * Sets the value of userEmail.
-	 * @param userEmail the userEmail to set
+	 * Sets the value of email.
+	 * @param email the email to set
 	 */
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**
-	 * Sets the value of logDescription.
-	 * @param logDescription the logDescription to set
+	 * Sets the value of message.
+	 * @param message the message to set
 	 */
-	public void setLogDescription(String logDescription) {
-		this.logDescription = logDescription;
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * Sets the value of type.
+	 * @param type the type to set
+	 */
+	public void setType(char type) {
+		this.type = type;
+	}
+
+	/**
+	 * Sets the value of date.
+	 * @param date the date to set
+	 */
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	/**
+	 * Sets the value of ip.
+	 * @param ip the ip to set
+	 */
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public boolean isloggedOut(String email) {
+		return false;
 	}
 }
