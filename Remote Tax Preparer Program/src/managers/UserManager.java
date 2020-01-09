@@ -97,4 +97,16 @@ public class UserManager {
 	public Properties getAccountInfo(String email) {
 		return null;
 	}
+	
+	/**
+	 * Utilizing the parameters that have been passed, this method verifies with the
+	 * User database to check whether or not the user is currently logged in somewhere.
+	 * @param email email to check
+	 * @param password password to check
+	 * @param ip ip to check
+	 * @return boolean
+	 */
+	public boolean loggedIn(String email, String password, String ip) {
+		return false;
+	}
 }
