@@ -109,4 +109,30 @@ public class UserManager {
 	public boolean loggedIn(String email, String password, String ip) {
 		return false;
 	}
+	
+	/**
+	 * Method to generate and return a String value containing a recovery key for the
+	 * user that is utilized in identity verification for recovering an account.
+	 * @return recovery key
+	 */
+	public String generateRecoveryKey() {
+		return null;
+	}
+	
+	/**
+	 * Sends an email to the specified user containing the generated recovery key.
+	 * @return boolean
+	 */
+	public boolean sendRecoveryEmail() {
+		return false;
+	}
+	
+	/**
+	 * Takes the recovery key that was entered by the user and compares it to the key
+	 * that was generated and sent to their email.
+	 * @return boolean
+	 */
+	public boolean verifyRecoveryKey() {
+		return false;
+	}
 }
