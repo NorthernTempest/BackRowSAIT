@@ -61,4 +61,16 @@ public class ParcelManager {
 	public ArrayList<Parcel> getAll() {
 		return null;
 	}
+	
+	/**
+	 * Method that, using the supplied taxReturnID and email, retrieves all
+	 * parcels in the database with that information and returns a list
+	 * to the calling program.
+	 * @param taxReturnID taxReturnID
+	 * @param email email
+	 * @return ArrayList<Parcel> containing related parcels
+	 */
+	public ArrayList<Parcel> viewAll(String taxReturnID, String email) {
+		return null;
+	}
 }
