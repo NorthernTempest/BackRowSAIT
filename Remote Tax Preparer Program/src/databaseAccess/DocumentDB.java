@@ -6,7 +6,7 @@ import domain.Document;
 
 /**
  * 
- * Class Description: 	Class that establishes a connection and communicates directly
+ * Class Description: 	EH! Class that establishes a connection and communicates directly
  * 						with the document table in the database.
  *
  * @author Tristen Kreutz
