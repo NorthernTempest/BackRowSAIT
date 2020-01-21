@@ -16,14 +16,21 @@ public class Log {
 	
 	private String ip;
 	
-	private char LOGIN_ATTEMPT;
-	
-	public Log() {
+	public Log(String email, String ip, char type) {
 		
+		setEmail(email);
+		setIp(ip);
+		setType(type);
+		setDate(new Date());
 	}
 	
-	public Log(String email, String ip, char type, Date date) {
+	public Log(int logID, String email, String ip, char type, Date date) {
 		
+		setLogID(logID);
+		setEmail(email);
+		setIp(ip);
+		setType(type);
+		setDate(date);
 	}
 
 	/**
@@ -103,7 +110,20 @@ public class Log {
 	 * @param type the type to set
 	 */
 	public void setType(char type) {
-		this.type = type;
+		
+		switch(type) {
+		
+			case 'L':
+			case 'E':
+			case 'X':
+			case 'S':
+				this.type = type;
+				break;
+			
+			default:
+				System.out.println("Incorrect type character.");
+				break;
+		}
 	}
 
 	/**
