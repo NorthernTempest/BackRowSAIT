@@ -38,8 +38,7 @@ public class AuthenticationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		
-		
-		if( SessionManager.isSessionActive( session.getId() ) )
+		if( SessionManager.isSessionActive( session.getId() ) && ((HttpServletRequest) request).getContextPath() == "/login" )
 			chain.doFilter(request, response);
 		else
 			((HttpServletResponse) response).sendRedirect( "login" );
