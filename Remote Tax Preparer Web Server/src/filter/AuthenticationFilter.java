@@ -49,5 +49,4 @@ public class AuthenticationFilter implements Filter {
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
 	}
-
 }
