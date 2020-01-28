@@ -9,10 +9,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import manager.SessionManager;
-import manager.UserManager;
 
 /**
  * Servlet Filter implementation class AuthenticationFilter
@@ -41,6 +41,8 @@ public class AuthenticationFilter implements Filter {
 		
 		if( SessionManager.isSessionActive( session.getId() ) )
 			chain.doFilter(request, response);
+		else
+			((HttpServletResponse) response).sendRedirect( "login" );
 	}
 
 	/**
