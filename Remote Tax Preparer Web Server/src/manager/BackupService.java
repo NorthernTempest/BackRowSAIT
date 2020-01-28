@@ -1,4 +1,4 @@
-package managers;
+package manager;
 
 /**
  * Class Description: 	Service manager class that handles backup and restore operations of the entire

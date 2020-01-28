@@ -1,4 +1,4 @@
-package managers;
+package manager;
 
 import java.util.ArrayList;
 
@@ -14,6 +14,7 @@ import domain.Session;
  */
 public class SessionManager {
 
+	// Should not do this
 	/**
 	 * Takes the Session object passed into the method and calls the insert method
 	 * of the SessionDB, passing the Session.
@@ -23,7 +24,8 @@ public class SessionManager {
 	public boolean insert(Session session) {
 		return false;
 	}
-	
+
+	// Should not do this
 	/**
 	 * Takes the sessionID passed into the method and calls the delete method
 	 * of the SessionDB, passing the sessionID.
@@ -33,7 +35,8 @@ public class SessionManager {
 	public boolean delete(String sessionID) {
 		return false;
 	}
-	
+
+	// Should not do this
 	/**
 	 * Takes the sessionID passed into the method and calls the get method
 	 * of the SessionDB, passing the sessionID.
@@ -43,7 +46,8 @@ public class SessionManager {
 	public Session get(String sessionID) {
 		return null;
 	}
-	
+
+	// Should not do this
 	/**
 	 * Calls the getAll method of the SessionDB.
 	 * @return ArrayList<Session> containing all the Sessions in the database
@@ -58,7 +62,7 @@ public class SessionManager {
 	 * @param sessionID sessionID to check
 	 * @return boolean based on whether or not the current Session is active
 	 */
-	public boolean isSessionActive(String sessionID) {
+	public static boolean isSessionActive(String sessionID) {
 		return false;
 	}
 	
@@ -68,7 +72,7 @@ public class SessionManager {
 	 * @param email email to create a Session object for
 	 * @return String
 	 */
-	public String createSession(String email) {
+	public static String createSession(String email) {
 		return null;
 	}
 }

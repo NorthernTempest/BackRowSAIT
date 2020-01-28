@@ -1,4 +1,4 @@
-package managers;
+package manager;
 
 /**
  * Class Description:

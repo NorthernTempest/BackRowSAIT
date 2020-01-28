@@ -1,4 +1,4 @@
-package managers;
+package manager;
 
 import java.util.ArrayList;
 import java.util.Properties;
