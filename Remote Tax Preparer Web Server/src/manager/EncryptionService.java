@@ -31,9 +31,6 @@ import domain.Document;
  *
  */
 public class EncryptionService {
-	
-	final String key = "fM,w9~A8u>(B[uqH4<Z33e>G33&\"wxJm<enFZp-iGl!'0K:C0MUH+yFEa[2*2i_";
-
 	/**
 	 * Takes the String passed into the method and hashes it for security purposes.
 	 * 
@@ -84,8 +81,9 @@ public class EncryptionService {
 		//get key TODO 
 		File inFile = new File(filepath);
 		File outFile = new File(filepath + "outputTEMP");
+		String key = null;
 		try {
-			Key secretKey = new SecretKeySpec(key.getBytes(), "AES");
+			Key secretKey = new SecretKeySpec( key.getBytes(), "AES");
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE,  secretKey);
 			
@@ -97,7 +95,10 @@ public class EncryptionService {
 			FileOutputStream fos = new FileOutputStream(outFile);
 					
 		}
-		catch(  )
+		catch( Exception e )
+		{
+			
+		}
 		
 		return null;
 	}
