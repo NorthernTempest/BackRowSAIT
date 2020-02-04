@@ -9,6 +9,7 @@ package domain;
  */
 public abstract class Document {
 
+	// Test note
 	private String filePath;
 	
 	private boolean isSigned;

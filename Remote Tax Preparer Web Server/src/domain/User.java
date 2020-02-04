@@ -42,7 +42,7 @@ public class User {
 	}
 	
 	public User(String email, String fname, String lname, String phone, String passHash, String language, String address) {
-		
+		// Test note
 	}
 
 	/**
