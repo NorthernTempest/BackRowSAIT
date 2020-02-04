@@ -97,7 +97,7 @@ public class EncryptionService {
 			FileOutputStream fos = new FileOutputStream(outFile);
 					
 		}
-		
+		catch(  )
 		
 		return null;
 	}
