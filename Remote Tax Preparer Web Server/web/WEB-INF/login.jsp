@@ -16,6 +16,7 @@
     <div class="form-group col-md-6">
         <label for="password">Password</label>
         <input type="password" id="password" name="password" class="form-control">
+    </div>
     <div class="form-group col-md-6">
         <button type="submit" class="btn btn-primary">Log in</button>
         <c:choose>
