@@ -1,34 +1,23 @@
 package manager;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import domain.Document;
 
@@ -38,7 +27,6 @@ import domain.Document;
  * security.
  *
  * @author Cesar Guzman, Jesse Goerzen, Taylor Hanlon, Tristen Kreutz
- *
  */
 public class EncryptionService {
 	
@@ -46,10 +34,11 @@ public class EncryptionService {
 	private static final String CONFIG_CIPHER = "cipher:";
 	private static final String CONFIG_KEY_PATH = "keypath:";
 	private static final String CONFIG_SALT_PATH = "saltpath:";
-	private static final String KEY_ALGORITHM = "PBBKDF2WithHmacSHA1";
-	private static final String TEXT_FORMAT = "UTF8";
-	private static final int ITERATION_COUNT = 65536;
-	private static final int KEY_LENGTH = 128;
+	private static final String CONFIG_KEY_ALGORITHM = "keyalgor:";
+	private static final String CONFIG_TEXT_FORMAT = "txtfmt:";
+	private static final String CONFIG_ITERATION_COUNT = "itercount:";
+	private static final String CONFIG_KEY_LENGTH = "keylen:";
+	private static final String CONFIG_ENCRYPTED_FILES_DIR = "encfiles:";
 	
 	/**
 	 * Takes the String passed into the method and hashes it for security purposes.
@@ -87,12 +76,12 @@ public class EncryptionService {
 	 * @throws InvalidKeyException 
 	 * @throws IOException 
 	 */
-	public Document encryptDocument(String filepath) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
+	public Document encryptDocument( String filepath ) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
 		
 		Cipher cipher = getCipher();
-		SecretKey key = getKey( fetchFromConfig( CONFIG_KEY_PATH ), fetchFromConfig( CONFIG_SALT_PATH ) );
+		SecretKey key = getKey( fetchContents( fetchFromConfig( CONFIG_KEY_PATH ) ), fetchContents( fetchFromConfig( CONFIG_SALT_PATH ) ) );
 		
-		String outputPath = null; //TODO
+		String outputPath = getEncryptedFilepath();
 		
 		try( FileInputStream in =  new FileInputStream( filepath ); FileOutputStream out = new FileOutputStream( outputPath ); CipherOutputStream cipherOut = new CipherOutputStream( out, cipher ) ) {
 			
@@ -144,19 +133,38 @@ public class EncryptionService {
 		return Base64.getEncoder().encodeToString(saltBytes);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchPaddingException
+	 */
 	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException
 	{
 		return Cipher.getInstance( fetchFromConfig( CONFIG_CIPHER ) );
 	}
 	
+	/**
+	 * 
+	 * @param toHash
+	 * @param salt
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
 	private static SecretKey getKey( String toHash, String salt ) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
-		KeySpec spec = new PBEKeySpec( toHash.toCharArray(), salt.getBytes(), ITERATION_COUNT, KEY_LENGTH );
-		SecretKeyFactory skf = SecretKeyFactory.getInstance( KEY_ALGORITHM );
+		KeySpec spec = new PBEKeySpec( toHash.toCharArray(), salt.getBytes(), Integer.parseInt( fetchFromConfig( CONFIG_ITERATION_COUNT ) ), Integer.parseInt( fetchFromConfig( CONFIG_KEY_LENGTH ) ) );
+		SecretKeyFactory skf = SecretKeyFactory.getInstance( fetchFromConfig( CONFIG_KEY_ALGORITHM ) );
 		
 		return skf.generateSecret( spec );
 	}
 	
+	/**
+	 * 
+	 * @param option
+	 * @return
+	 */
 	private static String fetchFromConfig( String option )
 	{
 		Scanner s = new Scanner( CONFIG_FILE_PATH );
@@ -168,5 +176,28 @@ public class EncryptionService {
 		}
 		
 		return line.substring( option.length() );
+	}
+	
+	/**
+	 * 
+	 * @param filePath
+	 * @return
+	 */
+	private static String fetchContents( String filePath )
+	{
+		Scanner s = new Scanner( filePath );
+		String line = s.nextLine();
+		
+		while( line != null && !line.equals( "" ) )
+		{
+			line += s.nextLine();
+		}
+		
+		return line;
+	}
+	
+	private static String getEncryptedFilepath()
+	{
+		return fetchFromConfig( "CONFIG_ENCRYPTED_FILES_DIR" ) + getSalt() + ".secure";
 	}
 }
