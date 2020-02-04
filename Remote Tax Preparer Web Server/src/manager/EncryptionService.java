@@ -1,20 +1,30 @@
 package manager;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.UUID;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -31,6 +41,16 @@ import domain.Document;
  *
  */
 public class EncryptionService {
+	
+	private static final String CONFIG_FILE_PATH = "res/config.txt";
+	private static final String CONFIG_CIPHER = "cipher:";
+	private static final String CONFIG_KEY_PATH = "keypath:";
+	private static final String CONFIG_SALT_PATH = "saltpath:";
+	private static final String KEY_ALGORITHM = "PBBKDF2WithHmacSHA1";
+	private static final String TEXT_FORMAT = "UTF8";
+	private static final int ITERATION_COUNT = 65536;
+	private static final int KEY_LENGTH = 128;
+	
 	/**
 	 * Takes the String passed into the method and hashes it for security purposes.
 	 * 
@@ -40,22 +60,8 @@ public class EncryptionService {
 	 * @throws InvalidKeySpecException
 	 */
 	public String hash(String toHash, String salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
-		/*
-		 * MessageDigest md = MessageDigest.getInstance("SHA-256"); md.reset();
-		 * 
-		 * md.update(toHash.getBytes());
-		 * 
-		 * byte[] mdArray = md.digest(); StringBuilder sb = new
-		 * StringBuilder(mdArray.length * 2);
-		 * 
-		 * for (byte b : mdArray) { int i = b & 0xff; if (i < 16) { sb.append('0'); }
-		 * sb.append(Integer.toHexString(i)); } return sb.toString();
-		 */
 
-		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(), 65536, 128);
-		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBBKDF2WithHmacSHA1");
-
-		byte[] hash = factory.generateSecret(spec).getEncoded();
+		byte[] hash = getKey( toHash, salt ).getEncoded();
 
 		StringBuilder sb = new StringBuilder(hash.length * 2);
 
@@ -75,28 +81,20 @@ public class EncryptionService {
 	 * 
 	 * @param filepath filepath of the file to encrypt
 	 * @return encrypted file
+	 * @throws NoSuchPaddingException 
+	 * @throws NoSuchAlgorithmException 
+	 * @throws InvalidKeySpecException 
+	 * @throws InvalidKeyException 
+	 * @throws IOException 
 	 */
-	public Document encryptDocument(String filepath) {
-		//TODO
-		//get key TODO 
-		File inFile = new File(filepath);
-		File outFile = new File(filepath + "outputTEMP");
-		String key = null;
-		try {
-			Key secretKey = new SecretKeySpec( key.getBytes(), "AES");
-			Cipher cipher = Cipher.getInstance("AES");
-			cipher.init(Cipher.ENCRYPT_MODE,  secretKey);
-			
-			FileInputStream fis = new FileInputStream(inFile);
-			byte[] inBytes = new byte[(int) inFile.length()];
-			fis.read(inBytes);
-			
-			byte[] outBytes = cipher.doFinal(inBytes);
-			FileOutputStream fos = new FileOutputStream(outFile);
-					
-		}
-		catch( Exception e )
-		{
+	public Document encryptDocument(String filepath) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
+		
+		Cipher cipher = getCipher();
+		SecretKey key = getKey( fetchFromConfig( CONFIG_KEY_PATH ), fetchFromConfig( CONFIG_SALT_PATH ) );
+		
+		String outputPath = null; //TODO
+		
+		try( FileInputStream in =  new FileInputStream( filepath ); FileOutputStream out = new FileOutputStream( outputPath ); CipherOutputStream cipherOut = new CipherOutputStream( out, cipher ) ) {
 			
 		}
 		
@@ -135,7 +133,7 @@ public class EncryptionService {
 	}
 
 	/**
-	 * Returns the salt
+	 * Returns a salt string
 	 * 
 	 * @return the salt
 	 */
@@ -146,4 +144,29 @@ public class EncryptionService {
 		return Base64.getEncoder().encodeToString(saltBytes);
 	}
 	
+	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException
+	{
+		return Cipher.getInstance( fetchFromConfig( CONFIG_CIPHER ) );
+	}
+	
+	private static SecretKey getKey( String toHash, String salt ) throws NoSuchAlgorithmException, InvalidKeySpecException
+	{
+		KeySpec spec = new PBEKeySpec( toHash.toCharArray(), salt.getBytes(), ITERATION_COUNT, KEY_LENGTH );
+		SecretKeyFactory skf = SecretKeyFactory.getInstance( KEY_ALGORITHM );
+		
+		return skf.generateSecret( spec );
+	}
+	
+	private static String fetchFromConfig( String option )
+	{
+		Scanner s = new Scanner( CONFIG_FILE_PATH );
+		String line = s.nextLine();
+		
+		while( line != null && !line.equals( "" ) && !line.startsWith( option ) )
+		{
+			line = s.nextLine();
+		}
+		
+		return line.substring( option.length() );
+	}
 }

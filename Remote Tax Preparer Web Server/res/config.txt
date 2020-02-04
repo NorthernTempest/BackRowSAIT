@@ -1,0 +1,3 @@
+cipher:AES/CBC/PKCS5Padding
+keypath:C:\key.txt
+saltpath:C:\salt.txt
