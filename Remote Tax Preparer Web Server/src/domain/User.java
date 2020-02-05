@@ -17,7 +17,7 @@ public class User {
 	
 	private String lName;
 	
-	private char permissionLevel;
+	private int permissionLevel;
 	
 	private String phone;
 	
@@ -36,6 +36,16 @@ public class User {
 	private String language;
 	
 	private String address;
+	
+	private final int DEFAULT = 0;
+	
+	private final int USER = 1;
+	
+	private final int TAX_PREPARER = 2;
+	
+	private final int ADMIN = 3;
+	
+	private final int SYSADMIN = 4;
 	
 	public User() {
 		
@@ -83,7 +93,7 @@ public class User {
 	 * Returns the permissionLevel.
 	 * @return the permissionLevel
 	 */
-	public char getPermissionLevel() {
+	public int getPermissionLevel() {
 		
 		return permissionLevel;
 	}
@@ -200,9 +210,20 @@ public class User {
 	 * Sets the value of permissionLevel.
 	 * @param permissionLevel the permissionLevel to set
 	 */
-	public void setPermissionLevel(char permissionLevel) {
+	public void setPermissionLevel(int permissionLevel) {
 		
-		this.permissionLevel = permissionLevel;
+		switch (permissionLevel) {
+		
+			case USER:
+			case TAX_PREPARER:
+			case ADMIN:
+			case SYSADMIN:
+				this.permissionLevel = permissionLevel;
+				break;
+				
+			default:
+				System.out.println("Incorrect role value.");
+		}
 	}
 
 	/**
