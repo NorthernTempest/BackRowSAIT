@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MCL Taxes & Bookkeeping</title>
+    <?-- CSS -->
+    <link rel="stylesheet" href="../template/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../template/css/mcl-main.css">
+    <?-- Javascript -->
+    <script type="text/javascript" src="../template/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="../template/js/bootstrap.js"></script>
+    <script src="https://kit.fontawesome.com/1213a7076a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="main">
+    <div class="text-center" id="logo">
+        <img id="logo-image" src="../template/img/MCL-logo-large.png" width="283px"/>
+        <i id="burger" class="fas fa-bars" onclick="toggleNav()"></i>
+    </div>
+
+    <div class="block text-center" id="nav">
+      <span class="nav-selected nav-first">
+        <a href="">Home</a>
+      </span>
+        <span class="nav-separator">|</span>
+        <span class="nav-item">
+        <a href="">Our Services</a>
+      </span>
+        <span class="nav-separator">|</span>
+        <span class="nav-item">
+        <a href="">About Us</a>
+      </span>
+        <span class="nav-separator">|</span>
+        <span class="nav-item">
+        <a href="">Contact</a>
+      </span>
+        <span class="nav-separator">|</span>
+        <span class="nav-item">
+        <a href="">Customers</a>
+      </span>
+    </div>
+    <hr>
+    <div class="block" id="content">
