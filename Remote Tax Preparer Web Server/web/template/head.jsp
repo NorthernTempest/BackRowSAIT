@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../template/css/mcl-main.css">
     <?-- Javascript -->
+    <script type="text/javascript" src="../template/js/jQuery.min.js"></script>
     <script type="text/javascript" src="../template/js/bootstrap.js"></script>
     <script src="https://kit.fontawesome.com/1213a7076a.js" crossorigin="anonymous"></script>
 </head>

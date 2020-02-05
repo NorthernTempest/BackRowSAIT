@@ -22,6 +22,8 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Log in</button>
+                </div>
+                <div class="form-group">
                     <c:choose>
                         <c:when test="${errorMessage!=null}">
                             <div class="alert alert-danger" role="alert">
