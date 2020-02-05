@@ -3,6 +3,7 @@ package manager;
 import java.util.ArrayList;
 import java.util.Date;
 
+import databaseAccess.LogEntryDB;
 import domain.LogEntry;
 
 /**
@@ -55,7 +56,7 @@ public final class LogEntryManager {
 	 * @param logID logID of the LogEntry in the database to retrieve
 	 * @return LogEntry containing the information of the requested LogEntry
 	 */
-	public static LogEntry get(int logID) {
+	public static LogEntry get(int logEntryID) {
 		return null;
 	}
 
@@ -68,20 +69,22 @@ public final class LogEntryManager {
 		return null;
 	}
 
-	//TODO
-	/**
-	 * @param logEntryID
-	 * @param email
-	 * @param type
-	 * @param startDate
-	 * @param endDate
-	 * @param ip
+	/** 
+	 * Gets all LogEntries from database fulfilling criteria specified by parameters
+	 * 
+	 * @param email the email used to fetch logs, any if null
+	 * @param type the log type used to fetch logs, any if null
+	 * @param startDate the start Date to fetch logs from
+	 * @param endDate the end Date to fetch logs to
+	 * @param ip the ip used to fetch logs, any if null
 	 * @return ArrayList<LogEntry> containing all the LogEntrys in the database that
 	 *         match given parameters
 	 */
-	public static ArrayList<LogEntry> getLog(String logEntryID, String email, char type, Date startDate, Date endDate, String ip) {
-		return null;
-
+	public static ArrayList<LogEntry> getLog(String email, char type, Date startDate, Date endDate, String ip) {
+		LogEntryDB ldb = new LogEntryDB();
+		ArrayList<LogEntry> log = ldb.getByParameters(email, type, startDate, endDate, ip);
+		
+		return log;
 	}
 
 	/**

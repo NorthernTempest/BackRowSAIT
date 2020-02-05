@@ -121,7 +121,7 @@ public final class LoginServlet extends HttpServlet {
 		Date endDate = cal.getTime();
 		cal.add(Calendar.MINUTE, LOGIN_ATTEMPT_TIMELIMIT);
 		Date startDate = cal.getTime();
-		ArrayList<LogEntry> logs = LogEntryManager.getLog(null, email, LogEntry.LOGIN_ATTEMPT, startDate, endDate, null);
+		ArrayList<LogEntry> logs = LogEntryManager.getLog(email, LogEntry.LOGIN_ATTEMPT, startDate, endDate, null);
 		
 		if(logs.size() > MAX_LOGIN_ATTEMPTS) {
 			return true;
