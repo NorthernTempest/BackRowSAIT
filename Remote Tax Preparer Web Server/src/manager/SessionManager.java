@@ -9,7 +9,7 @@ import domain.Session;
  * Class Description: 	Class that communicates with the SessionDB class as a proxy
  * 						to pass information utilized in communicating with the database.
  *
- * @author Tristen Kreutz
+ * @author Cesar Guzman, Tristen Kreutz
  *
  */
 public class SessionManager {
@@ -68,11 +68,12 @@ public class SessionManager {
 	
 	/**
 	 * Takes the email and creates a new Session object passing the email
-	 * into the constructor.
+	 * into the constructor. 
 	 * @param email email to create a Session object for
-	 * @return String
+	 * @param sessionID the sessionID to set for the Session object
+	 * @return true if session created successfully, false if not
 	 */
-	public static String createSession(String email) {
-		return null;
+	public static boolean createSession(String email, String sessionID) {
+		return false;
 	}
 }
