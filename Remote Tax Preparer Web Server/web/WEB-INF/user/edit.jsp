@@ -8,48 +8,99 @@
 
 <jsp:directive.include file = "../../template/head.jsp" />
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <form action="" method="POST">
-                <div class="form-group">
-                    <label for="address1">Street Address</label>
-                    <input id="address1" name="address1" class="form-control">
-                    <input id="address2" name="address2" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="addressCity">City</label>
-                    <input id="addressCity" name="addressCity" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="addressRegion">Province/State</label>
-                    <select id="addressRegion" class="form-control" name="addressRegion">
-                        <option value="">-----</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Country</label>
-                    <select class="crs-country form-control" data-region-id="addressRegion" name="addressCountry">
-                    </select>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-6 align-content-center">
-            <c:choose>
-                <c:when test="${successMessage!=null}">
-                    <span class="alert alert-success">
-                        ${successMessage}
-                    </span>
-                </c:when>
-                <c:when test="${errorMessage!=null}">
-                    <span class="alert alert-warning">
-                        ${errorMessage}
-                    </span>
-                </c:when>
-            </c:choose>
+<form action="" method="POST">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <c:choose>
+                    <c:when test="${successMessage!=null}">
+                        <span class="alert alert-success">
+                                ${successMessage}
+                        </span>
+                    </c:when>
+                </c:choose>
+            </div>
+
+            <div class="col-md-6">
+                <h3>Address</h3>
+                <label for="address1">Street Address</label>
+                <input id="address1" name="address1" class="form-control" value="${address1}">
+                <input id="address2" name="address2" class="form-control" value="${address2}">
+
+                <label for="addressCity">City</label>
+                <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}">
+
+                <label for="addressCountry">Country</label>
+                <select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" value="${addressCountry}">
+                </select>
+
+                <label for="addressRegion">Province/State</label>
+                <select id="addressRegion" class="form-control" name="addressRegion" value="${addressRegion}">
+                </select>
+
+                <label for="addressPostal">Postal Code</label>
+                <input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}">
+            </div>
+            <div class="col-md-6">
+                <c:choose>
+                    <c:when test="${errorMessageAddress!=null}">
+                                <span class="alert alert-warning">
+                                        ${errorMessageAddress}
+                                </span>
+                    </c:when>
+                </c:choose>
+            </div>
+            <hr>
+
+            <div class="col-md-6">
+                <h3>Contact Details</h3>
+                <label for="contactPhone">Phone Number</label>
+                <input type="tel" id="contactPhone" name="contactPhone" class="form-control" value="${contactPhone}">
+
+                <label for="contactFax">Fax Number</label>
+                <input type="tel" id="contactFax" name="contactFax" class="form-control" value="${contactFax}">
+            </div>
+            <div class="col-md-6">
+                <c:choose>
+                    <c:when test="${errorMessageContact!=null}">
+                                <span class="alert alert-warning">
+                                        ${errorMessageContact}
+                                </span>
+                    </c:when>
+                </c:choose>
+            </div>
+
+            <hr>
+
+            <div class="col-md-6">
+                <h3>Change Password</h3>
+                <label for="oldPassword">Old Password</label>
+                <input type="password" id="oldPassword" name="oldPassword" class="form-control">
+
+                <label for="newPassword1">New Password</label>
+                <input type="password" id="newPassword1" name="newPassword1" class="form-control">
+
+                <label for="newPassword2">New Password (again)</label>
+                <input type="password" id="newPassword2" name="newPassword2" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <c:choose>
+                    <c:when test="${errorMessagePassword!=null}">
+                                <span class="alert alert-warning">
+                                        ${errorMessagePassword}
+                                </span>
+                    </c:when>
+                </c:choose>
+            </div>
+
+            <hr>
+
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
         </div>
     </div>
-</div>
+</form>
 
 <script type="text/javascript" src="../../template/js/country-regions.js"></script>
 
