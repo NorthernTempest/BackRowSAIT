@@ -20,25 +20,24 @@
     </div>
 
     <div class="block text-center" id="nav">
-      <span class="nav-selected nav-first">
-        <a href="">Home</a>
-      </span>
+        <span class="nav-first">
+            <a href=""><button class="btn btn-primary btn-lg"><b>Create Return</b></button></a>
+        </span>
+        <span class="nav-item">
+            <a href="">View Returns</a>
+        </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-        <a href="">Our Services</a>
-      </span>
+        <a href="">Messages</a>
+        </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-        <a href="">About Us</a>
-      </span>
+            <a href="">Account</a>
+        </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-        <a href="">Contact</a>
-      </span>
-        <span class="nav-separator">|</span>
-        <span class="nav-item">
-        <a href="">Customers</a>
-      </span>
+            <a href="">Logout</a>
+        </span>
     </div>
-    <hr>
+    <hr class="nav-separator">
     <div class="block" id="content">

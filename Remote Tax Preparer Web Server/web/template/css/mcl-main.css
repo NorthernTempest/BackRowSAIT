@@ -108,7 +108,7 @@ div#content {
 }
 
 .btn-primary {
-  background: #0f6674;
+  background: #48bfbb;
   border: 0;
 }
 
@@ -148,7 +148,7 @@ div#content {
     z-index: 50;
   }
 
-  span.nav-separator {
+  .nav-separator {
     display: none;
   }
 
@@ -172,6 +172,10 @@ div#content {
   }
 
   span.nav-selected:after {
+    width: 50%;
+  }
+
+  span.nav-item:hover:after {
     width: 50%;
   }
 }

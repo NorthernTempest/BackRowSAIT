@@ -15,7 +15,6 @@
         } else {
             document.getElementById("nav").style.display = "block";
             document.getElementById("nav").style.transform = "scale(1, 1)";
-
         }
     }
 </script>
