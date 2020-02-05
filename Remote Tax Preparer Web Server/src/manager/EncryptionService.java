@@ -1,6 +1,8 @@
 package manager;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -69,25 +71,33 @@ public class EncryptionService {
 	 * Takes the filepath passed into the method and encrypts the file.
 	 * 
 	 * @param filepath filepath of the file to encrypt
-	 * @return encrypted file
+	 * @return String The filepath of the encrypted file
 	 * @throws NoSuchPaddingException 
 	 * @throws NoSuchAlgorithmException 
 	 * @throws InvalidKeySpecException 
 	 * @throws InvalidKeyException 
 	 * @throws IOException 
 	 */
-	public Document encryptDocument( String filepath ) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
+	public String encryptDocument( String filepath ) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
 		
 		Cipher cipher = getCipher();
 		SecretKey key = getKey( fetchContents( fetchFromConfig( CONFIG_KEY_PATH ) ), fetchContents( fetchFromConfig( CONFIG_SALT_PATH ) ) );
 		
 		String outputPath = getEncryptedFilepath();
 		
+		File f = new File( outputPath );
+		f.createNewFile();
+		
 		try( FileInputStream in =  new FileInputStream( filepath ); FileOutputStream out = new FileOutputStream( outputPath ); CipherOutputStream cipherOut = new CipherOutputStream( out, cipher ) ) {
+			out.write( cipher.getIV() );
 			
+			byte[] content = new byte[(int) f.length()];
+			in.read( content );
+			
+	        cipherOut.write( content );
 		}
 		
-		return null;
+		return outputPath;
 	}
 
 	/**
@@ -96,9 +106,27 @@ public class EncryptionService {
 	 * 
 	 * @param filepath filepath of the file to decrypt
 	 * @return decrypted file
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws NoSuchPaddingException 
+	 * @throws NoSuchAlgorithmException 
 	 */
-	public Document decryptDocument(String filepath) {
-		return null;
+	public String decryptDocument(Document doc) throws FileNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException {
+		
+		String output = null;
+		
+		try (FileInputStream fileIn = new FileInputStream( doc.getFilePath() ) ) {
+			byte[] fileIv = new byte[16];
+			fileIn.read( fileIv );
+			
+			Cipher cipher = getCipher();
+			
+			CipherInputStream cipherIn = new CipherInputStream(fileIn, cipher);
+			InputStreamReader inputReader = new InputStreamReader(cipherIn);
+			BufferedReader reader = new BufferedReader(inputReader);
+		}
+		
+		return output;
 	}
 
 	/**
@@ -196,6 +224,10 @@ public class EncryptionService {
 		return line;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private static String getEncryptedFilepath()
 	{
 		return fetchFromConfig( "CONFIG_ENCRYPTED_FILES_DIR" ) + getSalt() + ".secure";
