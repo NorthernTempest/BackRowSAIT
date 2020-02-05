@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -12,13 +13,14 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Random;
-import java.util.Scanner;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 
 import domain.Document;
@@ -31,17 +33,16 @@ import domain.Document;
  * @author Cesar Guzman, Jesse Goerzen, Taylor Hanlon, Tristen Kreutz
  */
 public class EncryptionService {
-	
-	private static final String CONFIG_FILE_PATH = "res/config.txt";
+
 	private static final String CONFIG_CIPHER = "cipher:";
 	private static final String CONFIG_KEY_PATH = "keypath:";
 	private static final String CONFIG_SALT_PATH = "saltpath:";
 	private static final String CONFIG_KEY_ALGORITHM = "keyalgor:";
-	private static final String CONFIG_TEXT_FORMAT = "txtfmt:";
 	private static final String CONFIG_ITERATION_COUNT = "itercount:";
 	private static final String CONFIG_KEY_LENGTH = "keylen:";
 	private static final String CONFIG_ENCRYPTED_FILES_DIR = "encfiles:";
-	
+	private static final String CONFIG_OUTPUT_FILES_DIR = "outfiles:";
+
 	/**
 	 * Takes the String passed into the method and hashes it for security purposes.
 	 * 
@@ -50,9 +51,9 @@ public class EncryptionService {
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
 	 */
-	public String hash(String toHash, String salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	public static String hash(String toHash, String salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-		byte[] hash = getKey( toHash, salt ).getEncoded();
+		byte[] hash = getKey(toHash, salt).getEncoded();
 
 		StringBuilder sb = new StringBuilder(hash.length * 2);
 
@@ -72,31 +73,36 @@ public class EncryptionService {
 	 * 
 	 * @param filepath filepath of the file to encrypt
 	 * @return String The filepath of the encrypted file
-	 * @throws NoSuchPaddingException 
-	 * @throws NoSuchAlgorithmException 
-	 * @throws InvalidKeySpecException 
-	 * @throws InvalidKeyException 
-	 * @throws IOException 
+	 * @throws NoSuchPaddingException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 * @throws InvalidKeyException
+	 * @throws IOException
 	 */
-	public String encryptDocument( String filepath ) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
-		
+	public static String encryptDocument(String filepath) throws NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeySpecException, InvalidKeyException, IOException {
+
 		Cipher cipher = getCipher();
-		SecretKey key = getKey( fetchContents( fetchFromConfig( CONFIG_KEY_PATH ) ), fetchContents( fetchFromConfig( CONFIG_SALT_PATH ) ) );
-		
+
+		cipher.init(Cipher.ENCRYPT_MODE, getKey(ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_KEY_PATH)),
+				ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_SALT_PATH))));
+
 		String outputPath = getEncryptedFilepath();
-		
-		File f = new File( outputPath );
+
+		File f = new File(outputPath);
 		f.createNewFile();
-		
-		try( FileInputStream in =  new FileInputStream( filepath ); FileOutputStream out = new FileOutputStream( outputPath ); CipherOutputStream cipherOut = new CipherOutputStream( out, cipher ) ) {
-			out.write( cipher.getIV() );
-			
+
+		try (FileInputStream in = new FileInputStream(filepath);
+				FileOutputStream out = new FileOutputStream(outputPath);
+				CipherOutputStream cipherOut = new CipherOutputStream(out, cipher)) {
+			out.write(cipher.getIV());
+
 			byte[] content = new byte[(int) f.length()];
-			in.read( content );
-			
-	        cipherOut.write( content );
+			in.read(content);
+
+			cipherOut.write(content);
 		}
-		
+
 		return outputPath;
 	}
 
@@ -105,27 +111,47 @@ public class EncryptionService {
 	 * the file.
 	 * 
 	 * @param filepath filepath of the file to decrypt
-	 * @return decrypted file
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws NoSuchPaddingException 
-	 * @throws NoSuchAlgorithmException 
+	 * @return decrypted file path
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws NoSuchPaddingException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 * @throws InvalidAlgorithmParameterException
+	 * @throws InvalidKeyException
 	 */
-	public String decryptDocument(Document doc) throws FileNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException {
-		
-		String output = null;
-		
-		try (FileInputStream fileIn = new FileInputStream( doc.getFilePath() ) ) {
+	public static String decryptDocument(Document doc) throws FileNotFoundException, IOException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+
+		String output = ConfigService.fetchFromConfig(CONFIG_OUTPUT_FILES_DIR) + doc.getFileName();
+
+		CipherInputStream cipherIn = null;
+		FileOutputStream out = null;
+
+		try (FileInputStream fileIn = new FileInputStream(doc.getFilePath());) {
 			byte[] fileIv = new byte[16];
-			fileIn.read( fileIv );
-			
+			fileIn.read(fileIv);
+
 			Cipher cipher = getCipher();
-			
-			CipherInputStream cipherIn = new CipherInputStream(fileIn, cipher);
-			InputStreamReader inputReader = new InputStreamReader(cipherIn);
-			BufferedReader reader = new BufferedReader(inputReader);
+			cipher.init(Cipher.DECRYPT_MODE, getKey(ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_KEY_PATH)),
+					ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_SALT_PATH))), new IvParameterSpec(fileIv));
+
+			cipherIn = new CipherInputStream(fileIn, cipher);
+
+			out = new FileOutputStream(ConfigService.fetchFromConfig(CONFIG_OUTPUT_FILES_DIR) + doc.getFileName());
+
+			File f = new File(doc.getFilePath());
+
+			byte[] content = new byte[(int) f.length()];
+			cipherIn.read(content);
+
+			out.write(content);
+
+		} finally {
+			cipherIn.close();
+			out.close();
 		}
-		
+
 		return output;
 	}
 
@@ -135,7 +161,7 @@ public class EncryptionService {
 	 * @param string String to encrypt
 	 * @return encrypted String
 	 */
-	public String encryptString(String string) {
+	public static String encryptString(String string) {
 		return null;
 	}
 
@@ -145,7 +171,7 @@ public class EncryptionService {
 	 * @param string String to decrypt
 	 * @return decrypted String
 	 */
-	public String decryptString(String string) {
+	public static String decryptString(String string) {
 		return null;
 	}
 
@@ -160,18 +186,17 @@ public class EncryptionService {
 		r.nextBytes(saltBytes);
 		return Base64.getEncoder().encodeToString(saltBytes);
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws NoSuchPaddingException
 	 */
-	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException
-	{
-		return Cipher.getInstance( fetchFromConfig( CONFIG_CIPHER ) );
+	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException {
+		return Cipher.getInstance(ConfigService.fetchFromConfig(CONFIG_CIPHER));
 	}
-	
+
 	/**
 	 * 
 	 * @param toHash
@@ -180,56 +205,21 @@ public class EncryptionService {
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
 	 */
-	private static SecretKey getKey( String toHash, String salt ) throws NoSuchAlgorithmException, InvalidKeySpecException
-	{
-		KeySpec spec = new PBEKeySpec( toHash.toCharArray(), salt.getBytes(), Integer.parseInt( fetchFromConfig( CONFIG_ITERATION_COUNT ) ), Integer.parseInt( fetchFromConfig( CONFIG_KEY_LENGTH ) ) );
-		SecretKeyFactory skf = SecretKeyFactory.getInstance( fetchFromConfig( CONFIG_KEY_ALGORITHM ) );
-		
-		return skf.generateSecret( spec );
+	private static SecretKey getKey(String toHash, String salt)
+			throws NoSuchAlgorithmException, InvalidKeySpecException {
+		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(),
+				Integer.parseInt(ConfigService.fetchFromConfig(CONFIG_ITERATION_COUNT)),
+				Integer.parseInt(ConfigService.fetchFromConfig(CONFIG_KEY_LENGTH)));
+		SecretKeyFactory skf = SecretKeyFactory.getInstance(ConfigService.fetchFromConfig(CONFIG_KEY_ALGORITHM));
+
+		return skf.generateSecret(spec);
 	}
-	
-	/**
-	 * 
-	 * @param option
-	 * @return
-	 */
-	private static String fetchFromConfig( String option )
-	{
-		Scanner s = new Scanner( CONFIG_FILE_PATH );
-		String line = s.nextLine();
-		
-		while( line != null && !line.equals( "" ) && !line.startsWith( option ) )
-		{
-			line = s.nextLine();
-		}
-		
-		return line.substring( option.length() );
-	}
-	
-	/**
-	 * 
-	 * @param filePath
-	 * @return
-	 */
-	private static String fetchContents( String filePath )
-	{
-		Scanner s = new Scanner( filePath );
-		String line = s.nextLine();
-		
-		while( line != null && !line.equals( "" ) )
-		{
-			line += s.nextLine();
-		}
-		
-		return line;
-	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
-	private static String getEncryptedFilepath()
-	{
-		return fetchFromConfig( "CONFIG_ENCRYPTED_FILES_DIR" ) + getSalt() + ".secure";
+	private static String getEncryptedFilepath() {
+		return ConfigService.fetchFromConfig(CONFIG_ENCRYPTED_FILES_DIR) + getSalt() + ".secure";
 	}
 }
