@@ -51,15 +51,13 @@ public class User {
 		
 	}
 	
-	public User(String email, String fname, String lname, String phone, String passHash, String language, String address) {
+	public User(String email, String fname, String lname, String phone, String passHash) {
 		
 		setEmail(email);
 		setfName(fname);
 		setlName(lname);
 		setPhone(phone);
 		setPassHash(passHash);
-		setLanguage(language);
-		setAddress(address);
 	}
 
 	/**
