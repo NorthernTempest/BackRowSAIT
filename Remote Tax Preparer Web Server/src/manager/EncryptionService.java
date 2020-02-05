@@ -46,12 +46,13 @@ public class EncryptionService {
 	/**
 	 * Takes the String passed into the method and hashes it for security purposes.
 	 * 
-	 * @param toHash String to hash
-	 * @return hashed String
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
+	 * @param toHash The string to hash
+	 * @return The hashed string
+	 * @throws NoSuchAlgorithmException If the algorithm in res/config.txt isn't valid according to https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws InvalidKeySpecException 
+	 * @throws FileNotFoundException If res/config.txt isn't found
 	 */
-	public static String hash(String toHash, String salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	public static String hash(String toHash, String salt) throws InvalidKeySpecException, NoSuchAlgorithmException, FileNotFoundException {
 
 		byte[] hash = getKey(toHash, salt).getEncoded();
 
@@ -192,8 +193,9 @@ public class EncryptionService {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws NoSuchPaddingException
+	 * @throws FileNotFoundException 
 	 */
-	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException {
+	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, FileNotFoundException {
 		return Cipher.getInstance(ConfigService.fetchFromConfig(CONFIG_CIPHER));
 	}
 
@@ -204,9 +206,11 @@ public class EncryptionService {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
+	 * @throws FileNotFoundException 
+	 * @throws NumberFormatException 
 	 */
 	private static SecretKey getKey(String toHash, String salt)
-			throws NoSuchAlgorithmException, InvalidKeySpecException {
+			throws NoSuchAlgorithmException, InvalidKeySpecException, NumberFormatException, FileNotFoundException {
 		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(),
 				Integer.parseInt(ConfigService.fetchFromConfig(CONFIG_ITERATION_COUNT)),
 				Integer.parseInt(ConfigService.fetchFromConfig(CONFIG_KEY_LENGTH)));
@@ -218,8 +222,9 @@ public class EncryptionService {
 	/**
 	 * 
 	 * @return
+	 * @throws FileNotFoundException 
 	 */
-	private static String getEncryptedFilepath() {
+	private static String getEncryptedFilepath() throws FileNotFoundException {
 		return ConfigService.fetchFromConfig(CONFIG_ENCRYPTED_FILES_DIR) + getSalt() + ".secure";
 	}
 }
