@@ -17,7 +17,7 @@ public class User {
 	
 	private String lName;
 	
-	private char permissionLevel;
+	private int permissionLevel;
 	
 	private String phone;
 	
@@ -37,12 +37,29 @@ public class User {
 	
 	private String address;
 	
+	private final int DEFAULT = 0;
+	
+	private final int USER = 1;
+	
+	private final int TAX_PREPARER = 2;
+	
+	private final int ADMIN = 3;
+	
+	private final int SYSADMIN = 4;
+	
 	public User() {
 		
 	}
 	
 	public User(String email, String fname, String lname, String phone, String passHash, String language, String address) {
-		// Test note
+		
+		setEmail(email);
+		setfName(fname);
+		setlName(lname);
+		setPhone(phone);
+		setPassHash(passHash);
+		setLanguage(language);
+		setAddress(address);
 	}
 
 	/**
@@ -50,6 +67,7 @@ public class User {
 	 * @return the email
 	 */
 	public String getEmail() {
+		
 		return email;
 	}
 
@@ -58,6 +76,7 @@ public class User {
 	 * @return the fName
 	 */
 	public String getfName() {
+		
 		return fName;
 	}
 
@@ -66,6 +85,7 @@ public class User {
 	 * @return the lName
 	 */
 	public String getlName() {
+		
 		return lName;
 	}
 
@@ -73,7 +93,8 @@ public class User {
 	 * Returns the permissionLevel.
 	 * @return the permissionLevel
 	 */
-	public char getPermissionLevel() {
+	public int getPermissionLevel() {
+		
 		return permissionLevel;
 	}
 
@@ -82,6 +103,7 @@ public class User {
 	 * @return the phone
 	 */
 	public String getPhone() {
+		
 		return phone;
 	}
 
@@ -90,6 +112,7 @@ public class User {
 	 * @return the passHash
 	 */
 	public String getPassHash() {
+		
 		return passHash;
 	}
 
@@ -98,6 +121,7 @@ public class User {
 	 * @return the iD
 	 */
 	public int getID() {
+		
 		return ID;
 	}
 
@@ -106,6 +130,7 @@ public class User {
 	 * @return the title
 	 */
 	public String getTitle() {
+		
 		return title;
 	}
 
@@ -114,6 +139,7 @@ public class User {
 	 * @return the creationDate
 	 */
 	public Date getCreationDate() {
+		
 		return creationDate;
 	}
 
@@ -122,6 +148,7 @@ public class User {
 	 * @return the fax
 	 */
 	public String getFax() {
+		
 		return fax;
 	}
 
@@ -130,6 +157,7 @@ public class User {
 	 * @return the active
 	 */
 	public boolean isActive() {
+		
 		return active;
 	}
 
@@ -138,6 +166,7 @@ public class User {
 	 * @return the language
 	 */
 	public String getLanguage() {
+		
 		return language;
 	}
 
@@ -146,6 +175,7 @@ public class User {
 	 * @return the address
 	 */
 	public String getAddress() {
+		
 		return address;
 	}
 
@@ -154,6 +184,7 @@ public class User {
 	 * @param email the email to set
 	 */
 	public void setEmail(String email) {
+		
 		this.email = email;
 	}
 
@@ -162,6 +193,7 @@ public class User {
 	 * @param fName the fName to set
 	 */
 	public void setfName(String fName) {
+		
 		this.fName = fName;
 	}
 
@@ -170,6 +202,7 @@ public class User {
 	 * @param lName the lName to set
 	 */
 	public void setlName(String lName) {
+		
 		this.lName = lName;
 	}
 
@@ -177,8 +210,20 @@ public class User {
 	 * Sets the value of permissionLevel.
 	 * @param permissionLevel the permissionLevel to set
 	 */
-	public void setPermissionLevel(char permissionLevel) {
-		this.permissionLevel = permissionLevel;
+	public void setPermissionLevel(int permissionLevel) {
+		
+		switch (permissionLevel) {
+		
+			case USER:
+			case TAX_PREPARER:
+			case ADMIN:
+			case SYSADMIN:
+				this.permissionLevel = permissionLevel;
+				break;
+				
+			default:
+				System.out.println("Incorrect role value.");
+		}
 	}
 
 	/**
@@ -186,6 +231,7 @@ public class User {
 	 * @param phone the phone to set
 	 */
 	public void setPhone(String phone) {
+		
 		this.phone = phone;
 	}
 
@@ -194,6 +240,7 @@ public class User {
 	 * @param passHash the passHash to set
 	 */
 	public void setPassHash(String passHash) {
+		
 		this.passHash = passHash;
 	}
 
@@ -202,6 +249,7 @@ public class User {
 	 * @param iD the iD to set
 	 */
 	public void setID(int iD) {
+		
 		ID = iD;
 	}
 
@@ -210,6 +258,7 @@ public class User {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
+		
 		this.title = title;
 	}
 
@@ -218,6 +267,7 @@ public class User {
 	 * @param creationDate the creationDate to set
 	 */
 	public void setCreationDate(Date creationDate) {
+		
 		this.creationDate = creationDate;
 	}
 
@@ -226,6 +276,7 @@ public class User {
 	 * @param fax the fax to set
 	 */
 	public void setFax(String fax) {
+		
 		this.fax = fax;
 	}
 
@@ -234,6 +285,7 @@ public class User {
 	 * @param active the active to set
 	 */
 	public void setActive(boolean active) {
+		
 		this.active = active;
 	}
 
@@ -242,6 +294,7 @@ public class User {
 	 * @param language the language to set
 	 */
 	public void setLanguage(String language) {
+		
 		this.language = language;
 	}
 
@@ -250,6 +303,7 @@ public class User {
 	 * @param address the address to set
 	 */
 	public void setAddress(String address) {
+		
 		this.address = address;
 	}
 }
