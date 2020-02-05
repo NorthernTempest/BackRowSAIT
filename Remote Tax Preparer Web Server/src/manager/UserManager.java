@@ -3,6 +3,7 @@ package manager;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import databaseAccess.UserDB;
 import domain.User;
 
 /**
@@ -22,7 +23,10 @@ public class UserManager {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public boolean insert(User user) {
-		return false;
+		
+		UserDB udb = new UserDB();
+		
+		return (udb.insert(user));
 	}
 	
 	/**
@@ -32,7 +36,10 @@ public class UserManager {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public boolean update(User user) {
-		return false;
+		
+		UserDB udb = new UserDB();
+		
+		return udb.update(user);
 	}
 	
 	/**
@@ -42,7 +49,10 @@ public class UserManager {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public boolean delete(String email) {
-		return false;
+		
+		UserDB udb = new UserDB();
+		
+		return udb.delete(email);
 	}
 	
 	/**
@@ -52,7 +62,10 @@ public class UserManager {
 	 * @return User containing the information of the requested User
 	 */
 	public User get(String email) {
-		return null;
+		
+		UserDB udb = new UserDB();
+		
+		return udb.get(email);
 	}
 	
 	/**
@@ -60,7 +73,10 @@ public class UserManager {
 	 * @return ArrayList<User> containing all the Users in the database
 	 */
 	public ArrayList<User> getAll() {
-		return null;
+		
+		UserDB udb = new UserDB();
+		
+		return udb.getAll();
 	}
 	
 	/**
@@ -72,6 +88,7 @@ public class UserManager {
 	 * @return boolean based on whether or not the information matches
 	 */
 	public boolean authenticate(User user, String password) {
+		
 		return false;
 	}
 	
@@ -85,6 +102,7 @@ public class UserManager {
 	 * @return boolean based on whether or not the User can successfully login
 	 */
 	public boolean login(String email, String password, String ip) {
+		
 		return false;
 	}
 	
@@ -95,6 +113,7 @@ public class UserManager {
 	 * @return Properties objects containing the account information of the request User
 	 */
 	public Properties getAccountInfo(String email) {
+		
 		return null;
 	}
 	
@@ -107,6 +126,7 @@ public class UserManager {
 	 * @return boolean
 	 */
 	public boolean loggedIn(String email, String password, String ip) {
+		
 		return false;
 	}
 	
@@ -116,6 +136,7 @@ public class UserManager {
 	 * @return recovery key
 	 */
 	public String generateRecoveryKey() {
+		
 		return null;
 	}
 	
@@ -124,6 +145,7 @@ public class UserManager {
 	 * @return boolean
 	 */
 	public boolean sendRecoveryEmail() {
+		
 		return false;
 	}
 	
@@ -133,6 +155,7 @@ public class UserManager {
 	 * @return boolean
 	 */
 	public boolean verifyRecoveryKey() {
+		
 		return false;
 	}
 }
