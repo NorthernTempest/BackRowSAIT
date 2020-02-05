@@ -22,7 +22,7 @@ public class UserManager {
 	 * @param user User to insert
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(User user) {
+	public static boolean insert(User user) {
 		
 		UserDB udb = new UserDB();
 		
@@ -35,7 +35,7 @@ public class UserManager {
 	 * @param user User in the database to update
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean update(User user) {
+	public static boolean update(User user) {
 		
 		UserDB udb = new UserDB();
 		
@@ -48,7 +48,7 @@ public class UserManager {
 	 * @param email email of the User in the database to delete
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(String email) {
+	public static boolean delete(String email) {
 		
 		UserDB udb = new UserDB();
 		
@@ -61,7 +61,7 @@ public class UserManager {
 	 * @param email email of the User in the database to retrieve
 	 * @return User containing the information of the requested User
 	 */
-	public User get(String email) {
+	public static User get(String email) {
 		
 		UserDB udb = new UserDB();
 		
@@ -72,7 +72,7 @@ public class UserManager {
 	 * Calls the getAll method of the UserDB.
 	 * @return ArrayList<User> containing all the Users in the database
 	 */
-	public ArrayList<User> getAll() {
+	public static ArrayList<User> getAll() {
 		
 		UserDB udb = new UserDB();
 		
@@ -80,14 +80,14 @@ public class UserManager {
 	}
 	
 	/**
-	 * Takes a User object and a password String to check against what exists
+	 * Takes an email String and a password String to check against what exists
 	 * in the user table to see if the information matches for
 	 * authentication purposes
-	 * @param user User to check
+	 * @param email email to check
 	 * @param password password
 	 * @return boolean based on whether or not the information matches
 	 */
-	public boolean authenticate(User user, String password) {
+	public static boolean authenticate(String email, String password) {
 		
 		return false;
 	}
@@ -101,7 +101,7 @@ public class UserManager {
 	 * @param ip ip of login computer
 	 * @return boolean based on whether or not the User can successfully login
 	 */
-	public boolean login(String email, String password, String ip) {
+	public static boolean login(String email, String password, String ip) {
 		
 		return false;
 	}
@@ -112,7 +112,7 @@ public class UserManager {
 	 * @param email email of User to retrieve information for
 	 * @return Properties objects containing the account information of the request User
 	 */
-	public Properties getAccountInfo(String email) {
+	public static Properties getAccountInfo(String email) {
 		
 		return null;
 	}
@@ -125,7 +125,7 @@ public class UserManager {
 	 * @param ip ip to check
 	 * @return boolean
 	 */
-	public boolean loggedIn(String email, String password, String ip) {
+	public static boolean loggedIn(String email, String password, String ip) {
 		
 		return false;
 	}
@@ -135,7 +135,7 @@ public class UserManager {
 	 * user that is utilized in identity verification for recovering an account.
 	 * @return recovery key
 	 */
-	public String generateRecoveryKey() {
+	public static String generateRecoveryKey() {
 		
 		return null;
 	}
@@ -144,7 +144,7 @@ public class UserManager {
 	 * Sends an email to the specified user containing the generated recovery key.
 	 * @return boolean
 	 */
-	public boolean sendRecoveryEmail() {
+	public static boolean sendRecoveryEmail() {
 		
 		return false;
 	}
@@ -154,7 +154,7 @@ public class UserManager {
 	 * that was generated and sent to their email.
 	 * @return boolean
 	 */
-	public boolean verifyRecoveryKey() {
+	public static boolean verifyRecoveryKey() {
 		
 		return false;
 	}

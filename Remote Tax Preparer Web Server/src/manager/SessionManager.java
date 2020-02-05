@@ -21,7 +21,7 @@ public final class SessionManager {
 	 * @param session Session to insert
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(Session session) {
+	public static boolean insert(Session session) {
 		return false;
 	}
 
@@ -32,7 +32,7 @@ public final class SessionManager {
 	 * @param sessionID sessionID of the Session in the database to delete
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(String sessionID) {
+	public static boolean delete(String sessionID) {
 		return false;
 	}
 
@@ -43,7 +43,7 @@ public final class SessionManager {
 	 * @param sessionID sessionID of the Session in the database to retrieve
 	 * @return Session containing the information of the requested Session
 	 */
-	public Session get(String sessionID) {
+	public static Session get(String sessionID) {
 		return null;
 	}
 
@@ -52,7 +52,7 @@ public final class SessionManager {
 	 * Calls the getAll method of the SessionDB.
 	 * @return ArrayList<Session> containing all the Sessions in the database
 	 */
-	public ArrayList<Session> getAll() {
+	public static ArrayList<Session> getAll() {
 		return null;
 	}
 	
