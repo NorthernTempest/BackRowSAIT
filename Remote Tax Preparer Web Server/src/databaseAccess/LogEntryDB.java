@@ -111,6 +111,27 @@ public class LogEntryDB {
 	
 	/**
 	 * Establishes a connection with the database and selects all Logs in the
+	 * logEntry table that have parameters matching the parameters being passed
+	 * into this method.
+	 * @param email
+	 * @param type
+	 * @param startDate
+	 * @param endDate
+	 * @param ip
+	 * @return
+	 */
+	public ArrayList<LogEntry> getByParameters(String email, char type, java.util.Date startDate, java.util.Date endDate, String ip){
+		/*
+		 * note to whoever is writing this code, do some clever string appends within 
+		 * if statements here to get the select statement right.
+		 * null should be a wildcard so if(param = null) dont append.
+		 */
+		
+		return null;
+	}
+	
+	/**
+	 * Establishes a connection with the database and selects all Logs in the
 	 * logEntry table that has an email matching the email being passed
 	 * into this method.
 	 * @param email email of the Logs to retrieve from the database
