@@ -1,5 +1,10 @@
 package databaseAccess;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 /**
  * 
  * Class Description: 	Class that establishes a connection and communicates directly
@@ -21,29 +26,42 @@ public class LogEntryDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public boolean insert(LogEntry logEntry) {
-		return false;
-	}
-	
-	/**
-	 * Establishes a connection with the database and updates the LogEntry in the logEntry
-	 * table that shares a Primary Key with the LogEntry being passed into this method.
-	 * All values of the LogEntry in the database will be updated with the values of the
-	 * object being passed assuming constraints are not violated.
-	 * @param logEntry LogEntry to update in the database
-	 * @return boolean based on whether or not the operation was successful
-	 */
-	public boolean update(LogEntry logEntry) {
-		return false;
-	}
-	
-	/**
-	 * Establishes a connection with the database and removes the LogEntry from the
-	 * logEntry table that has a Primary Key matching the logEntryID being passed
-	 * into this method.
-	 * @param logEntryID logEntryID of the LogEntry to remove from the database
-	 * @return boolean based on whether or not the operation was successful
-	 */
-	public boolean delete(int logEntryID) {
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+		
+		try {
+			
+			String preparedQuery = "INSERT INTO log (log_id, email, type, message, date, "
+									+ "VALUES (?, ?, ?, ?, ?)";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setInt(1, logEntry.getLogEntryID());
+			ps.setString(2, logEntry.getEmail());
+			ps.setString(3, logEntry.getType() + "");
+			ps.setString(4, logEntry.getMessage());
+			ps.setDate(5, (Date) logEntry.getDate());
+			
+			rows = ps.executeUpdate();
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		if (rows > 0) {
+			
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -55,7 +73,40 @@ public class LogEntryDB {
 	 * @return LogEntry that contains the information of the requested Log
 	 */
 	public LogEntry get(int logEntryID) {
-		return null;
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs = null;
+		LogEntry logEntry = null;
+		
+		try {
+			
+			String preparedQuery = "SELECT * FROM log WHERE log_id = ?";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setInt(1, logEntryID);
+			
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				
+				logEntry = new LogEntry(logEntryID, rs.getString("email"), rs.getString("type").charAt(0),
+										rs.getString("message"), rs.getDate("date"));
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return logEntry;
 	}
 	
 	/**
@@ -66,7 +117,43 @@ public class LogEntryDB {
 	 * @return ArrayList<Log> that contains information of the requested Logs
 	 */
 	public ArrayList<LogEntry> getByEmail(String email) {
-		return null;
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs = null;
+		LogEntry logEntry = null;
+		ArrayList<LogEntry> logEntries = new ArrayList<>();
+		
+		try {
+			
+			String preparedQuery = "SELECT * FROM log WHERE email = ?";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(1, email);
+			
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				
+				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("type").charAt(0),
+										rs.getString("message"), rs.getDate("date"));
+				
+				logEntries.add(logEntry);
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return logEntries;
 	}
 	
 	/**
@@ -76,6 +163,40 @@ public class LogEntryDB {
 	 * @return ArrayList<LogEntry> containing all of the Logs from the database
 	 */
 	public ArrayList<LogEntry> getAll() {
-		return null;
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs = null;
+		LogEntry logEntry = null;
+		ArrayList<LogEntry> logEntries = new ArrayList<>();
+		
+		try {
+			
+			String preparedQuery = "SELECT * FROM log";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				
+				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("type").charAt(0),
+										rs.getString("message"), rs.getDate("date"));
+				
+				logEntries.add(logEntry);
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return logEntries;
 	}
 }
