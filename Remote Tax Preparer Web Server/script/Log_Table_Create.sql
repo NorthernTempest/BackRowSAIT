@@ -7,4 +7,4 @@ CREATE TABLE log (
     FOREIGN KEY (email) REFERENCES user(email));
     
 ALTER TABLE log 
-ADD CONSTRAINT CHK_log_type CHECK (type IN ('L', 'E', 'X', 'S'));
+ADD CONSTRAINT CHK_log_type CHECK (type IN ('L', 'E', 'D', 'U'));
