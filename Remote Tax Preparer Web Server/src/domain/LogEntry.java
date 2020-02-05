@@ -38,6 +38,15 @@ public class LogEntry {
 		setDate(date);
 	}
 
+	public LogEntry(int logEntryID, String email, char type, String message, Date date) {
+		
+		setLogEntryID(logEntryID);
+		setEmail(email);
+		setType(type);
+		setMessage(message);
+		setDate(date);
+	}
+	
 	/**
 	 * Returns the logEntryID.
 	 * @return the logEntryID
