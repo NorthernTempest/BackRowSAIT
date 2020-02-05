@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import domain.LogEntry;
 import manager.LogEntryManager;
 import manager.SessionManager;
+import manager.UserManager;
 
 /**
  * Servlet for logging into the site.
@@ -24,6 +25,15 @@ import manager.SessionManager;
 @WebServlet("/login")
 public final class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Maximum number of login attempts within LOGIN_ATTEMPT_TIMELIMIT
+	 */
+	private static final int MAX_LOGIN_ATTEMPTS = 5;
+	/**
+	 * Time in minutes to check for login attempts
+	 */
+	private static final int LOGIN_ATTEMPT_TIMELIMIT = 10;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -75,18 +85,18 @@ public final class LoginServlet extends HttpServlet {
 		//Grab user email
 		String email = request.getParameter("email");
 		
-		//Check logs for attempts from ip
-		String ip = request.getRemoteAddr();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		Date date = cal.getTime();
+		//Check logs for attempts from email, if too many attempts don't let them in.
+		if(tooManyAttempts(email)) {
+			request.setAttribute("errorMessage", "Too many log in attempts, try again later");
+			getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+			return;
+		}
 		
-		ArrayList<LogEntry> logs = LogEntryManager.getLog(null, email, LogEntry.LOGIN_ATTEMPT, new Date(), new Date(), null);
-
 		//Grab user password
 		String password = request.getParameter("password");
+		
 		//validate user info
-		if (!validate(email, password)) {
+		if (!UserManager.authenticate(email, password)) {
 			request.setAttribute("errorMessage", "Incorrect email or password");
 			/*
 			 * write to log
@@ -109,29 +119,30 @@ public final class LoginServlet extends HttpServlet {
 		}
 
 	}
+	
+	/* ************************************************************************************************************************************************
+	 * *****************************************************************HELPER METHODS*****************************************************************
+	 * ************************************************************************************************************************************************
+	 * /
 
 	/**
-	 * Returns true if login credentials match entry in database, false if they do
-	 * not.
-	 * 
-	 * @param email the email to validate
-	 * @param password the password to validate
-	 * @return true if login credentials match database, false if they do not
+	 * Checks logs for login attempts from email, if too many attempts return true
+	 * .
+	 * @param email the email to check login attempts for
+	 * @return true if too many log in attempts, false if not
 	 */
-	private boolean validate(String email, String password) {
-		/* TODO
-		 * 
-		 * check email vs database
-		 * if no match
-		 * 		return false
-		 * else
-		 * 		hash password
-		 * 		check hashedPass vs database
-		 * 		if match
-		 * 			return true
-		 * 		else
-		 * 			return false
-		 */
+	private boolean tooManyAttempts(String email) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		Date endDate = cal.getTime();
+		cal.add(Calendar.MINUTE, LOGIN_ATTEMPT_TIMELIMIT);
+		Date startDate = cal.getTime();
+		ArrayList<LogEntry> logs = LogEntryManager.getLog(null, email, LogEntry.LOGIN_ATTEMPT, startDate, endDate, null);
+		
+		if(logs.size() > MAX_LOGIN_ATTEMPTS) {
+			return true;
+		}
 		return false;
 	}
+
 }

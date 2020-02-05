@@ -22,7 +22,7 @@ public final class LogEntryManager {
 	 * @param logEntry LogEntry to insert
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(LogEntry logEntry) {
+	public static boolean insert(LogEntry logEntry) {
 		return false;
 	}
 
@@ -33,7 +33,7 @@ public final class LogEntryManager {
 	 * @param logEntry LogEntry in the database to update
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean update(LogEntry logEntry) {
+	public static boolean update(LogEntry logEntry) {
 		return false;
 	}
 
@@ -44,7 +44,7 @@ public final class LogEntryManager {
 	 * @param logID logID of the LogEntry in the database to delete
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(int logID) {
+	public static boolean delete(int logID) {
 		return false;
 	}
 
@@ -55,7 +55,7 @@ public final class LogEntryManager {
 	 * @param logID logID of the LogEntry in the database to retrieve
 	 * @return LogEntry containing the information of the requested LogEntry
 	 */
-	public LogEntry get(int logID) {
+	public static LogEntry get(int logID) {
 		return null;
 	}
 
@@ -64,7 +64,7 @@ public final class LogEntryManager {
 	 * 
 	 * @return ArrayList<LogEntry> containing all the LogEntrys in the database
 	 */
-	public ArrayList<LogEntry> getAll() {
+	public static ArrayList<LogEntry> getAll() {
 		return null;
 	}
 
@@ -91,7 +91,7 @@ public final class LogEntryManager {
 	 * @param email email of logs to count
 	 * @return number of logs counted matching the above conditions
 	 */
-	public int checkAttempts(String email) {
+	public static int checkAttempts(String email) {
 		return 0;
 	}
 
@@ -102,7 +102,7 @@ public final class LogEntryManager {
 	 * @param email email of the user that successfully logged in
 	 * @param ip    ip of the user that successfully logged in
 	 */
-	public void insertLogin(String email, String ip) {
+	public static void insertLogin(String email, String ip) {
 
 	}
 }
