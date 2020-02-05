@@ -12,7 +12,7 @@ import domain.Session;
  * @author Cesar Guzman, Tristen Kreutz
  *
  */
-public class SessionManager {
+public final class SessionManager {
 
 	// Should not do this
 	/**

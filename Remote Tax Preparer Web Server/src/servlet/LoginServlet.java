@@ -1,6 +1,10 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import domain.LogEntry;
+import manager.LogEntryManager;
 import manager.SessionManager;
 
 /**
@@ -16,7 +22,7 @@ import manager.SessionManager;
  * @author Cesar Guzman, Taylor Hanlon
  */
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public final class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -46,6 +52,10 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		/* TODO
 		 * 
+		 * check logs for attempts from ip
+		 * if attempts > threshold
+		 * 		tell the user
+		 * 		return
 		 * grab email
 		 * grab password
 		 * 
@@ -61,10 +71,21 @@ public class LoginServlet extends HttpServlet {
 		 * 		put sessionID in database
 		 * 		forward to home
 		 */
-
+		
+		//Grab user email
 		String email = request.getParameter("email");
-		String password = request.getParameter("password");
+		
+		//Check logs for attempts from ip
+		String ip = request.getRemoteAddr();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		Date date = cal.getTime();
+		
+		ArrayList<LogEntry> logs = LogEntryManager.getLog(null, email, LogEntry.LOGIN_ATTEMPT, new Date(), new Date(), null);
 
+		//Grab user password
+		String password = request.getParameter("password");
+		//validate user info
 		if (!validate(email, password)) {
 			request.setAttribute("errorMessage", "Incorrect email or password");
 			/*

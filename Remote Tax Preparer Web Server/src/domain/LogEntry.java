@@ -2,9 +2,9 @@ package domain;
 
 import java.util.Date;
 
-public class Log {
+public class LogEntry {
 
-	private int logID;
+	private int logEntryID;
 	
 	private String email;
 	
@@ -16,7 +16,12 @@ public class Log {
 	
 	private String ip;
 	
-	public Log(String email, String ip, char type) {
+	public static final char LOGIN_ATTEMPT = 'L';
+	public static final char ERROR = 'E';
+	public static final char DEACTIVATE_ACCOUNT = 'D';
+	public static final char UPDATE_ACCOUNT = 'U';
+	
+	public LogEntry(String email, String ip, char type) {
 		
 		setEmail(email);
 		setIp(ip);
@@ -24,9 +29,9 @@ public class Log {
 		setDate(new Date());
 	}
 	
-	public Log(int logID, String email, String ip, char type, Date date) {
+	public LogEntry(int logEntryID, String email, String ip, char type, Date date) {
 		
-		setLogID(logID);
+		setLogEntryID(logEntryID);
 		setEmail(email);
 		setIp(ip);
 		setType(type);
@@ -34,11 +39,11 @@ public class Log {
 	}
 
 	/**
-	 * Returns the logID.
-	 * @return the logID
+	 * Returns the logEntryID.
+	 * @return the logEntryID
 	 */
-	public int getLogID() {
-		return logID;
+	public int getLogEntryID() {
+		return logEntryID;
 	}
 
 	/**
@@ -85,8 +90,8 @@ public class Log {
 	 * Sets the value of logID.
 	 * @param logID the logID to set
 	 */
-	public void setLogID(int logID) {
-		this.logID = logID;
+	public void setLogEntryID(int logEntryID) {
+		this.logEntryID = logEntryID;
 	}
 
 	/**
@@ -113,15 +118,16 @@ public class Log {
 		
 		switch(type) {
 		
-			case 'L':
-			case 'E':
-			case 'X':
-			case 'S':
+			case LOGIN_ATTEMPT:
+			case ERROR:
+			case DEACTIVATE_ACCOUNT:
+			case UPDATE_ACCOUNT:
 				this.type = type;
 				break;
 			
 			default:
 				System.out.println("Incorrect type character.");
+				//TODO
 				break;
 		}
 	}
