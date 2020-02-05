@@ -6,4 +6,4 @@ txtfmt:UTF8
 itercount:65536
 keylen:128
 encfiles:C:\Users\784713\Capstone\encrypted\
-outfiles:C:\Users\784713\Capstone\encrypted\
+outfiles:C:\Users\784713\Capstone\output\
