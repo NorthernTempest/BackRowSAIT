@@ -136,12 +136,12 @@ div#content {
   }
 
   div#nav {
-    width: 200px;
+    width: 100%;
     position: absolute;
     display: none;
     right: 0;
     padding: 10px;
-    transition: all 0s ease-in-out;
+    transition: transform 0s ease-in-out;
     transition-duration: 0.5s;
     transform: scale(1, 0);
     transform-origin: top;
@@ -165,5 +165,13 @@ div#content {
   span.nav-selected, span.nav-item {
     display: block;
     margin: 0 0 10px 0;
+  }
+
+  div#content {
+    padding: 27px;
+  }
+
+  span.nav-selected:after {
+    width: 50%;
   }
 }

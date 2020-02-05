@@ -2,7 +2,7 @@
 <hr>
 <div class="block text-center" id="footer">
     <i>You can also find us on:</i><br>
-    <a href="https://facebook.com/MCLTaxes"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://facebook.com/MCLTaxes" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
 </div>
 </div>
 <script>
@@ -14,9 +14,7 @@
             }, 500)
         } else {
             document.getElementById("nav").style.display = "block";
-            setTimeout(function() {
-                document.getElementById("nav").style.transform = "scale(1, 1)";
-            }, 500)
+            document.getElementById("nav").style.transform = "scale(1, 1)";
 
         }
     }
