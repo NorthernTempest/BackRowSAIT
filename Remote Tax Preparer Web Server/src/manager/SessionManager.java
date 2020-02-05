@@ -67,8 +67,7 @@ public final class SessionManager {
 	}
 	
 	/**
-	 * Takes the email and creates a new Session object passing the email
-	 * into the constructor. 
+	 * Creates a Session object and inserts it into the database.
 	 * @param email email to create a Session object for
 	 * @param sessionID the sessionID to set for the Session object
 	 * @return true if session created successfully, false if not

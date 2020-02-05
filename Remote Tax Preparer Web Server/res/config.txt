@@ -1,7 +1,7 @@
 cipher:AES/CBC/PKCS5Padding
 keypath:C:\Users\784713\Capstone\key.txt
 saltpath:C:\Users\784713\Capstone\salt.txt
-keyalgor:PBBKDF2WithHmacSHA1
+keyalgor:PBEWithHmacSHA256AndAES_128
 txtfmt:UTF8
 itercount:65536
 keylen:128

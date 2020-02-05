@@ -94,15 +94,17 @@ public final class LogEntryManager {
 	public static int checkAttempts(String email) {
 		return 0;
 	}
-
+	
 	/**
-	 * Inserts into the logEntry table of the database a specific type of log based
-	 * on a user having successfully logged in.
-	 * 
-	 * @param email email of the user that successfully logged in
-	 * @param ip    ip of the user that successfully logged in
+	 * Creates a LogEntry Object and inserts it into the database
+	 * @param email
+	 * @param message
+	 * @param type
+	 * @param ip
+	 * @return
 	 */
-	public static void insertLogin(String email, String ip) {
-
+	public static boolean createLogEntry(String email, String message, char type, String ip) {
+		return false;
 	}
+
 }

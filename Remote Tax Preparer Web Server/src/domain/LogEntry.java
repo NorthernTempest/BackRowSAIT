@@ -21,30 +21,22 @@ public class LogEntry {
 	public static final char DEACTIVATE_ACCOUNT = 'D';
 	public static final char UPDATE_ACCOUNT = 'U';
 	
-	public LogEntry(String email, String ip, char type) {
-		
-		setEmail(email);
-		setIp(ip);
+	public LogEntry(String email, String message, char type, String ip) {
+		this.email = email;
+		this.message = message;
 		setType(type);
-		setDate(new Date());
+		this.date = new Date();
+		this.ip = ip;
 	}
 	
-	public LogEntry(int logEntryID, String email, String ip, char type, Date date) {
+	public LogEntry(int logEntryID, String email, String message, char type, Date date, String ip) {
 		
-		setLogEntryID(logEntryID);
-		setEmail(email);
-		setIp(ip);
+		this.logEntryID = logEntryID;
+		this.email = email;
+		this.message = message;
 		setType(type);
-		setDate(date);
-	}
-
-	public LogEntry(int logEntryID, String email, char type, String message, Date date) {
-		
-		setLogEntryID(logEntryID);
-		setEmail(email);
-		setType(type);
-		setMessage(message);
-		setDate(date);
+		this.date = date;
+		this.ip = ip;
 	}
 	
 	/**
@@ -96,34 +88,10 @@ public class LogEntry {
 	}
 
 	/**
-	 * Sets the value of logID.
-	 * @param logID the logID to set
-	 */
-	public void setLogEntryID(int logEntryID) {
-		this.logEntryID = logEntryID;
-	}
-
-	/**
-	 * Sets the value of email.
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * Sets the value of message.
-	 * @param message the message to set
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	/**
 	 * Sets the value of type.
 	 * @param type the type to set
 	 */
-	public void setType(char type) {
+	private void setType(char type) {
 		
 		switch(type) {
 		
@@ -136,25 +104,9 @@ public class LogEntry {
 			
 			default:
 				System.out.println("Incorrect type character.");
-				//TODO
+				//TODO THROW A CUSTOM EXCEPTION
 				break;
 		}
-	}
-
-	/**
-	 * Sets the value of date.
-	 * @param date the date to set
-	 */
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	/**
-	 * Sets the value of ip.
-	 * @param ip the ip to set
-	 */
-	public void setIp(String ip) {
-		this.ip = ip;
 	}
 
 	public boolean isloggedOut(String email) {

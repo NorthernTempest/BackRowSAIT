@@ -48,9 +48,7 @@ public final class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		/* 
-		 * display login page
-		 */
+		//Display Login page
 		getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 	}
 
@@ -60,27 +58,6 @@ public final class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		/* TODO
-		 * 
-		 * check logs for attempts from ip
-		 * if attempts > threshold
-		 * 		tell the user
-		 * 		return
-		 * grab email
-		 * grab password
-		 * 
-		 * if inputs !validate()
-		 * 		tell the user
-		 * 		write to log
-		 * 		check logs for attempts
-		 * 		if attempts > threshold
-		 * 				put login attempts from ip on timer
-		 * 		go to get
-		 * else
-		 * 		get session from request
-		 * 		put sessionID in database
-		 * 		forward to home
-		 */
 		
 		//Grab user email
 		String email = request.getParameter("email");
@@ -95,16 +72,17 @@ public final class LoginServlet extends HttpServlet {
 		//Grab user password
 		String password = request.getParameter("password");
 		
-		//validate user info
+		//validate user info, forward.
+		String logMessage;
 		if (!UserManager.authenticate(email, password)) {
+			//tell user
 			request.setAttribute("errorMessage", "Incorrect email or password");
-			/*
-			 * write to log
-			 * check logs for attempts
-			 * if attempts > threshold
-			 * 		put login attempts from ip on timer
-			 * 	go to get
-			 */
+
+			//set log message
+			logMessage = "Failed login attempt";
+			
+			//forward to login
+			getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 			
 		} else {
 			//get session id
@@ -114,20 +92,26 @@ public final class LoginServlet extends HttpServlet {
 			//add session to database
 			SessionManager.createSession(email, sessionID);
 			
+			//set log message
+			logMessage = "Successful login attempt";
+			
 			//forward to home
 			getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
 		}
+		
+		//write to log
+		LogEntryManager.createLogEntry(email, logMessage, LogEntry.LOGIN_ATTEMPT, request.getRemoteAddr());
 
 	}
 	
 	/* ************************************************************************************************************************************************
 	 * *****************************************************************HELPER METHODS*****************************************************************
 	 * ************************************************************************************************************************************************
-	 * /
+	 */
 
 	/**
 	 * Checks logs for login attempts from email, if too many attempts return true
-	 * .
+	 * 
 	 * @param email the email to check login attempts for
 	 * @return true if too many log in attempts, false if not
 	 */
