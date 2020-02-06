@@ -91,8 +91,8 @@ public class LogEntryDB {
 			
 			if (rs.next()) {
 				
-				logEntry = new LogEntry(logEntryID, rs.getString("email"), rs.getString("type").charAt(0),
-										rs.getString("message"), rs.getDate("date"));
+				logEntry = new LogEntry(logEntryID, rs.getString("email"), rs.getString("message"), rs.getString("type").charAt(0),
+										rs.getDate("date"), rs.getString("ip"));
 			}
 		}
 		
@@ -155,10 +155,10 @@ public class LogEntryDB {
 			
 			rs = ps.executeQuery();
 			
-			while (rs.next()) {
+			while (rs.next()) { 
 				
-				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("type").charAt(0),
-										rs.getString("message"), rs.getDate("date"));
+				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("message"),
+						rs.getString("type").charAt(0), rs.getDate("date"), rs.getString("ip"));
 				
 				logEntries.add(logEntry);
 			}
@@ -201,8 +201,8 @@ public class LogEntryDB {
 			
 			while (rs.next()) {
 				
-				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("type").charAt(0),
-										rs.getString("message"), rs.getDate("date"));
+				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("message"), 
+										rs.getString("type").charAt(0), rs.getDate("date"), rs.getString("ip"));
 				
 				logEntries.add(logEntry);
 			}
