@@ -12,7 +12,7 @@ public class ConfigService {
 	 * 
 	 * @param option
 	 * @return
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	public static String fetchFromConfig(String option) throws FileNotFoundException {
 		try (Scanner s = new Scanner(new File(CONFIG_FILE_PATH))) {
@@ -20,10 +20,10 @@ public class ConfigService {
 			while (s.hasNext() && !line.startsWith(option)) {
 				line = s.nextLine();
 			}
-			if( line.startsWith( option ) )
+			if (line.startsWith(option))
 				return line.substring(option.length());
 			else
-				throw new IndexOutOfBoundsException( "End of config reached." );
+				throw new IndexOutOfBoundsException("End of config reached.");
 		}
 	}
 
@@ -36,7 +36,7 @@ public class ConfigService {
 		try (Scanner s = new Scanner(filePath)) {
 			String line = s.nextLine();
 
-			while (line != null && !line.equals("")) {
+			while (s.hasNext()) {
 				line += s.nextLine();
 			}
 

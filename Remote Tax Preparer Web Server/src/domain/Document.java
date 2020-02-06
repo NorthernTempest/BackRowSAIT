@@ -8,7 +8,7 @@ package domain;
  * @author Tristen Kreutz
  *
  */
-public abstract class Document {
+public class Document {
 
 	private String filePath;
 
@@ -19,13 +19,16 @@ public abstract class Document {
 	private int parcelID;
 
 	private String fileName;
+	
+	private long fileSize;
 
-	public Document(String filePath, boolean isSigned, boolean requiresSignature, int parcelID, String fileName) {
+	public Document(String filePath, boolean isSigned, boolean requiresSignature, int parcelID, String fileName, long fileSize) {
 		this.filePath = filePath;
 		this.isSigned = isSigned;
 		this.requiresSignature = requiresSignature;
 		this.parcelID = parcelID;
 		this.fileName = fileName;
+		this.fileSize = fileSize;
 	}
 
 	/**
@@ -62,6 +65,18 @@ public abstract class Document {
 	 */
 	public int getParcelID() {
 		return parcelID;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getFileName() {
+		return fileName;
+	}
+	
+	public long getFileSize() {
+		return fileSize;
 	}
 
 	/**
@@ -102,17 +117,17 @@ public abstract class Document {
 
 	/**
 	 * 
-	 * @return
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-
-	/**
-	 * 
 	 * @param fileName
 	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+	
+	/**
+	 * 
+	 * @param fileSize
+	 */
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
 	}
 }

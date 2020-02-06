@@ -13,6 +13,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -22,6 +23,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import domain.Document;
 
@@ -38,6 +42,7 @@ public class EncryptionService {
 	private static final String CONFIG_KEY_PATH = "keypath:";
 	private static final String CONFIG_SALT_PATH = "saltpath:";
 	private static final String CONFIG_KEY_ALGORITHM = "keyalgor:";
+	private static final String CONFIG_CIPHER_KEY_ALGORITHM = "cipherkeyalgor:";
 	private static final String CONFIG_ITERATION_COUNT = "itercount:";
 	private static final String CONFIG_KEY_LENGTH = "keylen:";
 	private static final String CONFIG_ENCRYPTED_FILES_DIR = "encfiles:";
@@ -48,11 +53,14 @@ public class EncryptionService {
 	 * 
 	 * @param toHash The string to hash
 	 * @return The hashed string
-	 * @throws NoSuchAlgorithmException If the algorithm in res/config.txt isn't valid according to https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
-	 * @throws InvalidKeySpecException 
-	 * @throws FileNotFoundException If res/config.txt isn't found
+	 * @throws NoSuchAlgorithmException If the algorithm in res/config.txt isn't
+	 *                                  valid according to
+	 *                                  https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws InvalidKeySpecException
+	 * @throws FileNotFoundException    If res/config.txt isn't found
 	 */
-	public static String hash(String toHash, String salt) throws InvalidKeySpecException, NoSuchAlgorithmException, FileNotFoundException {
+	public static String hash(String toHash, String salt)
+			throws InvalidKeySpecException, NoSuchAlgorithmException, FileNotFoundException {
 
 		byte[] hash = getKey(toHash, salt).getEncoded();
 
@@ -80,31 +88,31 @@ public class EncryptionService {
 	 * @throws InvalidKeyException
 	 * @throws IOException
 	 */
-	public static String encryptDocument(String filepath) throws NoSuchAlgorithmException, NoSuchPaddingException,
+	public static Document encryptDocument(String filepath, boolean isSigned, boolean requiresSignature, int parcelID) throws NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeySpecException, InvalidKeyException, IOException {
-
 		Cipher cipher = getCipher();
 
-		cipher.init(Cipher.ENCRYPT_MODE, getKey(ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_KEY_PATH)),
-				ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_SALT_PATH))));
+		SecretKey key = getKey(ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_KEY_PATH)),
+				ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_SALT_PATH)));
+
+		cipher.init(Cipher.ENCRYPT_MODE,
+				new SecretKeySpec(key.getEncoded(), ConfigService.fetchFromConfig(CONFIG_CIPHER_KEY_ALGORITHM)));
 
 		String outputPath = getEncryptedFilepath();
 
 		File f = new File(outputPath);
 		f.createNewFile();
+		File fileIn = new File( filepath );
 
 		try (FileInputStream in = new FileInputStream(filepath);
 				FileOutputStream out = new FileOutputStream(outputPath);
 				CipherOutputStream cipherOut = new CipherOutputStream(out, cipher)) {
 			out.write(cipher.getIV());
-
-			byte[] content = new byte[(int) f.length()];
-			in.read(content);
-
-			cipherOut.write(content);
+			
+			IOUtils.copy(in, cipherOut);
 		}
 
-		return outputPath;
+		return new Document( outputPath, isSigned, requiresSignature, parcelID, fileIn.getName(), fileIn.length() );
 	}
 
 	/**
@@ -121,8 +129,9 @@ public class EncryptionService {
 	 * @throws InvalidAlgorithmParameterException
 	 * @throws InvalidKeyException
 	 */
-	public static String decryptDocument(Document doc) throws FileNotFoundException, IOException, NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+	public static String decryptDocument(Document doc)
+			throws FileNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException {
 
 		String output = ConfigService.fetchFromConfig(CONFIG_OUTPUT_FILES_DIR) + doc.getFileName();
 
@@ -134,19 +143,19 @@ public class EncryptionService {
 			fileIn.read(fileIv);
 
 			Cipher cipher = getCipher();
-			cipher.init(Cipher.DECRYPT_MODE, getKey(ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_KEY_PATH)),
-					ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_SALT_PATH))), new IvParameterSpec(fileIv));
+
+			SecretKey key = getKey(ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_KEY_PATH)),
+					ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_SALT_PATH)));
+
+			cipher.init(Cipher.DECRYPT_MODE,
+					new SecretKeySpec(key.getEncoded(), ConfigService.fetchFromConfig(CONFIG_CIPHER_KEY_ALGORITHM)),
+					new IvParameterSpec(fileIv));
 
 			cipherIn = new CipherInputStream(fileIn, cipher);
 
 			out = new FileOutputStream(ConfigService.fetchFromConfig(CONFIG_OUTPUT_FILES_DIR) + doc.getFileName());
 
-			File f = new File(doc.getFilePath());
-
-			byte[] content = new byte[(int) f.length()];
-			cipherIn.read(content);
-
-			out.write(content);
+			IOUtils.copy(cipherIn, out);
 
 		} finally {
 			cipherIn.close();
@@ -193,7 +202,7 @@ public class EncryptionService {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws NoSuchPaddingException
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, FileNotFoundException {
 		return Cipher.getInstance(ConfigService.fetchFromConfig(CONFIG_CIPHER));
@@ -206,14 +215,15 @@ public class EncryptionService {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
-	 * @throws FileNotFoundException 
-	 * @throws NumberFormatException 
+	 * @throws FileNotFoundException
+	 * @throws NumberFormatException
 	 */
 	private static SecretKey getKey(String toHash, String salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException, NumberFormatException, FileNotFoundException {
 		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(),
 				Integer.parseInt(ConfigService.fetchFromConfig(CONFIG_ITERATION_COUNT)),
 				Integer.parseInt(ConfigService.fetchFromConfig(CONFIG_KEY_LENGTH)));
+
 		SecretKeyFactory skf = SecretKeyFactory.getInstance(ConfigService.fetchFromConfig(CONFIG_KEY_ALGORITHM));
 
 		return skf.generateSecret(spec);
@@ -222,9 +232,9 @@ public class EncryptionService {
 	/**
 	 * 
 	 * @return
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	private static String getEncryptedFilepath() throws FileNotFoundException {
-		return ConfigService.fetchFromConfig(CONFIG_ENCRYPTED_FILES_DIR) + getSalt() + ".secure";
+		return ConfigService.fetchFromConfig(CONFIG_ENCRYPTED_FILES_DIR) + UUID.randomUUID().toString() + ".secure";
 	}
 }
