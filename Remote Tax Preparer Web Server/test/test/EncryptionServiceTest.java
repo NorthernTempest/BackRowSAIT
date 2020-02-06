@@ -3,28 +3,23 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import javax.crypto.NoSuchPaddingException;
+
 import org.junit.jupiter.api.Test;
 
+import domain.Document;
 import manager.EncryptionService;
 
 class EncryptionServiceTest {
 
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
-
 	@Test
 	void saltTest() {
-
 		for (int i = 0; i < 100000; i++) {
 			String salt1 = EncryptionService.getSalt();
 			String salt2 = EncryptionService.getSalt();
@@ -52,5 +47,12 @@ class EncryptionServiceTest {
 		assertTrue(EncryptionService.hash(password3, salt).equals(EncryptionService.hash(password1, salt)));
 	}
 	
-	
+	@Test
+	void encrpytDocTest() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException {
+		String unencryptedFilePath = "C:\\Users\\784713\\Capstone\\test_pdf_large.pdf";
+		
+		Document encryptedFile = EncryptionService.encryptDocument( unencryptedFilePath, false, false, 1 );
+		
+		String decryptedFilePath = EncryptionService.decryptDocument( encryptedFile );
+	}
 }

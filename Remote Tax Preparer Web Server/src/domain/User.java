@@ -23,6 +23,8 @@ public class User {
 	
 	private String passHash;
 	
+	private String passSalt;
+	
 	private int ID;
 	
 	private String title;
@@ -51,13 +53,14 @@ public class User {
 		
 	}
 	
-	public User(String email, String fname, String lname, String phone, String passHash) {
+	public User(String email, String fname, String lname, String phone, String passHash, String passSalt) {
 		
 		setEmail(email);
 		setfName(fname);
 		setlName(lname);
 		setPhone(phone);
 		setPassHash(passHash);
+		setPassSalt(passSalt);
 	}
 
 	/**
@@ -112,6 +115,15 @@ public class User {
 	public String getPassHash() {
 		
 		return passHash;
+	}
+	
+	/**
+	 * Returns the salt for hashing the password.
+	 * @return the salt for hashing the password.
+	 */
+	public String getPassSalt() {
+		
+		return passSalt;
 	}
 
 	/**
@@ -221,6 +233,7 @@ public class User {
 				
 			default:
 				System.out.println("Incorrect role value.");
+				this.permissionLevel = DEFAULT;
 		}
 	}
 
@@ -240,6 +253,15 @@ public class User {
 	public void setPassHash(String passHash) {
 		
 		this.passHash = passHash;
+	}
+	
+	/**
+	 * 
+	 * @param passSalt2
+	 */
+	private void setPassSalt(String passSalt) {
+
+		this.passSalt = passSalt;
 	}
 
 	/**
