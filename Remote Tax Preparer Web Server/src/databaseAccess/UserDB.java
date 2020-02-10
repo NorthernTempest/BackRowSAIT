@@ -195,7 +195,7 @@ public class UserDB {
 			if (rs.next()) {
 				
 				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
-								rs.getString("phone"), rs.getString("pass_hash"));
+								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
 			}
 		}
 		
@@ -237,7 +237,7 @@ public class UserDB {
 			while (rs.next()) {
 				
 				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
-								rs.getString("phone"), rs.getString("pass_hash"));
+								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
 				
 				users.add(user);
 			}
