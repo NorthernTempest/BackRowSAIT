@@ -20,7 +20,7 @@ public class TaxReturnDB {
 	 * @param taxReturn TaxReturn to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(TaxReturn taxReturn) {
+	public static boolean insert(TaxReturn taxReturn) {
 		return false;
 	}
 	
@@ -32,7 +32,7 @@ public class TaxReturnDB {
 	 * @param taxReturn TaxReturn to update in the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean update(TaxReturn taxReturn) {
+	public static boolean update(TaxReturn taxReturn) {
 		return false;
 	}
 	
@@ -43,7 +43,7 @@ public class TaxReturnDB {
 	 * @param taxReturnID taxReturnID of the TaxReturn to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(int taxReturnID) {
+	public static boolean delete(int taxReturnID) {
 		return false;
 	}
 	
@@ -54,7 +54,7 @@ public class TaxReturnDB {
 	 * @param taxReturnID taxReturnID of the TaxReturn to retrieve from the database
 	 * @return TaxReturn that contains the information of the requested TaxReturn
 	 */
-	public TaxReturn get(int taxReturnID) {
+	public static TaxReturn get(int taxReturnID) {
 		return null;
 	}
 	
@@ -64,7 +64,7 @@ public class TaxReturnDB {
 	 * and returns that to the calling object.
 	 * @return ArrayList<TaxReturn> containing all of the TaxReturns from the database
 	 */
-	public ArrayList<TaxReturn> getAll() {
+	public static ArrayList<TaxReturn> getAll() {
 		return null;
 	}
 }

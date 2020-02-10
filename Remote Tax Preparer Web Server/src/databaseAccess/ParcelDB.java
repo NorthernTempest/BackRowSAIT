@@ -20,7 +20,7 @@ public class ParcelDB {
 	 * @param parcel Parcel to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(Parcel parcel) {
+	public static boolean insert(Parcel parcel) {
 		return false;
 	}
 	
@@ -32,7 +32,7 @@ public class ParcelDB {
 	 * @param parcel Parcel to update in the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean update(Parcel parcel) {
+	public static boolean update(Parcel parcel) {
 		return false;
 	}
 	
@@ -43,7 +43,7 @@ public class ParcelDB {
 	 * @param parcelID parcelID of the Parcel to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(int parcelID) {
+	public static boolean delete(int parcelID) {
 		return false;
 	}
 	
@@ -54,7 +54,7 @@ public class ParcelDB {
 	 * @param parcelID parcelID of the Parcel to retrieve from the database
 	 * @return Parcel that contains the information of the requested Parcel
 	 */
-	public Parcel get(int parcelID) {
+	public static Parcel get(int parcelID) {
 		return null;
 	}
 	
@@ -64,7 +64,7 @@ public class ParcelDB {
 	 * and returns that to the calling object.
 	 * @return ArrayList<Parcel> containing all of the Parcels from the database
 	 */
-	public ArrayList<Parcel> getAll() {
+	public static ArrayList<Parcel> getAll() {
 		return null;
 	}
 	
@@ -76,7 +76,7 @@ public class ParcelDB {
 	 * @param email email
 	 * @return ArrayList<Parcel> containing related parcels
 	 */
-	public ArrayList<Parcel> getAllParcels(String taxReturnID, String email) {
+	public static ArrayList<Parcel> getAllParcels(String taxReturnID, String email) {
 		return null;
 	}
 }
