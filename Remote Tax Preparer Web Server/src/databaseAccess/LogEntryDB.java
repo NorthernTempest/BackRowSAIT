@@ -25,7 +25,7 @@ public class LogEntryDB {
 	 * @param logEntry LogEntry to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(LogEntry logEntry) {
+	public static boolean insert(LogEntry logEntry) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -72,7 +72,7 @@ public class LogEntryDB {
 	 * @param logEntryID logEntryID of the LogEntry to retrieve from the database
 	 * @return LogEntry that contains the information of the requested Log
 	 */
-	public LogEntry get(int logEntryID) {
+	public static LogEntry get(int logEntryID) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -120,7 +120,7 @@ public class LogEntryDB {
 	 * @param ip
 	 * @return
 	 */
-	public ArrayList<LogEntry> getByParameters(String email, char type, java.util.Date startDate, java.util.Date endDate, String ip){
+	public static ArrayList<LogEntry> getByParameters(String email, char type, java.util.Date startDate, java.util.Date endDate, String ip){
 		/*
 		 * note to whoever is writing this code, do some clever string appends within 
 		 * if statements here to get the select statement right.
@@ -247,7 +247,7 @@ public class LogEntryDB {
 	 * @param email email of the Logs to retrieve from the database
 	 * @return ArrayList<Log> that contains information of the requested Logs
 	 */
-	public ArrayList<LogEntry> getByEmail(String email) {
+	public static ArrayList<LogEntry> getByEmail(String email) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -293,7 +293,7 @@ public class LogEntryDB {
 	 * and returns that to the calling object.
 	 * @return ArrayList<LogEntry> containing all of the Logs from the database
 	 */
-	public ArrayList<LogEntry> getAll() {
+	public static ArrayList<LogEntry> getAll() {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();

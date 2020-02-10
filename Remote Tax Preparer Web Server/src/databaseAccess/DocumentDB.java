@@ -21,7 +21,7 @@ public class DocumentDB {
 	 * @param doc Document to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(Document doc) {
+	public static boolean insert(Document doc) {
 		return false;
 	}
 	
@@ -33,7 +33,7 @@ public class DocumentDB {
 	 * @param doc Document to update in the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean update(Document doc) {
+	public static boolean update(Document doc) {
 		return false;
 	}
 	
@@ -44,7 +44,7 @@ public class DocumentDB {
 	 * @param filePath filePath of the Document to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(String filePath) {
+	public static boolean delete(String filePath) {
 		return false;
 	}
 	
@@ -55,7 +55,7 @@ public class DocumentDB {
 	 * @param filePath filePath of the Document to retrieve from the database
 	 * @return Document that contains the information of the requested Document
 	 */
-	public Document get(String filePath) {
+	public static Document get(String filePath) {
 		return null;
 	}
 	
@@ -65,7 +65,7 @@ public class DocumentDB {
 	 * and returns that to the calling object.
 	 * @return ArrayList<Document> containing all of the Documents from the database
 	 */
-	public ArrayList<Document> getAll() {
+	public static ArrayList<Document> getAll() {
 		return null;
 	}
 }
