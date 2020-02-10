@@ -10,6 +10,7 @@ CREATE TABLE user (
     permission_level INT NOT NULL,
     phone CHAR(10),
     pass_hash CHAR(32) NOT NULL,
+    pass_salt CHAR(32) NOT NULL,
     title VARCHAR(5),
     creation_date DATE NOT NULL,
     fax CHAR(10),
@@ -111,3 +112,10 @@ CREATE TABLE payment (
     FOREIGN KEY (return_id) REFERENCES tax_return(return_id));
 	
 COMMIT;
+
+/* The following section is for testing purposes only!
+ * TODO: Remove before deployment.
+ */
+
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active)
+VALUES ("test@test.com", "Timmy", "Turner", 1, "pass", "word", CURDATE(), "y");
