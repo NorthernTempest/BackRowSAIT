@@ -86,17 +86,6 @@ public final class LogEntryManager {
 		
 		return log;
 	}
-
-	/**
-	 * Counts the number of times a logEntry of type LOGIN_ATTEMPT has been created
-	 * matching the passed email within the past 10 minutes.
-	 * 
-	 * @param email email of logs to count
-	 * @return number of logs counted matching the above conditions
-	 */
-	public static int checkAttempts(String email) {
-		return 0;
-	}
 	
 	/**
 	 * Creates a LogEntry Object and inserts it into the database

@@ -127,7 +127,7 @@ public class LogEntryDB {
 		 * null should be a wildcard so if(param = null) dont append.
 		 */
 		
-		return null;
+		return new ArrayList<LogEntry>();
 	}
 	
 	/**
