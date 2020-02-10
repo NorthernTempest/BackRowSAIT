@@ -23,11 +23,11 @@ public final class UserManager {
 	/**
 	 * Maximum number of login attempts within LOGIN_ATTEMPT_TIMELIMIT
 	 */
-	private static final int MAX_LOGIN_ATTEMPTS = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS"));
+	private static final int MAX_LOGIN_ATTEMPTS = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
 	/**
 	 * Time in minutes to check for login attempts
 	 */
-	private static final int LOGIN_ATTEMPT_TIMELIMIT = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT"));
+	private static final int LOGIN_ATTEMPT_TIMELIMIT = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
 	
 	/**
 	 * Takes an email String and a password String to check against what exists in
