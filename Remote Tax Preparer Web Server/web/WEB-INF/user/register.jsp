@@ -55,6 +55,21 @@
     <div class="col-md-6">
 
     </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <h3>Settings</h3>
+            <label for="language">Preferred Language</label>
+            <select name="language" id="language" value="eng">
+                <option value="eng">English</option>
+                <option value="spn">Spanish</option>
+                <option value="fre">French</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+
+    </div>
 </form>
 
 <jsp:directive.include file = "../../template/foot.jsp" />
