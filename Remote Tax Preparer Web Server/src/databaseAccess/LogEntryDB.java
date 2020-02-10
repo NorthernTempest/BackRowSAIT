@@ -127,7 +127,117 @@ public class LogEntryDB {
 		 * null should be a wildcard so if(param = null) dont append.
 		 */
 		
-		return null;
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs = null;
+		LogEntry logEntry = null;
+		ArrayList<LogEntry> logEntries = new ArrayList<>();
+		String preparedQuery;
+		
+		try {
+			
+			if (email == null && !Character.isLetter(type) && startDate == null && endDate == null && ip == null) {
+				preparedQuery = "SELECT * FROM log";
+			}
+			
+			else {
+				
+				preparedQuery = "SELECT * FROM log WHERE ";
+				int i = 0;
+				
+				if (email != null) {
+					
+					preparedQuery = preparedQuery + "email = " + email;
+					i++;
+				}
+				
+				if (Character.isLetter(type)) {
+					
+					if (i == 0) {
+						
+						preparedQuery = preparedQuery + "type = " + type;
+					}
+					
+					else {
+						
+						preparedQuery = preparedQuery + " AND type = " + type;
+					}
+					
+					i++;
+				}
+				
+				if (startDate != null) {
+					
+					if (i == 0) {
+						
+						preparedQuery = preparedQuery + "start_date = " + startDate;
+					}
+					
+					else {
+						
+						preparedQuery = preparedQuery + " AND start_date = " + startDate;
+					}
+					
+					i++;
+				}
+				
+				if (endDate != null) {
+					
+					if (i == 0) {
+						
+						preparedQuery = preparedQuery + "end_date = " + endDate;
+					}
+					
+					else {
+						
+						preparedQuery = preparedQuery + " AND end_date = " + endDate;
+					}
+					
+					i++;
+				}
+				
+				if (ip != null) {
+					
+					if (i == 0) {
+						
+						preparedQuery = preparedQuery + "ip = " + ip;
+					}
+					
+					else {
+						
+						preparedQuery = preparedQuery + " AND ip = " + ip;
+					}
+					
+					i++;
+				}
+			}
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(1, email);
+			
+			rs = ps.executeQuery();
+			
+			while (rs.next()) { 
+				
+				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("message"),
+						rs.getString("type").charAt(0), rs.getDate("date"), rs.getString("ip"));
+				
+				logEntries.add(logEntry);
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return logEntries;
 	}
 	
 	/**

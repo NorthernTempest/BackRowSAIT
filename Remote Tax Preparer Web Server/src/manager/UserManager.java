@@ -22,11 +22,11 @@ public final class UserManager {
 	/**
 	 * Maximum number of login attempts within LOGIN_ATTEMPT_TIMELIMIT
 	 */
-	private static final int MAX_LOGIN_ATTEMPTS = 5;
+	private static final int MAX_LOGIN_ATTEMPTS = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS"));
 	/**
 	 * Time in minutes to check for login attempts
 	 */
-	private static final int LOGIN_ATTEMPT_TIMELIMIT = 10;
+	private static final int LOGIN_ATTEMPT_TIMELIMIT = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT"));
 
 	/**
 	 * Takes the User object passed into the method and calls the insert method of
@@ -152,10 +152,11 @@ public final class UserManager {
 		cal.setTime(new Date());
 		Date endDate = cal.getTime();
 		cal.add(Calendar.MINUTE, LOGIN_ATTEMPT_TIMELIMIT);
-		Date startDate = cal.getTime();
-		ArrayList<LogEntry> logs = LogEntryManager.getLog(email, LogEntry.LOGIN_ATTEMPT, startDate, endDate, null);
 
-		if (logs.size() > MAX_LOGIN_ATTEMPTS) {
+		Date startDate = cal.getTime();
+		ArrayList<LogEntry> log = LogEntryManager.getLog(email, LogEntry.LOGIN_ATTEMPT, startDate, endDate, null);
+
+		if (log.size() > MAX_LOGIN_ATTEMPTS) {
 			return true;
 		}
 		return false;
