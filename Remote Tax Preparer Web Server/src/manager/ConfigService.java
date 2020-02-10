@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class ConfigService {
+import exception.ConfigException;
+
+public final class ConfigService {
 
 	public static final String CONFIG_FILE_PATH = "res/config.txt";
 
@@ -12,10 +14,11 @@ public class ConfigService {
 	 * 
 	 * @param option
 	 * @return
-	 * @throws FileNotFoundException
 	 */
-	public static String fetchFromConfig(String option) throws FileNotFoundException {
-		try (Scanner s = new Scanner(new File(CONFIG_FILE_PATH))) {
+	public static String fetchFromConfig(String option) {
+		Scanner s = null;
+		try {
+			s = new Scanner(new File(CONFIG_FILE_PATH));
 			String line = s.nextLine();
 			while (s.hasNext() && !line.startsWith(option)) {
 				line = s.nextLine();
@@ -23,7 +26,14 @@ public class ConfigService {
 			if (line.startsWith(option))
 				return line.substring(option.length());
 			else
-				throw new IndexOutOfBoundsException("End of config reached.");
+				throw new ConfigException("End of config reached.");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new ConfigException( "Config not found." );
+		}
+		finally
+		{
+			s.close();
 		}
 	}
 
@@ -33,7 +43,9 @@ public class ConfigService {
 	 * @return
 	 */
 	public static String fetchContents(String filePath) {
-		try (Scanner s = new Scanner(filePath)) {
+		Scanner s = null;
+		try {
+			s = new Scanner(filePath);
 			String line = s.nextLine();
 
 			while (s.hasNext()) {
@@ -41,6 +53,10 @@ public class ConfigService {
 			}
 
 			return line;
+		}
+		finally
+		{
+			s.close();
 		}
 	}
 
