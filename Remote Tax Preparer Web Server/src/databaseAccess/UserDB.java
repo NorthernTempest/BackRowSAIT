@@ -1,5 +1,10 @@
 package databaseAccess;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import domain.User;
@@ -21,6 +26,48 @@ public class UserDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public boolean insert(User user) {
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+		
+		try {
+			
+			String preparedQuery = "INSERT INTO user (email, f_name, l_name, permission_level, phone, "
+									+ "pass_hash, title, creation_date, fax, active) "
+									+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(1, user.getEmail());
+			ps.setString(2, user.getfName());
+			ps.setString(3, user.getlName());
+			ps.setInt(4, user.getPermissionLevel());
+			ps.setString(5, user.getPhone());
+			ps.setString(6, user.getPassHash());
+			ps.setString(7, user.getTitle());
+			ps.setDate(8, (Date) user.getCreationDate());
+			ps.setString(9, user.getFax());
+			ps.setBoolean(10, user.isActive());
+			
+			rows = ps.executeUpdate();
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		if (rows > 0) {
+			
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -33,6 +80,48 @@ public class UserDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public boolean update(User user) {
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+		
+		try {
+			
+			String preparedQuery = "UPDATE user f_name = ?, l_name = ?, permission_level = ?, "
+									+ "phone = ?, pass_hash = ?, title = ?, creation_date = ?, "
+									+ "fax = ?, active = ? WHERE email = ?)";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(1, user.getfName());
+			ps.setString(2, user.getlName());
+			ps.setInt(3, user.getPermissionLevel());
+			ps.setString(4, user.getPhone());
+			ps.setString(5, user.getPassHash());
+			ps.setString(6, user.getTitle());
+			ps.setDate(7, (Date) user.getCreationDate());
+			ps.setString(8, user.getFax());
+			ps.setBoolean(9, user.isActive());
+			ps.setString(10, user.getEmail());
+			
+			rows = ps.executeUpdate();
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		if (rows > 0) {
+			
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -44,6 +133,38 @@ public class UserDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public boolean delete(String email) {
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+		
+		try {
+			
+			String preparedQuery = "UPDATE user SET active = ? WHERE email = ?";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setBoolean(1, false);
+			ps.setString(2, email);
+			
+			rows = ps.executeUpdate();
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		if (rows > 0) {
+			
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -55,7 +176,40 @@ public class UserDB {
 	 * @return User that contains the information of the requested User
 	 */
 	public User get(String email) {
-		return null;
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		User user = null;
+		
+		try {
+			
+			String preparedQuery = "SELECT * FROM user WHERE email = ?";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(2, email);
+			
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				
+				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
+								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return user;
 	}
 	
 	/**
@@ -65,6 +219,40 @@ public class UserDB {
 	 * @return ArrayList<User> containing all of the Users from the database
 	 */
 	public ArrayList<User> getAll() {
-		return null;
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		ArrayList<User> users = new ArrayList<>();
+		User user = null;
+		
+		try {
+			
+			String preparedQuery = "SELECT * FROM user";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				
+				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
+								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
+				
+				users.add(user);
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return users;
 	}
 }

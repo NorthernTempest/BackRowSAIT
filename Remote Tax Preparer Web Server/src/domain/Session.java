@@ -8,16 +8,18 @@ import java.util.Date;
  * @author Tristen Kreutz
  *
  */
-public class Session {
+public final class Session {
 
-	private String sessionID;
-	
 	private String email;
+	
+	private String sessionID;
 	
 	private Date timeout;
 	
-	public Session(String email, String sessionID, Date date) {
-		
+	public Session(String email, String sessionID, Date timeout) {
+		this.email = email;
+		this.sessionID = sessionID;
+		this.timeout = timeout;
 	}
 
 	/**

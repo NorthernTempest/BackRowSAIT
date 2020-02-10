@@ -1,2 +1,5 @@
 /build/
-/web/WEB-INF/web.xml
+/.classpath
+/*.project
+/.settings
+/bin/

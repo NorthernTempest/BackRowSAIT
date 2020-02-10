@@ -5,6 +5,7 @@ CREATE TABLE user (
     permission_level INT NOT NULL,
     phone CHAR(10),
     pass_hash CHAR(32) NOT NULL,
+    salt CHAR(32) NOT NULL,
     title VARCHAR(5),
     creation_date DATE NOT NULL,
     fax CHAR(10),
