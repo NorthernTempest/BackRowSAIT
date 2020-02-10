@@ -8,7 +8,7 @@ import exception.ConfigException;
 
 public final class ConfigService {
 
-	public static final String CONFIG_FILE_PATH = "res/config.txt";
+	public static final String CONFIG_FILE_PATH = "C:\\Capstone\\BackRowSAIT\\Remote Tax Preparer Web Server\\res\\config.txt";
 
 	/**
 	 * 
@@ -23,17 +23,19 @@ public final class ConfigService {
 			while (s.hasNext() && !line.startsWith(option)) {
 				line = s.nextLine();
 			}
+			s.close();
 			if (line.startsWith(option))
 				return line.substring(option.length());
 			else
 				throw new ConfigException("End of config reached.");
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new ConfigException( "Config not found." );
 		}
 		finally
 		{
-			s.close();
+			
 		}
 	}
 

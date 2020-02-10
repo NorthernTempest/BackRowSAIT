@@ -55,7 +55,7 @@ public final class LoginServlet extends HttpServlet {
 		//try to login user, forward as appropriate.
 		if (UserManager.tooManyAttempts(email)) {
 			//tell user
-			request.setAttribute("errorMessage", "Too many attemots, try again later");
+			request.setAttribute("errorMessage", "Too many attempts, try again later");
 			//forward to login
 			getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 			
