@@ -35,6 +35,7 @@
             <h3>Personal Info</h3>
             <label for="title">Title</label>
             <select name="title" id="title">
+                <option value="Na">N/A</option>
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
                 <option value="Ms">Ms</option>
