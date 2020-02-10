@@ -38,6 +38,7 @@
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
                 <option value="Ms">Ms</option>
+                <option value="Mx">Mx</option>
             </select>
             <label for="f-name">First Name</label>
             <input name="f-name" id="f-name">
@@ -49,6 +50,21 @@
             <input type="tel" name="phone" id="phone">
             <label for="fax">Primary Phone Number</label>
             <input type="tel" name="fax" id="fax">
+        </div>
+    </div>
+    <div class="col-md-6">
+
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <h3>Settings</h3>
+            <label for="language">Preferred Language</label>
+            <select name="language" id="language" value="eng">
+                <option value="eng">English</option>
+                <option value="spn">Spanish</option>
+                <option value="fre">French</option>
+            </select>
         </div>
     </div>
     <div class="col-md-6">
