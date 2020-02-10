@@ -38,6 +38,7 @@
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
                 <option value="Ms">Ms</option>
+                <option value="Mx">Mx</option>
             </select>
             <label for="f-name">First Name</label>
             <input name="f-name" id="f-name">
