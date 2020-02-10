@@ -1,12 +1,12 @@
 cipher:AES/CBC/PKCS5Padding
-keypath:C:\Capstone\key.txt
-saltpath:C:\Capstone\salt.txt
+keypath:C:\Capstone\TestFiles\key.txt
+saltpath:C:\Capstone\TestFiles\salt.txt
 keyalgor:PBEWithHmacSHA256AndAES_256
 cipherkeyalgor:AES
 txtfmt:UTF8
 itercount:65536
 keylen:256
-encfiles:C:\Capstone\encrypted\
-outfiles:C:\Capstone\output\
+encfiles:C:\Capstone\TestFiles\encrypted\
+outfiles:C:\Capstone\TestFiles\output\
 MAX_LOGIN_ATTEMPTS:5
 LOGIN_ATTEMPT_TIMELIMIT:10
