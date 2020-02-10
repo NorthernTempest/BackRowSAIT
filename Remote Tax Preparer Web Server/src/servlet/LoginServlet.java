@@ -71,7 +71,7 @@ public final class LoginServlet extends HttpServlet {
 			String sessionID = session.getId();
 			
 			//create a session
-			SessionManager.createSession(email, sessionID);
+			SessionManager.createSession(email, sessionID, ip);
 			
 			//forward to home
 			getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);

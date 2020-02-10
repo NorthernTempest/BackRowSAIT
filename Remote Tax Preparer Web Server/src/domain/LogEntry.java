@@ -20,6 +20,7 @@ public class LogEntry {
 	public static final char ERROR = 'E';
 	public static final char DEACTIVATE_ACCOUNT = 'D';
 	public static final char UPDATE_ACCOUNT = 'U';
+	public static final char SESSION_UPDATE = 'S';
 	
 	public LogEntry(String email, String message, char type, String ip) {
 		this.email = email;

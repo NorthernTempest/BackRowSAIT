@@ -17,7 +17,7 @@ import domain.User;
  * @author Tristen Kreutz, Cesar Guzman, Taylor Hanlon
  *
  */
-public class UserManager {
+public final class UserManager {
 
 	/**
 	 * Maximum number of login attempts within LOGIN_ATTEMPT_TIMELIMIT

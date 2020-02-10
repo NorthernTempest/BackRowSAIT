@@ -12,7 +12,7 @@ import domain.Session;
  * @author Tristen Kreutz
  *
  */
-public class SessionDB {
+public final class SessionDB {
 
 	/**
 	 * Establishes a connection with the database and inserts the Session object passed

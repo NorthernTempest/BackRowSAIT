@@ -1,7 +1,11 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import databaseAccess.SessionDB;
+import domain.LogEntry;
 import domain.Session;
 
 /**
@@ -13,6 +17,8 @@ import domain.Session;
  *
  */
 public final class SessionManager {
+	
+	public static final int SESSION_TIMEOUT = 30;
 
 	// Should not do this
 	/**
@@ -72,7 +78,22 @@ public final class SessionManager {
 	 * @param sessionID the sessionID to set for the Session object
 	 * @return true if session created successfully, false if not
 	 */
-	public static boolean createSession(String email, String sessionID) {
+	public static boolean createSession(String email, String sessionID, String ip) {
+		//Create session with correct timeout date
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.MINUTE, SESSION_TIMEOUT);
+		Date timeoutDate = cal.getTime();
+		Session session = new Session(email, sessionID, timeoutDate);
+		
+		//insert session to database
+		SessionDB sdb = new SessionDB();
+		sdb.insert(session);
+		
+		//write to log
+		String logMessage = "Session created";
+		LogEntryManager.createLogEntry(email, logMessage, LogEntry.SESSION_UPDATE, ip);
+		
 		return false;
 	}
 }
