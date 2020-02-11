@@ -35,6 +35,7 @@
             <h3>Personal Info</h3>
             <label for="title">Title</label>
             <select name="title" id="title">
+                <option value="Na">N/A</option>
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
                 <option value="Ms">Ms</option>
@@ -42,13 +43,15 @@
             </select>
             <label for="f-name">First Name</label>
             <input name="f-name" id="f-name">
+            <label for="m-name">Middle Name</label>
+            <input name="m-name" id="m-name">
             <label for="l-name">Last Name</label>
             <input name="l-name" id="l-name">
         </div>
         <div class="form-group">
             <label for="phone">Primary Phone Number</label>
             <input type="tel" name="phone" id="phone">
-            <label for="fax">Primary Phone Number</label>
+            <label for="fax">Fax Number</label>
             <input type="tel" name="fax" id="fax">
         </div>
     </div>
