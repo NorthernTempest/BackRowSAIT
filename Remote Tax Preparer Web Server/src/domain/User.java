@@ -57,21 +57,11 @@ public class User {
 	private final int ADMIN = 3;
 
 	private final int SYSADMIN = 4;
-	
+
 	public User() {
-		
+
 	}
 
-	public User(String email, String f_name, String l_name, String phone, String pass_hash, String pass_salt) {
-		
-		setEmail(email);
-		setfName(f_name);
-		setlName(l_name);
-		setPhone(phone);
-		setPassHash(pass_hash);
-		setPassSalt(pass_salt);
-	}
-	
 	/**
 	 * @return the email
 	 */

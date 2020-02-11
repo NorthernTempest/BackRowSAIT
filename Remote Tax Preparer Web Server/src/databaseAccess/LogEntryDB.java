@@ -120,8 +120,7 @@ public class LogEntryDB {
 	 * @param ip
 	 * @return
 	 */
-	public static ArrayList<LogEntry> getByParameters(String email, char type, java.util.Date startDate, 
-																		java.util.Date endDate, String ip) {
+	public static ArrayList<LogEntry> getByParameters(String email, char type, java.util.Date startDate, java.util.Date endDate, String ip){
 		/*
 		 * note to whoever is writing this code, do some clever string appends within 
 		 * if statements here to get the select statement right.
@@ -214,6 +213,8 @@ public class LogEntryDB {
 			}
 			
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(1, email);
 			
 			rs = ps.executeQuery();
 			

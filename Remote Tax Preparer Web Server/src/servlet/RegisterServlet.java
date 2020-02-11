@@ -44,40 +44,18 @@ public final class RegisterServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//Grab user ip
-		String ip = request.getRemoteAddr();
-		//Grab user email
-		String email = request.getParameter("email");
-		//Grab user password
-		String password = request.getParameter("password1");
-		//Grab user passConf
-		String passConf = request.getParameter("password2");
-		//Grab user title
-		String title = request.getParameter("title");
-		//Grab user fName
-		String fName = request.getParameter("f-name");
-		//Grab user mName
-		String mName = request.getParameter("m-name");
-		//Grab user lName
-		String lName = request.getParameter("l-name");
-		//Grab user phone
-		String phone = request.getParameter("phone");
-		//Grab user fax
-		String fax = request.getParameter("fax");
-		//Grab user language
-		String language = request.getParameter("language");
-		
-		
-
+		//validate and get all inputs
 		//hey usermanager make a user in the db
 		//did you? 
-		//dope. tell the user all is good
-		//tell the user a verification email has been sent
-		//go to login once user is like K
+			//dope. tell the user all is good
+			//tell the user a verification email has been sent
+			//go to login once user is like K
 		//did you not?
-		//uh oh. tell the user is not good
-		//to to register page once user is like K
-
+			//uh oh. tell the user is not good
+			//to to register page once user is like K
+		
+		
+		
 		//Show a page, probably login
 		getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 	}
