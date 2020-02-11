@@ -19,4 +19,7 @@ ADD CONSTRAINT CHK_user_permission_level CHECK (permission_level BETWEEN 0 AND 3
 ALTER TABLE user
 ADD CONSTRAINT CHK_user_active CHECK (active = 'T' OR active = 'F');
 
+ALTER TABLE user
+    ADD CONSTRAINT CHK_user_verified CHECK (verified = 'T' OR verified = 'F');
+
 COMMIT;
