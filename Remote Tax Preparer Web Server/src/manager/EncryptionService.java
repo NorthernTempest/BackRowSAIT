@@ -38,15 +38,15 @@ import domain.Document;
  */
 public class EncryptionService {
 
-	private static final String CONFIG_CIPHER = "cipher:";
-	private static final String CONFIG_KEY_PATH = "keypath:";
-	private static final String CONFIG_SALT_PATH = "saltpath:";
-	private static final String CONFIG_KEY_ALGORITHM = "keyalgor:";
-	private static final String CONFIG_CIPHER_KEY_ALGORITHM = "cipherkeyalgor:";
-	private static final String CONFIG_ITERATION_COUNT = "itercount:";
-	private static final String CONFIG_KEY_LENGTH = "keylen:";
-	private static final String CONFIG_ENCRYPTED_FILES_DIR = "encfiles:";
-	private static final String CONFIG_OUTPUT_FILES_DIR = "outfiles:";
+	private static final String CIPHER_TRANSFORM = ConfigService.fetchFromConfig("cipher:");
+	private static final String KEY_PATH = ConfigService.fetchFromConfig("keypath:");
+	private static final String SALT_PATH = ConfigService.fetchFromConfig("saltpath:");
+	private static final String KEY_ALGORITHM = ConfigService.fetchFromConfig("keyalgor:");
+	private static final String CIPHER_KEY_ALGORITHM = ConfigService.fetchFromConfig("cipherkeyalgor:");
+	private static final int ITERATION_COUNT = Integer.parseInt(ConfigService.fetchFromConfig("itercount:"));
+	private static final int KEY_LENGTH = Integer.parseInt(ConfigService.fetchFromConfig("keylen:"));
+	private static final String ENCRYPTED_FILES_DIR = ConfigService.fetchFromConfig("encfiles:");
+	private static final String OUTPUT_FILES_DIR = ConfigService.fetchFromConfig("outfiles:");
 
 	/**
 	 * Takes the String passed into the method and hashes it for security purposes.
@@ -92,11 +92,11 @@ public class EncryptionService {
 			InvalidKeySpecException, InvalidKeyException, IOException {
 		Cipher cipher = getCipher();
 
-		SecretKey key = getKey(ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_KEY_PATH)),
-				ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_SALT_PATH)));
+		SecretKey key = getKey(ConfigService.fetchContents(KEY_PATH),
+				ConfigService.fetchContents(SALT_PATH));
 
 		cipher.init(Cipher.ENCRYPT_MODE,
-				new SecretKeySpec(key.getEncoded(), ConfigService.fetchFromConfig(CONFIG_CIPHER_KEY_ALGORITHM)));
+				new SecretKeySpec(key.getEncoded(), CIPHER_KEY_ALGORITHM));
 
 		String outputPath = getEncryptedFilepath();
 
@@ -133,7 +133,7 @@ public class EncryptionService {
 			throws FileNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException {
 
-		String output = ConfigService.fetchFromConfig(CONFIG_OUTPUT_FILES_DIR) + doc.getFileName();
+		String output = OUTPUT_FILES_DIR + doc.getFileName();
 
 		CipherInputStream cipherIn = null;
 		FileOutputStream out = null;
@@ -144,16 +144,16 @@ public class EncryptionService {
 
 			Cipher cipher = getCipher();
 
-			SecretKey key = getKey(ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_KEY_PATH)),
-					ConfigService.fetchContents(ConfigService.fetchFromConfig(CONFIG_SALT_PATH)));
+			SecretKey key = getKey(ConfigService.fetchContents(KEY_PATH),
+					ConfigService.fetchContents(SALT_PATH));
 
 			cipher.init(Cipher.DECRYPT_MODE,
-					new SecretKeySpec(key.getEncoded(), ConfigService.fetchFromConfig(CONFIG_CIPHER_KEY_ALGORITHM)),
+					new SecretKeySpec(key.getEncoded(), CIPHER_KEY_ALGORITHM),
 					new IvParameterSpec(fileIv));
 
 			cipherIn = new CipherInputStream(fileIn, cipher);
 
-			out = new FileOutputStream(ConfigService.fetchFromConfig(CONFIG_OUTPUT_FILES_DIR) + doc.getFileName());
+			out = new FileOutputStream(OUTPUT_FILES_DIR + doc.getFileName());
 
 			IOUtils.copy(cipherIn, out);
 
@@ -205,7 +205,7 @@ public class EncryptionService {
 	 * @throws FileNotFoundException
 	 */
 	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, FileNotFoundException {
-		return Cipher.getInstance(ConfigService.fetchFromConfig(CONFIG_CIPHER));
+		return Cipher.getInstance(CIPHER_TRANSFORM);
 	}
 
 	/**
@@ -220,11 +220,9 @@ public class EncryptionService {
 	 */
 	private static SecretKey getKey(String toHash, String salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException, NumberFormatException, FileNotFoundException {
-		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(),
-				Integer.parseInt(ConfigService.fetchFromConfig(CONFIG_ITERATION_COUNT)),
-				Integer.parseInt(ConfigService.fetchFromConfig(CONFIG_KEY_LENGTH)));
+		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(), ITERATION_COUNT, KEY_LENGTH);
 
-		SecretKeyFactory skf = SecretKeyFactory.getInstance(ConfigService.fetchFromConfig(CONFIG_KEY_ALGORITHM));
+		SecretKeyFactory skf = SecretKeyFactory.getInstance(ConfigService.fetchFromConfig(KEY_ALGORITHM));
 
 		return skf.generateSecret(spec);
 	}
@@ -235,6 +233,6 @@ public class EncryptionService {
 	 * @throws FileNotFoundException
 	 */
 	private static String getEncryptedFilepath() throws FileNotFoundException {
-		return ConfigService.fetchFromConfig(CONFIG_ENCRYPTED_FILES_DIR) + UUID.randomUUID().toString() + ".secure";
+		return ENCRYPTED_FILES_DIR + UUID.randomUUID().toString() + ".secure";
 	}
 }

@@ -20,7 +20,7 @@ public class PaymentDB {
 	 * @param payment Payment to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(Payment payment) {
+	public static boolean insert(Payment payment) {
 		return false;
 	}
 	
@@ -32,7 +32,7 @@ public class PaymentDB {
 	 * @param payment Payment to update in the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean update(Payment payment) {
+	public static boolean update(Payment payment) {
 		return false;
 	}
 	
@@ -43,7 +43,7 @@ public class PaymentDB {
 	 * @param paymentID paymentID of the Payment to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(int paymentID) {
+	public static boolean delete(int paymentID) {
 		return false;
 	}
 	
@@ -54,7 +54,7 @@ public class PaymentDB {
 	 * @param paymentID paymentID of the Payment to retrieve from the database
 	 * @return Payment that contains the information of the requested Payment
 	 */
-	public Payment get(int paymentID) {
+	public static Payment get(int paymentID) {
 		return null;
 	}
 	
@@ -64,7 +64,7 @@ public class PaymentDB {
 	 * and returns that to the calling object.
 	 * @return ArrayList<Payment> containing all of the Payments from the database
 	 */
-	public ArrayList<Payment> getAll() {
+	public static ArrayList<Payment> getAll() {
 		return null;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
+import databaseAccess.LogEntryDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.User;
@@ -22,80 +23,12 @@ public final class UserManager {
 	/**
 	 * Maximum number of login attempts within LOGIN_ATTEMPT_TIMELIMIT
 	 */
-	private static final int MAX_LOGIN_ATTEMPTS = 5;
+	private static final int MAX_LOGIN_ATTEMPTS = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
 	/**
 	 * Time in minutes to check for login attempts
 	 */
-	private static final int LOGIN_ATTEMPT_TIMELIMIT = 10;
-
-	/**
-	 * Takes the User object passed into the method and calls the insert method of
-	 * the UserDB, passing the User.
-	 * 
-	 * @param user User to insert
-	 * @return boolean based on whether or not the operation was successful
-	 */
-	public static boolean insert(User user) {
-
-		UserDB udb = new UserDB();
-
-		return (udb.insert(user));
-	}
-
-	/**
-	 * Takes the User object passed into the method and calls the update method of
-	 * the UserDB, passing the User.
-	 * 
-	 * @param user User in the database to update
-	 * @return boolean based on whether or not the operation was successful
-	 */
-	public static boolean update(User user) {
-
-		UserDB udb = new UserDB();
-
-		return udb.update(user);
-	}
-
-	/**
-	 * Takes the email passed into the method and calls the delete method of the
-	 * UserDB, passing the email.
-	 * 
-	 * @param email email of the User in the database to delete
-	 * @return boolean based on whether or not the operation was successful
-	 */
-	public static boolean delete(String email) {
-
-		UserDB udb = new UserDB();
-
-		return udb.delete(email);
-	}
-
-	/**
-	 * Takes the email passed into the method and calls the get method of the
-	 * UserDB, passing the email.
-	 * 
-	 * @param email email of the User in the database to retrieve
-	 * @return User containing the information of the requested User
-	 */
-	public static User get(String email) {
-
-		UserDB udb = new UserDB();
-
-		return udb.get(email);
-	}
-
-	/**
-	 * Calls the getAll method of the UserDB.
-	 * 
-	 * @return ArrayList<User> containing all the Users in the database
-	 */
-	public static ArrayList<User> getAll() {
-
-		UserDB udb = new UserDB();
-
-		return udb.getAll();
-	}
-
+	private static final int LOGIN_ATTEMPT_TIMELIMIT = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
+	
 	/**
 	 * Takes an email String and a password String to check against what exists in
 	 * the user table to see if the information matches for authentication purposes
@@ -105,7 +38,14 @@ public final class UserManager {
 	 * @return boolean based on whether or not the information matches
 	 */
 	public static boolean authenticate(String email, String password) {
-
+		
+		User userToCheck = UserDB.get(email);
+		
+		if (userToCheck.getPassHash() == password && userToCheck.getEmail() == email) {
+			
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -152,10 +92,11 @@ public final class UserManager {
 		cal.setTime(new Date());
 		Date endDate = cal.getTime();
 		cal.add(Calendar.MINUTE, LOGIN_ATTEMPT_TIMELIMIT);
-		Date startDate = cal.getTime();
-		ArrayList<LogEntry> logs = LogEntryManager.getLog(email, LogEntry.LOGIN_ATTEMPT, startDate, endDate, null);
 
-		if (logs.size() > MAX_LOGIN_ATTEMPTS) {
+		Date startDate = cal.getTime();
+		ArrayList<LogEntry> log = LogEntryManager.getLog(email, LogEntry.LOGIN_ATTEMPT, startDate, endDate, null);
+
+		if (log.size() > MAX_LOGIN_ATTEMPTS) {
 			return true;
 		}
 		return false;
@@ -219,5 +160,17 @@ public final class UserManager {
 	public static boolean verifyRecoveryKey() {
 
 		return false;
+	}
+	
+	/**
+	 * Allows the user to recover their
+	 * 
+	 * @param parameter
+	 * @param parameter2
+	 * @return true if the user's email is already an existing user and the email was successfully sent.
+	 */
+	public static boolean recover(String email) {
+		User u = UserDB.get(email);
+		return u != null;
 	}
 }

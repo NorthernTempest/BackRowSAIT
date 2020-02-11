@@ -20,7 +20,7 @@ public class HouseholdDB {
 	 * @param household Household to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(Household household) {
+	public static boolean insert(Household household) {
 		return false;
 	}
 	
@@ -32,7 +32,7 @@ public class HouseholdDB {
 	 * @param household Household to update in the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean update(Household household) {
+	public static boolean update(Household household) {
 		return false;
 	}
 	
@@ -43,7 +43,7 @@ public class HouseholdDB {
 	 * @param householdID householdID of the Household to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(int householdID) {
+	public static boolean delete(int householdID) {
 		return false;
 	}
 	
@@ -54,7 +54,7 @@ public class HouseholdDB {
 	 * @param householdID householdID of the Household to retrieve from the database
 	 * @return Household that contains the information of the requested Household
 	 */
-	public Household get(int householdID) {
+	public static Household get(int householdID) {
 		return null;
 	}
 	
@@ -64,7 +64,7 @@ public class HouseholdDB {
 	 * and returns that to the calling object.
 	 * @return ArrayList<Household> containing all of the Households from the database
 	 */
-	public ArrayList<Household> getAll() {
+	public static ArrayList<Household> getAll() {
 		return null;
 	}
 }

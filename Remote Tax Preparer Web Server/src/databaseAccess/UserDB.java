@@ -25,7 +25,7 @@ public class UserDB {
 	 * @param user User to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(User user) {
+	public static boolean insert(User user) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -79,7 +79,7 @@ public class UserDB {
 	 * @param user User to update in the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean update(User user) {
+	public static boolean update(User user) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -132,7 +132,7 @@ public class UserDB {
 	 * @param email email of the User to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean delete(String email) {
+	public static boolean delete(String email) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -175,7 +175,7 @@ public class UserDB {
 	 * @param email email of the User to retrieve from the database
 	 * @return User that contains the information of the requested User
 	 */
-	public User get(String email) {
+	public static User get(String email) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -218,7 +218,7 @@ public class UserDB {
 	 * and returns that to the calling object.
 	 * @return ArrayList<User> containing all of the Users from the database
 	 */
-	public ArrayList<User> getAll() {
+	public static ArrayList<User> getAll() {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();

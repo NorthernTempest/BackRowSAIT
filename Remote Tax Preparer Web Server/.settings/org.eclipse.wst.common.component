@@ -2,7 +2,6 @@
     <wb-module deploy-name="Remote Tax Preparer Web App">
         <wb-resource deploy-path="/" source-path="/web" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
         <property name="context-root" value="service"/>
         <property name="java-output-path" value="/Remote Tax Preparer Web App/build/classes"/>
     </wb-module>

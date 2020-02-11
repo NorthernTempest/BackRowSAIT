@@ -25,7 +25,7 @@ public class LogEntryDB {
 	 * @param logEntry LogEntry to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public boolean insert(LogEntry logEntry) {
+	public static boolean insert(LogEntry logEntry) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -72,7 +72,7 @@ public class LogEntryDB {
 	 * @param logEntryID logEntryID of the LogEntry to retrieve from the database
 	 * @return LogEntry that contains the information of the requested Log
 	 */
-	public LogEntry get(int logEntryID) {
+	public static LogEntry get(int logEntryID) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -120,14 +120,123 @@ public class LogEntryDB {
 	 * @param ip
 	 * @return
 	 */
-	public ArrayList<LogEntry> getByParameters(String email, char type, java.util.Date startDate, java.util.Date endDate, String ip){
+	public static ArrayList<LogEntry> getByParameters(String email, char type, java.util.Date startDate, 
+																		java.util.Date endDate, String ip) {
 		/*
 		 * note to whoever is writing this code, do some clever string appends within 
 		 * if statements here to get the select statement right.
 		 * null should be a wildcard so if(param = null) dont append.
 		 */
 		
-		return null;
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs = null;
+		LogEntry logEntry = null;
+		ArrayList<LogEntry> logEntries = new ArrayList<>();
+		String preparedQuery;
+		
+		try {
+			
+			if (email == null && !Character.isLetter(type) && startDate == null && endDate == null && ip == null) {
+				preparedQuery = "SELECT * FROM log";
+			}
+			
+			else {
+				
+				preparedQuery = "SELECT * FROM log WHERE ";
+				int i = 0;
+				
+				if (email != null) {
+					
+					preparedQuery = preparedQuery + "email = " + email;
+					i++;
+				}
+				
+				if (Character.isLetter(type)) {
+					
+					if (i == 0) {
+						
+						preparedQuery = preparedQuery + "type = " + type;
+					}
+					
+					else {
+						
+						preparedQuery = preparedQuery + " AND type = " + type;
+					}
+					
+					i++;
+				}
+				
+				if (startDate != null) {
+					
+					if (i == 0) {
+						
+						preparedQuery = preparedQuery + "start_date = " + startDate;
+					}
+					
+					else {
+						
+						preparedQuery = preparedQuery + " AND start_date = " + startDate;
+					}
+					
+					i++;
+				}
+				
+				if (endDate != null) {
+					
+					if (i == 0) {
+						
+						preparedQuery = preparedQuery + "end_date = " + endDate;
+					}
+					
+					else {
+						
+						preparedQuery = preparedQuery + " AND end_date = " + endDate;
+					}
+					
+					i++;
+				}
+				
+				if (ip != null) {
+					
+					if (i == 0) {
+						
+						preparedQuery = preparedQuery + "ip = " + ip;
+					}
+					
+					else {
+						
+						preparedQuery = preparedQuery + " AND ip = " + ip;
+					}
+					
+					i++;
+				}
+			}
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			rs = ps.executeQuery();
+			
+			while (rs.next()) { 
+				
+				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("message"),
+						rs.getString("type").charAt(0), rs.getDate("date"), rs.getString("ip"));
+				
+				logEntries.add(logEntry);
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return logEntries;
 	}
 	
 	/**
@@ -137,7 +246,7 @@ public class LogEntryDB {
 	 * @param email email of the Logs to retrieve from the database
 	 * @return ArrayList<Log> that contains information of the requested Logs
 	 */
-	public ArrayList<LogEntry> getByEmail(String email) {
+	public static ArrayList<LogEntry> getByEmail(String email) {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -183,7 +292,7 @@ public class LogEntryDB {
 	 * and returns that to the calling object.
 	 * @return ArrayList<LogEntry> containing all of the Logs from the database
 	 */
-	public ArrayList<LogEntry> getAll() {
+	public static ArrayList<LogEntry> getAll() {
 		
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
