@@ -1,7 +1,5 @@
-package manager;
+package service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import exception.ConfigException;
@@ -15,10 +13,10 @@ public final class ConfigService {
 	 * @param option
 	 * @return
 	 */
-	public static String fetchFromConfig(String option) {
+	public static String fetchFromConfig(String option) throws ConfigException {
 		Scanner s = null;
 		try {
-			s = new Scanner(new File(CONFIG_FILE_PATH));
+			s = new Scanner(CONFIG_FILE_PATH);
 			String line = s.nextLine();
 			while (s.hasNext() && !line.startsWith(option)) {
 				line = s.nextLine();
@@ -28,14 +26,8 @@ public final class ConfigService {
 				return line.substring(option.length());
 			else
 				throw new ConfigException("End of config reached.");
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new ConfigException( "Config not found." );
-		}
-		finally
-		{
-			
+		} finally {
+			s.close();
 		}
 	}
 
@@ -44,7 +36,7 @@ public final class ConfigService {
 	 * @param filePath
 	 * @return
 	 */
-	public static String fetchContents(String filePath) {
+	public static String fetchContents(String filePath) throws ConfigException {
 		Scanner s = null;
 		try {
 			s = new Scanner(filePath);
@@ -55,9 +47,7 @@ public final class ConfigService {
 			}
 
 			return line;
-		}
-		finally
-		{
+		} finally {
 			s.close();
 		}
 	}

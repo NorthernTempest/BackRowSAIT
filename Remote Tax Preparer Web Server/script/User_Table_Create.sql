@@ -11,6 +11,9 @@ CREATE TABLE user (
     creation_date DATE NOT NULL,
     fax CHAR(10),
     active CHAR(1) NOT NULL,
+    verification_id CHAR(36),
+    last_verification_date DATE,
+    last_verification_type INT);
     verified CHAR(1) NOT NULL);
     
 ALTER TABLE user 

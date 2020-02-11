@@ -122,38 +122,6 @@ public final class UserManager {
 
 		return false;
 	}
-
-	/**
-	 * Method to generate and return a String value containing a recovery key for
-	 * the user that is utilized in identity verification for recovering an account.
-	 * 
-	 * @return recovery key
-	 */
-	public static String generateRecoveryKey() {
-
-		return null;
-	}
-
-	/**
-	 * Sends an email to the specified user containing the generated recovery key.
-	 * 
-	 * @return boolean
-	 */
-	public static boolean sendRecoveryEmail() {
-
-		return false;
-	}
-
-	/**
-	 * Takes the recovery key that was entered by the user and compares it to the
-	 * key that was generated and sent to their email.
-	 * 
-	 * @return boolean
-	 */
-	public static boolean verifyRecoveryKey() {
-
-		return false;
-	}
 	
 	/**
 	 * Allows the user to recover their
@@ -173,5 +141,18 @@ public final class UserManager {
 	 */
 	public static User getUser(String email) {
 		return UserDB.get(email);
+	}
+	
+	/**
+	 * Allows the user to recover their
+	 * 
+	 * @param email
+	 * @return true if the user's email is already an existing user and the email was successfully sent.
+	 */
+	public static boolean recover(String email) {
+		boolean output = false;
+		User u = UserDB.get(email);
+		output = u != null;
+		return output;
 	}
 }

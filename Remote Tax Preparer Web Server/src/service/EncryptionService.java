@@ -1,8 +1,7 @@
-package manager;
+package service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -28,6 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import domain.Document;
+import exception.ConfigException;
 
 /**
  * Class Description: Class that contains methods that hash passwords,
@@ -38,16 +38,39 @@ import domain.Document;
  */
 public class EncryptionService {
 
-	private static final String CIPHER_TRANSFORM = ConfigService.fetchFromConfig("cipher:");
-	private static final String KEY_PATH = ConfigService.fetchFromConfig("keypath:");
-	private static final String SALT_PATH = ConfigService.fetchFromConfig("saltpath:");
-	private static final String KEY_ALGORITHM = ConfigService.fetchFromConfig("keyalgor:");
-	private static final String CIPHER_KEY_ALGORITHM = ConfigService.fetchFromConfig("cipherkeyalgor:");
-	private static final int ITERATION_COUNT = Integer.parseInt(ConfigService.fetchFromConfig("itercount:"));
-	private static final int KEY_LENGTH = Integer.parseInt(ConfigService.fetchFromConfig("keylen:"));
-	private static final String ENCRYPTED_FILES_DIR = ConfigService.fetchFromConfig("encfiles:");
-	private static final String OUTPUT_FILES_DIR = ConfigService.fetchFromConfig("outfiles:");
-
+	private static String cipherTransform;
+	private static String keyPath;
+	private static String saltPath;
+	private static String keyAlgorithm;
+	private static String cipherKeyAlgorithm;
+	private static int iterationCount;
+	private static int keyLength;
+	private static String encryptedFilesDirectory;
+	private static String outputFilesDirectory;
+	
+	/**
+	 * Initializes encryption constants
+	 * 
+	 * @throws NumberFormatException
+	 * @throws ConfigException
+	 */
+	private static void init() throws NumberFormatException, ConfigException
+	{
+		if( cipherTransform == null || keyPath == null || saltPath == null || keyAlgorithm == null ||
+				cipherKeyAlgorithm == null || iterationCount == 0 || keyLength == 0 ||
+				encryptedFilesDirectory == null || outputFilesDirectory == null ) {
+			cipherTransform = ConfigService.fetchFromConfig("cipher:");
+			keyPath = ConfigService.fetchFromConfig("keypath:");
+			saltPath = ConfigService.fetchFromConfig("saltpath:");
+			keyAlgorithm = ConfigService.fetchFromConfig("keyalgor:");
+			cipherKeyAlgorithm = ConfigService.fetchFromConfig("cipherkeyalgor:");
+			iterationCount = Integer.parseInt(ConfigService.fetchFromConfig("itercount:"));
+			keyLength = Integer.parseInt(ConfigService.fetchFromConfig("keylen:"));
+			encryptedFilesDirectory = ConfigService.fetchFromConfig("encfiles:");
+			outputFilesDirectory = ConfigService.fetchFromConfig("outfiles:");
+		}
+	}
+	
 	/**
 	 * Takes the String passed into the method and hashes it for security purposes.
 	 * 
@@ -57,11 +80,10 @@ public class EncryptionService {
 	 *                                  valid according to
 	 *                                  https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
 	 * @throws InvalidKeySpecException
-	 * @throws FileNotFoundException    If res/config.txt isn't found
 	 */
 	public static String hash(String toHash, String salt)
-			throws InvalidKeySpecException, NoSuchAlgorithmException, FileNotFoundException {
-
+			throws InvalidKeySpecException, NoSuchAlgorithmException {
+		init();
 		byte[] hash = getKey(toHash, salt).getEncoded();
 
 		StringBuilder sb = new StringBuilder(hash.length * 2);
@@ -90,13 +112,14 @@ public class EncryptionService {
 	 */
 	public static Document encryptDocument(String filepath, boolean isSigned, boolean requiresSignature, int parcelID) throws NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeySpecException, InvalidKeyException, IOException {
+		init();
 		Cipher cipher = getCipher();
 
-		SecretKey key = getKey(ConfigService.fetchContents(KEY_PATH),
-				ConfigService.fetchContents(SALT_PATH));
+		SecretKey key = getKey(ConfigService.fetchContents(keyPath),
+				ConfigService.fetchContents(saltPath));
 
 		cipher.init(Cipher.ENCRYPT_MODE,
-				new SecretKeySpec(key.getEncoded(), CIPHER_KEY_ALGORITHM));
+				new SecretKeySpec(key.getEncoded(), cipherKeyAlgorithm));
 
 		String outputPath = getEncryptedFilepath();
 
@@ -122,7 +145,6 @@ public class EncryptionService {
 	 * @param filepath filepath of the file to decrypt
 	 * @return decrypted file path
 	 * @throws IOException
-	 * @throws FileNotFoundException
 	 * @throws NoSuchPaddingException
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
@@ -130,10 +152,11 @@ public class EncryptionService {
 	 * @throws InvalidKeyException
 	 */
 	public static String decryptDocument(Document doc)
-			throws FileNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException,
+			throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+		init();
 
-		String output = OUTPUT_FILES_DIR + doc.getFileName();
+		String output = outputFilesDirectory + doc.getFileName();
 
 		CipherInputStream cipherIn = null;
 		FileOutputStream out = null;
@@ -144,16 +167,16 @@ public class EncryptionService {
 
 			Cipher cipher = getCipher();
 
-			SecretKey key = getKey(ConfigService.fetchContents(KEY_PATH),
-					ConfigService.fetchContents(SALT_PATH));
+			SecretKey key = getKey(ConfigService.fetchContents(keyPath),
+					ConfigService.fetchContents(saltPath));
 
 			cipher.init(Cipher.DECRYPT_MODE,
-					new SecretKeySpec(key.getEncoded(), CIPHER_KEY_ALGORITHM),
+					new SecretKeySpec(key.getEncoded(), cipherKeyAlgorithm),
 					new IvParameterSpec(fileIv));
 
 			cipherIn = new CipherInputStream(fileIn, cipher);
 
-			out = new FileOutputStream(OUTPUT_FILES_DIR + doc.getFileName());
+			out = new FileOutputStream(outputFilesDirectory + doc.getFileName());
 
 			IOUtils.copy(cipherIn, out);
 
@@ -191,6 +214,8 @@ public class EncryptionService {
 	 * @return the salt
 	 */
 	public static String getSalt() {
+		init();
+		
 		Random r = new SecureRandom();
 		byte[] saltBytes = new byte[32];
 		r.nextBytes(saltBytes);
@@ -202,37 +227,36 @@ public class EncryptionService {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws NoSuchPaddingException
-	 * @throws FileNotFoundException
 	 */
-	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, FileNotFoundException {
-		return Cipher.getInstance(CIPHER_TRANSFORM);
+	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException {
+		return Cipher.getInstance(cipherTransform);
 	}
 
 	/**
+	 * 
 	 * 
 	 * @param toHash
 	 * @param salt
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
-	 * @throws FileNotFoundException
 	 * @throws NumberFormatException
 	 */
 	private static SecretKey getKey(String toHash, String salt)
-			throws NoSuchAlgorithmException, InvalidKeySpecException, NumberFormatException, FileNotFoundException {
-		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(), ITERATION_COUNT, KEY_LENGTH);
+			throws NoSuchAlgorithmException, InvalidKeySpecException {
+		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(), iterationCount, keyLength);
 
-		SecretKeyFactory skf = SecretKeyFactory.getInstance(ConfigService.fetchFromConfig(KEY_ALGORITHM));
+		SecretKeyFactory skf = SecretKeyFactory.getInstance(ConfigService.fetchFromConfig(keyAlgorithm));
 
 		return skf.generateSecret(spec);
 	}
 
 	/**
+	 * Creates a valid filepath for encrypted files. The file name is random and unique and ends in the ".secure" extension
 	 * 
-	 * @return
-	 * @throws FileNotFoundException
+	 * @return String A random and unique filepath in the encrypted files directory.
 	 */
-	private static String getEncryptedFilepath() throws FileNotFoundException {
-		return ENCRYPTED_FILES_DIR + UUID.randomUUID().toString() + ".secure";
+	private static String getEncryptedFilepath() {
+		return encryptedFilesDirectory + UUID.randomUUID().toString() + ".secure";
 	}
 }

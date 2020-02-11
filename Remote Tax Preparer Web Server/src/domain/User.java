@@ -1,136 +1,132 @@
 package domain;
 
+import java.util.Calendar;
 import java.util.Date;
 
+import exception.UserException;
+
 /**
- * 
  * Class Description: User class that defines which attributes every type of
  * user has.
  *
- * @author Tristen Kreutz, Cesar Guzman
- *
+ * @author Tristen Kreutz, Cesar Guzman, Jesse Goerzen
  */
-public class User {
+public final class User {
 
 	private String email;
 
-	private String fName;
-
-	private String mName;
-
-	private String lName;
-
+	private boolean active;
 	private int permissionLevel;
 
-	private String phone;
+	private String title;
+	private String fName;
+  private String mName;
+	private String lName;
 
 	private String passHash;
-
 	private String passSalt;
-
-	private int ID;
-
-	private String title;
 
 	private Date creationDate;
 
+	private String phone;
 	private String fax;
 
-	private boolean active;
+	private String streetAddress;
+	private String streetAddress2;
+	private String city;
+	private String province;
+	private String country;
+	private String postalCode;
 
 	private String language;
 
-	private String address;
+  private boolean verified;
+	private String verificationID;
+	private Date lastVerificationAttempt;
+	private int lastVerificationType;
 
-	private boolean verified;
+	public static final int DEFAULT = 0;
+	public static final int USER = 1;
+	public static final int TAX_PREPARER = 2;
+	public static final int ADMIN = 3;
+	public static final int SYSADMIN = 4;
 
-	private int verificationID;
-
-	private boolean recovering;
-
-	private final int DEFAULT = 0;
-
-	private final int USER = 1;
-
-	private final int TAX_PREPARER = 2;
-
-	private final int ADMIN = 3;
-
-	private final int SYSADMIN = 4;
-
+	public static final int VERIFY_TYPE_CREATE_ACCOUNT = 11;
+	public static final int VERIFY_TYPE_PASS_RESET = 12;
+	
+	/**
+	 * Constructs an empty user.
+	 */
 	public User() {
 
 	}
+	
+	/**
+	 * Constructs a complete user with all fields.
+	 * 
+	 * @param email
+	 * @param fname
+	 * @param lname
+	 * @param permissionLevel
+	 * @param phone
+	 * @param passHash
+	 * @param passSalt
+	 * @param title
+	 * @param creationDate
+	 * @param fax
+	 * @param active
+	 * @param streetAddress
+	 * @param streetAddress2
+	 * @param city
+	 * @param province
+	 * @param country
+	 * @param postalCode
+	 * @param language
+	 * @param verificationID
+	 * @param lastVerificationAttempt
+	 * @param lastVerificationType
+	 * @throws UserException
+	 */
+	public User(String email, String fname, String lname, int permissionLevel, String phone, String passHash,
+			String passSalt, String title, Date creationDate, String fax, boolean active, String streetAddress,
+			String streetAddress2, String city, String province, String country, String postalCode, String language,
+			String verificationID, Date lastVerificationAttempt, int lastVerificationType) throws UserException {
+
+		setEmail(email);
+		setFName(fname);
+		setLName(lname);
+		setPermissionLevel(permissionLevel);
+		setPhone(phone);
+		setPassHash(passHash);
+		setPassSalt(passSalt);
+		setTitle(title);
+		setCreationDate(creationDate);
+		setFax(fax);
+		setActive(active);
+		setStreetAddress(streetAddress);
+		setStreetAddress2(streetAddress);
+		setCity(city);
+		setProvince(province);
+		setCountry(country);
+		setPostalCode(postalCode);
+		setLanguage(language);
+		setVerificationID(verificationID);
+		setLastVerificationAttempt(lastVerificationAttempt);
+		setLastVerificationType(lastVerificationType);
+	}
 
 	/**
-	 * @return the email
+	 * Returns the email.
+	 * 
+	 * @return <code>String</code> the email
 	 */
 	public String getEmail() {
 		return email;
 	}
-
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return the fName
-	 */
-	public String getfName() {
-		return fName;
-	}
-
-	/**
-	 * @param fName the fName to set
-	 */
-	public void setfName(String fName) {
-		this.fName = fName;
-	}
-
-	/**
-	 * @return the mName
-	 */
-	public String getmName() {
-		return mName;
-	}
-
-	/**
-	 * @param mName the mName to set
-	 */
-	public void setmName(String mName) {
-		this.mName = mName;
-	}
-
-	/**
-	 * @return the lName
-	 */
-	public String getlName() {
-		return lName;
-	}
-
-	/**
-	 * @param lName the lName to set
-	 */
-	public void setlName(String lName) {
-		this.lName = lName;
-	}
-
-	/**
-	 * @return the phone
-	 */
-	public String getPhone() {
-		return phone;
-	}
-
-	/**
-	 * @param phone the phone to set
-	 */
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+  
+  private void setEmail(String email){
+    this.email = email;
+  }
 
 	/**
 	 * @return the passHash
@@ -138,7 +134,7 @@ public class User {
 	public String getPassHash() {
 		return passHash;
 	}
-
+  
 	/**
 	 * @param passHash the passHash to set
 	 */
@@ -161,17 +157,86 @@ public class User {
 	}
 
 	/**
-	 * @return the iD
+	 * @return the permissionLevel
 	 */
-	public int getID() {
-		return ID;
+	public int getPermissionLevel() {
+		return permissionLevel;
 	}
 
 	/**
-	 * @param iD the iD to set
+	 * Sets the value of permissionLevel.
+	 * 
+	 * @param permissionLevel the permissionLevel to set
 	 */
-	public void setID(int iD) {
-		ID = iD;
+	public void setPermissionLevel(int permissionLevel) {
+
+		switch (permissionLevel) {
+
+		case USER:
+		case TAX_PREPARER:
+		case ADMIN:
+		case SYSADMIN:
+			this.permissionLevel = permissionLevel;
+			break;
+		default:
+			throw new UserException("Invalid permissions");
+		}
+	}
+
+	/**
+	 * @return the creationDate
+	 */
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	/**
+	 * @param creationDate the creationDate to set
+	 */
+	private void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	/**
+	 * @return the fName
+	 */
+	public String getFName() {
+		return fName;
+	}
+
+	/**
+	 * @param fName the fName to set
+	 */
+	public void setFName(String fName) {
+		this.fName = fName;
+	}
+
+	/**
+	 * @return the mName
+	 */
+	public String getMName() {
+		return mName;
+	}
+
+	/**
+	 * @param mName the mName to set
+	 */
+	public void setMName(String mName) {
+		this.mName = mName;
+	}
+
+	/**
+	 * @return the lName
+	 */
+	public String getLName() {
+		return lName;
+	}
+
+	/**
+	 * @param lName the lName to set
+	 */
+	public void setLName(String lName) {
+		this.lName = lName;
 	}
 
 	/**
@@ -189,17 +254,17 @@ public class User {
 	}
 
 	/**
-	 * @return the creationDate
+	 * @return the phone
 	 */
-	public Date getCreationDate() {
-		return creationDate;
+	public String getPhone() {
+		return phone;
 	}
 
 	/**
-	 * @param creationDate the creationDate to set
+	 * @param phone the phone to set
 	 */
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	/**
@@ -236,26 +301,107 @@ public class User {
 	public String getLanguage() {
 		return language;
 	}
+  
+  public void setLanguage(String language) {
+    this.language = language;
+  }
 
 	/**
-	 * @param language the language to set
-	 */
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	/**
+	 * Returns the address.
+	 * 
 	 * @return the address
 	 */
-	public String getAddress() {
-		return address;
+	public String getStreetAddress() {
+		return streetAddress;
 	}
 
 	/**
+	 * Sets the value of address.
+	 * 
 	 * @param address the address to set
 	 */
-	public void setAddress(String address) {
-		this.address = address;
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getStreetAddress2() {
+		return streetAddress2;
+	}
+
+	/**
+	 * 
+	 * @param streetAddress2
+	 */
+	public void setStreetAddress2(String streetAddress2) {
+		this.streetAddress2 = streetAddress2;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
+	 * 
+	 * @param city
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getProvince() {
+		return province;
+	}
+
+	/**
+	 * 
+	 * @param province
+	 */
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getCountry() {
+		return country;
+	}
+
+	/**
+	 * 
+	 * @param country
+	 */
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getPostalCode() {
+		return postalCode;
+	}
+
+	/**
+	 * 
+	 * @param postalCode
+	 */
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 
 	/**
@@ -272,96 +418,64 @@ public class User {
 		this.verified = verified;
 	}
 
+
 	/**
-	 * @return the verificationID
+	 * 
+	 * @return
 	 */
-	public int getVerificationID() {
+	public String getVerificationID() {
 		return verificationID;
 	}
 
 	/**
-	 * @param verificationID the verificationID to set
-	 */
-	public void setVerificationID(int verificationID) {
-		this.verificationID = verificationID;
-	}
-
-	/**
-	 * @return the recovering
-	 */
-	public boolean isRecovering() {
-		return recovering;
-	}
-
-	/**
-	 * @param recovering the recovering to set
-	 */
-	public void setRecovering(boolean recovering) {
-		this.recovering = recovering;
-	}
-
-	/**
-	 * @return the permissionLevel
-	 */
-	public int getPermissionLevel() {
-		return permissionLevel;
-	}
-
-	/**
-	 * Sets the value of permissionLevel.
 	 * 
-	 * @param permissionLevel the permissionLevel to set
+	 * @param verificationID
+	 * @throws UserException
 	 */
-	public void setPermissionLevel(int permissionLevel) {
-
-		switch (permissionLevel) {
-
-		case USER:
-		case TAX_PREPARER:
-		case ADMIN:
-		case SYSADMIN:
-			this.permissionLevel = permissionLevel;
-			break;
-
-		default:
-			System.out.println("Incorrect role value.");
-			this.permissionLevel = DEFAULT;
-		}
+	public void setVerificationID(String verificationID) throws UserException {
+		String UUIDRegex = "([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})";
+		if (verificationID.matches(UUIDRegex))
+			this.verificationID = verificationID;
+		else
+			throw new UserException("Invalid Verification ID");
 	}
 
 	/**
-	 * @return the dEFAULT
+	 * 
+	 * @return
 	 */
-	public int getDEFAULT() {
-		return DEFAULT;
+	public Date getLastVerificationAttempt() {
+		return lastVerificationAttempt;
 	}
 
 	/**
-	 * @return the uSER
+	 * 
+	 * @param lastVerificationAttempt
+	 * @throws UserException
 	 */
-	public int getUSER() {
-		return USER;
+	public void setLastVerificationAttempt(Date lastVerificationAttempt) throws UserException {
+		Calendar current = Calendar.getInstance();
+		current.add(Calendar.SECOND, 1);
+		if (lastVerificationAttempt.after(new Calendar.Builder().setDate(2020, Calendar.JANUARY, 1).build().getTime())
+				&& lastVerificationAttempt.before( current.getTime() ))
+			this.lastVerificationAttempt = lastVerificationAttempt;
+		else
+			throw new UserException("Invalid Verification Date");
 	}
 
 	/**
-	 * @return the tAX_PREPARER
+	 * 
+	 * @return
 	 */
-	public int getTAX_PREPARER() {
-		return TAX_PREPARER;
-	}
+	public int getLastVerificationType() {
+		return lastVerificationType;
+  }
 
 	/**
-	 * @return the aDMIN
+	 * 
+	 * @param lastVerificationType
 	 */
-	public int getADMIN() {
-		return ADMIN;
-	}
-
-	/**
-	 * @return the sYSADMIN
-	 */
-	public int getSYSADMIN() {
-		return SYSADMIN;
-	}
-
+	public void setLastVerificationType(int lastVerificationType) {
+		this.lastVerificationType = lastVerificationType;
+  }
 }
