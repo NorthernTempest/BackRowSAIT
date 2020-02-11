@@ -39,7 +39,8 @@ public final class UserManager {
 	 */
 	public static boolean authenticate(String email, String password) {
 
-		return false;
+		User user = UserDB.get(email);
+		return user.getEmail().equals(email) && user.getPassHash().equals(password);
 	}
 
 	/**

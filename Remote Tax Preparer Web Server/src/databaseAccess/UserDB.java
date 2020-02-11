@@ -188,20 +188,23 @@ public final class UserDB {
 			
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 			
-			ps.setString(2, email);
+			ps.setString(1, email);
 			
 			rs = ps.executeQuery();
 			
 			if (rs.next()) {
 				
-				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
-								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
+				/*user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
+								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));*/
+				user = new User();
+				user.setEmail(rs.getString("email"));
+				user.setPassHash(rs.getString("pass_hash"));
 			}
 		}
 		
 		catch (SQLException e) {
 			
-			System.out.println(e);
+			System.out.println("SQL Exception Thrown.");
 		}
 		
 		finally {
@@ -236,8 +239,8 @@ public final class UserDB {
 			
 			while (rs.next()) {
 				
-				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
-								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
+				/*user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
+								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));*/
 				
 				users.add(user);
 			}
