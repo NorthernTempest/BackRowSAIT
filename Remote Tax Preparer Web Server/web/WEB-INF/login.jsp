@@ -36,9 +36,9 @@
         </div>
         <div class="col-md-6 align-middle text-center">
             Don't have an account?<br>
-            <button class="btn btn-primary">
+            <a href="/register"><button class="btn btn-primary">
                 Register here!
-            </button>
+            </button></a>a>
         </div>
     </div>
 </div>

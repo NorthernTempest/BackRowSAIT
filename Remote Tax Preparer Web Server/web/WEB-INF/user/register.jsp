@@ -51,7 +51,7 @@
         <div class="form-group">
             <label for="phone">Primary Phone Number</label>
             <input type="tel" name="phone" id="phone">
-            <label for="fax">Primary Phone Number</label>
+            <label for="fax">Fax Number</label>
             <input type="tel" name="fax" id="fax">
         </div>
     </div>
