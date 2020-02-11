@@ -16,6 +16,9 @@ CREATE TABLE user (
     fax CHAR(10),
     postal_code CHAR (6),
     city VARCHAR (32),
+    province CHAR (2),
+    country VARCHAR (32),
+    street_address VARCHAR (320),
     mailing_address VARCHAR (320),
     active CHAR(1) NOT NULL);
     
@@ -29,12 +32,14 @@ COMMIT;
 
 CREATE TABLE parcel (
     parcel_id INT PRIMARY KEY,
+    return_id INT,
     subject VARCHAR(100),
     message VARCHAR(10000),
     sender VARCHAR(320) NOT NULL,
     receiver VARCHAR(320),
     date_sent DATE NOT NULL,
     expiration_date DATE,
+    FOREIGN KEY (return_id) REFERENCES tax_return(return_id),
     FOREIGN KEY (sender) REFERENCES user(email),
     FOREIGN KEY (receiver) REFERENCES user(email));
 	
