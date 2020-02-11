@@ -20,11 +20,11 @@
 <form method="post" action="">
     <div class="col-md-6">
         <label for="email">Email</label>
-        <input type="email" name="email" id="email">
+        <input type="email" name="email" id="email" maxlength="100">
         <label for="password1">Password</label>
-        <input type="password1" name="password1" id="password1">
+        <input type="password1" name="password1" id="password1" maxlength="256">
         <label for="password2">Password (again)</label>
-        <input type="password2" name="password2" id="password2">
+        <input type="password2" name="password2" id="password2" maxlength="256">
     </div>
     <div class="col-md-6">
         We do not send any sales emails. We will only send emails as notifications and messages about your tax returns.
@@ -34,7 +34,7 @@
         <div class="form-group">
             <h3>Personal Info</h3>
             <label for="title">Title</label>
-            <select name="title" id="title">
+            <select name="title" id="title" >
                 <option value="Na">N/A</option>
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
@@ -42,17 +42,17 @@
                 <option value="Mx">Mx</option>
             </select>
             <label for="f-name">First Name</label>
-            <input name="f-name" id="f-name">
+            <input name="f-name" id="f-name" maxlength="25">
             <label for="m-name">Middle Name</label>
-            <input name="m-name" id="m-name">
+            <input name="m-name" id="m-name" maxlength="25">
             <label for="l-name">Last Name</label>
-            <input name="l-name" id="l-name">
+            <input name="l-name" id="l-name" maxlength="25">
         </div>
         <div class="form-group">
             <label for="phone">Primary Phone Number</label>
-            <input type="tel" name="phone" id="phone">
+            <input type="tel" name="phone" id="phone" maxlength="15">
             <label for="fax">Fax Number</label>
-            <input type="tel" name="fax" id="fax">
+            <input type="tel" name="fax" id="fax" maxlength="15">
         </div>
     </div>
     <div class="col-md-6">
