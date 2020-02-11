@@ -14,6 +14,9 @@ CREATE TABLE user (
     title VARCHAR(5),
     creation_date DATE NOT NULL,
     fax CHAR(10),
+    postal_code CHAR (6),
+    city VARCHAR (32),
+    mailing_address VARCHAR (320),
     active CHAR(1) NOT NULL);
     
 ALTER TABLE user 
