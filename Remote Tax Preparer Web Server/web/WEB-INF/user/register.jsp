@@ -43,6 +43,8 @@
             </select>
             <label for="f-name">First Name</label>
             <input name="f-name" id="f-name">
+            <label for="m-name">Middle Name</label>
+            <input name="m-name" id="m-name">
             <label for="l-name">Last Name</label>
             <input name="l-name" id="l-name">
         </div>
