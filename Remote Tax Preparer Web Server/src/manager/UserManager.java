@@ -38,7 +38,7 @@ public final class UserManager {
 	 * @return boolean based on whether or not the information matches
 	 */
 	public static boolean authenticate(String email, String password) {
-
+		
 		return false;
 	}
 
