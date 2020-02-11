@@ -7,10 +7,10 @@ import java.util.Date;
  * 
  * Class Description: Class defining a parcel's attributes and methods to be used in sending messages and documents between clients.
  *
- * @author Tristen Kreutz
+ * @author Tristen Kreutz, Cesar Guzman
  *
  */
-public class Parcel {
+public final class Parcel {
 
 	private int parcelID;
 	
@@ -25,6 +25,22 @@ public class Parcel {
 	private Date dateSent;
 	
 	private Date expirationDate;
+	
+	private TaxReturn taxReturn;
+	
+	/**
+	 * @return the taxReturn
+	 */
+	public TaxReturn getTaxReturn() {
+		return taxReturn;
+	}
+
+	/**
+	 * @param taxReturn the taxReturn to set
+	 */
+	public void setTaxReturn(TaxReturn taxReturn) {
+		this.taxReturn = taxReturn;
+	}
 
 	/**
 	 * Returns the parcelID.
