@@ -2,6 +2,7 @@ package service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -144,16 +145,15 @@ public class EncryptionService {
 	 * 
 	 * @param filepath filepath of the file to decrypt
 	 * @return decrypted file path
-	 * @throws IOException
+	 * @throws FileNotFoundException
 	 * @throws NoSuchPaddingException
 	 * @throws NoSuchAlgorithmException
+	 * @throws ConfigException
 	 * @throws InvalidKeySpecException
 	 * @throws InvalidAlgorithmParameterException
 	 * @throws InvalidKeyException
 	 */
-	public static String decryptDocument(Document doc)
-			throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+	public static String decryptDocument(Document doc) throws FileNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, ConfigException, InvalidKeyException, InvalidAlgorithmParameterException {
 		init();
 
 		String output = outputFilesDirectory + doc.getFileName();
