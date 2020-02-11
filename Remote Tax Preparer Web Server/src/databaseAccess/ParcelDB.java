@@ -1,8 +1,10 @@
 package databaseAccess;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import domain.Parcel;
+import domain.User;
 
 /**
  * 
@@ -68,15 +70,20 @@ public class ParcelDB {
 		return null;
 	}
 	
+
 	/**
-	 * Method that, using the supplied taxReturnID and email, retrieves all
+	 * Method that, using the supplied parameters, retrieves all
 	 * parcels in the database with that information and returns a list
 	 * to the calling program.
-	 * @param taxReturnID taxReturnID
-	 * @param email email
-	 * @return ArrayList<Parcel> containing related parcels
+	 * @param parcelID
+	 * @param sender
+	 * @param receiver
+	 * @param dateSent
+	 * @param taxReturnID
+	 * @return ArrayList<Parcel> containing all relevant Parcels from the database
 	 */
-	public static ArrayList<Parcel> getAllParcels(String taxReturnID, String email) {
-		return null;
+	public static ArrayList<Parcel> getParcelsByParameter(int parcelID, User sender, User receiver, Date dateSent, int taxReturnID) {
+		//TODO
+		return new ArrayList<Parcel>();
 	}
 }

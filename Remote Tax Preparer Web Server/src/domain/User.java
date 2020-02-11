@@ -6,12 +6,10 @@ import java.util.Date;
 import exception.UserException;
 
 /**
- * 
  * Class Description: User class that defines which attributes every type of
  * user has.
  *
  * @author Tristen Kreutz, Cesar Guzman, Jesse Goerzen
- *
  */
 public final class User {
 
@@ -22,6 +20,7 @@ public final class User {
 
 	private String title;
 	private String fName;
+  private String mName;
 	private String lName;
 
 	private String passHash;
@@ -41,10 +40,9 @@ public final class User {
 
 	private String language;
 
+  private boolean verified;
 	private String verificationID;
-
 	private Date lastVerificationAttempt;
-
 	private int lastVerificationType;
 
 	public static final int DEFAULT = 0;
@@ -95,8 +93,8 @@ public final class User {
 			String verificationID, Date lastVerificationAttempt, int lastVerificationType) throws UserException {
 
 		setEmail(email);
-		setfName(fname);
-		setlName(lname);
+		setFName(fname);
+		setLName(lname);
 		setPermissionLevel(permissionLevel);
 		setPhone(phone);
 		setPassHash(passHash);
@@ -120,33 +118,45 @@ public final class User {
 	/**
 	 * Returns the email.
 	 * 
-	 * @return the email
+	 * @return <code>String</code> the email
 	 */
 	public String getEmail() {
 		return email;
 	}
+  
+  private void setEmail(String email){
+    this.email = email;
+  }
 
 	/**
-	 * Returns the fName.
-	 * 
-	 * @return the fName
+	 * @return the passHash
 	 */
-	public String getfName() {
-		return fName;
+	public String getPassHash() {
+		return passHash;
+	}
+  
+	/**
+	 * @param passHash the passHash to set
+	 */
+	public void setPassHash(String passHash) {
+		this.passHash = passHash;
 	}
 
 	/**
-	 * Returns the lName.
-	 * 
-	 * @return the lName
+	 * @return the passSalt
 	 */
-	public String getlName() {
-		return lName;
+	public String getPassSalt() {
+		return passSalt;
 	}
 
 	/**
-	 * Returns the permissionLevel.
-	 * 
+	 * @param passSalt the passSalt to set
+	 */
+	public void setPassSalt(String passSalt) {
+		this.passSalt = passSalt;
+	}
+
+	/**
 	 * @return the permissionLevel
 	 */
 	public int getPermissionLevel() {
@@ -154,185 +164,12 @@ public final class User {
 	}
 
 	/**
-	 * Returns the phone.
-	 * 
-	 * @return the phone
-	 */
-	public String getPhone() {
-		return phone;
-	}
-
-	/**
-	 * Returns the passHash.
-	 * 
-	 * @return the passHash
-	 */
-	public String getPassHash() {
-		return passHash;
-	}
-
-	/**
-	 * Returns the salt for hashing the password.
-	 * 
-	 * @return the salt for hashing the password.
-	 */
-	public String getPassSalt() {
-		return passSalt;
-	}
-
-	/**
-	 * Returns the title.
-	 * 
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * Returns the creationDate.
-	 * 
-	 * @return the creationDate
-	 */
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	/**
-	 * Returns the fax.
-	 * 
-	 * @return the fax
-	 */
-	public String getFax() {
-		return fax;
-	}
-
-	/**
-	 * Returns the active.
-	 * 
-	 * @return the active
-	 */
-	public boolean isActive() {
-		return active;
-	}
-
-	/**
-	 * Returns the language.
-	 * 
-	 * @return the language
-	 */
-	public String getLanguage() {
-		return language;
-	}
-
-	/**
-	 * Returns the address.
-	 * 
-	 * @return the address
-	 */
-	public String getStreetAddress() {
-		return streetAddress;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String getStreetAddress2() {
-		return streetAddress2;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String getCity() {
-		return city;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String getProvince() {
-		return province;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String getCountry() {
-		return country;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String getPostalCode() {
-		return postalCode;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String getVerificationID() {
-		return verificationID;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Date getLastVerificationAttempt() {
-		return lastVerificationAttempt;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public int getLastVerificationType() {
-		return lastVerificationType;
-	}
-
-	/**
-	 * Sets the value of email.
-	 * 
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-
-		this.email = email;
-	}
-
-	/**
-	 * Sets the value of fName.
-	 * 
-	 * @param fName the fName to set
-	 */
-	public void setfName(String fName) {
-		this.fName = fName;
-	}
-
-	/**
-	 * Sets the value of lName.
-	 * 
-	 * @param lName the lName to set
-	 */
-	public void setlName(String lName) {
-		this.lName = lName;
-	}
-
-	/**
 	 * Sets the value of permissionLevel.
 	 * 
 	 * @param permissionLevel the permissionLevel to set
-	 * @throws UserException 
 	 */
-	public void setPermissionLevel(int permissionLevel) throws UserException {
+	public void setPermissionLevel(int permissionLevel) {
+
 		switch (permissionLevel) {
 
 		case USER:
@@ -341,42 +178,75 @@ public final class User {
 		case SYSADMIN:
 			this.permissionLevel = permissionLevel;
 			break;
-
 		default:
-			throw new UserException("Invalid permission level");
+			throw new UserException("Invalid permissions");
 		}
 	}
 
 	/**
-	 * Sets the value of phone.
-	 * 
-	 * @param phone the phone to set
+	 * @return the creationDate
 	 */
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
 	/**
-	 * Sets the value of hash of the user's password.
-	 * 
-	 * @param passHash the passHash to set
+	 * @param creationDate the creationDate to set
 	 */
-	public void setPassHash(String passHash) {
-		this.passHash = passHash;
+	private void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	/**
-	 * Sets the salt for calculating the user's password
-	 * 
-	 * @param passSalt
+	 * @return the fName
 	 */
-	private void setPassSalt(String passSalt) {
-		this.passSalt = passSalt;
+	public String getFName() {
+		return fName;
 	}
 
 	/**
-	 * Sets the value of title.
-	 * 
+	 * @param fName the fName to set
+	 */
+	public void setFName(String fName) {
+		this.fName = fName;
+	}
+
+	/**
+	 * @return the mName
+	 */
+	public String getMName() {
+		return mName;
+	}
+
+	/**
+	 * @param mName the mName to set
+	 */
+	public void setMName(String mName) {
+		this.mName = mName;
+	}
+
+	/**
+	 * @return the lName
+	 */
+	public String getLName() {
+		return lName;
+	}
+
+	/**
+	 * @param lName the lName to set
+	 */
+	public void setLName(String lName) {
+		this.lName = lName;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
@@ -384,17 +254,27 @@ public final class User {
 	}
 
 	/**
-	 * Sets the value of creationDate.
-	 * 
-	 * @param creationDate the creationDate to set
+	 * @return the phone
 	 */
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+	public String getPhone() {
+		return phone;
 	}
 
 	/**
-	 * Sets the value of fax.
-	 * 
+	 * @param phone the phone to set
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	/**
+	 * @return the fax
+	 */
+	public String getFax() {
+		return fax;
+	}
+
+	/**
 	 * @param fax the fax to set
 	 */
 	public void setFax(String fax) {
@@ -402,8 +282,13 @@ public final class User {
 	}
 
 	/**
-	 * Sets the value of active.
-	 * 
+	 * @return the active
+	 */
+	public boolean isActive() {
+		return active;
+	}
+
+	/**
 	 * @param active the active to set
 	 */
 	public void setActive(boolean active) {
@@ -411,12 +296,23 @@ public final class User {
 	}
 
 	/**
-	 * Sets the value of language.
-	 * 
-	 * @param language the language to set
+	 * @return the language
 	 */
-	public void setLanguage(String language) {
-		this.language = language;
+	public String getLanguage() {
+		return language;
+	}
+  
+  public void setLanguage(String language) {
+    this.language = language;
+  }
+
+	/**
+	 * Returns the address.
+	 * 
+	 * @return the address
+	 */
+	public String getStreetAddress() {
+		return streetAddress;
 	}
 
 	/**
@@ -430,10 +326,26 @@ public final class User {
 
 	/**
 	 * 
+	 * @return
+	 */
+	public String getStreetAddress2() {
+		return streetAddress2;
+	}
+
+	/**
+	 * 
 	 * @param streetAddress2
 	 */
 	public void setStreetAddress2(String streetAddress2) {
 		this.streetAddress2 = streetAddress2;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getCity() {
+		return city;
 	}
 
 	/**
@@ -446,10 +358,26 @@ public final class User {
 
 	/**
 	 * 
+	 * @return
+	 */
+	public String getProvince() {
+		return province;
+	}
+
+	/**
+	 * 
 	 * @param province
 	 */
 	public void setProvince(String province) {
 		this.province = province;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getCountry() {
+		return country;
 	}
 
 	/**
@@ -462,10 +390,41 @@ public final class User {
 
 	/**
 	 * 
+	 * @return
+	 */
+	public String getPostalCode() {
+		return postalCode;
+	}
+
+	/**
+	 * 
 	 * @param postalCode
 	 */
 	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
+	}
+
+	/**
+	 * @return the verified
+	 */
+	public boolean isVerified() {
+		return verified;
+	}
+
+	/**
+	 * @param verified the verified to set
+	 */
+	public void setVerified(boolean verified) {
+		this.verified = verified;
+	}
+
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getVerificationID() {
+		return verificationID;
 	}
 
 	/**
@@ -479,6 +438,14 @@ public final class User {
 			this.verificationID = verificationID;
 		else
 			throw new UserException("Invalid Verification ID");
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Date getLastVerificationAttempt() {
+		return lastVerificationAttempt;
 	}
 
 	/**
@@ -498,9 +465,17 @@ public final class User {
 
 	/**
 	 * 
+	 * @return
+	 */
+	public int getLastVerificationType() {
+		return lastVerificationType;
+  }
+
+	/**
+	 * 
 	 * @param lastVerificationType
 	 */
 	public void setLastVerificationType(int lastVerificationType) {
 		this.lastVerificationType = lastVerificationType;
-	}
+  }
 }

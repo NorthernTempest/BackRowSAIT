@@ -18,7 +18,7 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="form-control">
+                    <input type="password" id="password" name="password" class="form-control" title="Your password should be at least 8 characters.">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Log in</button>
@@ -36,9 +36,9 @@
         </div>
         <div class="col-md-6 align-middle text-center">
             Don't have an account?<br>
-            <button class="btn btn-primary">
+            <a href="/register"><button class="btn btn-primary">
                 Register here!
-            </button>
+            </button></a>
         </div>
     </div>
 </div>

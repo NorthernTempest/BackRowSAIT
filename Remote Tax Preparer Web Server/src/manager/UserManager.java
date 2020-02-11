@@ -9,7 +9,6 @@ import databaseAccess.LogEntryDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.User;
-import service.ConfigService;
 
 /**
  * 
@@ -123,37 +122,25 @@ public final class UserManager {
 
 		return false;
 	}
-
+	
 	/**
-	 * Method to generate and return a String value containing a recovery key for
-	 * the user that is utilized in identity verification for recovering an account.
+	 * Allows the user to recover their
 	 * 
-	 * @return recovery key
+	 * @param parameter
+	 * @param parameter2
+	 * @return true if the user's email is already an existing user and the email was successfully sent.
 	 */
-	public static String generateRecoveryKey() {
-
-		return null;
+	public static boolean recover(String email) {
+		User u = UserDB.get(email);
+		return u != null;
 	}
-
+	
 	/**
-	 * Sends an email to the specified user containing the generated recovery key.
-	 * 
-	 * @return boolean
+	 * @param email
+	 * @return the user with a matching email
 	 */
-	public static boolean sendRecoveryEmail() {
-
-		return false;
-	}
-
-	/**
-	 * Takes the recovery key that was entered by the user and compares it to the
-	 * key that was generated and sent to their email.
-	 * 
-	 * @return boolean
-	 */
-	public static boolean verifyRecoveryKey() {
-
-		return false;
+	public static User getUser(String email) {
+		return UserDB.get(email);
 	}
 	
 	/**
