@@ -9,7 +9,10 @@ CREATE TABLE user (
     title VARCHAR(5),
     creation_date DATE NOT NULL,
     fax CHAR(10),
-    active CHAR(1) NOT NULL);
+    active CHAR(1) NOT NULL,
+    verification_id CHAR(36),
+    last_verification_date DATE,
+    last_verification_type INT);
     
 ALTER TABLE user 
 ADD CONSTRAINT CHK_user_permission_level CHECK (permission_level BETWEEN 0 AND 3);

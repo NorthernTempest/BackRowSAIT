@@ -9,6 +9,7 @@ import databaseAccess.LogEntryDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.User;
+import service.ConfigService;
 
 /**
  * 
@@ -158,12 +159,13 @@ public final class UserManager {
 	/**
 	 * Allows the user to recover their
 	 * 
-	 * @param parameter
-	 * @param parameter2
+	 * @param email
 	 * @return true if the user's email is already an existing user and the email was successfully sent.
 	 */
 	public static boolean recover(String email) {
+		boolean output = false;
 		User u = UserDB.get(email);
-		return u != null;
+		output = u != null;
+		return output;
 	}
 }

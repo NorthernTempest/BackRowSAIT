@@ -14,7 +14,7 @@ import javax.crypto.NoSuchPaddingException;
 import org.junit.jupiter.api.Test;
 
 import domain.Document;
-import manager.EncryptionService;
+import service.EncryptionService;
 
 class EncryptionServiceTest {
 
@@ -49,7 +49,7 @@ class EncryptionServiceTest {
 	
 	@Test
 	void encrpytDocTest() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException {
-		String unencryptedFilePath = "C:\\Users\\784713\\Capstone\\test_pdf_large.pdf";
+		String unencryptedFilePath = "C:\\Capstone\\TestFiles\\test_pdf_large.pdf";
 		
 		Document encryptedFile = EncryptionService.encryptDocument( unencryptedFilePath, false, false, 1 );
 		
