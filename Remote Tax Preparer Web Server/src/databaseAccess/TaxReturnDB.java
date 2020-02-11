@@ -3,7 +3,6 @@ package databaseAccess;
 import java.util.ArrayList;
 
 import domain.TaxReturn;
-import domain.User;
 
 /**
  * 
@@ -56,17 +55,6 @@ public class TaxReturnDB {
 	 * @return TaxReturn that contains the information of the requested TaxReturn
 	 */
 	public static TaxReturn get(int taxReturnID) {
-		return null;
-	}
-	
-	/**
-	 * Establishes a connection with the database and selects the TaxReturns in the
-	 * tax_return table that have a user matching the User being passed
-	 * into this method.
-	 * @param user the User of the TaxReturn to retrieve from the database
-	 * @return TaxReturn that contains the information of the requested TaxReturn
-	 */
-	public static ArrayList<TaxReturn> getByUser(User user) {
 		return null;
 	}
 	

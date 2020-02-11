@@ -14,10 +14,10 @@ import domain.User;
  * Class Description: 	Class that establishes a connection and communicates directly
  * 						with the user table in the database.
  *
- * @author Tristen Kreutz, Cesar Guzman
+ * @author Tristen Kreutz
  *
  */
-public final class UserDB {
+public class UserDB {
 
 	/**
 	 * Establishes a connection with the database and inserts the User object passed

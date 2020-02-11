@@ -166,12 +166,4 @@ public final class UserManager {
 		User u = UserDB.get(email);
 		return u != null;
 	}
-	
-	/**
-	 * @param email
-	 * @return the user with a matching email
-	 */
-	public static User getUser(String email) {
-		return UserDB.get(email);
-	}
 }
