@@ -39,6 +39,13 @@ public final class UserManager {
 	 */
 	public static boolean authenticate(String email, String password) {
 		
+		User userToCheck = UserDB.get(email);
+		
+		if (userToCheck.getPassHash() == password && userToCheck.getEmail() == email) {
+			
+			return true;
+		}
+		
 		return false;
 	}
 
