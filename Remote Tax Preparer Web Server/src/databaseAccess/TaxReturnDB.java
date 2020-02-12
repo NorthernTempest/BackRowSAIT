@@ -67,7 +67,7 @@ public class TaxReturnDB {
 	 * @return TaxReturn that contains the information of the requested TaxReturn
 	 */
 	public static ArrayList<TaxReturn> getByUser(User user) {
-		return null;
+		return new ArrayList<TaxReturn>();
 	}
 	
 	/**

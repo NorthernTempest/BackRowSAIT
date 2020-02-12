@@ -45,8 +45,7 @@ public final class SessionManager {
 		Session session = new Session(email, sessionID, timeoutDate);
 		
 		//insert session to database
-		SessionDB sdb = new SessionDB();
-		sdb.insert(session);
+		SessionDB.insert(session);
 		
 		//write to log
 		String logMessage = "Session created";
