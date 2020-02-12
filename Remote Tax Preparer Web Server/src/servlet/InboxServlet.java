@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,12 +11,11 @@ import javax.servlet.http.HttpSession;
 
 import exception.ConfigException;
 import manager.ParcelManager;
-import util.cesar.Debugger;
 
 /**
  * Servlet for logging into the site.
  * 
- * @author Cesar Guzman, Taylor Hanlon
+ * @author Cesar Guzman
  */
 @WebServlet("/inbox")
 public final class InboxServlet extends HttpServlet {
@@ -40,18 +38,16 @@ public final class InboxServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 
-		//show messages with receiver user, tax return most recent
-		int lastYear = Calendar.YEAR -1;
-		Debugger.log(lastYear);
+		//give the jsp the user's messages
 		try {
-			request.setAttribute("inbox", ParcelManager.getByYear(email, lastYear));
+			request.setAttribute("inbox", ParcelManager.getParcels(-1, null, email, null, -1));
 		} catch (ConfigException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		//Display Inbox page
-		getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/WEB-INF/inbox.jsp").forward(request, response);
 		//ass
 	}
 
