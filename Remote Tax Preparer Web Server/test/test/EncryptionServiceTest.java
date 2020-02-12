@@ -2,7 +2,6 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -12,14 +11,16 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.NoSuchPaddingException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 
 import domain.Document;
+import exception.ConfigException;
 import service.EncryptionService;
 
 class EncryptionServiceTest {
 
 	@Test
-	void saltTest() {
+	void saltTest() throws NumberFormatException, ConfigException {
 		for (int i = 0; i < 100000; i++) {
 			String salt1 = EncryptionService.getSalt();
 			String salt2 = EncryptionService.getSalt();
@@ -29,8 +30,7 @@ class EncryptionServiceTest {
 	}
 
 	@Test
-	void hashTest()
-			throws InvalidKeySpecException, NoSuchAlgorithmException, NumberFormatException, FileNotFoundException {
+	void hashTest() throws InvalidKeySpecException, NoSuchAlgorithmException, NumberFormatException, ConfigException {
 		String salt = EncryptionService.getSalt();
 		String password1 = "password";
 
@@ -48,7 +48,7 @@ class EncryptionServiceTest {
 	}
 	
 	@Test
-	void encrpytDocTest() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException {
+	void encrpytDocTest() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, ConfigException {
 		String unencryptedFilePath = "C:\\Capstone\\TestFiles\\test_pdf_large.pdf";
 		
 		Document encryptedFile = EncryptionService.encryptDocument( unencryptedFilePath, false, false, 1 );
