@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import domain.Parcel;
 import exception.ConfigException;
 import manager.ParcelManager;
 
@@ -40,15 +42,14 @@ public final class InboxServlet extends HttpServlet {
 
 		//give the jsp the user's messages
 		try {
-			request.setAttribute("inbox", ParcelManager.getParcels(-1, null, email, null, -1));
+			request.setAttribute("parcels", ParcelManager.getParcels(-1, null, email, null, -1));
 		} catch (ConfigException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		//Display Inbox page
-		getServletContext().getRequestDispatcher("/WEB-INF/inbox.jsp").forward(request, response);
-		//ass
+		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 	}
 
 	/**
@@ -57,8 +58,10 @@ public final class InboxServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		
 		//Display Inbox page
-		getServletContext().getRequestDispatcher("/WEB-INF/inbox.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 
 	}
 }
