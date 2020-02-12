@@ -138,68 +138,55 @@ public class LogEntryDB {
 			
 			if (email == null && !Character.isLetter(type) && startDate == null && endDate == null && ip == null) {
 				preparedQuery = "SELECT * FROM log";
+				PreparedStatement ps = connection.prepareStatement(preparedQuery);
+				rs = ps.executeQuery();
 			}
 			
 			else {
 				
+				ArrayList<String> parameters = new ArrayList<>();
+				int count = 0;
 				preparedQuery = "SELECT * FROM log WHERE ";
-				int i = 0;
 				
 				if (email != null) {
-					
-					preparedQuery = preparedQuery + "email = '" + email + "'";
-					i++;
+					preparedQuery += "email = ? ";
+					parameters.add(email);
+					count++;
 				}
 				
 				if (Character.isLetter(type)) {
-					
-					if (i == 0) {
-						
-						preparedQuery = preparedQuery + "type = '" + type + "'";
-					}
-					
-					else {
-						
-						preparedQuery = preparedQuery + " AND type = '" + type + "'";
-					}
-					
-					i++;
+					if (count > 0)
+						preparedQuery += "AND ";
+					preparedQuery += "type = ? ";
+					parameters.add(type + "");
+					count++;
 				}
 				
 				if (startDate != null && endDate != null) {
+					if (count > 0)
+						preparedQuery += "AND ";
+					preparedQuery += "date BETWEEN ? AND ? ";
+					parameters.add(startDate.toString());
+					parameters.add(endDate.toString());
+					count++;
+				}
 					
-					if (i == 0) {
-						
-						preparedQuery = preparedQuery + "date BETWEEN '" + startDate + "' AND '" + endDate + "'";
-					}
-					
-					else {
-						
-						preparedQuery = preparedQuery + " AND date BETWEEN '" + startDate + "' AND '" + endDate + "'";
-					}
-					
-					i++;
+				if (ip != null) {
+					if (count > 0)
+						preparedQuery += "AND ";
+					preparedQuery += "ip = ? ";
+					parameters.add(ip);
 				}
 				
-				if (ip != null) {
+				PreparedStatement ps = connection.prepareStatement(preparedQuery);
+				
+				for (int i = 0; i < parameters.size(); i++) {
 					
-					if (i == 0) {
-						
-						preparedQuery = preparedQuery + "ip = '" + ip + "'";
-					}
-					
-					else {
-						
-						preparedQuery = preparedQuery + " AND ip = '" + ip + "'";
-					}
-					
-					i++;
+					ps.setString(i + 1, parameters.get(i));
 				}
+				
+				rs = ps.executeQuery();
 			}
-			
-			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-			
-			rs = ps.executeQuery();
 			
 			while (rs.next()) { 
 				
