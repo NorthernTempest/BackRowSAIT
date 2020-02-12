@@ -6,6 +6,7 @@ import java.util.Date;
 import databaseAccess.ParcelDB;
 import domain.Parcel;
 import domain.User;
+import exception.ConfigException;
 
 /**
  * 
@@ -24,14 +25,15 @@ public final class ParcelManager {
 	 * @param dateSent
 	 * @param taxReturnID
 	 * @return
+	 * @throws ConfigException 
 	 */
-	public static ArrayList<Parcel> getParcels(int parcelID, String senderEmail, String receiverEmail, Date dateSent, int taxReturnID) {
+	public static ArrayList<Parcel> getParcels(int parcelID, String senderEmail, String receiverEmail, Date dateSent, int taxReturnID) throws ConfigException {
 		User userSender = UserManager.getUser(senderEmail);
 		User userReceiver = UserManager.getUser(receiverEmail);
 		return ParcelDB.getParcelsByParameter(parcelID, userSender, userReceiver, dateSent, taxReturnID);
 	}
 
-	public static ArrayList<Parcel> getByYear(String recieverEmail, int year) {
+	public static ArrayList<Parcel> getByYear(String recieverEmail, int year) throws ConfigException {
 		return getParcels(-1, null, recieverEmail, null, TaxReturnManager.getID(recieverEmail, year));
 	}
 

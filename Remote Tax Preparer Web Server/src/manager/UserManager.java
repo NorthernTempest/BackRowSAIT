@@ -11,6 +11,7 @@ import databaseAccess.LogEntryDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.User;
+import exception.ConfigException;
 import service.ConfigService;
 import service.EncryptionService;
 
@@ -27,12 +28,17 @@ public final class UserManager {
 	/**
 	 * Maximum number of login attempts within LOGIN_ATTEMPT_TIMELIMIT
 	 */
-	private static final int MAX_LOGIN_ATTEMPTS = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
+	private static int maxLoginAttempts;
 	/**
 	 * Time in minutes to check for login attempts
 	 */
-	private static final int LOGIN_ATTEMPT_TIMELIMIT = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
-	
+	private static int loginAttemptTimelimit;
+
+	private static void init() throws ConfigException {
+		maxLoginAttempts = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
+		Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
+	}
+
 	/**
 	 * Takes an email String and a password String to check against what exists in
 	 * the user table to see if the information matches for authentication purposes
@@ -40,27 +46,21 @@ public final class UserManager {
 	 * @param email    email to check
 	 * @param password password
 	 * @return boolean based on whether or not the information matches
+	 * @throws ConfigException
 	 */
-	public static boolean authenticate(String email, String password) {
-
+	public static boolean authenticate(String email, String password) throws ConfigException {
+		init();
 		User user = getUser(email);
-		
-		
+
 		try {
-			
 			String pass_hash = EncryptionService.hash(password, user.getPassSalt());
 			if (user.getPassHash().equals(pass_hash)) {
-				
 				return true;
 			}
-		} 
-		
-		catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-			
+		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return false;
 	}
 
@@ -72,8 +72,10 @@ public final class UserManager {
 	 * @param password password
 	 * @param ip       ip of login computer
 	 * @return boolean based on whether or not the User can successfully login
+	 * @throws ConfigException
 	 */
-	public static boolean login(String email, String password, String ip) {
+	public static boolean login(String email, String password, String ip) throws ConfigException {
+		init();
 		//set log message
 		String logMessage = null;
 
@@ -101,17 +103,19 @@ public final class UserManager {
 	 * 
 	 * @param email the email to check login attempts for
 	 * @return true if too many log in attempts, false if not
+	 * @throws ConfigException 
 	 */
-	public static boolean tooManyAttempts(String email) {
+	public static boolean tooManyAttempts(String email) throws ConfigException {
+		init();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		Date endDate = cal.getTime();
-		cal.add(Calendar.MINUTE, LOGIN_ATTEMPT_TIMELIMIT);
+		cal.add(Calendar.MINUTE, loginAttemptTimelimit);
 
 		Date startDate = cal.getTime();
 		ArrayList<LogEntry> log = LogEntryManager.getLog(email, LogEntry.LOGIN_ATTEMPT, startDate, endDate, null);
 
-		if (log.size() > MAX_LOGIN_ATTEMPTS) {
+		if (log.size() > maxLoginAttempts) {
 			return true;
 		}
 		return false;
@@ -124,9 +128,10 @@ public final class UserManager {
 	 * @param email email of User to retrieve information for
 	 * @return Properties objects containing the account information of the request
 	 *         User
+	 * @throws ConfigException 
 	 */
-	public static Properties getAccountInfo(String email) {
-
+	public static Properties getAccountInfo(String email) throws ConfigException {
+		init();
 		return null;
 	}
 
@@ -139,46 +144,56 @@ public final class UserManager {
 	 * @param password password to check
 	 * @param ip       ip to check
 	 * @return boolean
+	 * @throws ConfigException 
 	 */
-	public static boolean loggedIn(String email, String password, String ip) {
-
+	public static boolean loggedIn(String email, String password, String ip) throws ConfigException {
+		init();
 		return false;
 	}
-	
+
 	/**
 	 * Allows the user to recover their
 	 * 
 	 * @param parameter
 	 * @param parameter2
-	 * @return true if the user's email is already an existing user and the email was successfully sent.
+	 * @return true if the user's email is already an existing user and the email
+	 *         was successfully sent.
+	 * @throws ConfigException 
 	 */
-	public static boolean recover(String email, String what) {
+	public static boolean recover(String email, String what) throws ConfigException {
+		init();
 		User u = UserDB.get(email);
 		return u != null;
 	}
-	
+
 	/**
 	 * @param email
 	 * @return the user with a matching email
+	 * @throws ConfigException 
 	 */
-	public static User getUser(String email) {
+	public static User getUser(String email) throws ConfigException {
+		init();
 		return UserDB.get(email);
 	}
-	
+
 	/**
 	 * Allows the user to recover their
 	 * 
 	 * @param email
-	 * @return true if the user's email is already an existing user and the email was successfully sent.
+	 * @return true if the user's email is already an existing user and the email
+	 *         was successfully sent.
+	 * @throws ConfigException 
 	 */
-	public static boolean recover(String email) {
+	public static boolean recover(String email) throws ConfigException {
+		init();
 		boolean output = false;
 		User u = UserDB.get(email);
 		output = u != null;
 		return output;
 	}
 
-	public static User verification(String verify) {
+	public static User verification(String verify) throws ConfigException {
+		init();
 		// TODO Auto-generated method stub
 		return null;
 	}

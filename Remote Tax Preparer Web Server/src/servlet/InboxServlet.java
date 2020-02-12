@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import exception.ConfigException;
 import manager.ParcelManager;
 import util.cesar.Debugger;
 
@@ -42,7 +43,12 @@ public final class InboxServlet extends HttpServlet {
 		//show messages with receiver user, tax return most recent
 		int lastYear = Calendar.YEAR -1;
 		Debugger.log(lastYear);
-		request.setAttribute("inbox", ParcelManager.getByYear(email, lastYear));
+		try {
+			request.setAttribute("inbox", ParcelManager.getByYear(email, lastYear));
+		} catch (ConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		//Display Inbox page
 		getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
