@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import exception.ConfigException;
 import manager.SessionManager;
@@ -35,8 +34,17 @@ public final class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//Display Login page
-		getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+		String action = request.getParameter("action");
+		
+		if( action != null && action.equals("logout") )
+		{
+			SessionManager.invalidate( request.getSession().getId() );
+			request.getSession().invalidate();
+			response.sendRedirect("login");
+		}
+		else
+			//Display Login page
+			getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 	}
 
 	/**
@@ -61,28 +69,17 @@ public final class LoginServlet extends HttpServlet {
 				//forward to login
 				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 				
-			} else if(!UserManager.login(email, password, ip)) {
+			} else if(!UserManager.login(email, password, request.getSession().getId(), ip)) {
 				//tell user
 				request.setAttribute("errorMessage", "Incorrect email or password");
 				//forward to login
 				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 				
 			} else {
-				//get session id
-				HttpSession session = request.getSession();
-				String sessionID = session.getId();
-				
-				//create a session
-				SessionManager.createSession(email, sessionID, ip);
-				
-				//set session email
-				session.setAttribute("email", email);
-				
 				//forward to home
 				getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 			}
 		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
