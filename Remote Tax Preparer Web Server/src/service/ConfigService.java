@@ -26,16 +26,14 @@ public final class ConfigService {
 			s.close();
 			if (line.startsWith(option))
 				return line.substring(option.length());
-			else
-			{
+			else {
 				throw new ConfigException("End of config reached.");
 			}
-		} catch(FileNotFoundException e) {
-			throw new ConfigException( "Config file not found." );
+		} catch (FileNotFoundException e) {
+			throw new ConfigException("Config file not found.");
 		} finally {
 			s.close();
 		}
-		return option;
 	}
 
 	/**
@@ -54,12 +52,11 @@ public final class ConfigService {
 			}
 
 			return line;
-		} catch(FileNotFoundException e) {
-			throw new ConfigException( "Config file not found." );
+		} catch (FileNotFoundException e) {
+			throw new ConfigException("Config file not found.");
 		} finally {
 			s.close();
 		}
-		return filePath;
 	}
 
 }
