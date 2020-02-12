@@ -45,9 +45,11 @@ public final class UserManager {
 
 		User user = getUser(email);
 		
+		
 		try {
 			
 			String pass_hash = EncryptionService.hash(password, user.getPassSalt());
+			System.out.println(pass_hash);
 			if (user.getPassHash().equals(pass_hash)) {
 				
 				return true;

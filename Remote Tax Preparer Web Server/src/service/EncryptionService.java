@@ -244,9 +244,10 @@ public class EncryptionService {
 	 */
 	private static SecretKey getKey(String toHash, String salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
+		init();
 		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(), iterationCount, keyLength);
 
-		SecretKeyFactory skf = SecretKeyFactory.getInstance(ConfigService.fetchFromConfig(keyAlgorithm));
+		SecretKeyFactory skf = SecretKeyFactory.getInstance(keyAlgorithm);
 
 		return skf.generateSecret(spec);
 	}
