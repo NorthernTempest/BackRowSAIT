@@ -11,7 +11,6 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.NoSuchPaddingException;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 
 import domain.Document;
 import exception.ConfigException;
@@ -54,5 +53,7 @@ class EncryptionServiceTest {
 		Document encryptedFile = EncryptionService.encryptDocument( unencryptedFilePath, false, false, 1 );
 		
 		String decryptedFilePath = EncryptionService.decryptDocument( encryptedFile );
+		
+		System.out.println( decryptedFilePath );
 	}
 }
