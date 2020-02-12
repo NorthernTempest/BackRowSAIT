@@ -19,7 +19,11 @@ import manager.UserManager;
  */
 @WebServlet("/login")
 public final class LoginServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9068496584070534140L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()

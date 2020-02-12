@@ -19,7 +19,11 @@ import manager.ParcelManager;
  */
 @WebServlet("/inbox")
 public final class InboxServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4807630350799183535L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
