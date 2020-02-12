@@ -128,3 +128,12 @@ VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDA
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active)
 VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "y");
+
+INSERT INTO tax_return (return_id, email, status, year)
+VALUES (0, "test@test.com", "new", 2019);
+
+INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, return_id)
+VALUES (0, "Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 0);
+
+INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, return_id)
+VALUES (1, "Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 0);
