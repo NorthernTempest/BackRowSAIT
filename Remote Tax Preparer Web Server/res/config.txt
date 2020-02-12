@@ -10,3 +10,4 @@ encfiles:C:\Capstone\TestFiles\encrypted\
 outfiles:C:\Capstone\TestFiles\output\
 MAX_LOGIN_ATTEMPTS:5
 LOGIN_ATTEMPT_TIMELIMIT:10
+sessiontime:30

@@ -1,6 +1,5 @@
 package manager;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,13 +44,16 @@ public final class SessionManager {
 		Session session = new Session(email, sessionID, timeoutDate);
 		
 		//insert session to database
-		SessionDB sdb = new SessionDB();
-		sdb.insert(session);
+		SessionDB.insert(session);
 		
 		//write to log
 		String logMessage = "Session created";
 		LogEntryManager.createLogEntry(email, logMessage, LogEntry.SESSION_UPDATE, ip);
 		
 		return false;
+	}
+
+	public static void invalidate(String sessionID) {
+		SessionDB.delete(sessionID);
 	}
 }

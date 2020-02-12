@@ -7,9 +7,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
-import databaseAccess.LogEntryDB;
+import databaseAccess.SessionDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
+import domain.Session;
 import domain.User;
 import exception.ConfigException;
 import service.ConfigService;
@@ -33,10 +34,15 @@ public final class UserManager {
 	 * Time in minutes to check for login attempts
 	 */
 	private static int loginAttemptTimelimit;
+	/**
+	 * Time that the session is valid
+	 */
+	private static int sessionTimeout;
 
 	private static void init() throws ConfigException {
 		maxLoginAttempts = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
-		Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
+		loginAttemptTimelimit = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
+		sessionTimeout = Integer.parseInt(ConfigService.fetchFromConfig("sessiontime:"));
 	}
 
 	/**
@@ -74,7 +80,7 @@ public final class UserManager {
 	 * @return boolean based on whether or not the User can successfully login
 	 * @throws ConfigException
 	 */
-	public static boolean login(String email, String password, String ip) throws ConfigException {
+	public static boolean login(String email, String password, String sessionID, String ip) throws ConfigException {
 		init();
 		//set log message
 		String logMessage = null;
@@ -82,12 +88,16 @@ public final class UserManager {
 		//Check logs for attempts from email, if too many attempts don't let them in.
 		if (tooManyAttempts(email)) {
 			return false;
-		}
-
-		if (authenticate(email, password)) {
+		} else if (authenticate(email, password)) {
 			logMessage = "Successful login attempt";
 			//write to log
 			LogEntryManager.createLogEntry(email, logMessage, LogEntry.LOGIN_ATTEMPT, ip);
+			
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.MINUTE, sessionTimeout);
+			
+			Session newSession = new Session(email, sessionID, c.getTime());
+			SessionDB.insert(newSession);
 			return true;
 		} else {
 			logMessage = "Failed login attempt";
