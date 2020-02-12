@@ -46,6 +46,7 @@ public final class InboxServlet extends HttpServlet {
 
 		//Display Inbox page
 		getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+		//ass
 	}
 
 	/**
