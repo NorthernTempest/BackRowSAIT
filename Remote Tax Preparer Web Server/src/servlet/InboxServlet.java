@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,9 +40,8 @@ public final class InboxServlet extends HttpServlet {
 		String email = (String) session.getAttribute("email");
 
 		//show messages with receiver user, tax return most recent
-		Calendar cal = Calendar.getInstance();
-		int lastYear =  cal.get(Calendar.YEAR);
-		Debugger.log("year: " + lastYear);
+		int lastYear = Calendar.YEAR -1;
+		Debugger.log(lastYear);
 		request.setAttribute("inbox", ParcelManager.getByYear(email, lastYear));
 
 		//Display Inbox page
