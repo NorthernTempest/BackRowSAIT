@@ -27,10 +27,11 @@ public final class ConfigService {
 			if (line.startsWith(option))
 				return line.substring(option.length());
 			else
+			{
 				throw new ConfigException("End of config reached.");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			}
+		} catch(FileNotFoundException e) {
+			throw new ConfigException( "Config file not found." );
 		} finally {
 			s.close();
 		}
@@ -53,9 +54,8 @@ public final class ConfigService {
 			}
 
 			return line;
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch(FileNotFoundException e) {
+			throw new ConfigException( "Config file not found." );
 		} finally {
 			s.close();
 		}
