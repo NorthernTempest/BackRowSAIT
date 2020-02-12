@@ -79,7 +79,7 @@ public final class LoginServlet extends HttpServlet {
 				session.setAttribute("email", email);
 				
 				//forward to home
-				getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+				getServletContext().getRequestDispatcher("/WEB-INF/inbox.jsp").forward(request, response);
 			}
 		} catch (ConfigException e) {
 			// TODO Auto-generated catch block
