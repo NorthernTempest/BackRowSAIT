@@ -1,5 +1,9 @@
 package databaseAccess;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import domain.TaxReturn;
@@ -66,8 +70,42 @@ public class TaxReturnDB {
 	 * @param user the User of the TaxReturn to retrieve from the database
 	 * @return TaxReturn that contains the information of the requested TaxReturn
 	 */
-	public static ArrayList<TaxReturn> getByUser(User user) {
-		return null;
+	public static ArrayList<TaxReturn> getByUser(String email) {
+
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		ArrayList<TaxReturn> taxReturns = new ArrayList<>();
+		TaxReturn taxReturn = null;
+		
+		try {
+			
+			String preparedQuery = "SELECT * FROM tax_return WHERE email = ?";
+			
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(1, email);
+			
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				
+				taxReturn = new TaxReturn(rs.getInt("return_id"), rs.getString("email"), rs.getString("status"), rs.getInt("year"));
+				taxReturns.add(taxReturn);
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return taxReturns;
 	}
 	
 	/**
