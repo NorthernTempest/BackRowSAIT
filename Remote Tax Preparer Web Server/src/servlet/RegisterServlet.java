@@ -19,7 +19,11 @@ import manager.UserManager;
  */
 @WebServlet("/register")
 public final class RegisterServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8443625698924723832L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -34,7 +38,7 @@ public final class RegisterServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//Display Register page
+		// Display Register page
 		getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
 	}
 
@@ -44,19 +48,17 @@ public final class RegisterServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//validate and get all inputs
-		//hey usermanager make a user in the db
-		//did you? 
-			//dope. tell the user all is good
-			//tell the user a verification email has been sent
-			//go to login once user is like K
-		//did you not?
-			//uh oh. tell the user is not good
-			//to to register page once user is like K
-		
-		
-		
-		//Show a page, probably login
+		// validate and get all inputs
+		// hey usermanager make a user in the db
+		// did you?
+		// dope. tell the user all is good
+		// tell the user a verification email has been sent
+		// go to login once user is like K
+		// did you not?
+		// uh oh. tell the user is not good
+		// to to register page once user is like K
+
+		// Show a page, probably login
 		getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 	}
 }
