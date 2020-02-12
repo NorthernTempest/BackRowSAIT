@@ -17,10 +17,22 @@ import domain.User;
  */
 public final class ParcelManager {
 
-	public static ArrayList<Parcel> getByParameters(int parcelID, String sender, String receiver, Date dateSent, int taxReturnID) {
-		User userSender = UserManager.getUser(sender);
-		User userReceiver = UserManager.getUser(receiver);
+	/**
+	 * @param parcelID
+	 * @param senderEmail
+	 * @param receiverEmail
+	 * @param dateSent
+	 * @param taxReturnID
+	 * @return
+	 */
+	public static ArrayList<Parcel> getParcels(int parcelID, String senderEmail, String receiverEmail, Date dateSent, int taxReturnID) {
+		User userSender = UserManager.getUser(senderEmail);
+		User userReceiver = UserManager.getUser(receiverEmail);
 		return ParcelDB.getParcelsByParameter(parcelID, userSender, userReceiver, dateSent, taxReturnID);
+	}
+
+	public static ArrayList<Parcel> getByYear(String recieverEmail, int year) {
+		return getParcels(-1, null, recieverEmail, null, TaxReturnManager.getID(recieverEmail, year));
 	}
 
 }
