@@ -22,10 +22,18 @@
         </c:when>
     </c:choose>
 </div>
-<div class="col-md-6">
-    <h2>
-        ${user.title}. ${user.f_name} ${user.l_name}
-    </h2>
+<div class="col-12">
+    <a href="/parcel/create?parcelID=${parcel.parcelID}" class="btn btn-primary" role="button">Reply</a>
+</div>
+<div class="col-12">
+    <h4>
+        ${parcel.subject} - ${parcel.sender}
+    </h4>
+    <b>Date Sent:</b> ${parcel.dateSent}<br>
+    <b>Expiry Date:</b> ${parcel.expirationDate}<br>
+    <p>
+        ${parcel.message}
+    </p>
 
 </div>
 

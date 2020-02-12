@@ -35,6 +35,7 @@
             <th scope="col">Subject</th>
             <th scope="col">Message</th>
             <th scope="col">Date Sent</th>
+            <th scope="col">Attached</th>
             <th scope="col">Expiration Date</th>
         </tr>
         <tr>
@@ -44,6 +45,7 @@
                     <td>${parcel.subject}</td>
                     <td>${parcel.message.substring(0,20)}...</td>
                     <td>${parcel.dateSent}</td>
+                    <td>${parcel.documents.size()}</td>
                     <td>${parcel.expirationDate}</td>
                 </a>
             </c:forEach>
