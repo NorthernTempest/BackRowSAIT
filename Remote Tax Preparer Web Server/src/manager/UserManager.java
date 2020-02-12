@@ -1,5 +1,7 @@
 package manager;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +11,8 @@ import databaseAccess.LogEntryDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.User;
+import service.ConfigService;
+import service.EncryptionService;
 
 /**
  * 
@@ -39,6 +43,23 @@ public final class UserManager {
 	 */
 	public static boolean authenticate(String email, String password) {
 
+		User user = getUser(email);
+		
+		try {
+			
+			String pass_hash = EncryptionService.hash(password, user.getPassSalt());
+			if (user.getPassHash().equals(pass_hash)) {
+				
+				return true;
+			}
+		} 
+		
+		catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
@@ -130,7 +151,7 @@ public final class UserManager {
 	 * @param parameter2
 	 * @return true if the user's email is already an existing user and the email was successfully sent.
 	 */
-	public static boolean recover(String email) {
+	public static boolean recover(String email, String what) {
 		User u = UserDB.get(email);
 		return u != null;
 	}
@@ -154,5 +175,10 @@ public final class UserManager {
 		User u = UserDB.get(email);
 		output = u != null;
 		return output;
+	}
+
+	public static User verification(String verify) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
