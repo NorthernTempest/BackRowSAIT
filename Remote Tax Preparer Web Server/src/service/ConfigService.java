@@ -35,6 +35,7 @@ public final class ConfigService {
 		} finally {
 			s.close();
 		}
+		return option;
 	}
 
 	/**
@@ -58,6 +59,7 @@ public final class ConfigService {
 		} finally {
 			s.close();
 		}
+		return filePath;
 	}
 
 }

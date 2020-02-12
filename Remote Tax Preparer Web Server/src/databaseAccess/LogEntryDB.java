@@ -147,7 +147,7 @@ public class LogEntryDB {
 				
 				if (email != null) {
 					
-					preparedQuery = preparedQuery + "email = " + email;
+					preparedQuery = preparedQuery + "email = '" + email + "'";
 					i++;
 				}
 				
@@ -155,12 +155,12 @@ public class LogEntryDB {
 					
 					if (i == 0) {
 						
-						preparedQuery = preparedQuery + "type = " + type;
+						preparedQuery = preparedQuery + "type = '" + type + "'";
 					}
 					
 					else {
 						
-						preparedQuery = preparedQuery + " AND type = " + type;
+						preparedQuery = preparedQuery + " AND type = '" + type + "'";
 					}
 					
 					i++;
@@ -170,12 +170,12 @@ public class LogEntryDB {
 					
 					if (i == 0) {
 						
-						preparedQuery = preparedQuery + "start_date = " + startDate;
+						preparedQuery = preparedQuery + "start_date = '" + startDate + "'";
 					}
 					
 					else {
 						
-						preparedQuery = preparedQuery + " AND start_date = " + startDate;
+						preparedQuery = preparedQuery + " AND start_date = '" + startDate + "'";
 					}
 					
 					i++;
@@ -185,12 +185,12 @@ public class LogEntryDB {
 					
 					if (i == 0) {
 						
-						preparedQuery = preparedQuery + "end_date = " + endDate;
+						preparedQuery = preparedQuery + "end_date = '" + endDate + "'";
 					}
 					
 					else {
 						
-						preparedQuery = preparedQuery + " AND end_date = " + endDate;
+						preparedQuery = preparedQuery + " AND end_date = '" + endDate + "'";
 					}
 					
 					i++;
@@ -200,12 +200,12 @@ public class LogEntryDB {
 					
 					if (i == 0) {
 						
-						preparedQuery = preparedQuery + "ip = " + ip;
+						preparedQuery = preparedQuery + "ip = '" + ip + "'";
 					}
 					
 					else {
 						
-						preparedQuery = preparedQuery + " AND ip = " + ip;
+						preparedQuery = preparedQuery + " AND ip = '" + ip + "'";
 					}
 					
 					i++;
@@ -213,8 +213,6 @@ public class LogEntryDB {
 			}
 			
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-			
-			ps.setString(1, email);
 			
 			rs = ps.executeQuery();
 			

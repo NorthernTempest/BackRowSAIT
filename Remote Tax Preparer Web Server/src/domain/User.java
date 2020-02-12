@@ -115,6 +115,16 @@ public final class User {
 		setLastVerificationType(lastVerificationType);
 	}
 
+	// This constructor exists only for testing purposes.
+	public User(String email, String f_name, String l_name, String phone, String pass_hash, String pass_salt) {
+		setEmail(email);
+		setFName(f_name);
+		setLName(l_name);
+		setPhone(phone);
+		setPassHash(pass_hash);
+		setPassSalt(pass_salt);
+	}
+
 	/**
 	 * Returns the email.
 	 * 

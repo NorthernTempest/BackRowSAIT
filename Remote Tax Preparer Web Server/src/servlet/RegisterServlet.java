@@ -17,7 +17,7 @@ import manager.UserManager;
  * 
  * @author Cesar Guzman, Taylor Hanlon
  */
-@WebServlet("/login")
+@WebServlet("/register")
 public final class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

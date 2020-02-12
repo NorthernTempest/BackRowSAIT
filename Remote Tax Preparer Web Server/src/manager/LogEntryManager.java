@@ -28,10 +28,7 @@ public final class LogEntryManager {
 	 *         match given parameters
 	 */
 	public static ArrayList<LogEntry> getLog(String email, char type, Date startDate, Date endDate, String ip) {
-		LogEntryDB ldb = new LogEntryDB();
-		ArrayList<LogEntry> log = ldb.getByParameters(email, type, startDate, endDate, ip);
-		
-		return log;
+		return LogEntryDB.getByParameters(email, type, startDate, endDate, ip);
 	}
 	
 	/**

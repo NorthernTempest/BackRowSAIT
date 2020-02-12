@@ -121,4 +121,4 @@ COMMIT;
  */
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active)
-VALUES ("test@test.com", "Timmy", "Turner", 1, "pass", "word", CURDATE(), "y");
+VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDATE(), "y");

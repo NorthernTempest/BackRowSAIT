@@ -188,12 +188,13 @@ public final class UserDB {
 			
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 			
-			ps.setString(2, email);
+			ps.setString(1, email);
 			
 			rs = ps.executeQuery();
 			
 			if (rs.next()) {
 				
+				// TODO: This shit.
 				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
 								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
 			}
@@ -236,8 +237,8 @@ public final class UserDB {
 			
 			while (rs.next()) {
 				
-				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
-								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
+				/*user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
+								rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));*/
 				
 				users.add(user);
 			}

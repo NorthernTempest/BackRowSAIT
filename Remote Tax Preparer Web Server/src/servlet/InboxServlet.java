@@ -1,7 +1,7 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,11 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import domain.TaxReturn;
 import manager.ParcelManager;
-import manager.SessionManager;
-import manager.TaxReturnManager;
-import manager.UserManager;
+import util.cesar.Debugger;
 
 /**
  * Servlet for logging into the site.
@@ -42,14 +39,14 @@ public final class InboxServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 
-		//get user's most recent tax return id
-		int mostRecentTaxReturnID = TaxReturnManager.getMostRecentID(email);
-
 		//show messages with receiver user, tax return most recent
-		ParcelManager.getByParameters(0, null, email, null, mostRecentTaxReturnID);
+		int lastYear = Calendar.YEAR -1;
+		Debugger.log(lastYear);
+		request.setAttribute("inbox", ParcelManager.getByYear(email, lastYear));
 
 		//Display Inbox page
-		getServletContext().getRequestDispatcher("/WEB-INF/inbox.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+		//ass
 	}
 
 	/**
