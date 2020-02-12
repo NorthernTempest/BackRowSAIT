@@ -25,9 +25,8 @@ public final class TaxReturnManager {
 	 * @throws ConfigException 
 	 */
 	public static ArrayList<TaxReturn> getByEmail(String email) throws ConfigException {
-		User user = UserManager.getUser(email);
 
-		return TaxReturnDB.getByUser(user);
+		return TaxReturnDB.getByUser(email);
 	}
 
 	/**
