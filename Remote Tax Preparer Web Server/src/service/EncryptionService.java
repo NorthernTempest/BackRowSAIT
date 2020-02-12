@@ -81,9 +81,11 @@ public class EncryptionService {
 	 *                                  valid according to
 	 *                                  https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
 	 * @throws InvalidKeySpecException
+	 * @throws ConfigException 
+	 * @throws NumberFormatException 
 	 */
 	public static String hash(String toHash, String salt)
-			throws InvalidKeySpecException, NoSuchAlgorithmException {
+			throws InvalidKeySpecException, NoSuchAlgorithmException, NumberFormatException, ConfigException {
 		init();
 		byte[] hash = getKey(toHash, salt).getEncoded();
 
@@ -110,9 +112,11 @@ public class EncryptionService {
 	 * @throws InvalidKeySpecException
 	 * @throws InvalidKeyException
 	 * @throws IOException
+	 * @throws ConfigException 
+	 * @throws NumberFormatException 
 	 */
 	public static Document encryptDocument(String filepath, boolean isSigned, boolean requiresSignature, int parcelID) throws NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidKeySpecException, InvalidKeyException, IOException {
+			InvalidKeySpecException, InvalidKeyException, IOException, NumberFormatException, ConfigException {
 		init();
 		Cipher cipher = getCipher();
 
@@ -212,8 +216,10 @@ public class EncryptionService {
 	 * Returns a salt string
 	 * 
 	 * @return the salt
+	 * @throws ConfigException 
+	 * @throws NumberFormatException 
 	 */
-	public static String getSalt() {
+	public static String getSalt() throws NumberFormatException, ConfigException {
 		init();
 		
 		Random r = new SecureRandom();
@@ -240,13 +246,14 @@ public class EncryptionService {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
+	 * @throws ConfigException 
 	 * @throws NumberFormatException
 	 */
 	private static SecretKey getKey(String toHash, String salt)
-			throws NoSuchAlgorithmException, InvalidKeySpecException {
+			throws NoSuchAlgorithmException, InvalidKeySpecException, ConfigException {
 		KeySpec spec = new PBEKeySpec(toHash.toCharArray(), salt.getBytes(), iterationCount, keyLength);
 
-		SecretKeyFactory skf = SecretKeyFactory.getInstance(ConfigService.fetchFromConfig(keyAlgorithm));
+		SecretKeyFactory skf = SecretKeyFactory.getInstance(keyAlgorithm);
 
 		return skf.generateSecret(spec);
 	}

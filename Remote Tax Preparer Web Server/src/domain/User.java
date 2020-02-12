@@ -167,8 +167,9 @@ public final class User {
 	 * Sets the value of permissionLevel.
 	 * 
 	 * @param permissionLevel the permissionLevel to set
+	 * @throws UserException 
 	 */
-	public void setPermissionLevel(int permissionLevel) {
+	public void setPermissionLevel(int permissionLevel) throws UserException {
 
 		switch (permissionLevel) {
 

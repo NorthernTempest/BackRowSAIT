@@ -1,6 +1,6 @@
 package exception;
 
-public class ConfigException extends RuntimeException {
+public class ConfigException extends Exception {
 
 	/**
 	 * 

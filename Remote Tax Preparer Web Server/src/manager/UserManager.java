@@ -9,6 +9,7 @@ import databaseAccess.LogEntryDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.User;
+import service.ConfigService;
 
 /**
  * 
@@ -121,18 +122,6 @@ public final class UserManager {
 	public static boolean loggedIn(String email, String password, String ip) {
 
 		return false;
-	}
-	
-	/**
-	 * Allows the user to recover their
-	 * 
-	 * @param parameter
-	 * @param parameter2
-	 * @return true if the user's email is already an existing user and the email was successfully sent.
-	 */
-	public static boolean recover(String email) {
-		User u = UserDB.get(email);
-		return u != null;
 	}
 	
 	/**

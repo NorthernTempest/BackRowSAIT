@@ -40,8 +40,8 @@ public final class UserDB {
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 			
 			ps.setString(1, user.getEmail());
-			ps.setString(2, user.getfName());
-			ps.setString(3, user.getlName());
+			ps.setString(2, user.getFName());
+			ps.setString(3, user.getLName());
 			ps.setInt(4, user.getPermissionLevel());
 			ps.setString(5, user.getPhone());
 			ps.setString(6, user.getPassHash());
@@ -93,8 +93,8 @@ public final class UserDB {
 			
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 			
-			ps.setString(1, user.getfName());
-			ps.setString(2, user.getlName());
+			ps.setString(1, user.getFName());
+			ps.setString(2, user.getLName());
 			ps.setInt(3, user.getPermissionLevel());
 			ps.setString(4, user.getPhone());
 			ps.setString(5, user.getPassHash());
