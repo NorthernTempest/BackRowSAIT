@@ -36,12 +36,31 @@ public class AuthenticationFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpSession session = ((HttpServletRequest) request).getSession();
+		HttpServletRequest request2 = (HttpServletRequest) request;
+		HttpSession session = request2.getSession();
+		String context = request2.getContextPath();
 		
-		if( SessionManager.isSessionActive( session.getId() ) || ((HttpServletRequest) request).getContextPath() == "/login" )
-			chain.doFilter(request, response);
+		if( SessionManager.isSessionActive(session.getId()) )
+		{
+			if( context != null && context.equals("/login") )
+			{
+				String action = request2.getParameter("action");
+				
+				if( action != null && action.equals("logout"))
+					chain.doFilter(request, response);
+				else
+					((HttpServletResponse) response).sendRedirect("/inbox");
+			}
+			else
+				chain.doFilter(request, response);
+		}
 		else
-			((HttpServletResponse) response).sendRedirect( "login" );
+		{
+			if( context != null && context.equals("/login") )
+				chain.doFilter(request, response);
+			else
+				((HttpServletResponse) response).sendRedirect("/login");
+		}
 	}
 
 	/**
