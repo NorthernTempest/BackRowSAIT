@@ -166,31 +166,16 @@ public class LogEntryDB {
 					i++;
 				}
 				
-				if (startDate != null) {
+				if (startDate != null && endDate != null) {
 					
 					if (i == 0) {
 						
-						preparedQuery = preparedQuery + "start_date = '" + startDate + "'";
+						preparedQuery = preparedQuery + "date BETWEEN '" + startDate + "' AND '" + endDate + "'";
 					}
 					
 					else {
 						
-						preparedQuery = preparedQuery + " AND start_date = '" + startDate + "'";
-					}
-					
-					i++;
-				}
-				
-				if (endDate != null) {
-					
-					if (i == 0) {
-						
-						preparedQuery = preparedQuery + "end_date = '" + endDate + "'";
-					}
-					
-					else {
-						
-						preparedQuery = preparedQuery + " AND end_date = '" + endDate + "'";
+						preparedQuery = preparedQuery + " AND date BETWEEN '" + startDate + "' AND '" + endDate + "'";
 					}
 					
 					i++;
