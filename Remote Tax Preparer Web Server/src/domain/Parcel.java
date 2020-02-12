@@ -28,9 +28,9 @@ public final class Parcel {
 	
 	private Date expirationDate;
 	
-	private TaxReturn taxReturn;
+	private int taxReturn;
 	
-	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate) {
+	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate, int taxReturn) {
 		
 		setParcelID(parcelID);
 		setSubject(subject);
@@ -39,19 +39,20 @@ public final class Parcel {
 		setReceiver(receiver);
 		setDateSent(dateSent);
 		setExpirationDate(expirationDate);
+		setTaxReturn(taxReturn);
 	}
 	
 	/**
 	 * @return the taxReturn
 	 */
-	public TaxReturn getTaxReturn() {
+	public int getTaxReturn() {
 		return taxReturn;
 	}
 
 	/**
 	 * @param taxReturn the taxReturn to set
 	 */
-	public void setTaxReturn(TaxReturn taxReturn) {
+	public void setTaxReturn(int taxReturn) {
 		this.taxReturn = taxReturn;
 	}
 

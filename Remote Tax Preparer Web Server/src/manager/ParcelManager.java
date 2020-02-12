@@ -28,9 +28,7 @@ public final class ParcelManager {
 	 * @throws ConfigException 
 	 */
 	public static ArrayList<Parcel> getParcels(int parcelID, String senderEmail, String receiverEmail, Date dateSent, int taxReturnID) throws ConfigException {
-		User userSender = UserManager.getUser(senderEmail);
-		User userReceiver = UserManager.getUser(receiverEmail);
-		return ParcelDB.getParcelsByParameter(parcelID, userSender, userReceiver, dateSent, taxReturnID);
+		return ParcelDB.getParcelsByParameter(parcelID, senderEmail, receiverEmail, dateSent, taxReturnID);
 	}
 
 	public static ArrayList<Parcel> getByYear(String recieverEmail, int year) throws ConfigException {
