@@ -16,17 +16,30 @@ public final class Parcel {
 	
 	private ArrayList<Document> documents;
 	
+	private String subject;
+	
 	private String message;
 	
-	private User sender;
+	private String sender;
 	
-	private User receiver;
+	private String receiver;
 	
 	private Date dateSent;
 	
 	private Date expirationDate;
 	
 	private TaxReturn taxReturn;
+	
+	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate) {
+		
+		setParcelID(parcelID);
+		setSubject(subject);
+		setMessage(message);
+		setSender(sender);
+		setReceiver(receiver);
+		setDateSent(dateSent);
+		setExpirationDate(expirationDate);
+	}
 	
 	/**
 	 * @return the taxReturn
@@ -70,7 +83,7 @@ public final class Parcel {
 	 * Returns the sender.
 	 * @return the sender
 	 */
-	public User getSender() {
+	public String getSender() {
 		return sender;
 	}
 
@@ -78,7 +91,7 @@ public final class Parcel {
 	 * Returns the receiver.
 	 * @return the receiver
 	 */
-	public User getReceiver() {
+	public String getReceiver() {
 		return receiver;
 	}
 
@@ -126,7 +139,7 @@ public final class Parcel {
 	 * Sets the value of sender.
 	 * @param sender the sender to set
 	 */
-	public void setSender(User sender) {
+	public void setSender(String sender) {
 		this.sender = sender;
 	}
 
@@ -134,7 +147,7 @@ public final class Parcel {
 	 * Sets the value of receiver.
 	 * @param receiver the receiver to set
 	 */
-	public void setReceiver(User receiver) {
+	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
 
@@ -152,5 +165,13 @@ public final class Parcel {
 	 */
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 }
