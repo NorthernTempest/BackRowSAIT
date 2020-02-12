@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import domain.LogEntry;
 import domain.Parcel;
 import domain.User;
 
@@ -185,8 +186,9 @@ public class ParcelDB {
 			
 			if (rs.next()) {
 				
-				parcel = new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"), rs.getString("sender"),
-												rs.getString("receiver"), rs.getDate("date_sent"), rs.getDate("expiration_date"));
+				parcel = new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"), 
+									rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"), 
+									rs.getDate("expiration_date"), rs.getInt("return_id"));
 			}
 		}
 		
@@ -226,8 +228,9 @@ public class ParcelDB {
 			
 			while (rs.next()) {
 				
-				parcels.add(new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"), rs.getString("sender"),
-												rs.getString("receiver"), rs.getDate("date_sent"), rs.getDate("expiration_date")));
+				parcels.add(new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"), 
+										rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"), 
+										rs.getDate("expiration_date"), rs.getInt("return_id")));
 			}
 		}
 		
@@ -256,8 +259,95 @@ public class ParcelDB {
 	 * @param taxReturnID
 	 * @return ArrayList<Parcel> containing all relevant Parcels from the database
 	 */
-	public static ArrayList<Parcel> getParcelsByParameter(int parcelID, User sender, User receiver, Date dateSent, int taxReturnID) {
-		//TODO
-		return new ArrayList<Parcel>();
+	public static ArrayList<Parcel> getParcelsByParameter(int parcelID, String sender, String receiver, Date dateSent, int taxReturnID) {
+		
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs = null;
+		Parcel parcel = null;
+		ArrayList<Parcel> parcels = new ArrayList<>();
+		String preparedQuery;
+		
+		try {
+			
+			if (parcelID < 0 && sender == null && receiver == null && dateSent == null && taxReturnID < 0) {
+				preparedQuery = "SELECT * FROM parcel";
+				PreparedStatement ps = connection.prepareStatement(preparedQuery);
+				rs = ps.executeQuery();
+			}
+			
+			else {
+				
+				ArrayList<Object> parameters = new ArrayList<>();
+				int count = 0;
+				preparedQuery = "SELECT * FROM parcel WHERE ";
+				
+				if (parcelID >= 0) {
+					preparedQuery += "parcel_id = ? ";
+					parameters.add(parcelID);
+					count++;
+				}
+				
+				if (sender != null) {
+					if (count > 0)
+						preparedQuery += "AND ";
+					preparedQuery += "sender = ? ";
+					parameters.add(sender);
+					count++;
+				}
+				
+				if (receiver != null) {
+					if (count > 0)
+						preparedQuery += "AND ";
+					preparedQuery += "receiver = ? ";
+					parameters.add(receiver);
+					count++;
+				}
+					
+				if (dateSent != null) {
+					if (count > 0)
+						preparedQuery += "AND ";
+					preparedQuery += "dateSent = ? ";
+					parameters.add(dateSent.toString());
+				}
+				
+				if (taxReturnID >= 0) {
+					if (count > 0)
+						preparedQuery += "AND ";
+					preparedQuery += "return_id = ? ";
+					parameters.add(taxReturnID);
+				}
+				
+				PreparedStatement ps = connection.prepareStatement(preparedQuery);
+				
+				for (int i = 0; i < parameters.size(); i++) {
+					
+					ps.setString(i + 1, (String)parameters.get(i));
+				}
+				
+				rs = ps.executeQuery();
+			}
+			
+			while (rs.next()) { 
+				
+				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
+						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"), rs.getDate("expiration_date"),
+						rs.getInt("return_id"));
+				
+				parcels.add(parcel);
+			}
+		}
+		
+		catch (SQLException e) {
+			
+			System.out.println(e);
+		}
+		
+		finally {
+			
+			pool.closeConnection(connection);
+		}
+		
+		return parcels;
 	}
 }

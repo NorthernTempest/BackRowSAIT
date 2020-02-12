@@ -37,6 +37,7 @@ CREATE TABLE parcel (
     receiver VARCHAR(320),
     date_sent DATE NOT NULL,
     expiration_date DATE,
+    return_id INT,
     FOREIGN KEY (sender) REFERENCES user(email),
     FOREIGN KEY (receiver) REFERENCES user(email));
 	
