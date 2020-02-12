@@ -16,7 +16,9 @@ CREATE TABLE user (
     fax CHAR(10),
     postal_code CHAR (6),
     city VARCHAR (32),
-    mailing_address VARCHAR (320),
+    country VARCHAR (32),
+    street_address_1 VARCHAR (320),
+    street_address_2 VARCHAR (320),
     active CHAR(1) NOT NULL);
     
 ALTER TABLE user 
@@ -122,3 +124,6 @@ COMMIT;
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active)
 VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDATE(), "y");
+
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active)
+VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "y");
