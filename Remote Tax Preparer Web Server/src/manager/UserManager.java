@@ -97,6 +97,7 @@ public final class UserManager {
 			c.add(Calendar.MINUTE, sessionTimeout);
 			
 			Session newSession = new Session(email, sessionID, c.getTime());
+			
 			SessionDB.insert(newSession);
 			return true;
 		} else {

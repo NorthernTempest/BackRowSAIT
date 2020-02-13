@@ -88,7 +88,7 @@ public final class LoginServlet extends HttpServlet {
 				session.setAttribute("email", email);
 				
 				//forward to home
-				response.sendRedirect("/inbox");
+				response.sendRedirect("inbox");
 			}
 		} catch (ConfigException e) {
 			e.printStackTrace();
