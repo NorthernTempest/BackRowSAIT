@@ -38,19 +38,16 @@
             <th scope="col">Attached</th>
             <th scope="col">Expiration Date</th>
         </tr>
-            <c:forEach var="parcel" items="${parcels}">
-             	<a href="/parcel/view?parcelID=${parcel.parcelID}">
-             	<tr>
-                    <td scope="row">${parcel.sender}</td>
-                    <td>${parcel.subject}</td>
-                    <td>${parcel.message.substring(0,20)}...</td>
-                    <td>${parcel.dateSent}</td>
-                    <td>${parcel.documents.size()}</td>
-                    <td>${parcel.expirationDate}</td>
-                
-                </tr>
-                </a>
-            </c:forEach>
+        <c:forEach var="parcel" items="${parcels}">
+            <tr onclick="window.location='/parcel/view?parcelID=${parcel.parcelID}'">
+                <td scope="row">${parcel.sender}</td>
+                <td>${parcel.subject}</td>
+                <td>${parcel.message.substring(0,20)}...</td>
+                <td>${parcel.dateSent}</td>
+                <td>${parcel.documents.size()}</td>
+                <td>${parcel.expirationDate}</td>
+            </tr>
+        </c:forEach>
     </table>
 
 </div>
