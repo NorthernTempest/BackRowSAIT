@@ -9,7 +9,10 @@ package util.cesar;
 public class Debugger {
 	public static void log(Object o){
 	    if(Debugger.isEnabled()) {
-	        System.out.println("DEBUG: " + o.toString());
+	    	if(o != null)
+	    		System.out.println("DEBUG: " + o.toString());
+	    	else
+	    		System.out.println("DEBUG: null");
 	    }           
 	}
 
