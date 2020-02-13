@@ -124,6 +124,10 @@ CREATE EVENT terminate_sessions
 	EVERY 5 MINUTE
 	DO
 		DELETE FROM session WHERE timeout < NOW();
+		
+COMMIT;
+
+SET GLOBAL event_scheduler = ON;
 
 /* The following section is for testing purposes only!
  * TODO: Remove before deployment.
