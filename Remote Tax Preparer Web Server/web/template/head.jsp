@@ -36,7 +36,7 @@
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-            <a href="">Logout</a>
+            <a href="login?action=logout">Logout</a>
         </span>
     </div>
     <hr class="nav-separator">
