@@ -81,7 +81,7 @@ public final class LoginServlet extends HttpServlet {
 				
 			} else {
 				//forward to home
-				getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+				response.sendRedirect("inbox");
 			}
 		} catch (ConfigException e) {
 			e.printStackTrace();

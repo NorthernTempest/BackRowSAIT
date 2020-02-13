@@ -51,7 +51,7 @@ public final class InboxServlet extends HttpServlet {
 		}
 
 		//Display Inbox page
-		getServletContext().getRequestDispatcher("/WEB-INF/inbox.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		//ass
 	}
 
@@ -62,7 +62,7 @@ public final class InboxServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		//Display Inbox page
-		getServletContext().getRequestDispatcher("/WEB-INF/inbox.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 
 	}
 }
