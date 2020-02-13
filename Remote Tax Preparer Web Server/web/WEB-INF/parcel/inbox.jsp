@@ -39,7 +39,7 @@
             <th scope="col">Expiration Date</th>
         </tr>
         <c:forEach var="parcel" items="${parcels}">
-            <tr class="clickable-row" data-href="url:///parcel/view?parcelID=${parcel.parcelID}">
+            <tr onclick="window.location='/parcel/view?parcelID=${parcel.parcelID}'">
                 <td scope="row">${parcel.sender}</td>
                 <td>${parcel.subject}</td>
                 <td>${parcel.message.substring(0,20)}...</td>
