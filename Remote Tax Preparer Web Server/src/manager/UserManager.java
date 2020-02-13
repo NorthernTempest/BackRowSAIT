@@ -58,15 +58,21 @@ public final class UserManager {
 		init();
 		User user = getUser(email);
 
-		try {
-			String pass_hash = EncryptionService.hash(password, user.getPassSalt());
-			if (user.getPassHash().equals(pass_hash)) {
-				return true;
+		if (user != null) {
+			try {
+				String pass_hash = EncryptionService.hash(password, user.getPassSalt());
+				if (user.getPassHash().equals(pass_hash)) {
+					return true;
+				}
+			} catch (InvalidKeySpecException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+
 		return false;
 	}
 
@@ -92,12 +98,12 @@ public final class UserManager {
 			logMessage = "Successful login attempt";
 			//write to log
 			LogEntryManager.createLogEntry(email, logMessage, LogEntry.LOGIN_ATTEMPT, ip);
-			
+
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MINUTE, sessionTimeout);
-			
+
 			Session newSession = new Session(email, sessionID, c.getTime());
-			
+
 			SessionDB.insert(newSession);
 			return true;
 		} else {
@@ -114,7 +120,7 @@ public final class UserManager {
 	 * 
 	 * @param email the email to check login attempts for
 	 * @return true if too many log in attempts, false if not
-	 * @throws ConfigException 
+	 * @throws ConfigException
 	 */
 	public static boolean tooManyAttempts(String email) throws ConfigException {
 		init();
@@ -139,7 +145,7 @@ public final class UserManager {
 	 * @param email email of User to retrieve information for
 	 * @return Properties objects containing the account information of the request
 	 *         User
-	 * @throws ConfigException 
+	 * @throws ConfigException
 	 */
 	public static Properties getAccountInfo(String email) throws ConfigException {
 		init();
@@ -155,7 +161,7 @@ public final class UserManager {
 	 * @param password password to check
 	 * @param ip       ip to check
 	 * @return boolean
-	 * @throws ConfigException 
+	 * @throws ConfigException
 	 */
 	public static boolean loggedIn(String email, String password, String ip) throws ConfigException {
 		init();
@@ -169,7 +175,7 @@ public final class UserManager {
 	 * @param parameter2
 	 * @return true if the user's email is already an existing user and the email
 	 *         was successfully sent.
-	 * @throws ConfigException 
+	 * @throws ConfigException
 	 */
 	public static boolean recover(String email, String what) throws ConfigException {
 		init();
@@ -180,7 +186,7 @@ public final class UserManager {
 	/**
 	 * @param email
 	 * @return the user with a matching email
-	 * @throws ConfigException 
+	 * @throws ConfigException
 	 */
 	public static User getUser(String email) throws ConfigException {
 		init();
@@ -193,7 +199,7 @@ public final class UserManager {
 	 * @param email
 	 * @return true if the user's email is already an existing user and the email
 	 *         was successfully sent.
-	 * @throws ConfigException 
+	 * @throws ConfigException
 	 */
 	public static boolean recover(String email) throws ConfigException {
 		init();
