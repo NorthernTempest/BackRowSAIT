@@ -26,7 +26,12 @@ public final class SessionManager {
 	 * @return boolean based on whether or not the current Session is active
 	 */
 	public static boolean isSessionActive(String sessionID) {
-		return false;
+		Session s = SessionDB.get(sessionID);
+		boolean output = s != null;
+		
+		output = output && s.getTimeout().after(new Date());
+		
+		return output;
 	}
 	
 	/**

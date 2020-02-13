@@ -2,6 +2,7 @@ package databaseAccess;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public final class SessionDB {
 
 			ps.setString(1, session.getSessionID());
 			ps.setString(2, session.getEmail());
-			ps.setDate(3, new java.sql.Date( session.getTimeout().getTime() ));
+			ps.setTimestamp(3, new java.sql.Timestamp( session.getTimeout().getTime() ));
 
 			rows = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -75,7 +76,7 @@ public final class SessionDB {
 
 		try {
 
-			String preparedQuery = "DELETE session where sessionID = ?";
+			String preparedQuery = "DELETE FROM session WHERE session_id = ?";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -103,7 +104,39 @@ public final class SessionDB {
 	 * @return Session that contains the information of the requested Session
 	 */
 	public static Session get(String sessionID) {
-		return null;
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		Session session = null;
+
+		try {
+
+			String preparedQuery = "SELECT * FROM session WHERE session_id = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setString(1, sessionID);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				session = new Session(
+						rs.getString("email"),
+						rs.getString("session_id"),
+						rs.getTimestamp("timeout") );
+			}
+		}
+
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return session;
 	}
 
 	/**

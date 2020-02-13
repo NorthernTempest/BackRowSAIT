@@ -17,7 +17,6 @@ import manager.SessionManager;
 /**
  * Servlet Filter implementation class AuthenticationFilter
  */
-@WebFilter("/auth")
 public class AuthenticationFilter implements Filter {
 
     /**
@@ -38,7 +37,7 @@ public class AuthenticationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request2 = (HttpServletRequest) request;
 		HttpSession session = request2.getSession();
-		String context = request2.getContextPath();
+		String context = request2.getServletPath();
 		
 		if( SessionManager.isSessionActive(session.getId()) )
 		{
@@ -49,17 +48,18 @@ public class AuthenticationFilter implements Filter {
 				if( action != null && action.equals("logout"))
 					chain.doFilter(request, response);
 				else
-					((HttpServletResponse) response).sendRedirect("/inbox");
+					((HttpServletResponse) response).sendRedirect("inbox");
 			}
 			else
 				chain.doFilter(request, response);
 		}
 		else
 		{
+			
 			if( context != null && context.equals("/login") )
 				chain.doFilter(request, response);
 			else
-				((HttpServletResponse) response).sendRedirect("/login");
+				((HttpServletResponse) response).sendRedirect("login");
 		}
 	}
 
