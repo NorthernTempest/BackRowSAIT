@@ -39,8 +39,6 @@ public class AuthenticationFilter implements Filter {
 		HttpSession session = request2.getSession();
 		String context = request2.getServletPath();
 		
-		System.out.println(context);
-		
 		if( SessionManager.isSessionActive(session.getId()) )
 		{
 			if( context != null && context.equals("/login") )

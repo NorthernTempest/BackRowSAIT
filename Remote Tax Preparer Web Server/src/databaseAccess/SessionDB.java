@@ -76,7 +76,7 @@ public final class SessionDB {
 
 		try {
 
-			String preparedQuery = "DELETE session where sessionID = ?";
+			String preparedQuery = "DELETE FROM session WHERE session_id = ?";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
