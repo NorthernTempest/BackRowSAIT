@@ -61,4 +61,13 @@ public final class SessionManager {
 	public static void invalidate(String sessionID) {
 		SessionDB.delete(sessionID);
 	}
+
+	/**
+	 * Gets the email associated with a session ID
+	 * @param id the sessionID
+	 * @return the email associated with a session ID
+	 */
+	public static String getEmail(String id) {
+		return SessionDB.getEmail(id);
+	}
 }
