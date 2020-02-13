@@ -22,7 +22,7 @@
     <div class="block text-center" id="nav">
 
         <span class="nav-item">
-            <a href="https://www.mcltaxes.com/">Home</a>
+            <a href="/">Home</a>
         </span>
         <span class="nav-first">
             <a href="/login"><button class="btn btn-primary btn-lg"><b>Login</b></button></a>
