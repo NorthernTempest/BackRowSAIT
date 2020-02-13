@@ -14,7 +14,7 @@ public class TaxReturn {
 	
 	private int taxReturnID;
 	
-	private User user;
+	private String email;
 	
 	private ArrayList<User> taxPreparers;
 	
@@ -25,6 +25,10 @@ public class TaxReturn {
 	private double cost;
 	
 	private int year;
+	
+	public TaxReturn (int taxReturnID, String email, String status, int year) {
+		
+	}
 
 	/**
 	 * Returns the taxReturnID.
@@ -38,8 +42,8 @@ public class TaxReturn {
 	 * Returns the user.
 	 * @return the user
 	 */
-	public User getUser() {
-		return user;
+	public String getUser() {
+		return email;
 	}
 
 	/**
@@ -94,8 +98,8 @@ public class TaxReturn {
 	 * Sets the value of user.
 	 * @param user the user to set
 	 */
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(String user) {
+		this.email = user;
 	}
 
 	/**
