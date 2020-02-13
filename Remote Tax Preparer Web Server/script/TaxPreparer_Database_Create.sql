@@ -119,6 +119,12 @@ CREATE TABLE payment (
 	
 COMMIT;
 
+CREATE EVENT terminate_sessions
+	ON SCHEDULE
+	EVERY 5 MINUTE
+	DO
+		DELETE FROM session WHERE timeout < NOW();
+
 /* The following section is for testing purposes only!
  * TODO: Remove before deployment.
  */
