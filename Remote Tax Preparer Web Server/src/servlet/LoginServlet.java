@@ -7,10 +7,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import exception.ConfigException;
 import manager.SessionManager;
 import manager.UserManager;
+import util.cesar.Debugger;
 
 /**
  * Servlet for logging into the site.
@@ -38,6 +40,7 @@ public final class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		Debugger.log("LoginServlet.doGet");
 		String action = request.getParameter("action");
 		
 		if( action != null && action.equals("logout") )
@@ -57,6 +60,7 @@ public final class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		Debugger.log("LoginServlet.doPost");
 		
 		//Grab user email
 		String email = request.getParameter("email");
@@ -80,8 +84,11 @@ public final class LoginServlet extends HttpServlet {
 				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 				
 			} else {
+				HttpSession session = request.getSession();
+				session.setAttribute("email", email);
+				
 				//forward to home
-				getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+				response.sendRedirect("/inbox");
 			}
 		} catch (ConfigException e) {
 			e.printStackTrace();

@@ -13,8 +13,8 @@ import domain.User;
 
 /**
  * 
- * Class Description: 	Class that establishes a connection and communicates directly
- * 						with the parcel table in the database.
+ * Class Description: Class that establishes a connection and communicates
+ * directly with the parcel table in the database.
  *
  * @author Tristen Kreutz
  *
@@ -22,8 +22,9 @@ import domain.User;
 public class ParcelDB {
 
 	/**
-	 * Establishes a connection with the database and inserts the Parcel object passed
-	 * into this method into the parcel table.
+	 * Establishes a connection with the database and inserts the Parcel object
+	 * passed into this method into the parcel table.
+	 * 
 	 * @param parcel Parcel to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
@@ -32,47 +33,48 @@ public class ParcelDB {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		int rows = 0;
-		
+
 		try {
-			
+
 			String preparedQuery = "INSERT INTO parcel (subject, message, sender, receiver, date_sent, expiration_date"
-									+ "VALUES (?, ?, ?, ?, ?, ?)";
-			
+					+ "VALUES (?, ?, ?, ?, ?, ?)";
+
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-			
+
 			ps.setString(1, parcel.getSubject());
 			ps.setString(2, parcel.getMessage());
 			ps.setString(3, parcel.getSender());
 			ps.setString(4, parcel.getReceiver());
 			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
 			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
-			
+
 			rows = ps.executeUpdate();
 		}
-		
+
 		catch (SQLException e) {
-			
+
 			System.out.println(e);
 		}
-		
+
 		finally {
-			
+
 			pool.closeConnection(connection);
 		}
-		
+
 		if (rows > 0) {
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
-	 * Establishes a connection with the database and updates the Parcel in the parcel
-	 * table that shares a Primary Key with the Parcel being passed into this method.
-	 * All values of the Parcel in the database will be updated with the values of the
-	 * object being passed assuming constraints are not violated.
+	 * Establishes a connection with the database and updates the Parcel in the
+	 * parcel table that shares a Primary Key with the Parcel being passed into this
+	 * method. All values of the Parcel in the database will be updated with the
+	 * values of the object being passed assuming constraints are not violated.
+	 * 
 	 * @param parcel Parcel to update in the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
@@ -81,14 +83,14 @@ public class ParcelDB {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		int rows = 0;
-		
+
 		try {
-			
+
 			String preparedQuery = "UPDATE parcel subject = ?, message = ?, sender = ?, "
-									+ "receiver = ?, date_sent = ?, expiration_date = ? WHERE parcel_id = ?)";
-			
+					+ "receiver = ?, date_sent = ?, expiration_date = ? WHERE parcel_id = ?)";
+
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-			
+
 			ps.setString(1, parcel.getSubject());
 			ps.setString(2, parcel.getMessage());
 			ps.setString(3, parcel.getSender());
@@ -96,32 +98,33 @@ public class ParcelDB {
 			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
 			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
 			ps.setInt(7, parcel.getParcelID());
-			
+
 			rows = ps.executeUpdate();
 		}
-		
+
 		catch (SQLException e) {
-			
+
 			System.out.println(e);
 		}
-		
+
 		finally {
-			
+
 			pool.closeConnection(connection);
 		}
-		
+
 		if (rows > 0) {
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Establishes a connection with the database and removes the Parcel from the
-	 * parcel table that has a Primary Key matching the parcelID being passed
-	 * into this method.
+	 * parcel table that has a Primary Key matching the parcelID being passed into
+	 * this method.
+	 * 
 	 * @param parcelID parcelID of the Parcel to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
@@ -130,40 +133,41 @@ public class ParcelDB {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		int rows = 0;
-		
+
 		try {
-			
+
 			String preparedQuery = "DELETE FROM parcel WHERE parcel_id = ?";
-			
+
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-			
+
 			ps.setInt(1, parcelID);
-			
+
 			rows = ps.executeUpdate();
 		}
-		
+
 		catch (SQLException e) {
-			
+
 			System.out.println(e);
 		}
-		
+
 		finally {
-			
+
 			pool.closeConnection(connection);
 		}
-		
+
 		if (rows > 0) {
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Establishes a connection with the database and selects the Parcel in the
-	 * parcel table that has a Primary Key matching the parcelID being passed
-	 * into this method.
+	 * parcel table that has a Primary Key matching the parcelID being passed into
+	 * this method.
+	 * 
 	 * @param parcelID parcelID of the Parcel to retrieve from the database
 	 * @return Parcel that contains the information of the requested Parcel
 	 */
@@ -173,42 +177,43 @@ public class ParcelDB {
 		Connection connection = pool.getConnection();
 		ResultSet rs;
 		Parcel parcel = null;
-		
+
 		try {
-			
+
 			String preparedQuery = "SELECT * FROM parcel WHERE parcel_id = ?";
-			
+
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-			
+
 			ps.setInt(1, parcelID);
-			
+
 			rs = ps.executeQuery();
-			
+
 			if (rs.next()) {
-				
-				parcel = new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"), 
-									rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"), 
-									rs.getDate("expiration_date"), rs.getInt("return_id"));
+
+				parcel = new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"),
+						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
+						rs.getDate("expiration_date"), rs.getInt("return_id"));
 			}
 		}
-		
+
 		catch (SQLException e) {
-			
+
 			System.out.println(e);
 		}
-		
+
 		finally {
-			
+
 			pool.closeConnection(connection);
 		}
-		
+
 		return parcel;
 	}
-	
+
 	/**
-	 * Establishes a connection with the database and selects all the Parcels
-	 * within the parcel table. It then adds them to a newly created ArrayList
-	 * and returns that to the calling object.
+	 * Establishes a connection with the database and selects all the Parcels within
+	 * the parcel table. It then adds them to a newly created ArrayList and returns
+	 * that to the calling object.
+	 * 
 	 * @return ArrayList<Parcel> containing all of the Parcels from the database
 	 */
 	public static ArrayList<Parcel> getAll() {
@@ -217,41 +222,40 @@ public class ParcelDB {
 		Connection connection = pool.getConnection();
 		ResultSet rs;
 		ArrayList<Parcel> parcels = new ArrayList<>();
-		
+
 		try {
-			
+
 			String preparedQuery = "SELECT * FROM parcel";
-			
+
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-			
+
 			rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
-				
-				parcels.add(new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"), 
-										rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"), 
-										rs.getDate("expiration_date"), rs.getInt("return_id")));
+
+				parcels.add(new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"),
+						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
+						rs.getDate("expiration_date"), rs.getInt("return_id")));
 			}
 		}
-		
+
 		catch (SQLException e) {
-			
+
 			System.out.println(e);
 		}
-		
+
 		finally {
-			
+
 			pool.closeConnection(connection);
 		}
-		
+
 		return parcels;
 	}
-	
 
 	/**
-	 * Method that, using the supplied parameters, retrieves all
-	 * parcels in the database with that information and returns a list
-	 * to the calling program.
+	 * Method that, using the supplied parameters, retrieves all parcels in the
+	 * database with that information and returns a list to the calling program.
+	 * 
 	 * @param parcelID
 	 * @param sender
 	 * @param receiver
@@ -259,35 +263,36 @@ public class ParcelDB {
 	 * @param taxReturnID
 	 * @return ArrayList<Parcel> containing all relevant Parcels from the database
 	 */
-	public static ArrayList<Parcel> getParcelsByParameter(int parcelID, String sender, String receiver, Date dateSent, int taxReturnID) {
-		
+	public static ArrayList<Parcel> getParcelsByParameter(int parcelID, String sender, String receiver, Date dateSent,
+			int taxReturnID) {
+
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		ResultSet rs = null;
 		Parcel parcel = null;
 		ArrayList<Parcel> parcels = new ArrayList<>();
 		String preparedQuery;
-		
+
 		try {
-			
+
 			if (parcelID < 0 && sender == null && receiver == null && dateSent == null && taxReturnID < 0) {
 				preparedQuery = "SELECT * FROM parcel";
 				PreparedStatement ps = connection.prepareStatement(preparedQuery);
 				rs = ps.executeQuery();
 			}
-			
+
 			else {
-				
+
 				ArrayList<Object> parameters = new ArrayList<>();
 				int count = 0;
 				preparedQuery = "SELECT * FROM parcel WHERE ";
-				
+
 				if (parcelID >= 0) {
 					preparedQuery += "parcel_id = ? ";
 					parameters.add(parcelID);
 					count++;
 				}
-				
+
 				if (sender != null) {
 					if (count > 0)
 						preparedQuery += "AND ";
@@ -295,7 +300,7 @@ public class ParcelDB {
 					parameters.add(sender);
 					count++;
 				}
-				
+
 				if (receiver != null) {
 					if (count > 0)
 						preparedQuery += "AND ";
@@ -303,51 +308,51 @@ public class ParcelDB {
 					parameters.add(receiver);
 					count++;
 				}
-					
+
 				if (dateSent != null) {
 					if (count > 0)
 						preparedQuery += "AND ";
 					preparedQuery += "dateSent = ? ";
 					parameters.add(dateSent.toString());
 				}
-				
+
 				if (taxReturnID >= 0) {
 					if (count > 0)
 						preparedQuery += "AND ";
 					preparedQuery += "return_id = ? ";
 					parameters.add(taxReturnID);
 				}
-				
+
 				PreparedStatement ps = connection.prepareStatement(preparedQuery);
-				
+
 				for (int i = 0; i < parameters.size(); i++) {
-					
-					ps.setString(i + 1, (String)parameters.get(i));
+
+					ps.setString(i + 1, (String) parameters.get(i));
 				}
-				
+
 				rs = ps.executeQuery();
 			}
-			
-			while (rs.next()) { 
-				
+
+			while (rs.next()) {
+
 				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
-						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"), rs.getDate("expiration_date"),
-						rs.getInt("return_id"));
-				
+						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
+						rs.getDate("expiration_date"), rs.getInt("return_id"));
+
 				parcels.add(parcel);
 			}
 		}
-		
+
 		catch (SQLException e) {
-			
+
 			System.out.println(e);
 		}
-		
+
 		finally {
-			
+
 			pool.closeConnection(connection);
 		}
-		
+
 		return parcels;
 	}
 }
