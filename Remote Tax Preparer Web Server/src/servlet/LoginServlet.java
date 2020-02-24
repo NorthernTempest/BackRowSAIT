@@ -83,7 +83,7 @@ public final class LoginServlet extends HttpServlet {
 				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 				
 			} else {
-				request.getSession().setAttribute("email", email);
+				HttpSession session = request.getSession();
 				
 				//forward to home
 				response.sendRedirect("inbox");

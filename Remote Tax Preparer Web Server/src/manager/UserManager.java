@@ -68,14 +68,23 @@ public final class UserManager {
 		init();
 		User user = getUser(email);
 
-		try {
-			String pass_hash = EncryptionService.hash(password, user.getPassSalt());
-			if (user.getPassHash().equals(pass_hash)) {
-				return true;
+		if (user != null) {
+			try {
+				String pass_hash = EncryptionService.hash(password, user.getPassSalt());
+				if (user.getPassHash().equals(pass_hash)) {
+					return true;
+				}
+			} catch (InvalidKeySpecException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
+
 		return false;
 	}
 

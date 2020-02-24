@@ -1,0 +1,60 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MCL Taxes & Bookkeeping</title>
+  <?-- CSS -->
+  <link rel="stylesheet" href="/template/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/template/css/mcl-main.css">
+  <?-- Javascript -->
+  <script type="text/javascript" src="/template/js/jQuery.min.js"></script>
+  <script type="text/javascript" src="/template/js/bootstrap.js"></script>
+  <script src="https://kit.fontawesome.com/1213a7076a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="main">
+  <div class="text-center" id="logo">
+    <a href="https://www.mcltaxes.com/"><img id="logo-image" src="/template/img/MCL-logo-large.png" width="283px"/></a>
+    <i id="burger" class="fas fa-bars" onclick="toggleNav()"></i>
+  </div>
+
+  <div class="block text-center" id="nav">
+
+        <span class="nav-item">
+            <a href="javascript:history.back()">Back</a>
+        </span>
+  </div>
+  <hr class="nav-separator">
+  <div class="block" id="content">
+
+    <div class="col-md-12">
+        <span class="alert alert-danger">
+          <b>404:</b>
+            Page not found
+        </span>
+
+    </div>
+
+  </div>
+  <hr>
+  <div class="block text-center" id="footer">
+    <i>You can also find us on:</i><br>
+    <a href="https://facebook.com/MCLTaxes" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+  </div>
+</div>
+<script>
+    function toggleNav() {
+        if (document.getElementById("nav").style.display == "block") {
+            document.getElementById("nav").style.transform = "scale(1, 0)";
+            setTimeout(function() {
+                document.getElementById("nav").style.display = "none";
+            }, 500)
+        } else {
+            document.getElementById("nav").style.display = "block";
+            document.getElementById("nav").style.transform = "scale(1, 1)";
+        }
+    }
+</script>
+</body>
+</html>

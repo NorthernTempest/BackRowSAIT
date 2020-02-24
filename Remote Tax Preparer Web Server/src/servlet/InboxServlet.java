@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import domain.Parcel;
 import exception.ConfigException;
 import manager.ParcelManager;
+import manager.SessionManager;
 import util.cesar.Debugger;
 
 /**
@@ -46,7 +47,7 @@ public final class InboxServlet extends HttpServlet {
 
 		//get session email
 		HttpSession session = request.getSession();
-		String email = (String) session.getAttribute("email");
+		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
 
 		//give the jsp the user's messages
