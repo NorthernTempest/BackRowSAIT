@@ -135,7 +135,7 @@
     //Checks if passwords are the same
     document.getElementById("password2").onchange(function() {
         if(document.getElementById("password1").value!=document.getElementById("password2").value) {
-            document.getElementById("password2").style.transform = "scale(2, 1)";
+            document.getElementById("password2").style.borderColor = "red";
         }
     })
 </script>
