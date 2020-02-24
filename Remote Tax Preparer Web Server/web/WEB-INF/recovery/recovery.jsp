@@ -24,7 +24,7 @@
             Enter the email for your account below.
             You will receive further instructions on resetting your password in an email.
         </p>
-        <label for="email">New Password</label>
+        <label for="email">Email</label>
         <input type="email" id="email" name="email" class="form-control">
     </form>
 
