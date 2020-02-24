@@ -65,8 +65,43 @@
         <div class="col-md-6">
 
         </div>
+        <br>
+
     </div>
     <br>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Address</h3>
+            <label for="address1">Street Address</label>
+            <input id="address1" name="address1" class="form-control" value="${address1}">
+            <input id="address2" name="address2" class="form-control" value="${address2}">
+
+            <label for="addressCity">City</label>
+            <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}">
+
+            <label for="addressCountry">Country</label>
+            <select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" value="${addressCountry}">
+            </select>
+
+            <label for="addressRegion">Province/State</label>
+            <select id="addressRegion" class="form-control" name="addressRegion" value="${addressRegion}">
+            </select>
+
+            <label for="addressPostal">Postal Code</label>
+            <input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}">
+        </div>
+        <div class="col-md-6">
+            <c:choose>
+                <c:when test="${errorMessageAddress!=null}">
+                <span class="alert alert-warning">
+                        ${errorMessageAddress}
+                </span>
+                </c:when>
+            </c:choose>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -104,5 +139,7 @@
         }
     })
 </script>
+
+<script type="text/javascript" src="../template/js/country-regions.js"></script>
 
 <jsp:directive.include file = "../template/foot.jsp" />
