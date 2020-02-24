@@ -129,6 +129,9 @@ VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDA
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active)
 VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "y");
 
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active)
+VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "y");
+
 INSERT INTO tax_return (return_id, email, status, year)
 VALUES (0, "test@test.com", "new", 2019);
 
