@@ -10,7 +10,8 @@
   </filter>
   <filter-mapping>
     <filter-name>AuthenticationFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/login/*</url-pattern>
+    <url-pattern>/inbox/*</url-pattern>
   </filter-mapping>
   <resource-ref>
       <description>DB Connection</description>
