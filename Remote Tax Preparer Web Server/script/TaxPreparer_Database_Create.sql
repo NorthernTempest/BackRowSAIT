@@ -16,8 +16,9 @@ CREATE TABLE user (
     creation_date DATE NOT NULL,
     fax CHAR(15),
     postal_code CHAR(6),
-    city VARCHAR(32),
-    country VARCHAR(32),
+    city VARCHAR(100),
+    country VARCHAR(100),
+    province VARCHAR(100),
     street_address_1 VARCHAR(320),
     street_address_2 VARCHAR(320),
     language CHAR(3) NOT NULL,
@@ -148,8 +149,8 @@ VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDA
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
 VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "y", "eng");
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active)
-VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "y");
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
+VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "y", "eng");
 
 INSERT INTO tax_return (return_id, email, status, year)
 VALUES (0, "test@test.com", "new", 2019);
