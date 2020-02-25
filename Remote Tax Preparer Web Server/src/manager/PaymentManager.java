@@ -1,9 +1,5 @@
 package manager;
 
-import java.util.ArrayList;
-
-import domain.Payment;
-
 /**
  * 
  * Class Description: 	Class that communicates with the PaymentDB class as a proxy

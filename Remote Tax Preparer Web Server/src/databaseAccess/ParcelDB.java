@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import domain.LogEntry;
 import domain.Parcel;
-import domain.User;
 import exception.ConfigException;
 import manager.UserManager;
 import util.cesar.Debugger;

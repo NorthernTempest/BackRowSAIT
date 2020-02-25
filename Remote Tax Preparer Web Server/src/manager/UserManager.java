@@ -6,15 +6,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 
+import databaseAccess.LogEntryDB;
 import databaseAccess.SessionDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.Session;
 import domain.User;
 import exception.ConfigException;
+import exception.UserException;
 import service.ConfigService;
 import service.EmailService;
 import service.EncryptionService;
@@ -81,8 +84,6 @@ public final class UserManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-			e.printStackTrace();
 		}
 
 		return false;
@@ -181,32 +182,6 @@ public final class UserManager {
 	}
 
 	/**
-	 * Allows the user to recover their
-	 * 
-	 * @param parameter
-	 * @param parameter2
-	 * @return true if the user's email is already an existing user and the email
-	 *         was successfully sent.
-	 * @throws ConfigException
-	 */
-	public static boolean recover(String email, String what) throws ConfigException {
-		init();
-		boolean output = false;
-		User u = UserDB.get(email);
-		output = u != null;
-		if (output) {
-			try {
-				EmailService.sendRecovery(email);
-			} catch (ConfigException e) {
-				output = false;
-			} catch (MessagingException e) {
-				output = false;
-			}
-		}
-		return output;
-	}
-
-	/**
 	 * @param email
 	 * @return the user with a matching email
 	 * @throws ConfigException
@@ -224,11 +199,29 @@ public final class UserManager {
 	 *         was successfully sent.
 	 * @throws ConfigException
 	 */
-	public static boolean recover(String email) throws ConfigException {
+	public static boolean recover(String email, String ip) throws ConfigException {
 		init();
 		boolean output = false;
 		User u = UserDB.get(email);
 		output = u != null;
+		if(output)
+			try {
+				String verificationID = UUID.randomUUID().toString();
+				u.setVerificationID(verificationID);
+				UserDB.update(u);
+				EmailService.sendRecovery(email, verificationID);
+			} catch (ConfigException e) {
+				output = false;
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				output = false;
+				e.printStackTrace();
+			} catch (UserException e) {
+				output = false;
+				e.printStackTrace();
+			}
+		LogEntry l = new LogEntry(email, output ? "sent" : "not sent",LogEntry.RECOVER_PASSWORD, ip);
+		LogEntryDB.insert(l);
 		return output;
 	}
 

@@ -13,7 +13,8 @@ LOGIN_ATTEMPT_TIMELIMIT:10
 sessiontime:30
 smtphost:smtp.gmail.com
 smtpport:465
-emailusername:goerzen.campaholic@gmail.com
-emailpassword:ybqbligqkybysevv
+emailusernamepath:C:\Capstone\TestFiles\emailusername.txt
+emailpasswordpath:C:\Capstone\TestFiles\emailpassword.txt
 recoverysubject:Recover Your MCL Taxes Account
-recoverytemplatepath:
+recoverytemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\recoveryEmail.html
+recoverysentmessagepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\text\recoveryMessage.html
