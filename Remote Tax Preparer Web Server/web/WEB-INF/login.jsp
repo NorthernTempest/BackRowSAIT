@@ -22,6 +22,7 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Log in</button>
+                    <span width="20px"></span><a href="/recover">Forgot Password?</a>
                 </div>
                 <div class="form-group">
                     <c:choose>

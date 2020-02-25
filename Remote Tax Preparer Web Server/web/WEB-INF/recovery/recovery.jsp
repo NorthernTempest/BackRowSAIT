@@ -6,7 +6,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<jsp:directive.include file = "../../template/head.jsp" />
+<jsp:directive.include file = "../../template/headunauthorized.jsp" />
 
 <div class="col-12">
     <c:choose>
@@ -24,7 +24,7 @@
             Enter the email for your account below.
             You will receive further instructions on resetting your password in an email.
         </p>
-        <label for="email">New Password</label>
+        <label for="email">Email</label>
         <input type="email" id="email" name="email" class="form-control">
     </form>
 

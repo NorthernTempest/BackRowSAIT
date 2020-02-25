@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.mail.MessagingException;
+
 import databaseAccess.SessionDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
@@ -14,6 +16,7 @@ import domain.Session;
 import domain.User;
 import exception.ConfigException;
 import service.ConfigService;
+import service.EmailService;
 import service.EncryptionService;
 
 /**
@@ -38,11 +41,18 @@ public final class UserManager {
 	 * Time that the session is valid
 	 */
 	private static int sessionTimeout;
+	/**
+	 * A parameter that determines whether the system has been
+	 */
+	private static boolean init;
 
 	private static void init() throws ConfigException {
-		maxLoginAttempts = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
-		loginAttemptTimelimit = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
-		sessionTimeout = Integer.parseInt(ConfigService.fetchFromConfig("sessiontime:"));
+		if (!init) {
+			maxLoginAttempts = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
+			loginAttemptTimelimit = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
+			sessionTimeout = Integer.parseInt(ConfigService.fetchFromConfig("sessiontime:"));
+			init = true;
+		}
 	}
 
 	/**
@@ -71,6 +81,8 @@ public final class UserManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 
 		return false;
@@ -88,15 +100,15 @@ public final class UserManager {
 	 */
 	public static boolean login(String email, String password, String sessionID, String ip) throws ConfigException {
 		init();
-		//set log message
+		// set log message
 		String logMessage = null;
 
-		//Check logs for attempts from email, if too many attempts don't let them in.
+		// Check logs for attempts from email, if too many attempts don't let them in.
 		if (tooManyAttempts(email)) {
 			return false;
 		} else if (authenticate(email, password)) {
 			logMessage = "Successful login attempt";
-			//write to log
+			// write to log
 			LogEntryManager.createLogEntry(email, logMessage, LogEntry.LOGIN_ATTEMPT, ip);
 
 			Calendar c = Calendar.getInstance();
@@ -108,7 +120,7 @@ public final class UserManager {
 			return true;
 		} else {
 			logMessage = "Failed login attempt";
-			//write to log
+			// write to log
 			LogEntryManager.createLogEntry(email, logMessage, LogEntry.LOGIN_ATTEMPT, ip);
 
 			return false;
@@ -179,8 +191,19 @@ public final class UserManager {
 	 */
 	public static boolean recover(String email, String what) throws ConfigException {
 		init();
+		boolean output = false;
 		User u = UserDB.get(email);
-		return u != null;
+		output = u != null;
+		if (output) {
+			try {
+				EmailService.sendRecovery(email);
+			} catch (ConfigException e) {
+				output = false;
+			} catch (MessagingException e) {
+				output = false;
+			}
+		}
+		return output;
 	}
 
 	/**
