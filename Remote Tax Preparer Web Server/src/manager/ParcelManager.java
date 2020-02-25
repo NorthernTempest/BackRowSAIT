@@ -5,7 +5,6 @@ import java.util.Date;
 
 import databaseAccess.ParcelDB;
 import domain.Parcel;
-import domain.User;
 import exception.ConfigException;
 
 /**

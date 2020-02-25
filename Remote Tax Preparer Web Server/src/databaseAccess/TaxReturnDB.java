@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import domain.TaxReturn;
-import domain.User;
 
 /**
  * 

@@ -8,7 +8,7 @@ package domain;
  * @author Tristen Kreutz
  *
  */
-public class Document {
+public final class Document {
 
 	private String filePath;
 

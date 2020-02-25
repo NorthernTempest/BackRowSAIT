@@ -53,9 +53,13 @@ public final class ConfigService {
 
 			return line;
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			throw new ConfigException("Config file not found.");
 		} finally {
-			s.close();
+			try {
+				s.close();
+			} catch (NullPointerException e) {
+			}
 		}
 	}
 

@@ -1,7 +1,6 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * 
@@ -10,7 +9,7 @@ import java.util.Date;
  * @author Tristen Kreutz
  *
  */
-public class TaxReturn {
+public final class TaxReturn {
 	
 	private int taxReturnID;
 	

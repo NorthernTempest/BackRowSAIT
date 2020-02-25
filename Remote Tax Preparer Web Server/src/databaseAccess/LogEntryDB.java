@@ -42,7 +42,7 @@ public class LogEntryDB {
 			ps.setString(2, logEntry.getEmail());
 			ps.setString(3, logEntry.getType() + "");
 			ps.setString(4, logEntry.getMessage());
-			ps.setDate(5, (Date) logEntry.getDate());
+			ps.setDate(5, new Date( logEntry.getDate().getTime() ));
 			
 			rows = ps.executeUpdate();
 		}

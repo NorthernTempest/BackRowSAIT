@@ -26,17 +26,19 @@ public final class EmailService {
 		{
 			smtpHost = ConfigService.fetchFromConfig("smtphost:");
 			smtpPort = ConfigService.fetchFromConfig("smtpport:");
-			username = ConfigService.fetchFromConfig("emailusername:");
-			password = ConfigService.fetchFromConfig("emailpassword:");
+			username = ConfigService.fetchContents(ConfigService.fetchFromConfig("emailusernamepath:"));
+			password = ConfigService.fetchContents(ConfigService.fetchFromConfig("emailpasswordpath:"));
 			recoverySubject = ConfigService.fetchFromConfig("recoverysubject:");
 			recoveryTemplatePath = ConfigService.fetchFromConfig("recoverytemplatepath:");
 			init = true;
 		}
 	}
 
-	public static void sendRecovery(String email) throws ConfigException, MessagingException {
+	public static void sendRecovery(String email, String verificationID) throws ConfigException, MessagingException {
 		init();
-		sendEmail(username, email, recoverySubject, ConfigService.fetchContents(recoveryTemplatePath));
+		String content = ConfigService.fetchContents(recoveryTemplatePath);
+		content = content.replaceAll("\\[verification_id\\]", verificationID);
+		sendEmail(username, email, recoverySubject, content);
 	}
 
 	private static void sendEmail(String from, String to, String subject, String message) throws MessagingException {
