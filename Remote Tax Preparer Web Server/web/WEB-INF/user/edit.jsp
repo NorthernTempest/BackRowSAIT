@@ -9,16 +9,6 @@
 <jsp:directive.include file = "../../template/head.jsp" />
 
 <form action="" method="POST">
-    <div class="col-12">
-        <c:choose>
-            <c:when test="${successMessage!=null}">
-                <span class="alert alert-success">
-                        ${successMessage}
-                </span>
-            </c:when>
-        </c:choose>
-    </div>
-
     <div class="col-md-6">
         <h3>Address</h3>
         <label for="address1">Street Address</label>

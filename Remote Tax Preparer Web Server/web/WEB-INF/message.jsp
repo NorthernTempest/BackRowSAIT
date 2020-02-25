@@ -8,14 +8,4 @@
 
 <jsp:directive.include file = "../template/head.jsp" />
 
-<div class="col-12">
-    <c:choose>
-        <c:when test="${message!=null}">
-    <span class="alert alert-danger">
-            ${message}
-    </span>
-        </c:when>
-    </c:choose>
-</div>
-
 <jsp:directive.include file = "../template/foot.jsp" /></title>

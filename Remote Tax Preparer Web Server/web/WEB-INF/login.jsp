@@ -24,15 +24,6 @@
                     <button type="submit" class="btn btn-primary">Log in</button>
                     <span width="20px"></span><a href="/recover">Forgot Password?</a>
                 </div>
-                <div class="form-group">
-                    <c:choose>
-                        <c:when test="${errorMessage!=null}">
-                            <div class="alert alert-danger" role="alert">
-                                    ${errorMessage}
-                            </div>
-                        </c:when>
-                    </c:choose>
-                </div>
             </form>
         </div>
         <div class="col-md-6 align-middle text-center">

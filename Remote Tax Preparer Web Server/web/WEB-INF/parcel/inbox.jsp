@@ -9,20 +9,6 @@
 <jsp:directive.include file = "../../template/head.jsp" />
 
 <div class="col-12">
-    <c:choose>
-        <c:when test="${successMessage!=null}">
-            <span class="alert alert-success">
-                    ${successMessage}
-            </span>
-        </c:when>
-        <c:when test="${errorMessage!=null}">
-            <span class="alert alert-danger">
-                    ${errorMessage}
-            </span>
-        </c:when>
-    </c:choose>
-</div>
-<div class="col-12">
     <h3>
         Inbox
     </h3>
