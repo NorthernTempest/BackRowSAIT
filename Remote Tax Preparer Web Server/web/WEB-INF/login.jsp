@@ -6,7 +6,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<jsp:directive.include file = "../template/head.jsp" />
+<jsp:directive.include file = "../template/headunauthorized.jsp" />
 
 <div class="container">
     <div class="row">
@@ -22,6 +22,7 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Log in</button>
+                    <span width="20px"></span><a href="/recover">Forgot Password?</a>
                 </div>
                 <div class="form-group">
                     <c:choose>

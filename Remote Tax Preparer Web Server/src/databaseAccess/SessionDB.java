@@ -36,7 +36,7 @@ public final class SessionDB {
 
 			ps.setString(1, session.getSessionID());
 			ps.setString(2, session.getEmail());
-			ps.setTimestamp(3, new java.sql.Timestamp( session.getTimeout().getTime() ));
+			ps.setTimestamp(3, new java.sql.Timestamp(session.getTimeout().getTime()));
 
 			rows = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -120,10 +120,7 @@ public final class SessionDB {
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
-				session = new Session(
-						rs.getString("email"),
-						rs.getString("session_id"),
-						rs.getTimestamp("timeout") );
+				session = new Session(rs.getString("email"), rs.getString("session_id"), rs.getTimestamp("timeout"));
 			}
 		}
 
@@ -148,5 +145,45 @@ public final class SessionDB {
 	 */
 	public static ArrayList<Session> getAll() {
 		return null;
+	}
+
+	/**
+	 * Establishes a connection with the database and selects all the email matching
+	 * the session ID within the session table. Then it returns the email
+	 * 
+	 * @param sessionID the email associated with the sessionID
+	 * @return the email associated with the id
+	 */
+	public static String getEmail(String sessionID) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		Session session = null;
+
+		String email = null;
+
+		try {
+
+			String preparedQuery = "SELECT * FROM session WHERE session_id = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setString(1, sessionID);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				email = rs.getString("email");
+			}
+		}
+
+		catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return email;
 	}
 }

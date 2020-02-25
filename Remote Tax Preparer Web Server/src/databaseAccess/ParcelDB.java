@@ -10,6 +10,9 @@ import java.util.Date;
 import domain.LogEntry;
 import domain.Parcel;
 import domain.User;
+import exception.ConfigException;
+import manager.UserManager;
+import util.cesar.Debugger;
 
 /**
  * 
@@ -354,5 +357,27 @@ public class ParcelDB {
 		}
 
 		return parcels;
+	}
+
+	/**
+	 * Method that, using the supplied email and parcelID, returns true if the
+	 * associated user is allowed to view the aprcel associated with the ID
+	 * 
+	 * @param email the email to check against
+	 * @param parcelID the parcelID to check against
+	 * @return true if email is allowed to view this parcel. false if not.
+	 * @throws ConfigException 
+	 */
+	public static boolean isVisibleToUser(String email, int parcelID) throws ConfigException {
+		Parcel parcel = get(parcelID);
+		
+		Debugger.log(parcelID);
+		
+		if(parcel.getReceiver().equals(email)) {
+			return true;
+		} else if(UserManager.getUser(email).getPermissionLevel() >= 2) {
+			return true;
+		}
+		return false;
 	}
 }

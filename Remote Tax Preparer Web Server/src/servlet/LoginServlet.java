@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import exception.ConfigException;
 import manager.SessionManager;
@@ -85,7 +84,6 @@ public final class LoginServlet extends HttpServlet {
 				
 			} else {
 				HttpSession session = request.getSession();
-				session.setAttribute("email", email);
 				
 				//forward to home
 				response.sendRedirect("inbox");
