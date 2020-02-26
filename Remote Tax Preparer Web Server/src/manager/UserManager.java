@@ -208,6 +208,8 @@ public final class UserManager {
 			try {
 				String verificationID = UUID.randomUUID().toString();
 				u.setVerificationID(verificationID);
+				u.setLastVerificationAttempt(new Date());
+				u.setLastVerificationType(User.VERIFY_TYPE_PASS_RESET);
 				UserDB.update(u);
 				EmailService.sendRecovery(email, verificationID);
 			} catch (ConfigException e) {

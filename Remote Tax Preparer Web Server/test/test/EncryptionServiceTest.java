@@ -3,17 +3,21 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import org.junit.jupiter.api.Test;
 
 import domain.Document;
 import exception.ConfigException;
+import service.ConfigService;
 import service.EncryptionService;
 
 class EncryptionServiceTest {
@@ -45,15 +49,39 @@ class EncryptionServiceTest {
 		assertFalse(password3.equals(EncryptionService.hash(password3, salt)));
 		assertTrue(EncryptionService.hash(password3, salt).equals(EncryptionService.hash(password1, salt)));
 	}
-	
+
 	@Test
-	void encrpytDocTest() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, ConfigException {
+	void encryptDocTest() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, ConfigException {
 		String unencryptedFilePath = "C:\\Capstone\\TestFiles\\test_pdf_large.pdf";
+
+		Document encryptedFile = EncryptionService.encryptDocument(unencryptedFilePath, false, false, 1);
+
+		String decryptedFilePath = EncryptionService.decryptDocument(encryptedFile);
+
+		System.out.println(decryptedFilePath);
+	}
+
+	@Test
+	void encryptStringTest()
+			throws NumberFormatException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, ConfigException, InvalidAlgorithmParameterException, IOException {
+		String unencryptedString = ConfigService.fetchContents(ConfigService.fetchFromConfig("teststringpath:"));
+
+		byte[] encryptedBytes = EncryptionService.encryptString(unencryptedString);
 		
-		Document encryptedFile = EncryptionService.encryptDocument( unencryptedFilePath, false, false, 1 );
+		String encryptedString = new String( encryptedBytes, Charset.defaultCharset() );
 		
-		String decryptedFilePath = EncryptionService.decryptDocument( encryptedFile );
+		System.out.println(encryptedString);
+
+		assertFalse(unencryptedString.equals(encryptedString));
+
+		String decryptedString = EncryptionService.decryptString(encryptedBytes);
 		
-		System.out.println( decryptedFilePath );
+		System.out.println(decryptedString);
+		
+		assertFalse(encryptedString.equals(decryptedString));
+		
+		assertTrue(unencryptedString.equals(decryptedString));
 	}
 }

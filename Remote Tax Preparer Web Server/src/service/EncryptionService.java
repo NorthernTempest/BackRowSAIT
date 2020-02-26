@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -15,9 +16,11 @@ import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -39,26 +42,61 @@ import exception.ConfigException;
  */
 public class EncryptionService {
 
+	/**
+	 * The type of transform for Cipher objects to use.
+	 */
 	private static String cipherTransform;
+	/**
+	 * The path to the file containing the key for file and string encryption and
+	 * decryption.
+	 */
 	private static String keyPath;
+	/**
+	 * The path to the file containing the salt for file and string encryption and
+	 * decryption.
+	 */
 	private static String saltPath;
+	/**
+	 * The algorithm to generate SecretKey objects.
+	 */
 	private static String keyAlgorithm;
+	/**
+	 * The algorithm to generate SecretKey objects for use with Cipher objects.
+	 */
 	private static String cipherKeyAlgorithm;
+	/**
+	 * The number of iterations of the algorithm to perform.
+	 */
 	private static int iterationCount;
+	/**
+	 * The number of bytes in a key.
+	 */
 	private static int keyLength;
+	/**
+	 * The directory in which to store encrypted files.
+	 */
 	private static String encryptedFilesDirectory;
+	/**
+	 * The directory in which to store decrypted files.
+	 */
 	private static String outputFilesDirectory;
+	/**
+	 * Whether the encryption constants have been initialized from the config or
+	 * not.
+	 */
+	private static boolean init;
 
 	/**
-	 * Initializes encryption constants
+	 * Initializes encryption constants from the config. Should be added to the
+	 * beginning of each public method.
 	 * 
-	 * @throws NumberFormatException
-	 * @throws ConfigException
+	 * @throws NumberFormatException if iterationCount or keyLength are not integers
+	 *                               in the config file.
+	 * @throws ConfigException       if the config file is missing from the res
+	 *                               folder.
 	 */
 	private static void init() throws NumberFormatException, ConfigException {
-		if (cipherTransform == null || keyPath == null || saltPath == null || keyAlgorithm == null
-				|| cipherKeyAlgorithm == null || iterationCount == 0 || keyLength == 0
-				|| encryptedFilesDirectory == null || outputFilesDirectory == null) {
+		if (!init) {
 			cipherTransform = ConfigService.fetchFromConfig("cipher:");
 			keyPath = ConfigService.fetchFromConfig("keypath:");
 			saltPath = ConfigService.fetchFromConfig("saltpath:");
@@ -68,23 +106,29 @@ public class EncryptionService {
 			keyLength = Integer.parseInt(ConfigService.fetchFromConfig("keylen:"));
 			encryptedFilesDirectory = ConfigService.fetchFromConfig("encfiles:");
 			outputFilesDirectory = ConfigService.fetchFromConfig("outfiles:");
+			init = true;
 		}
 	}
 
 	/**
 	 * Takes the String passed into the method and hashes it for security purposes.
 	 * 
-	 * @param toHash The string to hash
-	 * @return The hashed string
-	 * @throws NoSuchAlgorithmException If the algorithm in res/config.txt isn't
+	 * @param toHash The password or other String to create a hash for.
+	 * @param salt   The salt to be used in the hashing.
+	 * @return The String of characters that is derived from the toHash and the
+	 *         salt.
+	 * @throws NumberFormatException    if iterationCount or keyLength are not
+	 *                                  integers in the config file.
+	 * @throws ConfigException          if the config file in the res directory
+	 *                                  doesn't exist.
+	 * @throws NoSuchAlgorithmException if the algorithm in the config file isn't
 	 *                                  valid according to
 	 *                                  https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
-	 * @throws InvalidKeySpecException
-	 * @throws ConfigException
-	 * @throws NumberFormatException
+	 * @throws InvalidKeySpecException  if the key specification created from the
+	 *                                  toHash and salt is invalid.
 	 */
 	public static String hash(String toHash, String salt)
-			throws InvalidKeySpecException, NoSuchAlgorithmException, NumberFormatException, ConfigException {
+			throws NumberFormatException, ConfigException, NoSuchAlgorithmException, InvalidKeySpecException {
 		init();
 		byte[] hash = getKey(toHash, salt).getEncoded();
 
@@ -102,21 +146,32 @@ public class EncryptionService {
 	}
 
 	/**
-	 * Takes the filepath passed into the method and encrypts the file.
+	 * Encrypts the file at the given filepath and returns a record of the document.
 	 * 
-	 * @param filepath filepath of the file to encrypt
-	 * @return String The filepath of the encrypted file
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
-	 * @throws InvalidKeyException
-	 * @throws IOException
-	 * @throws ConfigException
-	 * @throws NumberFormatException
+	 * @param filepath The filepath of the file to encrypt.
+	 * @return String The filepath of the encrypted file.
+	 * @throws ConfigException          if the config file in the res folder does
+	 *                                  not exist.
+	 * @throws NumberFormatException    if iterationCount or keyLength are not
+	 *                                  integers in the config file.
+	 * @throws NoSuchPaddingException   if the padding of the cipher transform given
+	 *                                  in the config file is not valid according to
+	 *                                  https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 * @throws NoSuchAlgorithmException if the algorithm of the cipher transform is
+	 *                                  invalid according to
+	 *                                  https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 *                                  or if the key is invalid according to
+	 *                                  https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws InvalidKeySpecException  if the key specification created from the
+	 *                                  key and the salt from the file are invalid.
+	 * @throws InvalidKeyException      if the key used in the cipher is invalid.
+	 * @throws IOException              if the file at the given filepath does not
+	 *                                  exist or a file at the output directory
+	 *                                  cannot be created.
 	 */
 	public static Document encryptDocument(String filepath, boolean isSigned, boolean requiresSignature, int parcelID)
-			throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException,
-			IOException, NumberFormatException, ConfigException {
+			throws NumberFormatException, ConfigException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeySpecException, InvalidKeyException, IOException {
 		init();
 		Cipher cipher = getCipher();
 
@@ -142,22 +197,41 @@ public class EncryptionService {
 	}
 
 	/**
-	 * Takes the filepath of an encrypted file passed into the method and decrypts
-	 * the file.
+	 * Decrypts the given document and returns the filepath of the resulting file.
 	 * 
-	 * @param filepath filepath of the file to decrypt
-	 * @return decrypted file path
-	 * @throws FileNotFoundException
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws ConfigException
-	 * @throws InvalidKeySpecException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws InvalidKeyException
+	 * @param filepath The filepath of the file to decrypt.
+	 * @return String The filepath of the decrypted file.
+	 * @throws NumberFormatException              if iterationCount or keyLength are
+	 *                                            not integers in the config file.
+	 * @throws FileNotFoundException              if the given document is not
+	 *                                            present.
+	 * @throws NoSuchPaddingException             if the padding of the cipher
+	 *                                            transform given in the config file
+	 *                                            is not valid according to
+	 *                                            https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 * @throws NoSuchAlgorithmException           if the algorithm of the cipher
+	 *                                            transform is invalid according to
+	 *                                            https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 *                                            or if the key is invalid according
+	 *                                            to
+	 *                                            https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws ConfigException                    if the config file in the res
+	 *                                            directory doesn't exist.
+	 * @throws IOException                        if the file at the given filepath
+	 *                                            does not exist or a file at the
+	 *                                            output directory cannot be
+	 *                                            created.
+	 * @throws InvalidKeySpecException            if the key specification created
+	 *                                            from the key and the salt from the
+	 *                                            file are invalid.
+	 * @throws InvalidAlgorithmParameterException if the cipher IV at the beginning
+	 *                                            of the document is invalid.
+	 * @throws InvalidKeyException                if the key used in the cipher is
+	 *                                            invalid.
 	 */
 	public static String decryptDocument(Document doc)
-			throws FileNotFoundException, IOException, NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidKeySpecException, ConfigException, InvalidKeyException, InvalidAlgorithmParameterException {
+			throws NumberFormatException, ConfigException, FileNotFoundException, IOException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException {
 		init();
 
 		String output = outputFilesDirectory + doc.getFileName();
@@ -191,31 +265,127 @@ public class EncryptionService {
 	}
 
 	/**
-	 * Takes the String passed into the method and encrypts the String.
+	 * Encrypts the given String object into an array of bytes. The resulting bytes
+	 * cannot be safely saved as a String.
 	 * 
-	 * @param string String to encrypt
-	 * @return encrypted String
+	 * @param unencrypted <code>String</code> The unencrypted String object.
+	 * @return byte[] The encrypted array of bytes.
+	 * @throws ConfigException           if the config file in the res directory
+	 *                                   doesn't exist.
+	 * @throws NumberFormatException     if iterationCount or keyLength are not
+	 *                                   integers in the config file.
+	 * @throws NoSuchPaddingException    if the padding of the cipher transform
+	 *                                   given in the config file is not valid
+	 *                                   according to
+	 *                                   https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 * @throws NoSuchAlgorithmException  if the algorithm of the cipher transform is
+	 *                                   invalid according to
+	 *                                   https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 *                                   or if the key is invalid according to
+	 *                                   https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws InvalidKeySpecException   if the key specification created from the
+	 *                                   key and the salt from the file are invalid.
+	 * @throws InvalidKeyException       if the key used in the cipher is invalid.
+	 * @throws BadPaddingException       if the padding option in the config file is
+	 *                                   invalid.
+	 * @throws IllegalBlockSizeException if the block size generated by the Cipher
+	 *                                   object instance creator is invalid.
 	 */
-	public static String encryptString(String string) {
-		return null;
+	public static byte[] encryptString(String unencrypted)
+			throws NumberFormatException, ConfigException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeySpecException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+		init();
+
+		Cipher cipher = getCipher();
+
+		SecretKey key = getKey(ConfigService.fetchContents(keyPath), ConfigService.fetchContents(saltPath));
+
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getEncoded(), cipherKeyAlgorithm));
+
+		byte[] bytes = cipher.doFinal(unencrypted.getBytes());
+
+		byte[] output = new byte[16 + bytes.length];
+
+		byte[] iv = cipher.getIV();
+
+		for (int i = 0; i < 16; i++)
+			output[i] = iv[i];
+		for (int i = 16; i < bytes.length + 16; i++)
+			output[i] = bytes[i - 16];
+
+		return output;
 	}
 
 	/**
 	 * Takes the String passed into the method and decrypts the String.
 	 * 
-	 * @param string String to decrypt
-	 * @return decrypted String
+	 * @param encoded byte[] The array of bytes to be decrypted. This array must
+	 *                have been produced by the <code>encrpytString()</code> method.
+	 * @return decrypted String The decrypted String object.
+	 * @throws ConfigException                    if the config file in the res
+	 *                                            directory doesn't exist.
+	 * @throws NumberFormatException              if iterationCount or keyLength are
+	 *                                            not integers in the config file.
+	 * @throws NoSuchPaddingException             if the padding of the cipher
+	 *                                            transform given in the config file
+	 *                                            is not valid according to
+	 *                                            https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 * @throws NoSuchAlgorithmException           if the algorithm of the cipher
+	 *                                            transform is invalid according to
+	 *                                            https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 *                                            or if the key is invalid according
+	 *                                            to
+	 *                                            https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws InvalidAlgorithmParameterException if the initialization vector
+	 *                                            stored at the beginning of the
+	 *                                            byte array is invalid.
+	 * @throws InvalidKeySpecException            if the key specification created
+	 *                                            from the key and the salt from the
+	 *                                            file are invalid.
+	 * @throws InvalidKeyException                if the key used in the cipher is
+	 *                                            invalid.
+	 * @throws BadPaddingException                if the padding option in the
+	 *                                            config file is invalid.
+	 * @throws IllegalBlockSizeException          if the block size generated by the
+	 *                                            Cipher object instance creator is
+	 *                                            invalid.
 	 */
-	public static String decryptString(String string) {
-		return null;
+	public static String decryptString(byte[] encoded) throws NumberFormatException, ConfigException,
+			NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		init();
+		byte[] iv = new byte[16];
+
+		for (int i = 0; i < 16; i++)
+			iv[i] = encoded[i];
+
+		Cipher cipher = getCipher();
+
+		SecretKey key = getKey(ConfigService.fetchContents(keyPath), ConfigService.fetchContents(saltPath));
+
+		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getEncoded(), cipherKeyAlgorithm),
+				new IvParameterSpec(iv));
+
+		StringBuffer sb = new StringBuffer();
+
+		byte[] bytes = new byte[encoded.length - 16];
+
+		for (int i = 16; i < encoded.length; i++)
+			bytes[i - 16] = encoded[i];
+
+		sb.append(new String(cipher.doFinal(bytes), Charset.defaultCharset()));
+
+		return sb.toString();
 	}
 
 	/**
-	 * Returns a salt string
+	 * Returns a random String object that is 32 characters long.
 	 * 
-	 * @return the salt
-	 * @throws ConfigException
-	 * @throws NumberFormatException
+	 * @return a random String object that is 32 characters long.
+	 * @throws ConfigException       if the config file in the res directory doesn't
+	 *                               exist.
+	 * @throws NumberFormatException if iterationCount or keyLength are not integers
+	 *                               in the config file.
 	 */
 	public static String getSalt() throws NumberFormatException, ConfigException {
 		init();
@@ -227,25 +397,41 @@ public class EncryptionService {
 	}
 
 	/**
+	 * Creates an instance of a Cipher object that follows the rules set out in the
+	 * config.
 	 * 
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchPaddingException
+	 * @return <code>Cipher</code> a Cipher object that follows the rules set out in
+	 *         the config.
+	 * @throws NoSuchAlgorithmException if the algorithm of the cipher transform is
+	 *                                  invalid according to
+	 *                                  https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 * @throws NoSuchPaddingException   if the padding of the cipher transform given
+	 *                                  in the config file is not valid according to
+	 *                                  https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
 	 */
 	private static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException {
 		return Cipher.getInstance(cipherTransform);
 	}
 
 	/**
+	 * Creates an instance of a SecretKey object according to rules in the config
+	 * file using the toHash and salt. The SecretKey object can be used to create a
+	 * hashed password or a Cipher object.
 	 * 
-	 * 
-	 * @param toHash
-	 * @param salt
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
-	 * @throws ConfigException
-	 * @throws NumberFormatException
+	 * @param toHash <code>String</code> The unhashed key or password to be used to
+	 *               encrypt or decrypt data.
+	 * @param salt   <code>String</code> The salt to be added to the key or
+	 *               password.
+	 * @return <code>SecretKey</code> The desired SecretKey object.
+	 * @throws NoSuchAlgorithmException if the algorithm of the key is invalid
+	 *                                  according to
+	 *                                  https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws InvalidKeySpecException  if the key specification created from the
+	 *                                  key and the salt are invalid.
+	 * @throws ConfigException          if the config file in the res directory
+	 *                                  doesn't exist.
+	 * @throws NumberFormatException    if iterationCount or keyLength are not
+	 *                                  integers in the config file.
 	 */
 	private static SecretKey getKey(String toHash, String salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException, ConfigException {
