@@ -39,7 +39,7 @@ ADD CONSTRAINT CHK_user_language CHECK (language IN ('eng', 'spn', 'fre'));
 COMMIT;
 
 CREATE TABLE tax_return (
-    return_id INT PRIMARY KEY,
+    return_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(320) NOT NULL,
     household_id INT,
     status VARCHAR(20) NOT NULL,
@@ -50,14 +50,14 @@ CREATE TABLE tax_return (
 COMMIT;
 
 CREATE TABLE parcel (
-    parcel_id INT PRIMARY KEY,
+    parcel_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     subject VARCHAR(100),
     message VARCHAR(10000),
     sender VARCHAR(320) NOT NULL,
     receiver VARCHAR(320),
     date_sent DATE NOT NULL,
     expiration_date DATE,
-    return_id INT NOT NULL,
+    return_id INT UNSIGNED NOT NULL,
     FOREIGN KEY (sender) REFERENCES user(email),
     FOREIGN KEY (receiver) REFERENCES user(email),
     FOREIGN KEY (return_id) REFERENCES tax_return(return_id));
@@ -69,7 +69,7 @@ CREATE TABLE document (
     requires_signature CHAR(1) NOT NULL,
     is_signed CHAR(1) NOT NULL,
     is_stored CHAR(1) NOT NULL,
-    parcel_id INT NOT NULL,
+    parcel_id INT UNSIGNED NOT NULL,
     FOREIGN KEY (parcel_id) REFERENCES parcel(parcel_id));
     
 ALTER TABLE document
@@ -84,7 +84,7 @@ ADD CONSTRAINT CHK_document_is_stored CHECK (is_stored = 'T' OR is_stored = 'F')
 COMMIT;
 
 CREATE TABLE log (
-    log_id INT PRIMARY KEY,
+    log_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(320),
     type CHAR(1) NOT NULL,
     message VARCHAR(200),
@@ -105,13 +105,13 @@ CREATE TABLE session (
 COMMIT;
 
 CREATE TABLE household (
-    household_id INT PRIMARY KEY,
+    household_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     household_name VARCHAR(30) NOT NULL);
 	
 COMMIT;
 
 CREATE TABLE preparer_tax_return (
-    return_id INT,
+    return_id INT UNSIGNED,
     email VARCHAR(320),
     PRIMARY KEY (return_id, email),
     FOREIGN KEY (return_id) REFERENCES tax_return(return_id),
@@ -120,8 +120,8 @@ CREATE TABLE preparer_tax_return (
 COMMIT;
 
 CREATE TABLE payment (
-    payment_id INT PRIMARY KEY,
-    return_id INT NOT NULL,
+    payment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    return_id INT UNSIGNED NOT NULL,
     payment_type VARCHAR(20) NOT NULL,
     amount DOUBLE(10,2) NOT NULL,
     date DATETIME NOT NULL,
@@ -144,19 +144,19 @@ SET GLOBAL event_scheduler = ON;
  */
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDATE(), "y", "eng");
+VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "y", "eng");
+VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "y", "eng");
+VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
 
-INSERT INTO tax_return (return_id, email, status, year)
-VALUES (0, "test@test.com", "new", 2019);
+INSERT INTO tax_return (email, status, year)
+VALUES ("test@test.com", "new", 2019);
 
-INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, return_id)
-VALUES (0, "Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 0);
+INSERT INTO parcel (subject, message, sender, receiver, date_sent, return_id)
+VALUES ("Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 1);
 
-INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, return_id)
-VALUES (1, "Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 0);
+INSERT INTO parcel (subject, message, sender, receiver, date_sent, return_id)
+VALUES ("Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 1);
