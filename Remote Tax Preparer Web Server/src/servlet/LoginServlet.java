@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+// import javax.servlet.http.HttpSession;
 
 import exception.ConfigException;
 import manager.SessionManager;
@@ -83,7 +84,7 @@ public final class LoginServlet extends HttpServlet {
 				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 				
 			} else {
-				HttpSession session = request.getSession();
+				// HttpSession session = request.getSession();
 				
 				//forward to home
 				response.sendRedirect("inbox");
