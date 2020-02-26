@@ -67,7 +67,7 @@ public final class RecoveryServlet extends HttpServlet {
 			throws ServletException, IOException {
 		boolean emailSent = false;
 		try {
-			emailSent = UserManager.recover(request.getParameter("email"));
+			emailSent = UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
 		} catch (ConfigException e) {
 
 		}
