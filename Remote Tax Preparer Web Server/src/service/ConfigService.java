@@ -47,9 +47,8 @@ public final class ConfigService {
 			s = new Scanner(new File(filePath));
 			String line = s.nextLine();
 
-			while (s.hasNext()) {
-				line += s.nextLine();
-			}
+			while (s.hasNext())
+				line += "\n" + s.nextLine();
 
 			return line;
 		} catch (FileNotFoundException e) {

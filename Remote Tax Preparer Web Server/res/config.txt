@@ -18,3 +18,4 @@ emailpasswordpath:C:\Capstone\TestFiles\emailpassword.txt
 recoverysubject:Recover Your MCL Taxes Account
 recoverytemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\recoveryEmail.html
 recoverysentmessagepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\text\recoveryMessage.html
+teststringpath:C:\Capstone\TestFiles\string.txt
