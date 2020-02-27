@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import domain.User;
 import exception.ConfigException;
+import manager.LogEntryManager;
 import manager.UserManager;
 
 /**
@@ -69,11 +71,11 @@ public final class RecoveryServlet extends HttpServlet {
 		try {
 			emailSent = UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
 		} catch (ConfigException e) {
-
+			LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
 		}
 
 		if (emailSent) {
-
+			
 		} else {
 
 		}
