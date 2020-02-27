@@ -20,7 +20,7 @@ public final class User {
 
 	private String title;
 	private String fName;
-  private String mName;
+	private String mName;
 	private String lName;
 
 	private String passHash;
@@ -40,7 +40,7 @@ public final class User {
 
 	private String language;
 
-  private boolean verified;
+	private boolean verified;
 	private String verificationID;
 	private Date lastVerificationAttempt;
 	private int lastVerificationType;

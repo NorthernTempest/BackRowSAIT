@@ -55,7 +55,7 @@ public class AuthenticationFilter implements Filter {
 		else
 		{
 			
-			if( context != null && context.equals("/login") )
+			if( context != null && ( context.equals("/login") || context.equals("/recover")) )
 				chain.doFilter(request, response);
 			else
 				((HttpServletResponse) response).sendRedirect("login");
