@@ -206,8 +206,8 @@ public final class UserManager {
 		output = u != null;
 		if(output)
 			try {
-				String verificationID = UUID.randomUUID().toString();
-				u.setVerificationID(verificationID);
+				UUID verificationID = UUID.randomUUID();
+				u.setVerificationID(verificationID.toString());
 				u.setLastVerificationAttempt(new Date());
 				u.setLastVerificationType(User.VERIFY_TYPE_PASS_RESET);
 				UserDB.update(u);
