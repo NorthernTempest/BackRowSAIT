@@ -215,8 +215,7 @@ public final class UserManager {
 			} catch (ConfigException | MessagingException | UserException e) {
 				output = false;
 				e.printStackTrace();
-				LogEntry l = new LogEntry(email, e.getStackTrace().toString(), LogEntry.ERROR, ip);
-				LogEntryDB.insert(l);
+				LogEntryManager.logError(email, e, ip);
 			}
 		LogEntry l = new LogEntry(email, output ? "sent" : "not sent", LogEntry.RECOVER_PASSWORD, ip);
 		LogEntryDB.insert(l);

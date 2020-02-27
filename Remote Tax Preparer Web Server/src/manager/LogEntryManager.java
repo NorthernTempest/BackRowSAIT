@@ -1,5 +1,7 @@
 package manager;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -41,6 +43,12 @@ public final class LogEntryManager {
 	 */
 	public static boolean createLogEntry(String email, String message, char type, String ip) {
 		return false;
+	}
+
+	public static boolean logError(String email, Exception error, String ip) {
+		StringWriter sw = new StringWriter();
+		error.printStackTrace(new PrintWriter(sw));
+		return LogEntryDB.insert(new LogEntry(email, sw.toString(), LogEntry.ERROR, ip));
 	}
 
 }
