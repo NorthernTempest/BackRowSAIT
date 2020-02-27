@@ -1,5 +1,8 @@
 package databaseAccess;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import domain.Document;
@@ -22,6 +25,42 @@ public class DocumentDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public static boolean insert(Document doc) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+
+		try {
+
+			String preparedQuery = "INSERT INTO document "
+					+ "VALUES (?, ?, ?, ?, ?)";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setString(1, doc.getFilePath());
+			ps.setBoolean(2, doc.isRequiresSignature());
+			ps.setBoolean(3, doc);
+			ps.setString(4, parcel.getReceiver());
+			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
+			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
+
+			rows = ps.executeUpdate();
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		if (rows > 0) {
+
+			return true;
+		}
+
 		return false;
 	}
 	

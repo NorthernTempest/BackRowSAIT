@@ -43,12 +43,12 @@ ADD CONSTRAINT CHK_user_language CHECK (language IN ('eng', 'spn', 'fre'));
 COMMIT;
 
 CREATE TABLE tax_return (
-    return_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(320) NOT NULL,
-    household_id INT,
+    household_id INT UNSIGNED,
     status VARCHAR(20) NOT NULL,
     cost DOUBLE(10,2),
-    year INT(4) NOT NULL,
+    year YEAR NOT NULL,
+	PRIMARY KEY (email, year),
     FOREIGN KEY (email) REFERENCES user(email));
 	
 COMMIT;
@@ -61,10 +61,10 @@ CREATE TABLE parcel (
     receiver VARCHAR(320),
     date_sent DATE NOT NULL,
     expiration_date DATE,
-    return_id INT UNSIGNED NOT NULL,
+	tax_return_year YEAR NOT NULL,
     FOREIGN KEY (sender) REFERENCES user(email),
     FOREIGN KEY (receiver) REFERENCES user(email),
-    FOREIGN KEY (return_id) REFERENCES tax_return(return_id));
+	FOREIGN KEY (receiver, tax_return_year) REFERENCES tax_return(email, year));
 	
 COMMIT;
 	
@@ -115,21 +115,23 @@ CREATE TABLE household (
 COMMIT;
 
 CREATE TABLE preparer_tax_return (
-    return_id INT UNSIGNED,
-    email VARCHAR(320),
-    PRIMARY KEY (return_id, email),
-    FOREIGN KEY (return_id) REFERENCES tax_return(return_id),
-    FOREIGN KEY (email) REFERENCES user(email));
+    tax_return_email VARCHAR(320) NOT NULL,
+	tax_return_year YEAR NOT NULL,
+    tax_preparer_email VARCHAR(320),
+    PRIMARY KEY (tax_return_email, tax_return_year, tax_preparer_email),
+    FOREIGN KEY (tax_preparer_email, tax_return_year) REFERENCES tax_return(email, year),
+    FOREIGN KEY (tax_preparer_email) REFERENCES user(email));
 	
 COMMIT;
 
 CREATE TABLE payment (
     payment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    return_id INT UNSIGNED NOT NULL,
+    email VARCHAR(320) NOT NULL,
+	year YEAR NOT NULL,
     payment_type VARCHAR(20) NOT NULL,
     amount DOUBLE(10,2) NOT NULL,
     date DATETIME NOT NULL,
-    FOREIGN KEY (return_id) REFERENCES tax_return(return_id));
+    FOREIGN KEY (email, year) REFERENCES tax_return(email, year));
 	
 COMMIT;
 
@@ -159,8 +161,8 @@ VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word"
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);
 
-INSERT INTO parcel (subject, message, sender, receiver, date_sent, return_id)
-VALUES ("Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 1);
+INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year)
+VALUES ("Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 2019);
 
-INSERT INTO parcel (subject, message, sender, receiver, date_sent, return_id)
-VALUES ("Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 1);
+INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year)
+VALUES ("Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 2019);
