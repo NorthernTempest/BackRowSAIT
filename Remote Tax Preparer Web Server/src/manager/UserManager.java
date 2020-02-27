@@ -212,17 +212,13 @@ public final class UserManager {
 				u.setLastVerificationType(User.VERIFY_TYPE_PASS_RESET);
 				UserDB.update(u);
 				EmailService.sendRecovery(email, verificationID);
-			} catch (ConfigException e) {
+			} catch (ConfigException | MessagingException | UserException e) {
 				output = false;
 				e.printStackTrace();
-			} catch (MessagingException e) {
-				output = false;
-				e.printStackTrace();
-			} catch (UserException e) {
-				output = false;
-				e.printStackTrace();
+				LogEntry l = new LogEntry(email, e.getStackTrace().toString(), LogEntry.ERROR, ip);
+				LogEntryDB.insert(l);
 			}
-		LogEntry l = new LogEntry(email, output ? "sent" : "not sent",LogEntry.RECOVER_PASSWORD, ip);
+		LogEntry l = new LogEntry(email, output ? "sent" : "not sent", LogEntry.RECOVER_PASSWORD, ip);
 		LogEntryDB.insert(l);
 		return output;
 	}

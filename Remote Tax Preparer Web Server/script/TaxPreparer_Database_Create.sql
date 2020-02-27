@@ -22,7 +22,11 @@ CREATE TABLE user (
     street_address_1 VARCHAR(320),
     street_address_2 VARCHAR(320),
     language CHAR(3) NOT NULL,
-    active CHAR(1) NOT NULL);
+    active CHAR(1) NOT NULL,
+    verified CHAR(1) NOT NULL,
+    verification_id CHAR(36),
+    last_verification_attempt DATETIME,
+    last_verification_type INT);
     
 ALTER TABLE user 
 ADD CONSTRAINT CHK_user_permission_level CHECK (permission_level BETWEEN 0 AND 3);
@@ -143,14 +147,14 @@ SET GLOBAL event_scheduler = ON;
  * TODO: Remove before deployment.
  */
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDATE(), "T", "eng", "T");
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "T", "eng", "T");
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "T", "eng", "T");
 
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);

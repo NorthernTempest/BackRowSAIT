@@ -13,7 +13,7 @@ import domain.User;
  * Class Description: Class that establishes a connection and communicates
  * directly with the user table in the database.
  *
- * @author Tristen Kreutz, Cesar Guzman
+ * @author Tristen Kreutz, Cesar Guzman, Jesse Goerzen
  *
  */
 public final class UserDB {
@@ -33,8 +33,19 @@ public final class UserDB {
 
 		try {
 
-			String preparedQuery = "INSERT INTO user (email, f_name, l_name, permission_level, phone, "
-					+ "pass_hash, title, creation_date, fax, active) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String preparedQuery = "INSERT INTO user "
+					+ "values (email, "
+							+ "f_name, "
+							+ "l_name, "
+							+ "permission_level, "
+							+ "phone, "
+							+ "pass_hash, "
+							+ "title, "
+							+ "creation_date, "
+							+ "fax, "
+							+ "active, "
+							+ "verified) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -47,7 +58,8 @@ public final class UserDB {
 			ps.setString(7, user.getTitle());
 			ps.setDate(8, new java.sql.Date(user.getCreationDate().getTime()));
 			ps.setString(9, user.getFax());
-			ps.setBoolean(10, user.isActive());
+			ps.setString(10, user.isActive()?"T":"F");
+			ps.setString(10, user.isVerified()?"T":"F");
 
 			rows = ps.executeUpdate();
 		}
@@ -87,9 +99,21 @@ public final class UserDB {
 
 		try {
 
-			String preparedQuery = "UPDATE user f_name = ?, l_name = ?, permission_level = ?, "
-					+ "phone = ?, pass_hash = ?, title = ?, creation_date = ?, "
-					+ "fax = ?, active = ? WHERE email = ?)";
+			String preparedQuery = "UPDATE user "
+					+ "SET f_name = ?, "
+					+ "l_name = ?, "
+					+ "permission_level = ?, "
+					+ "phone = ?, "
+					+ "pass_hash = ?, "
+					+ "title = ?, "
+					+ "creation_date = ?, "
+					+ "fax = ?, "
+					+ "active = ?, "
+					+ "verified = ?, "
+					+ "verification_id = ?, "
+					+ "last_verification_attempt = ?, "
+					+ "last_verification_type = ? "
+					+ "WHERE email = ?";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -105,8 +129,11 @@ public final class UserDB {
 				e.printStackTrace();
 			}
 			ps.setString(8, user.getFax());
-			ps.setBoolean(9, user.isActive());
-			ps.setString(10, user.getEmail());
+			ps.setString(9, user.isActive()?"T":"F");
+			ps.setString(10, user.isActive()?"T":"F");
+			ps.setString(11, user.getVerificationID());
+			ps.setDate(12, new java.sql.Date(user.getLastVerificationAttempt().getTime()));
+			ps.setString(11, user.getEmail());
 
 			rows = ps.executeUpdate();
 		}
@@ -201,8 +228,12 @@ public final class UserDB {
 			if (rs.next()) {
 
 				// TODO: This shit.
-				user = new User(rs.getString("email"), rs.getString("f_name"), rs.getString("l_name"),
-						rs.getString("phone"), rs.getString("pass_hash"), rs.getString("pass_salt"));
+				user = new User(rs.getString("email"),
+						rs.getString("f_name"),
+						rs.getString("l_name"),
+						rs.getString("phone"),
+						rs.getString("pass_hash"),
+						rs.getString("pass_salt"));
 			}
 		}
 
