@@ -44,8 +44,11 @@ public final class UserDB {
 							+ "creation_date, "
 							+ "fax, "
 							+ "active, "
-							+ "verified) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+							+ "verified, "
+							+ "verification_id, "
+							+ "last_verification_attempt, "
+							+ "last_verification_type) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -59,7 +62,10 @@ public final class UserDB {
 			ps.setDate(8, new java.sql.Date(user.getCreationDate().getTime()));
 			ps.setString(9, user.getFax());
 			ps.setString(10, user.isActive()?"T":"F");
-			ps.setString(10, user.isVerified()?"T":"F");
+			ps.setString(11, user.isVerified()?"T":"F");
+			ps.setString(12, user.getVerificationID());
+			ps.setDate(13, new java.sql.Date( user.getLastVerificationAttempt().getTime() ));
+			ps.setInt(14, user.getLastVerificationType());
 
 			rows = ps.executeUpdate();
 		}
