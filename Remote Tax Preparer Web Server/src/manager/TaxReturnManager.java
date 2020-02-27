@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import databaseAccess.TaxReturnDB;
 import domain.TaxReturn;
-import domain.User;
 import exception.ConfigException;
 
 /**

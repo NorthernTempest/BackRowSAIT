@@ -99,7 +99,11 @@ public final class UserDB {
 			ps.setString(4, user.getPhone());
 			ps.setString(5, user.getPassHash());
 			ps.setString(6, user.getTitle());
-			ps.setDate(7, new java.sql.Date(user.getCreationDate().getTime()));
+			try {
+				ps.setDate(7, new java.sql.Date(user.getCreationDate().getTime()));
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 			ps.setString(8, user.getFax());
 			ps.setBoolean(9, user.isActive());
 			ps.setString(10, user.getEmail());

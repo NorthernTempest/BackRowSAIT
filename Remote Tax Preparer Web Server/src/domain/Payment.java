@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Tristen Kreutz
  *
  */
-public class Payment {
+public final class Payment {
 	
 	private int paymentID;
 	

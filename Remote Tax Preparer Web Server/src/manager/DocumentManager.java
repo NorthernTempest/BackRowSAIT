@@ -1,9 +1,5 @@
 package manager;
 
-import java.util.ArrayList;
-
-import domain.Document;
-
 /**
  * 
  * Class Description: 	Class that communicates with the DocumentDB class as a proxy

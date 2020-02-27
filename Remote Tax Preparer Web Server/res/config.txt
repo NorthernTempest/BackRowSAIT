@@ -11,3 +11,10 @@ outfiles:C:\Capstone\TestFiles\output\
 MAX_LOGIN_ATTEMPTS:5
 LOGIN_ATTEMPT_TIMELIMIT:10
 sessiontime:30
+smtphost:smtp.gmail.com
+smtpport:465
+emailusernamepath:C:\Capstone\TestFiles\emailusername.txt
+emailpasswordpath:C:\Capstone\TestFiles\emailpassword.txt
+recoverysubject:Recover Your MCL Taxes Account
+recoverytemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\recoveryEmail.html
+recoverysentmessagepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\text\recoveryMessage.html
