@@ -8,16 +8,6 @@
 
 <jsp:directive.include file="../template/headunauthorized.jsp" />
 
-<div class="col-12">
-	<c:choose>
-		<c:when test="${successMessage!=null}">
-			<span class="alert alert-success"> ${successMessage} </span>
-		</c:when>
-		<c:when test="${errorMessage!=null}">
-			<span class="alert alert-danger"> ${errorMessage} </span>
-		</c:when>
-	</c:choose>
-</div>
 <div class="col-md-6">
 	<h2>Welcome to MCLTaxes!</h2>
 

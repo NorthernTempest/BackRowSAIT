@@ -8,16 +8,6 @@
 
 <jsp:directive.include file="../template/headunauthorized.jsp" />
 
-<div class="row">
-	<div class="col-12">
-		<c:choose>
-			<c:when test="${errorMessage!=null}">
-				<span class="alert alert-danger"> ${errorMessage} </span>
-			</c:when>
-		</c:choose>
-	</div>
-</div>
-
 <form method="post" action="">
 	<div class="row">
 		<div class="col-md-6">
