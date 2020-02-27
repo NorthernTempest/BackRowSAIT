@@ -37,8 +37,8 @@ public final class RecoveryServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String verify = request.getParameter("verify");
 
-		if (verify == null)
-			getServletContext().getRequestDispatcher("/WEB-INF/recovery/newpass.jsp").forward(request, response);
+		if (verify == null || verify.equals(""))
+			getServletContext().getRequestDispatcher("/WEB-INF/recovery/recovery.jsp").forward(request, response);
 		else {
 			boolean verifyIsValid = false;
 			String errorMessage = "";
@@ -67,7 +67,7 @@ public final class RecoveryServlet extends HttpServlet {
 			throws ServletException, IOException {
 		boolean emailSent = false;
 		try {
-			emailSent = UserManager.recover(request.getParameter("email"));
+			emailSent = UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
 		} catch (ConfigException e) {
 
 		}
