@@ -10,7 +10,7 @@ package domain;
  */
 public final class Document {
 
-	private String filePath;
+	private transient String filePath;
 
 	private boolean isSigned;
 
