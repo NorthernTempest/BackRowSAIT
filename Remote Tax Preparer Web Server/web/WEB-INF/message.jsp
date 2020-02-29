@@ -8,4 +8,6 @@
 
 <jsp:directive.include file="../template/head.jsp" />
 
-<jsp:directive.include file = "../template/foot.jsp" /></title>
+<div>${message}</div>
+
+<jsp:directive.include file = "../template/foot.jsp" />

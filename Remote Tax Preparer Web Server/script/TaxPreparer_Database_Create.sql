@@ -11,7 +11,7 @@ CREATE TABLE user (
     permission_level INT NOT NULL,
     phone CHAR(15),
     pass_hash VARCHAR(320) NOT NULL,
-    pass_salt CHAR(32) NOT NULL,
+    pass_salt CHAR(44) NOT NULL,
     title VARCHAR(5),
     creation_date DATETIME NOT NULL,
     fax CHAR(15),
@@ -92,8 +92,7 @@ CREATE TABLE log (
     email VARCHAR(320),
     type CHAR(1) NOT NULL,
     message VARCHAR(200),
-    date DATETIME NOT NULL,
-    FOREIGN KEY (email) REFERENCES user(email));
+    date DATETIME NOT NULL);
     
 ALTER TABLE log 
 ADD CONSTRAINT CHK_log_type CHECK (type IN ('L', 'E', 'D', 'U'));

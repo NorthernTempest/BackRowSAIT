@@ -320,7 +320,7 @@ public final class UserDB {
 				set.getString("pass_hash"),
 				set.getString("pass_salt"),
 				set.getString("title"),
-				new java.util.Date(set.getDate("creation_date").getTime()),
+				set.getTimestamp("creation_date") != null ? new java.util.Date(set.getTimestamp("creation_date").getTime()) : null,
 				set.getString("fax"),
 				set.getString("active").equals("T"),
 				set.getString("street_address_1"),
@@ -332,7 +332,7 @@ public final class UserDB {
 				set.getString("language"),
 				set.getString("verified").equals("T"),
 				set.getString("verification_id"),
-				set.getDate("last_verification_attempt") != null ? new java.util.Date(set.getDate("last_verification_attempt").getTime()) : null,
+				set.getTimestamp("last_verification_attempt") != null ? new java.util.Date(set.getTimestamp("last_verification_attempt").getTime()) : null,
 				set.getInt("last_verification_type"));
 		
 		return output;
@@ -349,7 +349,7 @@ public final class UserDB {
 		statement.setString(6 + add, user.getPassHash());
 		statement.setString(7 + add, user.getPassSalt());
 		statement.setString(8 + add, user.getTitle());
-		statement.setDate(9 + add, user.getCreationDate() != null ? new java.sql.Date(user.getCreationDate().getTime()) : null);
+		statement.setTimestamp(9 + add, user.getCreationDate() != null ? new java.sql.Timestamp(user.getCreationDate().getTime()) : null);
 		statement.setString(10 + add, user.getFax());
 		statement.setString(11 + add, user.isActive()?"T":"F");
 		statement.setString(12 + add, user.getStreetAddress());
@@ -361,7 +361,7 @@ public final class UserDB {
 		statement.setString(18 + add, user.getLanguage());
 		statement.setString(19 + add, user.isVerified()?"T":"F");
 		statement.setString(20 + add, user.getVerificationID());
-		statement.setDate(21 + add, user.getLastVerificationAttempt() != null ? new java.sql.Date( user.getLastVerificationAttempt().getTime() ) : null);
+		statement.setTimestamp(21 + add, user.getLastVerificationAttempt() != null ? new java.sql.Timestamp( user.getLastVerificationAttempt().getTime() ) : null);
 		statement.setInt(22 + add, user.getLastVerificationType());
 		
 		return statement;

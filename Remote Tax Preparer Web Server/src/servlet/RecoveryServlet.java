@@ -51,12 +51,17 @@ public final class RecoveryServlet extends HttpServlet {
 				errorMessage += e.getMessage();
 			}
 
-			request.setAttribute("errorMessage", errorMessage);
+			if (errorMessage != null && !errorMessage.equals(""))
+				request.setAttribute("errorMessage", errorMessage);
 
 			if (verifyIsValid) {
 				request.setAttribute("verify", verify);
-				
+
 				getServletContext().getRequestDispatcher("/WEB-INF/recovery/newpass.jsp").forward(request, response);
+			} else {
+				request.setAttribute("message",
+						"Sorry! You waited too long. Please follow <a href=\"/recover\">this link</a> to request another email.");
+				getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
 			}
 		}
 	}
@@ -67,15 +72,38 @@ public final class RecoveryServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
-			UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
-		} catch (ConfigException e) {
-			e.printStackTrace();
-			LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
+		String verify = request.getParameter("verify");
+
+		if (verify != null) {
+			String message;
+
+			try {
+				boolean passChanged = UserManager.recoveryChangePass(request.getParameter("newPass1"), request.getParameter("newPass2"), verify, request.getRemoteAddr());
+
+				if (passChanged) {
+					message = "Success! You've changed your password. Please <a href=\"/login\">log in</a> to continue.";
+				} else {
+					message = "Failure! We couldn't set your new password. Please follow the instructions in your email again.";
+				}
+			} catch (Exception e) {
+				message = e.getMessage() + " Please follow the instructions in your email again.";
+			}
+
+			request.setAttribute("message", message);
+
+			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
+		} else {
+			try {
+				UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
+			} catch (ConfigException e) {
+				e.printStackTrace();
+				LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
+			}
+
+			request.setAttribute("message",
+					"If the email you gave was associated with an account, we sent an email to it.");
+			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
 		}
-		
-		request.setAttribute("message", "If the email you gave was associated with an account, we sent an email to it.");
-		getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
 	}
 
 }
