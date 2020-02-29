@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import domain.User;
+import manager.LogEntryManager;
 
 /**
  * 
@@ -232,14 +233,7 @@ public final class UserDB {
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
-
-				// TODO: This shit.
-				user = new User(rs.getString("email"),
-						rs.getString("f_name"),
-						rs.getString("l_name"),
-						rs.getString("phone"),
-						rs.getString("pass_hash"),
-						rs.getString("pass_salt"));
+				user = createUser(rs);
 			}
 		}
 
@@ -269,7 +263,6 @@ public final class UserDB {
 		Connection connection = pool.getConnection();
 		ResultSet rs;
 		ArrayList<User> users = new ArrayList<>();
-		User user = null;
 
 		try {
 
@@ -279,20 +272,11 @@ public final class UserDB {
 
 			rs = ps.executeQuery();
 
-			while (rs.next()) {
-
-				/*
-				 * user = new User(rs.getString("email"), rs.getString("f_name"),
-				 * rs.getString("l_name"), rs.getString("phone"), rs.getString("pass_hash"),
-				 * rs.getString("pass_salt"));
-				 */
-
-				users.add(user);
-			}
+			while (rs.next()) 
+				users.add(createUser(rs));
 		}
 
 		catch (SQLException e) {
-
 			System.out.println(e);
 		}
 
@@ -302,5 +286,68 @@ public final class UserDB {
 		}
 
 		return users;
+	}
+	
+	public static User getByVerificationID(String verificationID) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet set = null;
+		
+		User output = null;
+		
+		try {
+			String query = "SELECT * FROM user WHERE verification_id = ?";
+			
+			PreparedStatement statement = connection.prepareStatement( query );
+			
+			statement.setString(1, verificationID);
+			
+			set = statement.executeQuery();
+			
+			if( set.next() )
+				output = createUser(set);
+				
+		} catch(SQLException e) {
+			LogEntryManager.logError(null, e, null);
+			System.out.println(e);
+		} finally {
+			pool.closeConnection(connection);
+		}
+		return output;
+	}
+	
+	/**
+	 * 
+	 * @param set
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws SQLException
+	 */
+	private static User createUser(ResultSet set) throws IllegalArgumentException, SQLException {
+		User output = new User(set.getString("email"),
+				set.getString("f_name"),
+				set.getString("m_name"),
+				set.getString("l_name"),
+				set.getInt("permission_level"),
+				set.getString("phone"),
+				set.getString("pass_hash"),
+				set.getString("pass_salt"),
+				set.getString("title"),
+				new java.util.Date(set.getDate("creation_date").getTime()),
+				set.getString("fax"),
+				set.getString("active").equals("T"),
+				set.getString("street_address_1"),
+				set.getString("street_address_2"),
+				set.getString("city"),
+				set.getString("province"),
+				set.getString("country"),
+				set.getString("postal_code"),
+				set.getString("language"),
+				set.getString("verified").equals("T"),
+				set.getString("verification_id"),
+				new java.util.Date(set.getDate("last_verification_attempt").getTime()),
+				set.getInt("last_verification_type"));
+		
+		return output;
 	}
 }

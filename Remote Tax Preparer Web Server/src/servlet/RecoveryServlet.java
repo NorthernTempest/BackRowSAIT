@@ -46,7 +46,7 @@ public final class RecoveryServlet extends HttpServlet {
 			String errorMessage = "";
 
 			try {
-				User u = UserManager.verification(verify);
+				User u = UserManager.verification(verify, request.getRemoteAddr());
 
 				verifyIsValid = u != null;
 			} catch (ConfigException e) {
@@ -67,18 +67,15 @@ public final class RecoveryServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		boolean emailSent = false;
 		try {
-			emailSent = UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
+			UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
 		} catch (ConfigException e) {
+			e.printStackTrace();
 			LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
 		}
-
-		if (emailSent) {
-			
-		} else {
-
-		}
+		
+		request.setAttribute("message", "If the email you gave was associated with an account, we sent an email to it.");
+		getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
 	}
 
 }
