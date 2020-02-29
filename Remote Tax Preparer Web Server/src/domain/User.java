@@ -53,19 +53,20 @@ public final class User {
 
 	public static final int VERIFY_TYPE_CREATE_ACCOUNT = 11;
 	public static final int VERIFY_TYPE_PASS_RESET = 12;
-	
+
 	/**
 	 * Constructs an empty user.
 	 */
 	public User() {
 
 	}
-	
+
 	/**
 	 * Constructs a complete user with all fields.
 	 * 
 	 * @param email
 	 * @param fname
+	 * @param mname
 	 * @param lname
 	 * @param permissionLevel
 	 * @param phone
@@ -82,18 +83,21 @@ public final class User {
 	 * @param country
 	 * @param postalCode
 	 * @param language
+	 * @param verified
 	 * @param verificationID
 	 * @param lastVerificationAttempt
 	 * @param lastVerificationType
-	 * @throws UserException
+	 * @throws IllegalArgumentException
 	 */
-	public User(String email, String fname, String lname, int permissionLevel, String phone, String passHash,
-			String passSalt, String title, Date creationDate, String fax, boolean active, String streetAddress,
-			String streetAddress2, String city, String province, String country, String postalCode, String language,
-			String verificationID, Date lastVerificationAttempt, int lastVerificationType) throws UserException {
+	public User(String email, String fname, String mname, String lname, int permissionLevel, String phone,
+			String passHash, String passSalt, String title, Date creationDate, String fax, boolean active,
+			String streetAddress, String streetAddress2, String city, String province, String country,
+			String postalCode, String language, boolean verified, String verificationID, Date lastVerificationAttempt,
+			int lastVerificationType) throws IllegalArgumentException {
 
 		setEmail(email);
 		setFName(fname);
+		setMName(mname);
 		setLName(lname);
 		setPermissionLevel(permissionLevel);
 		setPhone(phone);
@@ -110,6 +114,7 @@ public final class User {
 		setCountry(country);
 		setPostalCode(postalCode);
 		setLanguage(language);
+		setVerified(verified);
 		setVerificationID(verificationID);
 		setLastVerificationAttempt(lastVerificationAttempt);
 		setLastVerificationType(lastVerificationType);
@@ -133,10 +138,10 @@ public final class User {
 	public String getEmail() {
 		return email;
 	}
-  
-  private void setEmail(String email){
-    this.email = email;
-  }
+
+	private void setEmail(String email) {
+		this.email = email;
+	}
 
 	/**
 	 * @return the passHash
@@ -144,7 +149,7 @@ public final class User {
 	public String getPassHash() {
 		return passHash;
 	}
-  
+
 	/**
 	 * @param passHash the passHash to set
 	 */
@@ -177,9 +182,9 @@ public final class User {
 	 * Sets the value of permissionLevel.
 	 * 
 	 * @param permissionLevel the permissionLevel to set
-	 * @throws UserException 
+	 * @throws UserException
 	 */
-	public void setPermissionLevel(int permissionLevel) throws UserException {
+	public void setPermissionLevel(int permissionLevel) throws IllegalArgumentException {
 
 		switch (permissionLevel) {
 
@@ -190,7 +195,7 @@ public final class User {
 			this.permissionLevel = permissionLevel;
 			break;
 		default:
-			throw new UserException("Invalid permissions");
+			throw new IllegalArgumentException("Invalid permissions");
 		}
 	}
 
@@ -312,10 +317,10 @@ public final class User {
 	public String getLanguage() {
 		return language;
 	}
-  
-  public void setLanguage(String language) {
-    this.language = language;
-  }
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
 
 	/**
 	 * Returns the address.
@@ -429,7 +434,6 @@ public final class User {
 		this.verified = verified;
 	}
 
-
 	/**
 	 * 
 	 * @return
@@ -443,12 +447,12 @@ public final class User {
 	 * @param verificationID
 	 * @throws UserException
 	 */
-	public void setVerificationID(String verificationID) throws UserException {
+	public void setVerificationID(String verificationID) throws IllegalArgumentException {
 		String UUIDRegex = "([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})";
 		if (verificationID.matches(UUIDRegex))
 			this.verificationID = verificationID;
 		else
-			throw new UserException("Invalid Verification ID");
+			throw new IllegalArgumentException("Invalid Verification ID");
 	}
 
 	/**
@@ -464,14 +468,14 @@ public final class User {
 	 * @param lastVerificationAttempt
 	 * @throws UserException
 	 */
-	public void setLastVerificationAttempt(Date lastVerificationAttempt) throws UserException {
+	public void setLastVerificationAttempt(Date lastVerificationAttempt) throws IllegalArgumentException {
 		Calendar current = Calendar.getInstance();
 		current.add(Calendar.SECOND, 1);
 		if (lastVerificationAttempt.after(new Calendar.Builder().setDate(2020, Calendar.JANUARY, 1).build().getTime())
-				&& lastVerificationAttempt.before( current.getTime() ))
+				&& lastVerificationAttempt.before(current.getTime()))
 			this.lastVerificationAttempt = lastVerificationAttempt;
 		else
-			throw new UserException("Invalid Verification Date");
+			throw new IllegalArgumentException("Invalid Verification Date");
 	}
 
 	/**
@@ -480,7 +484,7 @@ public final class User {
 	 */
 	public int getLastVerificationType() {
 		return lastVerificationType;
-  }
+	}
 
 	/**
 	 * 
@@ -488,5 +492,5 @@ public final class User {
 	 */
 	public void setLastVerificationType(int lastVerificationType) {
 		this.lastVerificationType = lastVerificationType;
-  }
+	}
 }
