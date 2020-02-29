@@ -46,18 +46,18 @@ public final class RecoveryServlet extends HttpServlet {
 			String errorMessage = "";
 
 			try {
-				User u = UserManager.verification(verify, request.getRemoteAddr());
-
-				verifyIsValid = u != null;
+				verifyIsValid = UserManager.verification(verify, request.getRemoteAddr(), User.VERIFY_TYPE_PASS_RESET);
 			} catch (ConfigException e) {
 				errorMessage += e.getMessage();
 			}
 
+			request.setAttribute("errorMessage", errorMessage);
+
 			if (verifyIsValid) {
 				request.setAttribute("verify", verify);
+				
+				getServletContext().getRequestDispatcher("/WEB-INF/recovery/newpass.jsp").forward(request, response);
 			}
-
-			request.setAttribute("errorMessage", errorMessage);
 		}
 	}
 
