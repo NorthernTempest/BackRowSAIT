@@ -268,12 +268,12 @@ public final class UserManager {
 					if (u.getPassHash() != passHash) {
 						u.setPassHash(passHash);
 						u.setPassSalt(salt);
+						u.setLastVerificationType(User.VERIFY_TYPE_NONE);
+						output = UserDB.update(u);
 					}
 					else {
 						throw new IllegalArgumentException("You cannot use the same password twice in a row.");
 					}
-
-					output = UserDB.update(u);
 				} catch (NumberFormatException e) {
 					output = false;
 					LogEntryManager.logError(u.getEmail(), e, ip);
@@ -292,6 +292,8 @@ public final class UserManager {
 					e.printStackTrace();
 				}
 			}
+			else
+				output = false;
 		}
 
 		return output;

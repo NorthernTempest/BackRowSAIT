@@ -20,7 +20,7 @@ import manager.UserManager;
 public final class RecoveryServlet extends HttpServlet {
 
 	/**
-	 * 
+	 * The Serial Unique ID. Was computer generated.
 	 */
 	private static final long serialVersionUID = 6312378895160822989L;
 
