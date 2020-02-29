@@ -210,7 +210,7 @@ public final class UserManager {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MINUTE, recoveryTimeout);
 		output = u != null && u.isActive()
-				&& (u.getLastVerificationType() != User.VERIFY_TYPE_PASS_RESET
+				&& (u.getLastVerificationType() != User.VERIFY_TYPE_PASS_RESET || u.getLastVerificationAttempt() == null
 						|| !u.getLastVerificationAttempt().before(new Date())
 						|| !u.getLastVerificationAttempt().after(c.getTime()));
 		if (output)
@@ -231,20 +231,68 @@ public final class UserManager {
 		return output;
 	}
 
-	public static boolean verification(String verify, String ip, int verificationType) throws ConfigException {
+	public static boolean verification(String verificationID, String ip, int verificationType) throws ConfigException {
 		init();
-		User u = UserDB.getByVerificationID(verify);
+		User u = UserDB.getByVerificationID(verificationID);
 		boolean output = false;
 
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MINUTE, -recoveryTimeout);
 
-		output = u != null
-				&& u.isActive()
-				&& u.isVerified()
-				&& u.getLastVerificationType() == verificationType
+		output = u != null && u.isActive() && u.isVerified() && u.getLastVerificationType() == verificationType
+				&& u.getLastVerificationAttempt() != null && u.getLastVerificationAttempt().after(c.getTime())
+				&& u.getLastVerificationAttempt().before(new Date());
+
+		return output;
+	}
+
+	public static boolean recoveryChangePass(String newPass, String confirmPass, String verificationID, String ip)
+			throws ConfigException {
+		init();
+		User u = UserDB.getByVerificationID(verificationID);
+
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, -recoveryTimeout);
+
+		boolean output = u != null && u.isActive() && u.isVerified()
+				&& u.getLastVerificationType() == User.VERIFY_TYPE_PASS_RESET && u.getLastVerificationAttempt() != null
 				&& u.getLastVerificationAttempt().after(c.getTime())
 				&& u.getLastVerificationAttempt().before(new Date());
+
+		if (output) {
+			if (newPass.equals(confirmPass)) {
+				String salt = EncryptionService.getSalt();
+				try {
+					String passHash = EncryptionService.hash(newPass, salt);
+
+					if (u.getPassHash() != passHash) {
+						u.setPassHash(passHash);
+						u.setPassSalt(salt);
+					}
+					else {
+						throw new IllegalArgumentException("You cannot use the same password twice in a row.");
+					}
+
+					output = UserDB.update(u);
+				} catch (NumberFormatException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (InvalidKeySpecException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (ConfigException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				}
+			}
+		}
 
 		return output;
 	}
