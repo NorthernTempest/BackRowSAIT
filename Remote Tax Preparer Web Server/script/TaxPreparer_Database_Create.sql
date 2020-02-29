@@ -61,7 +61,7 @@ CREATE TABLE parcel (
     receiver VARCHAR(320),
     date_sent DATETIME NOT NULL,
     expiration_date DATETIME,
-	  tax_return_year YEAR NOT NULL,
+	tax_return_year YEAR NOT NULL,
     FOREIGN KEY (sender) REFERENCES user(email),
     FOREIGN KEY (receiver) REFERENCES user(email),
 	FOREIGN KEY (receiver, tax_return_year) REFERENCES tax_return(email, year));
