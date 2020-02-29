@@ -449,8 +449,10 @@ public final class User {
 	 */
 	public void setVerificationID(String verificationID) throws IllegalArgumentException {
 		String UUIDRegex = "([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})";
-		if (verificationID.matches(UUIDRegex))
+		if (verificationID != null && verificationID.matches(UUIDRegex))
 			this.verificationID = verificationID;
+		else if( verificationID == null )
+			this.verificationID = null;
 		else
 			throw new IllegalArgumentException("Invalid Verification ID");
 	}
@@ -471,9 +473,11 @@ public final class User {
 	public void setLastVerificationAttempt(Date lastVerificationAttempt) throws IllegalArgumentException {
 		Calendar current = Calendar.getInstance();
 		current.add(Calendar.SECOND, 1);
-		if (lastVerificationAttempt.after(new Calendar.Builder().setDate(2020, Calendar.JANUARY, 1).build().getTime())
+		if (lastVerificationAttempt != null && lastVerificationAttempt.after(new Calendar.Builder().setDate(2020, Calendar.JANUARY, 1).build().getTime())
 				&& lastVerificationAttempt.before(current.getTime()))
 			this.lastVerificationAttempt = lastVerificationAttempt;
+		else if (lastVerificationAttempt == null)
+			this.lastVerificationAttempt = null;
 		else
 			throw new IllegalArgumentException("Invalid Verification Date");
 	}

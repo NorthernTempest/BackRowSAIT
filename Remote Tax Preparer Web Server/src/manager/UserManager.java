@@ -210,10 +210,10 @@ public final class UserManager {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MINUTE, recoveryTimeout);
 		output = u != null && u.isActive()
-				&& ( u.getLastVerificationType() != User.VERIFY_TYPE_PASS_RESET
-				|| !u.getLastVerificationAttempt().before(new Date())
-				|| !u.getLastVerificationAttempt().after(c.getTime()) );
-		if(output)
+				&& (u.getLastVerificationType() != User.VERIFY_TYPE_PASS_RESET
+						|| !u.getLastVerificationAttempt().before(new Date())
+						|| !u.getLastVerificationAttempt().after(c.getTime()));
+		if (output)
 			try {
 				UUID verificationID = UUID.randomUUID();
 				u.setVerificationID(verificationID.toString());
@@ -231,10 +231,21 @@ public final class UserManager {
 		return output;
 	}
 
-	public static User verification(String verify, String ip) throws ConfigException {
+	public static boolean verification(String verify, String ip, int verificationType) throws ConfigException {
 		init();
-		
-		// TODO Auto-generated method stub
-		return null;
+		User u = UserDB.getByVerificationID(verify);
+		boolean output = false;
+
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, -recoveryTimeout);
+
+		output = u != null
+				&& u.isActive()
+				&& u.isVerified()
+				&& u.getLastVerificationType() == verificationType
+				&& u.getLastVerificationAttempt().after(c.getTime())
+				&& u.getLastVerificationAttempt().before(new Date());
+
+		return output;
 	}
 }
