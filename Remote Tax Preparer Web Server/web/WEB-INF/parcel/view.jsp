@@ -9,18 +9,7 @@
 <jsp:directive.include file="../../template/head.jsp" />
 
 <div class="col-12">
-	<c:choose>
-		<c:when test="${successMessage!=null}">
-			<span class="alert alert-success"> ${successMessage} </span>
-		</c:when>
-		<c:when test="${errorMessage!=null}">
-			<span class="alert alert-danger"> ${errorMessage} </span>
-		</c:when>
-	</c:choose>
-</div>
-<div class="col-12">
-	<a href="/parcel/create?parcelID=${parcel.parcelID}"
-		class="btn btn-primary" role="button">Reply</a>
+    <a href="/parcel/create?parcelID=${parcel.parcelID}" class="btn btn-primary" role="button">Reply</a>
 </div>
 <div class="col-12">
 	<h4>${parcel.subject} - ${parcel.sender}</h4>
