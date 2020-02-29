@@ -53,6 +53,7 @@ public final class User {
 
 	public static final int VERIFY_TYPE_CREATE_ACCOUNT = 11;
 	public static final int VERIFY_TYPE_PASS_RESET = 12;
+	public static final int VERIFY_TYPE_NONE = -1;
 
 	/**
 	 * Constructs an empty user.

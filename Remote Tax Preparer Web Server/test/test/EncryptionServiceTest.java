@@ -48,6 +48,11 @@ class EncryptionServiceTest {
 
 		assertFalse(password3.equals(EncryptionService.hash(password3, salt)));
 		assertTrue(EncryptionService.hash(password3, salt).equals(EncryptionService.hash(password1, salt)));
+		
+		String salt2 = EncryptionService.getSalt();
+		
+		assertFalse(password1.equals(EncryptionService.hash(password1, salt2)));
+		assertFalse(EncryptionService.hash(password1, salt2).equals(EncryptionService.hash(password1, salt)));
 	}
 
 	@Test
