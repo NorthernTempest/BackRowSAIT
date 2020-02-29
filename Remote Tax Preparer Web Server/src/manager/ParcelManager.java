@@ -1,6 +1,7 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.apache.tomcat.util.http.fileupload.FileItem;
 import databaseAccess.ParcelDB;
 import domain.Parcel;
 import exception.ConfigException;
+import service.ConfigService;
 
 /**
  * 
@@ -19,6 +21,10 @@ import exception.ConfigException;
  *
  */
 public final class ParcelManager {
+	
+	private static boolean init;
+	
+	private static int expirationDays;
 
 	/**
 	 * @param parcelID
@@ -54,11 +60,47 @@ public final class ParcelManager {
 		return ParcelDB.isVisibleToUser(email, parcelID);
 	}
 
+	/**
+	 * @param fileItemsList
+	 * @param subject
+	 * @param message
+	 * @param email
+	 * @param reciever
+	 * @param dateSent
+	 * @param expiryDate
+	 * @param taxYear
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws ConfigException
+	 */
 	public static boolean createParcel(List<FileItem> fileItemsList, String subject, String message, String email,
-			Object object, Date date, Object object2, int taxYear) {
-		// TODO Auto-generated method stub
-		return false;
+			String reciever, Date dateSent, Date expiryDate, int taxYear) throws NumberFormatException, ConfigException {
+		init();
+		
+		//Set expiration date
+		Calendar c = Calendar.getInstance();
+		c.setTime(dateSent);
+		c.add(Calendar.DAY_OF_MONTH, expirationDays);  
+		Date expDate = c.getTime();
+		
+		Parcel parcel = new Parcel(0, subject, message, email, null, dateSent, expDate, taxYear);
+		
+		if(ParcelDB.insert(parcel)){
+			return true;
+		} else {
+			return false;
+		}
 
+	}
+	
+	/**
+	 * @throws ConfigException
+	 */
+	private static void init() throws ConfigException {
+		if (!init) {
+			expirationDays = Integer.parseInt(ConfigService.fetchFromConfig("PARCEL_EXPIRATION_DAYS:"));
+			init = true;
+		}
 	}
 
 }

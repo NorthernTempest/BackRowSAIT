@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +96,7 @@ public final class NewMessageServlet extends HttpServlet {
 
 			fileItemsList = uploader.parseRequest((RequestContext) request);
 
-			if(!ParcelManager.createParcel(fileItemsList, subject, message, email, null, new Date(), null, taxYear)) {
+			if(!ParcelManager.createParcel(fileItemsList, subject, message, sender, null, new Date(), null, taxYear)) {
 				request.setAttribute("errorMessage", "Couldn't send message");
 				getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			} else {
@@ -110,6 +109,10 @@ public final class NewMessageServlet extends HttpServlet {
 			e.printStackTrace();
 		} catch (FileUploadException e) {
 			request.setAttribute("errorMessage", "Error uploading");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
+			e.printStackTrace();
+		} catch (ConfigException e) {
+			request.setAttribute("errorMessage", "Error, please try again");
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			e.printStackTrace();
 		}
