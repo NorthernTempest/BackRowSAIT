@@ -48,6 +48,8 @@ public class AuthenticationFilter implements Filter {
 					chain.doFilter(request, response);
 				else
 					((HttpServletResponse) response).sendRedirect("inbox");
+			} else if (context.equals("/recover")) {
+				((HttpServletResponse) response).sendRedirect("inbox");
 			}
 			else
 				chain.doFilter(request, response);
