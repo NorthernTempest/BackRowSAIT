@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 
+import databaseAccess.LogEntryDB;
 import databaseAccess.SessionDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
@@ -42,6 +44,10 @@ public final class UserManager {
 	 */
 	private static int sessionTimeout;
 	/**
+	 * Time that the recovery verification id is valid
+	 */
+	private static int recoveryTimeout;
+	/**
 	 * A parameter that determines whether the system has been
 	 */
 	private static boolean init;
@@ -51,6 +57,7 @@ public final class UserManager {
 			maxLoginAttempts = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
 			loginAttemptTimelimit = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
 			sessionTimeout = Integer.parseInt(ConfigService.fetchFromConfig("sessiontime:"));
+			recoveryTimeout = Integer.parseInt(ConfigService.fetchFromConfig("recoverytime:"));
 			init = true;
 		}
 	}
@@ -81,8 +88,6 @@ public final class UserManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-			e.printStackTrace();
 		}
 
 		return false;
@@ -181,32 +186,6 @@ public final class UserManager {
 	}
 
 	/**
-	 * Allows the user to recover their
-	 * 
-	 * @param parameter
-	 * @param parameter2
-	 * @return true if the user's email is already an existing user and the email
-	 *         was successfully sent.
-	 * @throws ConfigException
-	 */
-	public static boolean recover(String email, String what) throws ConfigException {
-		init();
-		boolean output = false;
-		User u = UserDB.get(email);
-		output = u != null;
-		if (output) {
-			try {
-				EmailService.sendRecovery(email);
-			} catch (ConfigException e) {
-				output = false;
-			} catch (MessagingException e) {
-				output = false;
-			}
-		}
-		return output;
-	}
-
-	/**
 	 * @param email
 	 * @return the user with a matching email
 	 * @throws ConfigException
@@ -224,17 +203,99 @@ public final class UserManager {
 	 *         was successfully sent.
 	 * @throws ConfigException
 	 */
-	public static boolean recover(String email) throws ConfigException {
+	public static boolean recover(String email, String ip) throws ConfigException {
 		init();
 		boolean output = false;
 		User u = UserDB.get(email);
-		output = u != null;
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, recoveryTimeout);
+		output = u != null && u.isActive()
+				&& (u.getLastVerificationType() != User.VERIFY_TYPE_PASS_RESET || u.getLastVerificationAttempt() == null
+						|| !u.getLastVerificationAttempt().before(new Date())
+						|| !u.getLastVerificationAttempt().after(c.getTime()));
+		if (output)
+			try {
+				UUID verificationID = UUID.randomUUID();
+				u.setVerificationID(verificationID.toString());
+				u.setLastVerificationAttempt(new Date());
+				u.setLastVerificationType(User.VERIFY_TYPE_PASS_RESET);
+				UserDB.update(u);
+				EmailService.sendRecovery(email, verificationID);
+			} catch (ConfigException | MessagingException | IllegalArgumentException e) {
+				output = false;
+				e.printStackTrace();
+				LogEntryManager.logError(email, e, ip);
+			}
+		LogEntry l = new LogEntry(email, output ? "sent" : "not sent", LogEntry.RECOVER_PASSWORD, ip);
+		LogEntryDB.insert(l);
 		return output;
 	}
 
-	public static User verification(String verify) throws ConfigException {
+	public static boolean verification(String verificationID, String ip, int verificationType) throws ConfigException {
 		init();
-		// TODO Auto-generated method stub
-		return null;
+		User u = UserDB.getByVerificationID(verificationID);
+		boolean output = false;
+
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, -recoveryTimeout);
+
+		output = u != null && u.isActive() && u.isVerified() && u.getLastVerificationType() == verificationType
+				&& u.getLastVerificationAttempt() != null && u.getLastVerificationAttempt().after(c.getTime())
+				&& u.getLastVerificationAttempt().before(new Date());
+
+		return output;
+	}
+
+	public static boolean recoveryChangePass(String newPass, String confirmPass, String verificationID, String ip)
+			throws ConfigException {
+		init();
+		User u = UserDB.getByVerificationID(verificationID);
+
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, -recoveryTimeout);
+
+		boolean output = u != null && u.isActive() && u.isVerified()
+				&& u.getLastVerificationType() == User.VERIFY_TYPE_PASS_RESET && u.getLastVerificationAttempt() != null
+				&& u.getLastVerificationAttempt().after(c.getTime())
+				&& u.getLastVerificationAttempt().before(new Date());
+
+		if (output) {
+			if (newPass.equals(confirmPass)) {
+				String salt = EncryptionService.getSalt();
+				try {
+					String passHash = EncryptionService.hash(newPass, salt);
+
+					if (u.getPassHash() != passHash) {
+						u.setPassHash(passHash);
+						u.setPassSalt(salt);
+						u.setLastVerificationType(User.VERIFY_TYPE_NONE);
+						output = UserDB.update(u);
+					}
+					else {
+						throw new IllegalArgumentException("You cannot use the same password twice in a row.");
+					}
+				} catch (NumberFormatException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (InvalidKeySpecException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (ConfigException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				}
+			}
+			else
+				output = false;
+		}
+
+		return output;
 	}
 }

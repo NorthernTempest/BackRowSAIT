@@ -2,7 +2,7 @@ package domain;
 
 import java.util.Date;
 
-public class LogEntry {
+public final class LogEntry {
 
 	private int logEntryID;
 	
@@ -20,9 +20,11 @@ public class LogEntry {
 	public static final char ERROR = 'E';
 	public static final char DEACTIVATE_ACCOUNT = 'D';
 	public static final char UPDATE_ACCOUNT = 'U';
+	public static final char RECOVER_PASSWORD = 'R';
 	public static final char SESSION_UPDATE = 'S';
 	
 	public LogEntry(String email, String message, char type, String ip) {
+		this.logEntryID = -1;
 		this.email = email;
 		this.message = message;
 		setType(type);
@@ -99,14 +101,14 @@ public class LogEntry {
 			case LOGIN_ATTEMPT:
 			case ERROR:
 			case DEACTIVATE_ACCOUNT:
+			case RECOVER_PASSWORD:
 			case UPDATE_ACCOUNT:
+			case SESSION_UPDATE:
 				this.type = type;
 				break;
-			
 			default:
 				System.out.println("Incorrect type character.");
-				//TODO THROW A CUSTOM EXCEPTION
-				break;
+				throw new IllegalArgumentException("Illegal log entry type");
 		}
 	}
 

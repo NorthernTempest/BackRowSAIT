@@ -11,9 +11,9 @@ CREATE TABLE user (
     permission_level INT NOT NULL,
     phone CHAR(15),
     pass_hash VARCHAR(320) NOT NULL,
-    pass_salt CHAR(32) NOT NULL,
+    pass_salt CHAR(44) NOT NULL,
     title VARCHAR(5),
-    creation_date DATE NOT NULL,
+    creation_date DATETIME NOT NULL,
     fax CHAR(15),
     postal_code CHAR(6),
     city VARCHAR(100),
@@ -22,7 +22,11 @@ CREATE TABLE user (
     street_address_1 VARCHAR(320),
     street_address_2 VARCHAR(320),
     language CHAR(3) NOT NULL,
-    active CHAR(1) NOT NULL);
+    active CHAR(1) NOT NULL,
+    verified CHAR(1) NOT NULL,
+    verification_id CHAR(36),
+    last_verification_attempt DATETIME,
+    last_verification_type INT);
     
 ALTER TABLE user 
 ADD CONSTRAINT CHK_user_permission_level CHECK (permission_level BETWEEN 0 AND 3);
@@ -55,8 +59,8 @@ CREATE TABLE parcel (
     message VARCHAR(10000),
     sender VARCHAR(320) NOT NULL,
     receiver VARCHAR(320),
-    date_sent DATE NOT NULL,
-    expiration_date DATE,
+    date_sent DATETIME NOT NULL,
+    expiration_date DATETIME,
 	tax_return_year YEAR NOT NULL,
     FOREIGN KEY (sender) REFERENCES user(email),
     FOREIGN KEY (receiver) REFERENCES user(email),
@@ -88,8 +92,7 @@ CREATE TABLE log (
     email VARCHAR(320),
     type CHAR(1) NOT NULL,
     message VARCHAR(200),
-    date DATETIME NOT NULL,
-    FOREIGN KEY (email) REFERENCES user(email));
+    date DATETIME NOT NULL);
     
 ALTER TABLE log 
 ADD CONSTRAINT CHK_log_type CHECK (type IN ('L', 'E', 'D', 'U'));
@@ -145,14 +148,14 @@ SET GLOBAL event_scheduler = ON;
  * TODO: Remove before deployment.
  */
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("test@test.com", "Timmy", "Turner", 1, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "T", "eng", "T");
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("example@test.com", "Roger", "Rabbit", 1, "5b38e98e36f7316530be21f4ac1089d5689010ce55469f8d22c52053e32e1ea6", "EUmgQiGBpAy+pcPdAAVR1e2zd4xl8fcz0tF3sQOd5uI=", CURDATE(), "T", "eng", "T");
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language)
-VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "T", "eng");
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "T", "eng", "T");
 
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);

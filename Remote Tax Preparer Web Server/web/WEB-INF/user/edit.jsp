@@ -3,22 +3,12 @@
   Date: 2020-02-05
   Time: 12:30 PM
 --%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<jsp:directive.include file = "../../template/head.jsp" />
+<jsp:directive.include file="../../template/head.jsp" />
 
 <form action="" method="POST">
-    <div class="col-12">
-        <c:choose>
-            <c:when test="${successMessage!=null}">
-                <span class="alert alert-success">
-                        ${successMessage}
-                </span>
-            </c:when>
-        </c:choose>
-    </div>
-
     <div class="col-md-6">
         <h3>Address</h3>
         <label for="address1">Street Address</label>
@@ -98,6 +88,7 @@
     </div>
 </form>
 
-<script type="text/javascript" src="../../template/js/country-regions.js"></script>
+<script type="text/javascript"
+	src="../../template/js/country-regions.js"></script>
 
-<jsp:directive.include file = "../../template/foot.jsp" />
+<jsp:directive.include file="../../template/foot.jsp" />

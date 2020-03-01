@@ -33,16 +33,15 @@ public class LogEntryDB {
 		
 		try {
 			
-			String preparedQuery = "INSERT INTO log (log_id, email, type, message, date, "
-									+ "VALUES (?, ?, ?, ?, ?)";
+			String preparedQuery = "INSERT INTO log (email, type, message, date) "
+									+ "VALUES (?, ?, ?, ?)";
 			
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 			
-			ps.setInt(1, logEntry.getLogEntryID());
-			ps.setString(2, logEntry.getEmail());
-			ps.setString(3, logEntry.getType() + "");
-			ps.setString(4, logEntry.getMessage());
-			ps.setDate(5, (Date) logEntry.getDate());
+			ps.setString(1, logEntry.getEmail());
+			ps.setString(2, logEntry.getType() + "");
+			ps.setString(3, logEntry.getMessage());
+			ps.setDate(4, new Date( logEntry.getDate().getTime() ));
 			
 			rows = ps.executeUpdate();
 		}

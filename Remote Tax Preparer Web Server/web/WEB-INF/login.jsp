@@ -3,10 +3,10 @@
   Date: 2020-02-05
   Time: 12:30 PM
 --%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<jsp:directive.include file = "../template/headunauthorized.jsp" />
+<jsp:directive.include file="../template/headunauthorized.jsp" />
 
 <div class="container">
     <div class="row">
@@ -24,15 +24,6 @@
                     <button type="submit" class="btn btn-primary">Log in</button>
                     <span width="20px"></span><a href="/recover">Forgot Password?</a>
                 </div>
-                <div class="form-group">
-                    <c:choose>
-                        <c:when test="${errorMessage!=null}">
-                            <div class="alert alert-danger" role="alert">
-                                    ${errorMessage}
-                            </div>
-                        </c:when>
-                    </c:choose>
-                </div>
             </form>
         </div>
         <div class="col-md-6 align-middle text-center">
@@ -45,4 +36,4 @@
 </div>
 
 
-<jsp:directive.include file = "../template/foot.jsp" />
+<jsp:directive.include file="../template/foot.jsp" />

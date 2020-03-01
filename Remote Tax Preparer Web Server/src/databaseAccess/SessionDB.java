@@ -158,7 +158,6 @@ public final class SessionDB {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		ResultSet rs;
-		Session session = null;
 
 		String email = null;
 

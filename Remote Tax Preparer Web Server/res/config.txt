@@ -1,7 +1,7 @@
 cipher:AES/CBC/PKCS5Padding
 keypath:C:\Capstone\TestFiles\key.txt
 saltpath:C:\Capstone\TestFiles\salt.txt
-keyalgor:PBEWithHmacSHA256AndAES_256
+keyalgor:PBKDF2WithHmacSHA1
 cipherkeyalgor:AES
 txtfmt:UTF8
 itercount:65536
@@ -11,9 +11,13 @@ outfiles:C:\Capstone\TestFiles\output\
 MAX_LOGIN_ATTEMPTS:5
 LOGIN_ATTEMPT_TIMELIMIT:10
 sessiontime:30
+recoverytime:15
 smtphost:smtp.gmail.com
 smtpport:465
-emailusername:goerzen.campaholic@gmail.com
-emailpassword:ybqbligqkybysevv
+emailusernamepath:C:\Capstone\TestFiles\emailusername.txt
+emailpasswordpath:C:\Capstone\TestFiles\emailpassword.txt
 recoverysubject:Recover Your MCL Taxes Account
-recoverytemplatepath:
+recoverytemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\recoveryEmail.html
+recoverysentmessagepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\text\recoveryMessage.html
+teststringpath:C:\Capstone\TestFiles\string.txt
+PARCEL_EXPIRATION_DAYS:5

@@ -6,14 +6,23 @@ import java.util.Scanner;
 
 import exception.ConfigException;
 
+/**
+ * A set of methods to get information from the config file.
+ * 
+ * @author Jesse Goerzen
+ */
 public final class ConfigService {
-
+	/**
+	 * The filepath to the config file.
+	 */
 	public static final String CONFIG_FILE_PATH = "C:\\Capstone\\BackRowSAIT\\Remote Tax Preparer Web Server\\res\\config.txt";
 
 	/**
+	 * Fetches a <code>String</code> from the line with the given option from the config file.
 	 * 
-	 * @param option
-	 * @return
+	 * @param option <code>String</code> The type of option to look for in the config file. Must include all characters on the line before the information stored in the file.
+	 * @return <code>String</code> The piece of data stored in the config file including all characters after all the characters in option.
+	 * @throws ConfigException if the config file cannot be found.
 	 */
 	public static String fetchFromConfig(String option) throws ConfigException {
 		Scanner s = null;
@@ -37,9 +46,11 @@ public final class ConfigService {
 	}
 
 	/**
+	 * Fetches a <code>String</code> containing all the text in the given file.
 	 * 
-	 * @param filePath
-	 * @return
+	 * @param filePath The path to the file whose contents to fetch.
+	 * @return <code>String</code> The contents of the given file.
+	 * @throws ConfigException if the given filePath cannot be found.
 	 */
 	public static String fetchContents(String filePath) throws ConfigException {
 		Scanner s = null;
@@ -47,15 +58,18 @@ public final class ConfigService {
 			s = new Scanner(new File(filePath));
 			String line = s.nextLine();
 
-			while (s.hasNext()) {
-				line += s.nextLine();
-			}
+			while (s.hasNext())
+				line += "\n" + s.nextLine();
 
 			return line;
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			throw new ConfigException("Config file not found.");
 		} finally {
-			s.close();
+			try {
+				s.close();
+			} catch (NullPointerException e) {
+			}
 		}
 	}
 

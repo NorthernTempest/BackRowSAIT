@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>MCL Taxes & Bookkeeping</title>
-    <?-- CSS -->
+<meta charset="UTF-8">
+<title>MCL Taxes &amp; Bookkeeping</title>
+<?-- CSS -->
     <link rel="stylesheet" href="../template/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../template/css/mcl-main.css">
@@ -41,3 +41,19 @@
     </div>
     <hr class="nav-separator">
     <div class="block" id="content">
+        <div class="row">
+            <div class="col-12">
+                <c:choose>
+                    <c:when test="${successMessage!=null}">
+                <div class="alert alert-success">
+                        ${successMessage}
+                </div>
+                    </c:when>
+                    <c:when test="${errorMessage!=null}">
+                <div class="alert alert-danger">
+                        ${errorMessage}
+                </div>
+                    </c:when>
+                </c:choose>
+            </div>
+        </div>
