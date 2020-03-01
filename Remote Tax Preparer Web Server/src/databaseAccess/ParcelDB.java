@@ -265,7 +265,7 @@ public class ParcelDB {
 	 * @return ArrayList<Parcel> containing all relevant Parcels from the database
 	 */
 	public static ArrayList<Parcel> getParcelsByParameter(int parcelID, String sender, String receiver, Date dateSent,
-			int taxReturnID) {
+			int year) {
 
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -276,7 +276,7 @@ public class ParcelDB {
 
 		try {
 
-			if (parcelID < 0 && sender == null && receiver == null && dateSent == null && taxReturnID < 0) {
+			if (parcelID < 0 && sender == null && receiver == null && dateSent == null && year < 0) {
 				preparedQuery = "SELECT * FROM parcel";
 				PreparedStatement ps = connection.prepareStatement(preparedQuery);
 				rs = ps.executeQuery();
@@ -317,11 +317,11 @@ public class ParcelDB {
 					parameters.add(dateSent.toString());
 				}
 
-				if (taxReturnID >= 0) {
+				if (year >= 0) {
 					if (count > 0)
 						preparedQuery += "AND ";
-					preparedQuery += "return_id = ? ";
-					parameters.add(taxReturnID);
+					preparedQuery += "year = ? ";
+					parameters.add(year);
 				}
 
 				PreparedStatement ps = connection.prepareStatement(preparedQuery);

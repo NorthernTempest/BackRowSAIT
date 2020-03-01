@@ -27,23 +27,4 @@ public final class TaxReturnManager {
 
 		return TaxReturnDB.getByUser(email);
 	}
-
-	/**
-	 * Get most recent tax return for user with email as parameter
-	 * 
-	 * @param email the email to get return for
-	 * @return the most recent tax return matching the given email or -1 if not found
-	 * @throws ConfigException 
-	 */
-	public static int getID(String email, int year) throws ConfigException {
-		ArrayList<TaxReturn> taxReturns = TaxReturnManager.getByEmail(email);
-
-		for (TaxReturn taxReturn : taxReturns) {
-			if (taxReturn.getYear() == year) {
-				return taxReturn.getTaxReturnID();
-			}
-		}
-
-		return -1;
-	}
 }

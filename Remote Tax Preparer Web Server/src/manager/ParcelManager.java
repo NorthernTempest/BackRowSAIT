@@ -36,12 +36,12 @@ public final class ParcelManager {
 	 * @throws ConfigException
 	 */
 	public static ArrayList<Parcel> getParcels(int parcelID, String senderEmail, String receiverEmail, Date dateSent,
-			int taxReturnID) throws ConfigException {
-		return ParcelDB.getParcelsByParameter(parcelID, senderEmail, receiverEmail, dateSent, taxReturnID);
+			int year) throws ConfigException {
+		return ParcelDB.getParcelsByParameter(parcelID, senderEmail, receiverEmail, dateSent, year);
 	}
 
 	public static ArrayList<Parcel> getByYear(String recieverEmail, int year) throws ConfigException {
-		return getParcels(-1, null, recieverEmail, null, TaxReturnManager.getID(recieverEmail, year));
+		return getParcels(-1, null, recieverEmail, null, year);
 	}
 
 	public static Parcel get(int parcelID) throws ConfigException {

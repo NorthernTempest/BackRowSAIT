@@ -19,7 +19,19 @@ public final class Payment {
 	
 	private Date date;
 	
+	private int year;
+	
+	private String email;
+	
 	private String billingInfo;
+	
+	public Payment (int paymentID, String email, int year, String paymentType, double amount, Date date) {
+		setEmail(email);
+		setYear(year);
+		setPaymentType(paymentType);
+		setAmount(amount);
+		setDate(date);
+	}
 
 	/**
 	 * Returns the paymentID.
@@ -99,5 +111,21 @@ public final class Payment {
 	 */
 	public void setBillingInfo(String billingInfo) {
 		this.billingInfo = billingInfo;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }
