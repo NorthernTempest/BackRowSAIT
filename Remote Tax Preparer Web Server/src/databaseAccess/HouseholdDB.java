@@ -1,7 +1,12 @@
 package databaseAccess;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import domain.Document;
 import domain.Household;
 
 /**
@@ -21,6 +26,37 @@ public class HouseholdDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public static boolean insert(Household household) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+
+		try {
+
+			String preparedQuery = "INSERT INTO household (household_name)"
+					+ "VALUES (?)";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setString(1, household.getHouseholdName());
+
+			rows = ps.executeUpdate();
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		if (rows > 0) {
+
+			return true;
+		}
+
 		return false;
 	}
 	
@@ -33,6 +69,38 @@ public class HouseholdDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public static boolean update(Household household) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+
+		try {
+
+			String preparedQuery = "UPDATE household household_name = ? "
+					+ " WHERE household_id = ?)";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setString(1, household.getHouseholdName());
+			ps.setInt(2, household.getHouseholdID());
+
+			rows = ps.executeUpdate();
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		if (rows > 0) {
+
+			return true;
+		}
+
 		return false;
 	}
 	
@@ -44,6 +112,36 @@ public class HouseholdDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public static boolean delete(int householdID) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+
+		try {
+
+			String preparedQuery = "DELETE FROM household WHERE household_id = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setInt(1, householdID);
+
+			rows = ps.executeUpdate();
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		if (rows > 0) {
+
+			return true;
+		}
+
 		return false;
 	}
 	
@@ -55,7 +153,38 @@ public class HouseholdDB {
 	 * @return Household that contains the information of the requested Household
 	 */
 	public static Household get(int householdID) {
-		return null;
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		Household household = null;
+
+		try {
+
+			String preparedQuery = "SELECT * FROM household WHERE household_id = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setInt(1, householdID);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				household = new Household(householdID, rs.getString("household_name"));
+			}
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return household;
 	}
 	
 	/**
@@ -65,6 +194,35 @@ public class HouseholdDB {
 	 * @return ArrayList<Household> containing all of the Households from the database
 	 */
 	public static ArrayList<Household> getAll() {
-		return null;
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		ArrayList<Household> households = new ArrayList<>();
+
+		try {
+
+			String preparedQuery = "SELECT * FROM household";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				households.add(new Household(rs.getInt("household_id"), rs.getString("household_name")));
+			}
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return households;
 	}
 }
