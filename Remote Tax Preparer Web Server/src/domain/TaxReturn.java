@@ -11,8 +11,6 @@ import java.util.ArrayList;
  */
 public final class TaxReturn {
 	
-	private int taxReturnID;
-	
 	private String email;
 	
 	private ArrayList<User> taxPreparers;
@@ -25,23 +23,19 @@ public final class TaxReturn {
 	
 	private int year;
 	
-	public TaxReturn (int taxReturnID, String email, String status, int year) {
-		
+	private int householdID;
+	
+	public TaxReturn (String email, String status, int year, double cost) {
+		setEmail(email);
+		setStatus(status);
+		setYear(year);
+		setCost(cost);
 	}
-
-	/**
-	 * Returns the taxReturnID.
-	 * @return the taxReturnID
-	 */
-	public int getTaxReturnID() {
-		return taxReturnID;
-	}
-
 	/**
 	 * Returns the user.
 	 * @return the user
 	 */
-	public String getUser() {
+	public String getEmail() {
 		return email;
 	}
 
@@ -86,19 +80,11 @@ public final class TaxReturn {
 	}
 
 	/**
-	 * Sets the value of taxReturnID.
-	 * @param taxReturnID the taxReturnID to set
-	 */
-	public void setTaxReturnID(int taxReturnID) {
-		this.taxReturnID = taxReturnID;
-	}
-
-	/**
 	 * Sets the value of user.
 	 * @param user the user to set
 	 */
-	public void setUser(String user) {
-		this.email = user;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**
@@ -139,6 +125,14 @@ public final class TaxReturn {
 	 */
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public int getHouseholdID() {
+		return householdID;
+	}
+
+	public void setHouseholdID(int householdID) {
+		this.householdID = householdID;
 	}
 
 	

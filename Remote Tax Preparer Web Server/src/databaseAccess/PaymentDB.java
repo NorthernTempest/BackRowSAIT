@@ -1,7 +1,13 @@
 package databaseAccess;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import domain.Household;
 import domain.Payment;
 
 /**
@@ -21,18 +27,41 @@ public class PaymentDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public static boolean insert(Payment payment) {
-		return false;
-	}
-	
-	/**
-	 * Establishes a connection with the database and updates the Payment in the payment
-	 * table that shares a Primary Key with the Payment being passed into this method.
-	 * All values of the Payment in the database will be updated with the values of the
-	 * object being passed assuming constraints are not violated.
-	 * @param payment Payment to update in the database
-	 * @return boolean based on whether or not the operation was successful
-	 */
-	public static boolean update(Payment payment) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+
+		try {
+
+			String preparedQuery = "INSERT INTO payment (email, year, payment_type, amount, date)"
+					+ "VALUES (?, ?, ?, ?, ?)";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setString(1, payment.getEmail());
+			ps.setInt(2, payment.getYear());
+			ps.setString(3, payment.getPaymentType());
+			ps.setDouble(4, payment.getAmount());
+			ps.setDate(5, (Date) payment.getDate());
+
+			rows = ps.executeUpdate();
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		if (rows > 0) {
+
+			return true;
+		}
+
 		return false;
 	}
 	
@@ -44,6 +73,36 @@ public class PaymentDB {
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public static boolean delete(int paymentID) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		int rows = 0;
+
+		try {
+
+			String preparedQuery = "DELETE FROM payment WHERE payment_id = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setInt(1, paymentID);
+
+			rows = ps.executeUpdate();
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		if (rows > 0) {
+
+			return true;
+		}
+
 		return false;
 	}
 	
@@ -55,7 +114,39 @@ public class PaymentDB {
 	 * @return Payment that contains the information of the requested Payment
 	 */
 	public static Payment get(int paymentID) {
-		return null;
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		Payment payment = null;
+
+		try {
+
+			String preparedQuery = "SELECT * FROM payment WHERE payment_id = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setInt(1, paymentID);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				payment = new Payment(paymentID, rs.getString("payment_name"), rs.getInt("year"),
+										rs.getString("payment_type"), rs.getDouble("amount"), rs.getDate("date"));
+			}
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return payment;
 	}
 	
 	/**
@@ -65,6 +156,36 @@ public class PaymentDB {
 	 * @return ArrayList<Payment> containing all of the Payments from the database
 	 */
 	public static ArrayList<Payment> getAll() {
-		return null;
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		ArrayList<Payment> payments = new ArrayList<>();
+
+		try {
+
+			String preparedQuery = "SELECT * FROM payment";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				payments.add(new Payment(rs.getInt("paymentID"), rs.getString("payment_name"), rs.getInt("year"),
+						rs.getString("payment_type"), rs.getDouble("amount"), rs.getDate("date")));
+			}
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return payments;
 	}
 }

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import domain.User;
+import manager.LogEntryManager;
 
 /**
  * 
@@ -34,40 +35,35 @@ public final class UserDB {
 		try {
 
 			String preparedQuery = "INSERT INTO user "
-					+ "values (email, "
-							+ "f_name, "
-							+ "l_name, "
-							+ "permission_level, "
-							+ "phone, "
-							+ "pass_hash, "
-							+ "title, "
-							+ "creation_date, "
-							+ "fax, "
-							+ "active, "
-							+ "verified, "
-							+ "verification_id, "
-							+ "last_verification_attempt, "
-							+ "last_verification_type) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "values ("
+					+ "email, "
+					+ "f_name, "
+					+ "m_name, "
+					+ "l_name, "
+					+ "permission_level, "
+					+ "phone, "
+					+ "pass_hash, "
+					+ "pass_salt, "
+					+ "title, "
+					+ "creation_date, "
+					+ "fax, "
+					+ "active, "
+					+ "street_address_1, "
+					+ "street_address_2, "
+					+ "city, "
+					+ "province, "
+					+ "country, "
+					+ "postal_code, "
+					+ "language, "
+					+ "verified, "
+					+ "verification_id, "
+					+ "last_verification_attempt, "
+					+ "last_verification_type) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
-			ps.setString(1, user.getEmail());
-			ps.setString(2, user.getFName());
-			ps.setString(3, user.getLName());
-			ps.setInt(4, user.getPermissionLevel());
-			ps.setString(5, user.getPhone());
-			ps.setString(6, user.getPassHash());
-			ps.setString(7, user.getTitle());
-			ps.setDate(8, new java.sql.Date(user.getCreationDate().getTime()));
-			ps.setString(9, user.getFax());
-			ps.setString(10, user.isActive()?"T":"F");
-			ps.setString(11, user.isVerified()?"T":"F");
-			ps.setString(12, user.getVerificationID());
-			ps.setDate(13, new java.sql.Date( user.getLastVerificationAttempt().getTime() ));
-			ps.setInt(14, user.getLastVerificationType());
-
-			rows = ps.executeUpdate();
+			rows = prepare(user, ps, false).executeUpdate();
 		}
 
 		catch (SQLException e) {
@@ -106,15 +102,25 @@ public final class UserDB {
 		try {
 
 			String preparedQuery = "UPDATE user "
-					+ "SET f_name = ?, "
+					+ "SET "
+					+ "f_name = ?, "
+					+ "m_name = ?, "
 					+ "l_name = ?, "
 					+ "permission_level = ?, "
 					+ "phone = ?, "
 					+ "pass_hash = ?, "
+					+ "pass_salt = ?, "
 					+ "title = ?, "
 					+ "creation_date = ?, "
 					+ "fax = ?, "
 					+ "active = ?, "
+					+ "street_address_1 = ?, "
+					+ "street_address_2 = ?, "
+					+ "city = ?, "
+					+ "province = ?, "
+					+ "country = ?, "
+					+ "postal_code = ?, "
+					+ "language = ?, "
 					+ "verified = ?, "
 					+ "verification_id = ?, "
 					+ "last_verification_attempt = ?, "
@@ -122,26 +128,8 @@ public final class UserDB {
 					+ "WHERE email = ?";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-
-			ps.setString(1, user.getFName());
-			ps.setString(2, user.getLName());
-			ps.setInt(3, user.getPermissionLevel());
-			ps.setString(4, user.getPhone());
-			ps.setString(5, user.getPassHash());
-			ps.setString(6, user.getTitle());
-			try {
-				ps.setDate(7, new java.sql.Date(user.getCreationDate().getTime()));
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-			ps.setString(8, user.getFax());
-			ps.setString(9, user.isActive()?"T":"F");
-			ps.setString(10, user.isActive()?"T":"F");
-			ps.setString(11, user.getVerificationID());
-			ps.setDate(12, new java.sql.Date(user.getLastVerificationAttempt().getTime()));
-			ps.setString(11, user.getEmail());
-
-			rows = ps.executeUpdate();
+			
+			rows = prepare(user, ps, true).executeUpdate();
 		}
 
 		catch (SQLException e) {
@@ -232,14 +220,7 @@ public final class UserDB {
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
-
-				// TODO: This shit.
-				user = new User(rs.getString("email"),
-						rs.getString("f_name"),
-						rs.getString("l_name"),
-						rs.getString("phone"),
-						rs.getString("pass_hash"),
-						rs.getString("pass_salt"));
+				user = createUser(rs);
 			}
 		}
 
@@ -269,7 +250,6 @@ public final class UserDB {
 		Connection connection = pool.getConnection();
 		ResultSet rs;
 		ArrayList<User> users = new ArrayList<>();
-		User user = null;
 
 		try {
 
@@ -279,20 +259,11 @@ public final class UserDB {
 
 			rs = ps.executeQuery();
 
-			while (rs.next()) {
-
-				/*
-				 * user = new User(rs.getString("email"), rs.getString("f_name"),
-				 * rs.getString("l_name"), rs.getString("phone"), rs.getString("pass_hash"),
-				 * rs.getString("pass_salt"));
-				 */
-
-				users.add(user);
-			}
+			while (rs.next()) 
+				users.add(createUser(rs));
 		}
 
 		catch (SQLException e) {
-
 			System.out.println(e);
 		}
 
@@ -302,5 +273,97 @@ public final class UserDB {
 		}
 
 		return users;
+	}
+	
+	public static User getByVerificationID(String verificationID) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet set = null;
+		
+		User output = null;
+		
+		try {
+			String query = "SELECT * FROM user WHERE verification_id = ?";
+			
+			PreparedStatement statement = connection.prepareStatement( query );
+			
+			statement.setString(1, verificationID);
+			
+			set = statement.executeQuery();
+			
+			if( set.next() )
+				output = createUser(set);
+				
+		} catch(SQLException e) {
+			LogEntryManager.logError(null, e, null);
+			System.out.println(e);
+		} finally {
+			pool.closeConnection(connection);
+		}
+		return output;
+	}
+	
+	/**
+	 * 
+	 * @param set
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws SQLException
+	 */
+	private static User createUser(ResultSet set) throws IllegalArgumentException, SQLException {
+		User output = new User(set.getString("email"),
+				set.getString("f_name"),
+				set.getString("m_name"),
+				set.getString("l_name"),
+				set.getInt("permission_level"),
+				set.getString("phone"),
+				set.getString("pass_hash"),
+				set.getString("pass_salt"),
+				set.getString("title"),
+				set.getTimestamp("creation_date") != null ? new java.util.Date(set.getTimestamp("creation_date").getTime()) : null,
+				set.getString("fax"),
+				set.getString("active").equals("T"),
+				set.getString("street_address_1"),
+				set.getString("street_address_2"),
+				set.getString("city"),
+				set.getString("province"),
+				set.getString("country"),
+				set.getString("postal_code"),
+				set.getString("language"),
+				set.getString("verified").equals("T"),
+				set.getString("verification_id"),
+				set.getTimestamp("last_verification_attempt") != null ? new java.util.Date(set.getTimestamp("last_verification_attempt").getTime()) : null,
+				set.getInt("last_verification_type"));
+		
+		return output;
+	}
+	
+	private static PreparedStatement prepare(User user, PreparedStatement statement, boolean isUpdate) throws SQLException {
+		int add = isUpdate?0:1;
+		statement.setString(isUpdate?23:1, user.getEmail());
+		statement.setString(1 + add, user.getFName());
+		statement.setString(2 + add, user.getMName());
+		statement.setString(3 + add, user.getLName());
+		statement.setInt(4 + add, user.getPermissionLevel());
+		statement.setString(5 + add, user.getPhone());
+		statement.setString(6 + add, user.getPassHash());
+		statement.setString(7 + add, user.getPassSalt());
+		statement.setString(8 + add, user.getTitle());
+		statement.setTimestamp(9 + add, user.getCreationDate() != null ? new java.sql.Timestamp(user.getCreationDate().getTime()) : null);
+		statement.setString(10 + add, user.getFax());
+		statement.setString(11 + add, user.isActive()?"T":"F");
+		statement.setString(12 + add, user.getStreetAddress());
+		statement.setString(13 + add, user.getStreetAddress2());
+		statement.setString(14 + add, user.getCity());
+		statement.setString(15 + add, user.getProvince());
+		statement.setString(16 + add, user.getCountry());
+		statement.setString(17 + add, user.getPostalCode());
+		statement.setString(18 + add, user.getLanguage());
+		statement.setString(19 + add, user.isVerified()?"T":"F");
+		statement.setString(20 + add, user.getVerificationID());
+		statement.setTimestamp(21 + add, user.getLastVerificationAttempt() != null ? new java.sql.Timestamp( user.getLastVerificationAttempt().getTime() ) : null);
+		statement.setInt(22 + add, user.getLastVerificationType());
+		
+		return statement;
 	}
 }

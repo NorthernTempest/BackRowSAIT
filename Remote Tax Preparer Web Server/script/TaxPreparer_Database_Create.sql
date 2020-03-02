@@ -11,9 +11,9 @@ CREATE TABLE user (
     permission_level INT NOT NULL,
     phone CHAR(15),
     pass_hash VARCHAR(320) NOT NULL,
-    pass_salt CHAR(32) NOT NULL,
+    pass_salt CHAR(44) NOT NULL,
     title VARCHAR(5),
-    creation_date DATE NOT NULL,
+    creation_date DATETIME NOT NULL,
     fax CHAR(15),
     postal_code CHAR(6),
     city VARCHAR(100),
@@ -43,12 +43,12 @@ ADD CONSTRAINT CHK_user_language CHECK (language IN ('eng', 'spn', 'fre'));
 COMMIT;
 
 CREATE TABLE tax_return (
-    return_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(320) NOT NULL,
-    household_id INT,
+    household_id INT UNSIGNED,
     status VARCHAR(20) NOT NULL,
     cost DOUBLE(10,2),
-    year INT(4) NOT NULL,
+    year YEAR NOT NULL,
+	PRIMARY KEY (email, year),
     FOREIGN KEY (email) REFERENCES user(email));
 	
 COMMIT;
@@ -59,12 +59,12 @@ CREATE TABLE parcel (
     message VARCHAR(10000),
     sender VARCHAR(320) NOT NULL,
     receiver VARCHAR(320),
-    date_sent DATE NOT NULL,
-    expiration_date DATE,
-    return_id INT UNSIGNED NOT NULL,
+    date_sent DATETIME NOT NULL,
+    expiration_date DATETIME,
+	tax_return_year YEAR NOT NULL,
     FOREIGN KEY (sender) REFERENCES user(email),
     FOREIGN KEY (receiver) REFERENCES user(email),
-    FOREIGN KEY (return_id) REFERENCES tax_return(return_id));
+	FOREIGN KEY (receiver, tax_return_year) REFERENCES tax_return(email, year));
 	
 COMMIT;
 	
@@ -92,8 +92,7 @@ CREATE TABLE log (
     email VARCHAR(320),
     type CHAR(1) NOT NULL,
     message VARCHAR(200),
-    date DATETIME NOT NULL,
-    FOREIGN KEY (email) REFERENCES user(email));
+    date DATETIME NOT NULL);
     
 ALTER TABLE log 
 ADD CONSTRAINT CHK_log_type CHECK (type IN ('L', 'E', 'D', 'U'));
@@ -115,21 +114,23 @@ CREATE TABLE household (
 COMMIT;
 
 CREATE TABLE preparer_tax_return (
-    return_id INT UNSIGNED,
-    email VARCHAR(320),
-    PRIMARY KEY (return_id, email),
-    FOREIGN KEY (return_id) REFERENCES tax_return(return_id),
-    FOREIGN KEY (email) REFERENCES user(email));
+    tax_return_email VARCHAR(320) NOT NULL,
+	tax_return_year YEAR NOT NULL,
+    tax_preparer_email VARCHAR(320),
+    PRIMARY KEY (tax_return_email, tax_return_year, tax_preparer_email),
+    FOREIGN KEY (tax_preparer_email, tax_return_year) REFERENCES tax_return(email, year),
+    FOREIGN KEY (tax_preparer_email) REFERENCES user(email));
 	
 COMMIT;
 
 CREATE TABLE payment (
     payment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    return_id INT UNSIGNED NOT NULL,
+    email VARCHAR(320) NOT NULL,
+	year YEAR NOT NULL,
     payment_type VARCHAR(20) NOT NULL,
     amount DOUBLE(10,2) NOT NULL,
     date DATETIME NOT NULL,
-    FOREIGN KEY (return_id) REFERENCES tax_return(return_id));
+    FOREIGN KEY (email, year) REFERENCES tax_return(email, year));
 	
 COMMIT;
 
@@ -148,19 +149,19 @@ SET GLOBAL event_scheduler = ON;
  */
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
-VALUES ("test@test.com", "Timmy", "Turner", 1, "70617373776f7264", "word", CURDATE(), "T", "eng", "T");
+VALUES ("test@test.com", "Timmy", "Turner", 1, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "T", "eng", "T");
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
-VALUES ("example@test.com", "Roger", "Rabbit", 1, "70617373776f7264", "word", CURDATE(), "T", "eng", "T");
+VALUES ("example@test.com", "Roger", "Rabbit", 1, "5b38e98e36f7316530be21f4ac1089d5689010ce55469f8d22c52053e32e1ea6", "EUmgQiGBpAy+pcPdAAVR1e2zd4xl8fcz0tF3sQOd5uI=", CURDATE(), "T", "eng", "T");
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
-VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "70617373776f7264", "word", CURDATE(), "T", "eng", "T");
+VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "T", "eng", "T");
 
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);
 
-INSERT INTO parcel (subject, message, sender, receiver, date_sent, return_id)
-VALUES ("Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 1);
+INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year)
+VALUES ("Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 2019);
 
-INSERT INTO parcel (subject, message, sender, receiver, date_sent, return_id)
-VALUES ("Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 1);
+INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year)
+VALUES ("Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 2019);

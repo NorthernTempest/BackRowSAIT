@@ -16,6 +16,11 @@ public final class Household {
 	private String householdName;
 	
 	private ArrayList<User> householdMembers;
+	
+	public Household (int householdID, String householdName) {
+		setHouseholdID(householdID);
+		setHouseholdName(householdName);
+	}
 
 	/**
 	 * Returns the householdID.

@@ -17,7 +17,6 @@ import domain.LogEntry;
 import domain.Session;
 import domain.User;
 import exception.ConfigException;
-import exception.UserException;
 import service.ConfigService;
 import service.EmailService;
 import service.EncryptionService;
@@ -45,6 +44,10 @@ public final class UserManager {
 	 */
 	private static int sessionTimeout;
 	/**
+	 * Time that the recovery verification id is valid
+	 */
+	private static int recoveryTimeout;
+	/**
 	 * A parameter that determines whether the system has been
 	 */
 	private static boolean init;
@@ -54,6 +57,7 @@ public final class UserManager {
 			maxLoginAttempts = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
 			loginAttemptTimelimit = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
 			sessionTimeout = Integer.parseInt(ConfigService.fetchFromConfig("sessiontime:"));
+			recoveryTimeout = Integer.parseInt(ConfigService.fetchFromConfig("recoverytime:"));
 			init = true;
 		}
 	}
@@ -203,8 +207,13 @@ public final class UserManager {
 		init();
 		boolean output = false;
 		User u = UserDB.get(email);
-		output = u != null;
-		if(output)
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, recoveryTimeout);
+		output = u != null && u.isActive()
+				&& (u.getLastVerificationType() != User.VERIFY_TYPE_PASS_RESET || u.getLastVerificationAttempt() == null
+						|| !u.getLastVerificationAttempt().before(new Date())
+						|| !u.getLastVerificationAttempt().after(c.getTime()));
+		if (output)
 			try {
 				UUID verificationID = UUID.randomUUID();
 				u.setVerificationID(verificationID.toString());
@@ -212,20 +221,81 @@ public final class UserManager {
 				u.setLastVerificationType(User.VERIFY_TYPE_PASS_RESET);
 				UserDB.update(u);
 				EmailService.sendRecovery(email, verificationID);
-			} catch (ConfigException | MessagingException | UserException e) {
+			} catch (ConfigException | MessagingException | IllegalArgumentException e) {
 				output = false;
 				e.printStackTrace();
-				LogEntry l = new LogEntry(email, e.getStackTrace().toString(), LogEntry.ERROR, ip);
-				LogEntryDB.insert(l);
+				LogEntryManager.logError(email, e, ip);
 			}
 		LogEntry l = new LogEntry(email, output ? "sent" : "not sent", LogEntry.RECOVER_PASSWORD, ip);
 		LogEntryDB.insert(l);
 		return output;
 	}
 
-	public static User verification(String verify) throws ConfigException {
+	public static boolean verification(String verificationID, String ip, int verificationType) throws ConfigException {
 		init();
-		// TODO Auto-generated method stub
-		return null;
+		User u = UserDB.getByVerificationID(verificationID);
+		boolean output = false;
+
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, -recoveryTimeout);
+
+		output = u != null && u.isActive() && u.isVerified() && u.getLastVerificationType() == verificationType
+				&& u.getLastVerificationAttempt() != null && u.getLastVerificationAttempt().after(c.getTime())
+				&& u.getLastVerificationAttempt().before(new Date());
+
+		return output;
+	}
+
+	public static boolean recoveryChangePass(String newPass, String confirmPass, String verificationID, String ip)
+			throws ConfigException {
+		init();
+		User u = UserDB.getByVerificationID(verificationID);
+
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, -recoveryTimeout);
+
+		boolean output = u != null && u.isActive() && u.isVerified()
+				&& u.getLastVerificationType() == User.VERIFY_TYPE_PASS_RESET && u.getLastVerificationAttempt() != null
+				&& u.getLastVerificationAttempt().after(c.getTime())
+				&& u.getLastVerificationAttempt().before(new Date());
+
+		if (output) {
+			if (newPass.equals(confirmPass)) {
+				String salt = EncryptionService.getSalt();
+				try {
+					String passHash = EncryptionService.hash(newPass, salt);
+
+					if (u.getPassHash() != passHash) {
+						u.setPassHash(passHash);
+						u.setPassSalt(salt);
+						u.setLastVerificationType(User.VERIFY_TYPE_NONE);
+						output = UserDB.update(u);
+					}
+					else {
+						throw new IllegalArgumentException("You cannot use the same password twice in a row.");
+					}
+				} catch (NumberFormatException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (InvalidKeySpecException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				} catch (ConfigException e) {
+					output = false;
+					LogEntryManager.logError(u.getEmail(), e, ip);
+					e.printStackTrace();
+				}
+			}
+			else
+				output = false;
+		}
+
+		return output;
 	}
 }
