@@ -28,8 +28,8 @@ import util.cesar.Debugger;
  * 
  * @author Cesar Guzman
  */
-@WebServlet("/parcel/newMessage")
-public final class NewMessageServlet extends HttpServlet {
+@WebServlet("/parcel/create")
+public final class CreateServlet extends HttpServlet {
 
 	/**
 	 * 
@@ -39,7 +39,7 @@ public final class NewMessageServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public NewMessageServlet() {
+	public CreateServlet() {
 		super();
 	}
 

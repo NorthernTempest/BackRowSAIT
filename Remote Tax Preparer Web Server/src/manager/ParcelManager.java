@@ -26,12 +26,13 @@ public final class ParcelManager {
 	
 	private static int expirationDays;
 
+
 	/**
 	 * @param parcelID
 	 * @param senderEmail
 	 * @param receiverEmail
 	 * @param dateSent
-	 * @param taxReturnID
+	 * @param year
 	 * @return
 	 * @throws ConfigException
 	 */
