@@ -196,12 +196,13 @@ public final class UserManager {
 	}
 
 	/**
-	 * Allows the user to recover their
+	 * Sends a password recovery email to a valid user.
 	 * 
-	 * @param email
+	 * @param email String The email address that the user wants us to recover.
+	 * @param ip String The ip of the request to recover the user's email.
 	 * @return true if the user's email is already an existing user and the email
 	 *         was successfully sent.
-	 * @throws ConfigException
+	 * @throws ConfigException If the config file cannot be found.
 	 */
 	public static boolean recover(String email, String ip) throws ConfigException {
 		init();
@@ -230,8 +231,16 @@ public final class UserManager {
 		LogEntryDB.insert(l);
 		return output;
 	}
-
-	public static boolean verification(String verificationID, String ip, int verificationType) throws ConfigException {
+	
+	/**
+	 * Verifies that the given user has been sent a verification email. 
+	 * 
+	 * @param verificationID String The UUID used to verify the email link.
+	 * @param verificationType int The type of thing that the system is checking is verified.
+	 * @return true if the user with the given verification id last used the verification type within the configured timeout period.
+	 * @throws ConfigException if the config file is missing.
+	 */
+	public static boolean verification(String verificationID, int verificationType) throws ConfigException {
 		init();
 		User u = UserDB.getByVerificationID(verificationID);
 		boolean output = false;
@@ -245,7 +254,17 @@ public final class UserManager {
 
 		return output;
 	}
-
+	
+	/**
+	 * Changes the password for a recovery attempt
+	 * 
+	 * @param newPass
+	 * @param confirmPass
+	 * @param verificationID
+	 * @param ip
+	 * @return true if the given verification id matches, the two different passwordds match, and the password was successfully updated.
+	 * @throws ConfigException 
+	 */
 	public static boolean recoveryChangePass(String newPass, String confirmPass, String verificationID, String ip)
 			throws ConfigException {
 		init();
