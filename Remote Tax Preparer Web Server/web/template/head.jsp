@@ -28,7 +28,7 @@
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-            <a href="">Messages</a>
+            <a href="inbox">Messages</a>
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
