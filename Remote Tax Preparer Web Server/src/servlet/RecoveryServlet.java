@@ -46,7 +46,7 @@ public final class RecoveryServlet extends HttpServlet {
 			String errorMessage = "";
 
 			try {
-				verifyIsValid = UserManager.verification(verify, request.getRemoteAddr(), User.VERIFY_TYPE_PASS_RESET);
+				verifyIsValid = UserManager.verification(verify, User.VERIFY_TYPE_PASS_RESET);
 			} catch (ConfigException e) {
 				errorMessage += e.getMessage();
 			}
