@@ -20,11 +20,14 @@
         </div>
         <div class="form-group">
             <div id="files"></div>
-            <div><button class="btn btn-primary" onclick="addFile()">Add File</button></div>
+            <div><button type="button" class="btn btn-primary" onclick="addFile()">Add File</button></div>
         </div>
         <div class="form-group">
             <label for="message">Message</label>
-            <textarea name="message" id="message" class="text-area">${message}</textarea>
+            <textarea name="message" id="message" class="form-control">${message}</textarea>
+        </div>
+        <div class="form-group">
+            <button>Submit</button>
         </div>
     </form>
 </div>
@@ -44,9 +47,9 @@
     addFile();
     function addFile() {
         if(filesEl.childElementCount > 10) {
-            let file = document.createElement("input");
-            file.type = "file";
-            file.name = "multiPartServlet";
+            let fileEl = document.createElement("input");
+            fileEl.type = "file";
+            fileEl.name = "multiPartServlet";
             filesEl.appendChild(file);
         }
     }
