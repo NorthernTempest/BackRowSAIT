@@ -110,6 +110,10 @@ div#content {
 	border: 0;
 }
 
+.card {
+  color: black;
+}
+
 @media only screen and (max-width: 850px) {
 	div.main {
 		margin: 0;
