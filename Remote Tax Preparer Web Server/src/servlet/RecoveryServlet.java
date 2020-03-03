@@ -101,9 +101,9 @@ public final class RecoveryServlet extends HttpServlet {
 				LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
 			}
 
-			request.setAttribute("message",
+			request.setAttribute("successMessage",
 					"If the email you gave was associated with an account, we sent an email to it.");
-			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
+			getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 		}
 	}
 

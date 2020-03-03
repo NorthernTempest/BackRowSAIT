@@ -177,7 +177,7 @@ public final class UserManager {
 		request.setAttribute("address1", u.getStreetAddress());
 		request.setAttribute("address2", u.getStreetAddress2());
 		request.setAttribute("addressCity", u.getCity());
-		request.setAttribute("addressRegion", u.getCountry());
+		request.setAttribute("addressRegion", u.getProvince());
 		request.setAttribute("addressCountry", u.getCountry());
 		request.setAttribute("addressPostal", u.getPostalCode());
 		request.setAttribute("contactPhone", u.getPhone());
