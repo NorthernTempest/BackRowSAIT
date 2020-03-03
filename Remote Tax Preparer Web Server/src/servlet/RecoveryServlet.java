@@ -78,7 +78,8 @@ public final class RecoveryServlet extends HttpServlet {
 			String message;
 
 			try {
-				boolean passChanged = UserManager.recoveryChangePass(request.getParameter("newPass1"), request.getParameter("newPass2"), verify, request.getRemoteAddr());
+				boolean passChanged = UserManager.recoveryChangePass(request.getParameter("newPass1"),
+						request.getParameter("newPass2"), verify, request.getRemoteAddr());
 
 				if (passChanged) {
 					message = "Success! You've changed your password. Please <a href=\"/login\">log in</a> to continue.";

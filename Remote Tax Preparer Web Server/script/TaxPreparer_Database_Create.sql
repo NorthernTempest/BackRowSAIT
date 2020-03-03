@@ -148,14 +148,14 @@ SET GLOBAL event_scheduler = ON;
  * TODO: Remove before deployment.
  */
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
-VALUES ("test@test.com", "Timmy", "Turner", 1, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "T", "eng", "T");
+INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
+VALUES ("test@test.com", "mr", "Timmy", "Tiberius", "Turner", 1, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "eng", "T");
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
 VALUES ("example@test.com", "Roger", "Rabbit", 1, "5b38e98e36f7316530be21f4ac1089d5689010ce55469f8d22c52053e32e1ea6", "EUmgQiGBpAy+pcPdAAVR1e2zd4xl8fcz0tF3sQOd5uI=", CURDATE(), "T", "eng", "T");
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
-VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "T", "eng", "T");
+INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
+VALUES ("jdgoerzen@gmail.com", "mr", "Jesse", "David", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "1-587-123-4567", "1-587-987-6543", "5000 Riverview Pl SE", "Calgary", "Alberta", "Canada", "T2C4K6", "T", "eng", "T");
 
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);

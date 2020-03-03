@@ -16,6 +16,7 @@
 		<url-pattern>/login/*</url-pattern>
 		<url-pattern>/inbox/*</url-pattern>
 		<url-pattern>/recover/*</url-pattern>
+		<url-pattern>/settings/*</url-pattern>
 	</filter-mapping>
 	<resource-ref>
 		<description>DB Connection</description>
