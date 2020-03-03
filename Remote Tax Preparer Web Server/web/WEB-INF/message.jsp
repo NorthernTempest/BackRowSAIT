@@ -10,4 +10,12 @@
 
 <div>${message}</div>
 
+<script>
+    if(${redirectTimer} > 0) {
+        setTimeout(function() {
+            document.location = '${redirectLocation}';
+        }, ${redirectTimer})
+    }
+</script>
+
 <jsp:directive.include file = "../template/foot.jsp" />
