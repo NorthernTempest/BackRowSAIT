@@ -16,13 +16,13 @@
 	<div class="col-md-6">
 		<h3>Name</h3>
 		<label for="title">Title<span style="color: red">*</span></label> <input
-			id="title" name="fname" class="form-control" value="${title}">
+			id="title" name="fname" class="form-control" placeholder="eg. 'mr'" value="${title}" required>
 		<label for="fname">First Name<span style="color: red">*</span></label>
-		<input id="fname" name="fname" class="form-control" value="${fname}">
+		<input id="fname" name="fname" class="form-control" value="${fname}" required>
 		<label for="mname">Middle Name</label> <input id="mname" name="mname"
 			class="form-control" value="${mname}"> <label id="lname">Last
 			Name<span style="color: red">*</span>
-		</label> <input id="lname" name="lname" class="form-control" value="${lname}">
+		</label> <input id="lname" name="lname" class="form-control" value="${lname}" required>
 	</div>
 	<div class="col-md-6">
 		<c:choose>
@@ -36,20 +36,20 @@
 		<h3>Address</h3>
 		<label for="address1">Street Address<span style="color: red">*</span></label>
 		<input id="address1" name="address1" class="form-control"
-			value="${address1}"> <input id="address2" name="address2"
+			value="${address1}" required> <input id="address2" name="address2"
 			class="form-control" value="${address2}"> <label
 			for="addressCity">City<span style="color: red">*</span></label> <input
 			id="addressCity" name="addressCity" class="form-control"
-			value="${addressCity}"> <label for="addressRegion">Province/State<span
+			value="${addressCity}" required> <label for="addressRegion">Province/State<span
 			style="color: red">*</span></label> <select id="addressRegion"
-			class="form-control" name="addressRegion" value="${addressRegion}">
+			class="form-control" name="addressRegion" value="${addressRegion}" required>
 		</select> <label for="addressCountry">Country<span style="color: red">*</span></label>
 		<select class="crs-country form-control" id="addressCountry"
 			data-region-id="addressRegion" name="addressCountry"
-			value="${addressCountry}">
+			value="${addressCountry}" required>
 		</select> <label for="addressPostal">Postal Code<span
 			style="color: red">*</span></label> <input class="form-control"
-			id="addressPostal" name="addressPostal" value="${addressPostal}">
+			id="addressPostal" name="addressPostal" value="${addressPostal}" required>
 	</div>
 	<div class="col-md-6">
 		<c:choose>
@@ -63,7 +63,7 @@
 		<h3>Contact Details</h3>
 		<label for="contactPhone">Phone Number<span style="color: red">*</span></label>
 		<input type="tel" id="contactPhone" name="contactPhone"
-			class="form-control" value="${contactPhone}"> <label
+			class="form-control" value="${contactPhone}" required> <label
 			for="contactFax">Fax Number</label> <input type="tel" id="contactFax"
 			name="contactFax" class="form-control" value="${contactFax}">
 	</div>
@@ -71,6 +71,22 @@
 		<c:choose>
 			<c:when test="${errorMessageContact!=null}">
 				<span class="alert alert-warning"> ${errorMessageContact} </span>
+			</c:when>
+		</c:choose>
+	</div>
+	<hr>
+	<div class="col-md-6">
+		<h3>Language</h3>
+		<label for="language">Language<span style="color: red">*</span></label>
+		<select class="form-control" id="language" name="language" required>
+			<option ${language.equals("en")?"selected":""}>English</option>
+			<option ${language.equals("es")?"selected":""}>Español</option>
+		</select>
+	</div>
+	<div class="col-md-6">
+		<c:choose>
+			<c:when test="${errorMessageLanguage!=null}">
+				<span class="alert alert-warning"> ${errorMessageLanguage} </span>
 			</c:when>
 		</c:choose>
 	</div>
