@@ -5,10 +5,10 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Properties;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import databaseAccess.LogEntryDB;
 import databaseAccess.SessionDB;
@@ -17,6 +17,7 @@ import domain.LogEntry;
 import domain.Session;
 import domain.User;
 import exception.ConfigException;
+import exception.UserException;
 import service.ConfigService;
 import service.EmailService;
 import service.EncryptionService;
@@ -164,9 +165,78 @@ public final class UserManager {
 	 *         User
 	 * @throws ConfigException
 	 */
-	public static Properties getAccountInfo(String email) throws ConfigException {
+	public static HttpServletRequest getAccountInfo(HttpServletRequest request) throws ConfigException {
 		init();
-		return null;
+		String sessionID = request.getSession().getId();
+
+		User u = UserDB.get(SessionDB.getEmail(sessionID));
+
+		request.setAttribute("title", u.getTitle());
+		request.setAttribute("fname", u.getFName());
+		request.setAttribute("mname", u.getMName());
+		request.setAttribute("lname", u.getLName());
+		request.setAttribute("address1", u.getStreetAddress());
+		request.setAttribute("address2", u.getStreetAddress2());
+		request.setAttribute("addressCity", u.getCity());
+		request.setAttribute("addressRegion", u.getProvince());
+		request.setAttribute("addressCountry", u.getCountry());
+		request.setAttribute("addressPostal", u.getPostalCode());
+		request.setAttribute("contactPhone", u.getPhone());
+		request.setAttribute("contactFax", u.getFax());
+		request.setAttribute("language", u.getLanguage());
+
+		return request;
+	}
+
+	public static HttpServletRequest setAccountInfo(HttpServletRequest request) throws ConfigException {
+		init();
+		String sessionID = request.getSession().getId();
+
+		User u = UserDB.get(SessionDB.getEmail(sessionID));
+
+		String title = request.getParameter("title");
+		String fname = request.getParameter("fname");
+		String mname = request.getParameter("mname");
+		String lname = request.getParameter("lname");
+		String address1 = request.getParameter("address1");
+		String address2 = request.getParameter("address2");
+		String addressCity = request.getParameter("addressCity");
+		String addressRegion = request.getParameter("addressRegion");
+		String addressCountry = request.getParameter("addressCountry");
+		String addressPostal = request.getParameter("addressPostal");
+		String contactPhone = request.getParameter("contactPhone");
+		String contactFax = request.getParameter("contactFax");
+		String language = request.getParameter("language");
+		String oldPassword = request.getParameter("oldPassword");
+		String newPassword1 = request.getParameter("newPassword1");
+		String newPassword2 = request.getParameter("newPassword2");
+
+		String errorMessageName = "";
+		boolean nameError = false;
+		String errorMessageAddress = "";
+		boolean addressError = false;
+		String errorMessageContact = "";
+		boolean contactError = false;
+		String errorMessageLanguage = "";
+		boolean languageError = false;
+		String errorMessagePassword = "";
+		boolean passwordError = false;
+
+		if (title == null || title.equals("")) {
+			errorMessageName += "No title given.";
+		}
+		if (fname == null || fname.equals("")) {
+			errorMessageName += errorMessageName.equals("") ? "" : "<br/>" + "No first name given."; }
+		if (mname == null || mname.equals("")) {
+			errorMessageName += errorMessageName.equals("") ? "" : "<br/>" + "No first name given."; }
+
+		request.setAttribute("errorMessageName", errorMessageName);
+		request.setAttribute("errorMessageAddress", errorMessageAddress);
+		request.setAttribute("errorMessageContact", errorMessageContact);
+		request.setAttribute("errorMessageLanguage", errorMessageLanguage);
+		request.setAttribute("errorMessagePassword", errorMessagePassword);
+
+		return request;
 	}
 
 	/**
@@ -199,7 +269,7 @@ public final class UserManager {
 	 * Sends a password recovery email to a valid user.
 	 * 
 	 * @param email String The email address that the user wants us to recover.
-	 * @param ip String The ip of the request to recover the user's email.
+	 * @param ip    String The ip of the request to recover the user's email.
 	 * @return true if the user's email is already an existing user and the email
 	 *         was successfully sent.
 	 * @throws ConfigException If the config file cannot be found.
@@ -231,13 +301,15 @@ public final class UserManager {
 		LogEntryDB.insert(l);
 		return output;
 	}
-	
+
 	/**
-	 * Verifies that the given user has been sent a verification email. 
+	 * Verifies that the given user has been sent a verification email.
 	 * 
-	 * @param verificationID String The UUID used to verify the email link.
-	 * @param verificationType int The type of thing that the system is checking is verified.
-	 * @return true if the user with the given verification id last used the verification type within the configured timeout period.
+	 * @param verificationID   String The UUID used to verify the email link.
+	 * @param verificationType int The type of thing that the system is checking is
+	 *                         verified.
+	 * @return true if the user with the given verification id last used the
+	 *         verification type within the configured timeout period.
 	 * @throws ConfigException if the config file is missing.
 	 */
 	public static boolean verification(String verificationID, int verificationType) throws ConfigException {
@@ -254,16 +326,19 @@ public final class UserManager {
 
 		return output;
 	}
-	
+
 	/**
-	 * Changes the password for a recovery attempt
+	 * Changes the password for a recovery attempt, but only if the verification id
+	 * checks out and both passwords match.
 	 * 
-	 * @param newPass
-	 * @param confirmPass
-	 * @param verificationID
+	 * @param newPass        String The new password to be assigned to the user.
+	 * @param confirmPass    String The user's attempt to duplicate the new
+	 *                       password.
+	 * @param verificationID String The universally unique id that
 	 * @param ip
-	 * @return true if the given verification id matches, the two different passwordds match, and the password was successfully updated.
-	 * @throws ConfigException 
+	 * @return true if the given verification id matches, the two different
+	 *         passwordds match, and the password was successfully updated.
+	 * @throws ConfigException
 	 */
 	public static boolean recoveryChangePass(String newPass, String confirmPass, String verificationID, String ip)
 			throws ConfigException {
@@ -289,8 +364,7 @@ public final class UserManager {
 						u.setPassSalt(salt);
 						u.setLastVerificationType(User.VERIFY_TYPE_NONE);
 						output = UserDB.update(u);
-					}
-					else {
+					} else {
 						throw new IllegalArgumentException("You cannot use the same password twice in a row.");
 					}
 				} catch (NumberFormatException e) {
@@ -310,11 +384,130 @@ public final class UserManager {
 					LogEntryManager.logError(u.getEmail(), e, ip);
 					e.printStackTrace();
 				}
-			}
-			else
+			} else
 				output = false;
 		}
 
 		return output;
+	}
+	
+	/**
+	 * Method to do basic validation of the fields submitted by the register user form 
+	 * 
+	 * @param email The email associated with the new user
+	 * @param password The password for the new user
+	 * @param passwordConf The confirmation field for the user password
+	 * @param title The new user's title
+	 * @param fName The new user's first name
+	 * @param mName The new user's middle name
+	 * @param lName The new user's last name
+	 * @param phone The new user's phone number
+	 * @param fax The new user's fax number
+	 * @param language The new user's language
+	 * @param streetAddress The new user's first street address field
+	 * @param streetAddress2 The new user's second street address field
+	 * @param city The new user's city
+	 * @param province The new user's province
+	 * @param country The new user's country
+	 * @param postalCode The new user's postal code
+	 * @return true if successful
+	 */
+	public static boolean registerValidate(String email, String password, String passwordConf, String title, String fName,
+			String mName, String lName, String phone, String fax, String language, String streetAddress, String streetAddress2, String city, String province, String country, String postalCode) {
+		
+		if (email.length()>100) {
+			return false;
+		}
+		if (password.length()>256) {
+			return false;
+		}
+		if (passwordConf.length()>256) {
+			return false;
+		}
+		if (password.equals(passwordConf)) {
+			return false;
+		}
+		if (title.equals("N/A")||title.equals("Mr")||title.equals("Mrs")||title.equals("Ms")||title.equals("Mx")) {
+			return false;
+		}
+		if (passwordConf.length()>256) {
+			return false;
+		}
+		if (fName.length()>25) {
+			return false;
+		}
+		if (mName.length()>25) {
+			return false;
+		}
+		if (lName.length()>25) {
+			return false;
+		}
+		if (phone.length()>15) {
+			return false;
+		}
+		if (fax.length()>15) {
+			return false;
+		}
+		if (language.equals("en")||language.equals("es")) {
+			return false;
+		}
+		if (streetAddress.length()>200) {
+			return false;
+		}
+		if (streetAddress2.length()>200) {
+			return false;
+		}
+		if (city.length()>100) {
+			return false;
+		}
+		if (province.length()>100) {
+			return false;
+		}
+		if (country.length()>2) {
+			return false;
+		}
+		if (postalCode.length()>10) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean createUser(String email, String password, String passwordConf, String title, String fName,
+			String mName, String lName, String phone, String fax, String language, String streetAddress, String streetAddress2, String city, String province, String country, String postalCode) {
+		String passSalt;
+		User user = null;
+		try {
+			passSalt = EncryptionService.getSalt();
+			String passHash = EncryptionService.hash(password, passSalt);
+			user = new User(email, fName, mName, lName, User.USER, phone, passHash, passSalt, title, new Date(), fax, true, streetAddress, streetAddress2, city, province, country, postalCode, language, false, UUID.randomUUID().toString(), new Date(),User.VERIFY_TYPE_CREATE_ACCOUNT);
+			
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+			return false;
+		} catch (ConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		//TODO set up email verification
+		
+		//write user to database
+		if (user!=null) {
+			UserDB.insert(user);
+		}
+		
+		return true;
+		
 	}
 }

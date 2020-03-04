@@ -78,7 +78,8 @@ public final class RecoveryServlet extends HttpServlet {
 			String message;
 
 			try {
-				boolean passChanged = UserManager.recoveryChangePass(request.getParameter("newPass1"), request.getParameter("newPass2"), verify, request.getRemoteAddr());
+				boolean passChanged = UserManager.recoveryChangePass(request.getParameter("newPass1"),
+						request.getParameter("newPass2"), verify, request.getRemoteAddr());
 
 				if (passChanged) {
 					message = "Success! You've changed your password. Please <a href=\"/login\">log in</a> to continue.";
@@ -93,17 +94,23 @@ public final class RecoveryServlet extends HttpServlet {
 
 			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
 		} else {
-			try {
-				UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
-			} catch (ConfigException e) {
-				e.printStackTrace();
-				LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
-			}
+			Thread t = new Thread( new Runnable() {
 
-			request.setAttribute("message",
-					"If the email you gave was associated with an account, we sent an email to it.");
-			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
+				@Override
+				public void run() {
+					try {
+						UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
+					} catch (ConfigException e) {
+						e.printStackTrace();
+						LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
+					}
+				}
+			
+			} );
+			
+			t.start();
+			
+			response.sendRedirect("/login?recovered");
 		}
 	}
-
 }

@@ -42,16 +42,20 @@ public final class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		Debugger.log("LoginServlet.doGet");
 		String action = request.getParameter("action");
-		
-		if( action != null && action.equals("logout") )
-		{
-			SessionManager.invalidate( request.getSession().getId() );
+
+		if (action != null && action.equals("logout")) {
+			SessionManager.invalidate(request.getSession().getId());
 			request.getSession().invalidate();
 			response.sendRedirect("login");
-		}
-		else
-			//Display Login page
+		} else {
+			String recovered = request.getParameter("recovered");
+			if (recovered != null) {
+				request.setAttribute("successMessage",
+						"Success! If the given email was associated with an account, we sent you an email.");
+			}
+			// Display Login page
 			getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+		}
 	}
 
 	/**
@@ -61,32 +65,32 @@ public final class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Debugger.log("LoginServlet.doPost");
-		
-		//Grab user email
+
+		// Grab user email
 		String email = request.getParameter("email");
-		//Grab user password
+		// Grab user password
 		String password = request.getParameter("password");
-		//Grab user ip
+		// Grab user ip
 		String ip = request.getRemoteAddr();
-		
-		//try to login user, forward as appropriate.
+
+		// try to login user, forward as appropriate.
 		try {
 			if (UserManager.tooManyAttempts(email)) {
-				//tell user
+				// tell user
 				request.setAttribute("errorMessage", "Too many attempts, try again later");
-				//forward to login
+				// forward to login
 				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-				
-			} else if(!UserManager.login(email, password, request.getSession().getId(), ip)) {
-				//tell user
+
+			} else if (!UserManager.login(email, password, request.getSession().getId(), ip)) {
+				// tell user
 				request.setAttribute("errorMessage", "Incorrect email or password");
-				//forward to login
+				// forward to login
 				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-				
+
 			} else {
 				// HttpSession session = request.getSession();
-				
-				//forward to home
+
+				// forward to home
 				response.sendRedirect("inbox");
 			}
 		} catch (ConfigException e) {

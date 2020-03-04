@@ -109,7 +109,7 @@ public final class User {
 		setFax(fax);
 		setActive(active);
 		setStreetAddress(streetAddress);
-		setStreetAddress2(streetAddress);
+		setStreetAddress2(streetAddress2);
 		setCity(city);
 		setProvince(province);
 		setCountry(country);
