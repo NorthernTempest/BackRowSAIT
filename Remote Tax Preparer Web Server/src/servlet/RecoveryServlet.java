@@ -94,17 +94,23 @@ public final class RecoveryServlet extends HttpServlet {
 
 			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
 		} else {
-			try {
-				UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
-			} catch (ConfigException e) {
-				e.printStackTrace();
-				LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
-			}
+			Thread t = new Thread( new Runnable() {
 
-			request.setAttribute("successMessage",
-					"If the email you gave was associated with an account, we sent an email to it.");
-			getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+				@Override
+				public void run() {
+					try {
+						UserManager.recover(request.getParameter("email"), request.getRemoteAddr());
+					} catch (ConfigException e) {
+						e.printStackTrace();
+						LogEntryManager.logError(request.getParameter("email"), e, request.getRemoteAddr());
+					}
+				}
+			
+			} );
+			
+			t.start();
+			
+			response.sendRedirect("/login?recovered");
 		}
 	}
-
 }

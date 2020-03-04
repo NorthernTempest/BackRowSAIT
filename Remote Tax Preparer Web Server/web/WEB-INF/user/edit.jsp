@@ -15,14 +15,14 @@
 	<hr>
 	<div class="col-md-6">
 		<h3>Name</h3>
-		<label for="title">Title<span style="color: red">*</span></label> <input
-			id="title" name="fname" class="form-control" placeholder="eg. 'mr'" value="${title}" required>
+		<label for="title">Title<span style="color: red">*</span></label>
+		<input id="title" name="title" class="form-control" placeholder="eg. 'mr'" value="${title}" required>
 		<label for="fname">First Name<span style="color: red">*</span></label>
 		<input id="fname" name="fname" class="form-control" value="${fname}" required>
-		<label for="mname">Middle Name</label> <input id="mname" name="mname"
-			class="form-control" value="${mname}"> <label id="lname">Last
-			Name<span style="color: red">*</span>
-		</label> <input id="lname" name="lname" class="form-control" value="${lname}" required>
+		<label for="mname">Middle Name</label>
+		<input id="mname" name="mname" class="form-control" value="${mname}">
+		<label id="lname">Last Name<span style="color: red">*</span></label>
+		<input id="lname" name="lname" class="form-control" value="${lname}" required>
 	</div>
 	<div class="col-md-6">
 		<c:choose>
@@ -35,21 +35,16 @@
 	<div class="col-md-6">
 		<h3>Address</h3>
 		<label for="address1">Street Address<span style="color: red">*</span></label>
-		<input id="address1" name="address1" class="form-control"
-			value="${address1}" required> <input id="address2" name="address2"
-			class="form-control" value="${address2}"> <label
-			for="addressCity">City<span style="color: red">*</span></label> <input
-			id="addressCity" name="addressCity" class="form-control"
-			value="${addressCity}" required> <label for="addressRegion">Province/State<span
-			style="color: red">*</span></label> <select id="addressRegion"
-			class="form-control" name="addressRegion" value="${addressRegion}" required>
-		</select> <label for="addressCountry">Country<span style="color: red">*</span></label>
-		<select class="crs-country form-control" id="addressCountry"
-			data-region-id="addressRegion" name="addressCountry"
-			value="${addressCountry}" required>
-		</select> <label for="addressPostal">Postal Code<span
-			style="color: red">*</span></label> <input class="form-control"
-			id="addressPostal" name="addressPostal" value="${addressPostal}" required>
+		<input id="address1" name="address1" class="form-control" value="${address1}" required>
+		<input id="address2" name="address2" class="form-control" value="${address2}">
+		<label for="addressCity">City<span style="color: red">*</span></label>
+		<input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
+		<label for="addressRegion">Province/State<span style="color: red">*</span></label>
+		<select id="addressRegion" class="form-control" name="addressRegion" value="${addressRegion}" required></select>
+		<label for="addressCountry">Country<span style="color: red">*</span></label>
+		<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" value="${addressCountry}" required></select>
+		<label for="addressPostal">Postal Code<span style="color: red">*</span></label>
+		<input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}" required>
 	</div>
 	<div class="col-md-6">
 		<c:choose>
@@ -62,10 +57,9 @@
 	<div class="col-md-6">
 		<h3>Contact Details</h3>
 		<label for="contactPhone">Phone Number<span style="color: red">*</span></label>
-		<input type="tel" id="contactPhone" name="contactPhone"
-			class="form-control" value="${contactPhone}" required> <label
-			for="contactFax">Fax Number</label> <input type="tel" id="contactFax"
-			name="contactFax" class="form-control" value="${contactFax}">
+		<input type="tel" id="contactPhone" name="contactPhone" class="form-control" value="${contactPhone}" required>
+		<label for="contactFax">Fax Number</label>
+		<input type="tel" id="contactFax" name="contactFax" class="form-control" value="${contactFax}">
 	</div>
 	<div class="col-md-6">
 		<c:choose>
@@ -94,14 +88,11 @@
 	<div class="col-md-6">
 		<h3>Change Password</h3>
 		<label for="oldPassword">Old Password<span style="color: red">*</span></label>
-		<input type="password" id="oldPassword" name="oldPassword"
-			class="form-control"> <label for="newPassword1">New
-			Password<span style="color: red">*</span>
-		</label> <input type="password" id="newPassword1" name="newPassword1"
-			class="form-control"> <label for="newPassword2">Same
-			Password<span style="color: red">*</span>
-		</label> <input type="password" id="newPassword2" name="newPassword2"
-			class="form-control">
+		<input type="password" id="oldPassword" name="oldPassword" class="form-control">
+		<label for="newPassword1">New Password<span style="color: red">*</span></label>
+		<input type="password" id="newPassword1" name="newPassword1" class="form-control">
+		<label for="newPassword2">Same Password<span style="color: red">*</span></label>
+		<input type="password" id="newPassword2" name="newPassword2" class="form-control">
 	</div>
 	<div class="col-md-6">
 		<c:choose>
@@ -123,7 +114,6 @@
 	</div>
 </form>
 
-<script type="text/javascript"
-	src="../../template/js/country-regions.js"></script>
+<script type="text/javascript" src="../../template/js/country-regions.js"></script>
 
 <jsp:directive.include file="../../template/foot.jsp" />
