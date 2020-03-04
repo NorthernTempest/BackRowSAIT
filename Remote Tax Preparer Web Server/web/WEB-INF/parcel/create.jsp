@@ -8,9 +8,71 @@
 
 <jsp:directive.include file="../../template/head.jsp" />
 
+<div class="row">
 <div class="col-md-6">
-	<h2>${user.title}. ${user.f_name} ${user.l_name}</h2>
-
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="taxYear">Tax Year</label>
+            <select name="taxYear" id="taxYear" class="form-control" value="${taxYear}">
+            </select>
+            <label for="subject">Subject</label>
+            <input name="subject" id="subject" class="form-control" value="${subject}">
+        </div>
+        <div class="form-group">
+            <div class="card">
+                <div class="card-body">
+                    <div id="files"></div>
+                    <div><button type="button" class="btn btn-primary" onclick="addFile()">Add File</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea name="message" id="message" class="form-control">${message}</textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary">Submit</button>
+        </div>
+    </form>
 </div>
+</div>
+
+<script>
+
+    let yearEl;
+    let today = new Date().getFullYear();
+    let filesEl;
+
+    window.onload = function() {
+        yearEl = document.getElementById("taxYear");
+        filesEl = document.getElementById("files");
+
+        for (let y = today - 1; y > today - 6; y--) {
+            console.log(y);
+            let opt = document.createElement("option");
+            opt.value = ""+y;
+            opt.textContent = ""+y;
+            yearEl.appendChild(opt);
+        }
+        addFile();
+    }
+
+    function addFile() {
+        if (filesEl.childElementCount < 10) {
+            let fileEl = document.createElement("input");
+            fileEl.type = "file";
+            fileEl.name = "multiPartServlet";
+            fileEl.className = "form-control-file";
+            filesEl.appendChild(fileEl);
+        }
+    }
+
+    function removeFile() {
+        if(filesEl.childElementCount > 1) {
+            filesEl.pop();
+        }
+    }
+
+</script>
 
 <jsp:directive.include file="../../template/foot.jsp" />

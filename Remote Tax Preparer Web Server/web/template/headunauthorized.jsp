@@ -30,3 +30,19 @@
     </div>
     <hr class="nav-separator">
     <div class="block" id="content">
+        <div class="row">
+            <div class="col-12">
+                <c:choose>
+                    <c:when test="${successMessage!=null}">
+                        <div class="alert alert-success">
+                                ${successMessage}
+                        </div>
+                    </c:when>
+                    <c:when test="${errorMessage!=null}">
+                        <div class="alert alert-danger">
+                                ${errorMessage}
+                        </div>
+                    </c:when>
+                </c:choose>
+            </div>
+        </div>

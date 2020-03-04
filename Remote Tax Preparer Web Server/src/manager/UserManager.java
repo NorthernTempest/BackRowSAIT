@@ -5,10 +5,10 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Properties;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import databaseAccess.LogEntryDB;
 import databaseAccess.SessionDB;
@@ -164,8 +164,25 @@ public final class UserManager {
 	 *         User
 	 * @throws ConfigException
 	 */
-	public static Properties getAccountInfo(String email) throws ConfigException {
+	public static HttpServletRequest getAccountInfo(HttpServletRequest request) throws ConfigException {
 		init();
+		String sessionID = request.getSession().getId();
+		
+		User u = UserDB.get(SessionDB.getEmail(sessionID));
+
+		request.setAttribute("title", u.getTitle());
+		request.setAttribute("fname", u.getFName());
+		request.setAttribute("mname", u.getMName());
+		request.setAttribute("lname", u.getLName());
+		request.setAttribute("address1", u.getStreetAddress());
+		request.setAttribute("address2", u.getStreetAddress2());
+		request.setAttribute("addressCity", u.getCity());
+		request.setAttribute("addressRegion", u.getProvince());
+		request.setAttribute("addressCountry", u.getCountry());
+		request.setAttribute("addressPostal", u.getPostalCode());
+		request.setAttribute("contactPhone", u.getPhone());
+		request.setAttribute("contactFax", u.getFax());
+		request.setAttribute("language", u.getLanguage());
 		return null;
 	}
 
@@ -199,7 +216,7 @@ public final class UserManager {
 	 * Sends a password recovery email to a valid user.
 	 * 
 	 * @param email String The email address that the user wants us to recover.
-	 * @param ip String The ip of the request to recover the user's email.
+	 * @param ip    String The ip of the request to recover the user's email.
 	 * @return true if the user's email is already an existing user and the email
 	 *         was successfully sent.
 	 * @throws ConfigException If the config file cannot be found.
@@ -231,13 +248,15 @@ public final class UserManager {
 		LogEntryDB.insert(l);
 		return output;
 	}
-	
+
 	/**
-	 * Verifies that the given user has been sent a verification email. 
+	 * Verifies that the given user has been sent a verification email.
 	 * 
-	 * @param verificationID String The UUID used to verify the email link.
-	 * @param verificationType int The type of thing that the system is checking is verified.
-	 * @return true if the user with the given verification id last used the verification type within the configured timeout period.
+	 * @param verificationID   String The UUID used to verify the email link.
+	 * @param verificationType int The type of thing that the system is checking is
+	 *                         verified.
+	 * @return true if the user with the given verification id last used the
+	 *         verification type within the configured timeout period.
 	 * @throws ConfigException if the config file is missing.
 	 */
 	public static boolean verification(String verificationID, int verificationType) throws ConfigException {
@@ -254,16 +273,17 @@ public final class UserManager {
 
 		return output;
 	}
-	
+
 	/**
-	 * Changes the password for a recovery attempt
+	 * Changes the password for a recovery attempt, but only if the verification id checks out and both passwords match.
 	 * 
-	 * @param newPass
-	 * @param confirmPass
-	 * @param verificationID
+	 * @param newPass String The new password to be assigned to the user.
+	 * @param confirmPass String The user's attempt to duplicate the new password.
+	 * @param verificationID String The universally unique id that 
 	 * @param ip
-	 * @return true if the given verification id matches, the two different passwordds match, and the password was successfully updated.
-	 * @throws ConfigException 
+	 * @return true if the given verification id matches, the two different
+	 *         passwordds match, and the password was successfully updated.
+	 * @throws ConfigException
 	 */
 	public static boolean recoveryChangePass(String newPass, String confirmPass, String verificationID, String ip)
 			throws ConfigException {
@@ -289,8 +309,7 @@ public final class UserManager {
 						u.setPassSalt(salt);
 						u.setLastVerificationType(User.VERIFY_TYPE_NONE);
 						output = UserDB.update(u);
-					}
-					else {
+					} else {
 						throw new IllegalArgumentException("You cannot use the same password twice in a row.");
 					}
 				} catch (NumberFormatException e) {
@@ -310,8 +329,7 @@ public final class UserManager {
 					LogEntryManager.logError(u.getEmail(), e, ip);
 					e.printStackTrace();
 				}
-			}
-			else
+			} else
 				output = false;
 		}
 

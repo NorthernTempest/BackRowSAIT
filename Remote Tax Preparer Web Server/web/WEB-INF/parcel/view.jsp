@@ -17,6 +17,10 @@
 	${parcel.expirationDate}<br>
 	<p>${parcel.message}</p>
 
+    <c:forEach var="doc" items="${parcel.documents}">
+        ${doc.filePath}Spaghetti<br>
+    </c:forEach>
+
 </div>
 
 <jsp:directive.include file="../../template/foot.jsp" />

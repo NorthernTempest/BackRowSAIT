@@ -24,19 +24,19 @@
             <a href=""><button class="btn btn-primary btn-lg"><b>Create Return</b></button></a>
         </span>
         <span class="nav-item">
-            <a href="">View Returns</a>
+            <a href="/inbox">View Returns</a>
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-            <a href="">Messages</a>
+            <a href="inbox">Messages</a>
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-            <a href="">Account</a>
+            <a href="/settings">Account</a>
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-            <a href="login?action=logout">Logout</a>
+            <a href="/login?action=logout">Logout</a>
         </span>
     </div>
     <hr class="nav-separator">
