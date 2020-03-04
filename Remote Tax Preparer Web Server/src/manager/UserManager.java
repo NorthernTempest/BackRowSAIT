@@ -168,7 +168,7 @@ public final class UserManager {
 	public static HttpServletRequest getAccountInfo(HttpServletRequest request) throws ConfigException {
 		init();
 		String sessionID = request.getSession().getId();
-		
+
 		User u = UserDB.get(SessionDB.getEmail(sessionID));
 
 		request.setAttribute("title", u.getTitle());
@@ -184,7 +184,59 @@ public final class UserManager {
 		request.setAttribute("contactPhone", u.getPhone());
 		request.setAttribute("contactFax", u.getFax());
 		request.setAttribute("language", u.getLanguage());
-		return null;
+
+		return request;
+	}
+
+	public static HttpServletRequest setAccountInfo(HttpServletRequest request) throws ConfigException {
+		init();
+		String sessionID = request.getSession().getId();
+
+		User u = UserDB.get(SessionDB.getEmail(sessionID));
+
+		String title = request.getParameter("title");
+		String fname = request.getParameter("fname");
+		String mname = request.getParameter("mname");
+		String lname = request.getParameter("lname");
+		String address1 = request.getParameter("address1");
+		String address2 = request.getParameter("address2");
+		String addressCity = request.getParameter("addressCity");
+		String addressRegion = request.getParameter("addressRegion");
+		String addressCountry = request.getParameter("addressCountry");
+		String addressPostal = request.getParameter("addressPostal");
+		String contactPhone = request.getParameter("contactPhone");
+		String contactFax = request.getParameter("contactFax");
+		String language = request.getParameter("language");
+		String oldPassword = request.getParameter("oldPassword");
+		String newPassword1 = request.getParameter("newPassword1");
+		String newPassword2 = request.getParameter("newPassword2");
+
+		String errorMessageName = "";
+		boolean nameError = false;
+		String errorMessageAddress = "";
+		boolean addressError = false;
+		String errorMessageContact = "";
+		boolean contactError = false;
+		String errorMessageLanguage = "";
+		boolean languageError = false;
+		String errorMessagePassword = "";
+		boolean passwordError = false;
+
+		if (title == null || title.equals("")) {
+			errorMessageName += "No title given.";
+		}
+		if (fname == null || fname.equals("")) {
+			errorMessageName += errorMessageName.equals("") ? "" : "<br/>" + "No first name given."; }
+		if (mname == null || mname.equals("")) {
+			errorMessageName += errorMessageName.equals("") ? "" : "<br/>" + "No first name given."; }
+
+		request.setAttribute("errorMessageName", errorMessageName);
+		request.setAttribute("errorMessageAddress", errorMessageAddress);
+		request.setAttribute("errorMessageContact", errorMessageContact);
+		request.setAttribute("errorMessageLanguage", errorMessageLanguage);
+		request.setAttribute("errorMessagePassword", errorMessagePassword);
+
+		return request;
 	}
 
 	/**
@@ -276,11 +328,13 @@ public final class UserManager {
 	}
 
 	/**
-	 * Changes the password for a recovery attempt, but only if the verification id checks out and both passwords match.
+	 * Changes the password for a recovery attempt, but only if the verification id
+	 * checks out and both passwords match.
 	 * 
-	 * @param newPass String The new password to be assigned to the user.
-	 * @param confirmPass String The user's attempt to duplicate the new password.
-	 * @param verificationID String The universally unique id that 
+	 * @param newPass        String The new password to be assigned to the user.
+	 * @param confirmPass    String The user's attempt to duplicate the new
+	 *                       password.
+	 * @param verificationID String The universally unique id that
 	 * @param ip
 	 * @return true if the given verification id matches, the two different
 	 *         passwordds match, and the password was successfully updated.
