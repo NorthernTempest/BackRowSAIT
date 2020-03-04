@@ -37,8 +37,8 @@ public class ParcelDB {
 
 		try {
 
-			String preparedQuery = "INSERT INTO parcel (subject, message, sender, receiver, date_sent, expiration_date"
-					+ "VALUES (?, ?, ?, ?, ?, ?)";
+			String preparedQuery = "INSERT INTO parcel (subject, message, sender, receiver, date_sent, expiration_date, year, requires_signature"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -48,6 +48,8 @@ public class ParcelDB {
 			ps.setString(4, parcel.getReceiver());
 			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
 			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
+			ps.setInt(7, parcel.getTaxReturn());
+			ps.setBoolean(8, parcel.isRequiresSignature());
 
 			rows = ps.executeUpdate();
 		}
@@ -88,7 +90,7 @@ public class ParcelDB {
 		try {
 
 			String preparedQuery = "UPDATE parcel subject = ?, message = ?, sender = ?, "
-					+ "receiver = ?, date_sent = ?, expiration_date = ? WHERE parcel_id = ?)";
+					+ "receiver = ?, date_sent = ?, expiration_date = ?, year = ?, requires_signature = ? WHERE parcel_id = ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -98,7 +100,9 @@ public class ParcelDB {
 			ps.setString(4, parcel.getReceiver());
 			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
 			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
-			ps.setInt(7, parcel.getParcelID());
+			ps.setInt(7, parcel.getTaxReturn());
+			ps.setBoolean(8, parcel.isRequiresSignature());
+			ps.setInt(9, parcel.getParcelID());
 
 			rows = ps.executeUpdate();
 		}
@@ -194,7 +198,7 @@ public class ParcelDB {
 				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")));
+						DocumentDB.getByParcelID(rs.getInt("parcel_id")), rs.getBoolean("requires_signature"));
 			}
 		}
 
@@ -238,7 +242,7 @@ public class ParcelDB {
 				parcels.add(new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id"))));
+						DocumentDB.getByParcelID(rs.getInt("parcel_id")), rs.getBoolean("requires_signature")));
 			}
 		}
 
@@ -341,7 +345,7 @@ public class ParcelDB {
 				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")));
+						DocumentDB.getByParcelID(rs.getInt("parcel_id")), rs.getBoolean("requires_signature"));
 
 				parcels.add(parcel);
 			}
