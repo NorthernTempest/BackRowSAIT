@@ -191,9 +191,10 @@ public class ParcelDB {
 
 			if (rs.next()) {
 
-				parcel = new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"),
+				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
-						rs.getDate("expiration_date"), rs.getInt("tax_return_year"));
+						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
+						DocumentDB.getByParcelID(rs.getInt("parcel_id")));
 			}
 		}
 
@@ -234,9 +235,10 @@ public class ParcelDB {
 
 			while (rs.next()) {
 
-				parcels.add(new Parcel(rs.getInt("parcel_ID"), rs.getString("subject"), rs.getString("message"),
+				parcels.add(new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
-						rs.getDate("expiration_date"), rs.getInt("tax_return_year")));
+						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
+						DocumentDB.getByParcelID(rs.getInt("parcel_id"))));
 			}
 		}
 
@@ -338,7 +340,8 @@ public class ParcelDB {
 
 				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
-						rs.getDate("expiration_date"), rs.getInt("tax_return_year"));
+						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
+						DocumentDB.getByParcelID(rs.getInt("parcel_id")));
 
 				parcels.add(parcel);
 			}

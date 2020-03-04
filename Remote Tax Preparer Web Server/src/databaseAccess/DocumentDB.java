@@ -26,7 +26,7 @@ public class DocumentDB {
 	 * @param doc Document to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public static boolean insert(Document doc) {
+	public static boolean insert(Document doc, int parcelID) {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		int rows = 0;
@@ -41,7 +41,7 @@ public class DocumentDB {
 			ps.setString(1, doc.getFilePath());
 			ps.setBoolean(2, doc.isRequiresSignature());
 			ps.setBoolean(3, doc.isSigned());
-			ps.setInt(4, doc.getParcelID());
+			ps.setInt(4, parcelID);
 			ps.setString(5, doc.getFileName());
 			ps.setLong(6, doc.getFileSize());
 
@@ -74,7 +74,7 @@ public class DocumentDB {
 	 * @param doc Document to update in the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public static boolean update(Document doc) {
+	public static boolean update(Document doc, int parcelID) {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		int rows = 0;
@@ -88,7 +88,7 @@ public class DocumentDB {
 
 			ps.setBoolean(1, doc.isRequiresSignature());
 			ps.setBoolean(2, doc.isSigned());
-			ps.setInt(3, doc.getParcelID());
+			ps.setInt(3, parcelID);
 
 			rows = ps.executeUpdate();
 		}
@@ -177,8 +177,8 @@ public class DocumentDB {
 
 			if (rs.next()) {
 
-				document = new Document(filePath, rs.getBoolean("requires_signature"), rs.getBoolean("is_signed"),
-						rs.getInt("parcel_id"), rs.getString("file_name"), rs.getLong("file_size"));
+				document = new Document(filePath, rs.getBoolean("requires_signature"), rs.getBoolean("is_signed"), 
+										rs.getString("file_name"), rs.getLong("file_size"));
 			}
 		}
 
@@ -193,6 +193,49 @@ public class DocumentDB {
 		}
 
 		return document;
+	}
+	
+	/**
+	 * Establishes a connection with the database and selects the Document in the
+	 * document table that has a Primary Key matching the filePath being passed
+	 * into this method.
+	 * @param parcelID parcelID of the Documents to retrieve from the database
+	 * @return Documents that contains the documents of the requested parcelID
+	 */
+	public static ArrayList<Document> getByParcelID(int parcelID) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		ArrayList<Document> documents = new ArrayList<>();
+
+		try {
+
+			String preparedQuery = "SELECT * FROM document WHERE parcel_id = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+
+			ps.setInt(1, parcelID);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				documents.add(new Document(rs.getString("file_path"), rs.getBoolean("requires_signature"), rs.getBoolean("is_signed"), 
+										rs.getString("file_name"), rs.getLong("file_size")));
+			}
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return documents;
 	}
 	
 	/**
@@ -218,7 +261,7 @@ public class DocumentDB {
 			while (rs.next()) {
 
 				documents.add(new Document(rs.getString("file_path"), rs.getBoolean("requires_signature"), rs.getBoolean("is_signed"),
-								rs.getInt("parcel_id"), rs.getString("file_name"), rs.getLong("file_size")));
+											rs.getString("file_name"), rs.getLong("file_size")));
 			}
 		}
 
