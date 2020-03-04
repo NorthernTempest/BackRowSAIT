@@ -8,9 +8,11 @@ import java.util.List;
 import org.apache.tomcat.util.http.fileupload.FileItem;
 
 import databaseAccess.ParcelDB;
+import domain.Document;
 import domain.Parcel;
 import exception.ConfigException;
 import service.ConfigService;
+import service.EncryptionService;
 
 /**
  * 
@@ -26,7 +28,6 @@ public final class ParcelManager {
 	
 	private static int expirationDays;
 
-
 	/**
 	 * @param parcelID
 	 * @param senderEmail
@@ -41,10 +42,21 @@ public final class ParcelManager {
 		return ParcelDB.getParcelsByParameter(parcelID, senderEmail, receiverEmail, dateSent, year);
 	}
 
+	/**
+	 * @param recieverEmail
+	 * @param year
+	 * @return
+	 * @throws ConfigException
+	 */
 	public static ArrayList<Parcel> getByYear(String recieverEmail, int year) throws ConfigException {
 		return getParcels(-1, null, recieverEmail, null, year);
 	}
 
+	/**
+	 * @param parcelID
+	 * @return
+	 * @throws ConfigException
+	 */
 	public static Parcel get(int parcelID) throws ConfigException {
 		return ParcelDB.get(parcelID);
 	}
@@ -61,21 +73,22 @@ public final class ParcelManager {
 		return ParcelDB.isVisibleToUser(email, parcelID);
 	}
 
+
 	/**
-	 * @param fileItemsList
-	 * @param subject
-	 * @param message
-	 * @param email
-	 * @param reciever
-	 * @param dateSent
-	 * @param expiryDate
-	 * @param taxYear
-	 * @return
+	 * @param fileItemsList the List of FileItems to include with the Parcel
+	 * @param subject the subject
+	 * @param message the message
+	 * @param sender the email of the sender
+	 * @param receiver the email of the receiver
+	 * @param dateSent the date parcel was created
+	 * @param expiryDate the date parcel will expire
+	 * @param taxYear the tax year this parcel is associated with
+	 * @return true if parcel created in database successfully
 	 * @throws NumberFormatException
 	 * @throws ConfigException
 	 */
-	public static boolean createParcel(List<FileItem> fileItemsList, String subject, String message, String email,
-			String reciever, Date dateSent, Date expiryDate, int taxYear) throws NumberFormatException, ConfigException {
+	public static boolean createParcel(ArrayList<Document> documents, String subject, String message, String sender,
+			String receiver, Date dateSent, Date expiryDate, int taxYear) throws NumberFormatException, ConfigException {
 		init();
 		
 		//Set expiration date
@@ -84,7 +97,7 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);  
 		Date expDate = c.getTime();
 		
-		Parcel parcel = new Parcel(0, subject, message, email, null, dateSent, expDate, taxYear);
+		Parcel parcel = new Parcel(0, subject, message, sender, receiver, dateSent, expDate, taxYear, documents);
 		
 		if(ParcelDB.insert(parcel)){
 			return true;
@@ -95,6 +108,7 @@ public final class ParcelManager {
 	}
 	
 	/**
+	 * Initializes this class from config file once upon first creation.
 	 * @throws ConfigException
 	 */
 	private static void init() throws ConfigException {

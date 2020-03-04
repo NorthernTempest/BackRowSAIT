@@ -169,7 +169,7 @@ public class EncryptionService {
 	 *                                  exist or a file at the output directory
 	 *                                  cannot be created.
 	 */
-	public static Document encryptDocument(String filepath, boolean isSigned, boolean requiresSignature, int parcelID)
+	public static Document encryptDocument(String filepath, boolean isSigned, boolean requiresSignature)
 			throws NumberFormatException, ConfigException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeySpecException, InvalidKeyException, IOException {
 		init();
@@ -193,7 +193,7 @@ public class EncryptionService {
 			IOUtils.copy(in, cipherOut);
 		}
 
-		return new Document(outputPath, isSigned, requiresSignature, parcelID, fileIn.getName(), fileIn.length());
+		return new Document(outputPath, isSigned, requiresSignature, fileIn.getName(), fileIn.length());
 	}
 
 	/**

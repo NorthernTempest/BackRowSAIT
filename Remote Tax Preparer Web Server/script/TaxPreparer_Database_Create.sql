@@ -157,6 +157,9 @@ VALUES ("example@test.com", "Roger", "Rabbit", 1, "5b38e98e36f7316530be21f4ac108
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
 VALUES ("jdgoerzen@gmail.com", "Jesse", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "T", "eng", "T");
 
+INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("proton1guzman@gmail.com", "Cesar", "Guzman", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "AkJv9U1EomdagYn0SF/Hl9XiKDt2s2dLHL0TukPO3+k=", CURDATE(), "T", "eng", "T");
+
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);
 
