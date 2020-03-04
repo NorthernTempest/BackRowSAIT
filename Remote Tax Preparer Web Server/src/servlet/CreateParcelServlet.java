@@ -2,15 +2,18 @@ package servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -18,9 +21,11 @@ import org.apache.tomcat.util.http.fileupload.RequestContext;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
+import domain.Document;
 import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
+import service.ConfigService;
 import util.cesar.Debugger;
 
 /**
@@ -29,18 +34,27 @@ import util.cesar.Debugger;
  * @author Cesar Guzman
  */
 @WebServlet("/parcel/create")
-public final class CreateServlet extends HttpServlet {
+@MultipartConfig(fileSizeThreshold = 0, maxFileSize = 1024 * 1024 * 25, maxRequestSize = 1024 * 1024 * 25 * 10) //0mb, 25mb, 10x 25mb
+public final class CreateParcelServlet extends HttpServlet {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4807630350769183535L;
 
+	String uploadPath;
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public CreateServlet() {
+	public CreateParcelServlet() {
 		super();
+		try {
+			uploadPath = ConfigService.fetchFromConfig("SERVER_STORAGE_PATH:");
+		} catch (ConfigException e) {
+			System.out.println("Failed to initialize from config");
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -73,11 +87,14 @@ public final class CreateServlet extends HttpServlet {
 		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
 
-		DiskFileItemFactory fileFactory = new DiskFileItemFactory();
-		File filesDir = (File) getServletContext().getAttribute("FILES_DIR_FILE");
-		Debugger.log("file dir: " + filesDir.getAbsolutePath());
-		fileFactory.setRepository(filesDir);
-		ServletFileUpload uploader = new ServletFileUpload(fileFactory);
+		Debugger.log(uploadPath);
+		File uploadDir = new File(uploadPath);
+		if (!uploadDir.exists())
+			uploadDir.mkdir();
+
+		String fileName;
+
+		ArrayList<Document> documents = new ArrayList<>();
 
 		try {
 			//grab tax year
@@ -91,24 +108,25 @@ public final class CreateServlet extends HttpServlet {
 			String subject = request.getParameter("subject");
 			//grab sender
 			String sender = email;
+			//grab receiver
+			String receiver = request.getParameter("receiver");
 			//grab attachments
-			List<FileItem> fileItemsList = null;
+			for (Part part : request.getParts()) {
+				fileName = part.getSubmittedFileName();
+				String writePath = uploadPath + File.separator + fileName;
+				part.write(writePath);
+				documents.add(new Document(uploadPath, isSigned, requiresSignature, fileName, part.getSize()));
+			}
 
-			fileItemsList = uploader.parseRequest((RequestContext) request);
-
-			if(!ParcelManager.createParcel(fileItemsList, subject, message, sender, null, new Date(), null, taxYear)) {
+			if (!ParcelManager.createParcel(documents, subject, message, sender, receiver, new Date(), null, taxYear)) {
 				request.setAttribute("errorMessage", "Couldn't send message");
 				getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			} else {
 				request.setAttribute("successMessage", "Message Sent");
 			}
-			
+
 		} catch (NumberFormatException e) {
 			request.setAttribute("errorMessage", "Error in year format, this shouln't happen");
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
-			e.printStackTrace();
-		} catch (FileUploadException e) {
-			request.setAttribute("errorMessage", "Error uploading");
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			e.printStackTrace();
 		} catch (ConfigException e) {

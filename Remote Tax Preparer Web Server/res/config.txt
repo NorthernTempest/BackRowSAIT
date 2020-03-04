@@ -21,3 +21,4 @@ recoverytemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\
 recoverysentmessagepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\text\recoveryMessage.html
 teststringpath:C:\Capstone\TestFiles\string.txt
 PARCEL_EXPIRATION_DAYS:5
+SERVER_STORAGE_PATH:C:/Capstone/TestFiles/ServerStorage
