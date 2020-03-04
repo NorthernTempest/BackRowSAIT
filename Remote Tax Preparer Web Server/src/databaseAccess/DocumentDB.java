@@ -34,61 +34,14 @@ public class DocumentDB {
 		try {
 
 			String preparedQuery = "INSERT INTO document "
-					+ "VALUES (?, ?, ?, ?, ?, ?)";
+					+ "VALUES (?, ?, ?, ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
 			ps.setString(1, doc.getFilePath());
-			ps.setBoolean(2, doc.isRequiresSignature());
-			ps.setBoolean(3, doc.isSigned());
-			ps.setInt(4, parcelID);
-			ps.setString(5, doc.getFileName());
-			ps.setLong(6, doc.getFileSize());
-
-			rows = ps.executeUpdate();
-		}
-
-		catch (SQLException e) {
-
-			System.out.println(e);
-		}
-
-		finally {
-
-			pool.closeConnection(connection);
-		}
-
-		if (rows > 0) {
-
-			return true;
-		}
-
-		return false;
-	}
-	
-	/**
-	 * Establishes a connection with the database and updates the Document in the database
-	 * table that shares a Primary Key with the Document being passed into this method.
-	 * All values of the Document in the database will be updated with the values of the
-	 * object being passed assuming constraints are not violated.
-	 * @param doc Document to update in the database
-	 * @return boolean based on whether or not the operation was successful
-	 */
-	public static boolean update(Document doc, int parcelID) {
-		ConnectionPool pool = ConnectionPool.getInstance();
-		Connection connection = pool.getConnection();
-		int rows = 0;
-
-		try {
-
-			String preparedQuery = "UPDATE document requires_signature = ?, is_signed = ?, "
-					+ " WHERE parcel_id = ?)";
-
-			PreparedStatement ps = connection.prepareStatement(preparedQuery);
-
-			ps.setBoolean(1, doc.isRequiresSignature());
-			ps.setBoolean(2, doc.isSigned());
-			ps.setInt(3, parcelID);
+			ps.setInt(2, parcelID);
+			ps.setString(3, doc.getFileName());
+			ps.setLong(4, doc.getFileSize());
 
 			rows = ps.executeUpdate();
 		}
@@ -177,8 +130,7 @@ public class DocumentDB {
 
 			if (rs.next()) {
 
-				document = new Document(filePath, rs.getBoolean("requires_signature"), rs.getBoolean("is_signed"), 
-										rs.getString("file_name"), rs.getLong("file_size"));
+				document = new Document(filePath, rs.getString("file_name"), rs.getLong("file_size"));
 			}
 		}
 
@@ -220,8 +172,7 @@ public class DocumentDB {
 
 			if (rs.next()) {
 
-				documents.add(new Document(rs.getString("file_path"), rs.getBoolean("requires_signature"), rs.getBoolean("is_signed"), 
-										rs.getString("file_name"), rs.getLong("file_size")));
+				documents.add(new Document(rs.getString("file_path"), rs.getString("file_name"), rs.getLong("file_size")));
 			}
 		}
 
@@ -260,8 +211,7 @@ public class DocumentDB {
 
 			while (rs.next()) {
 
-				documents.add(new Document(rs.getString("file_path"), rs.getBoolean("requires_signature"), rs.getBoolean("is_signed"),
-											rs.getString("file_name"), rs.getLong("file_size")));
+				documents.add(new Document(rs.getString("file_path"), rs.getString("file_name"), rs.getLong("file_size")));
 			}
 		}
 
