@@ -20,10 +20,8 @@
         </div>
         <div class="form-group">
             <div class="card">
-                <div class="card-body">
                     <div id="files"></div>
-                    <div><button type="button" class="btn btn-primary" onclick="addFile()">Add File</button></div>
-                </div>
+                    <div><button type="button" class="btn btn-primary" onclick="addFile()">More Files</button></div>
             </div>
         </div>
         <div class="form-group">

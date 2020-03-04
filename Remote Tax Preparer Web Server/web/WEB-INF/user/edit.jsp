@@ -9,7 +9,7 @@
 <jsp:directive.include file="../../template/head.jsp" />
 
 <form action="" method="POST">
-	<div class="col-md-6">
+	<div class="col-12">
 		<span style="color: red">*</span>Required fields for each section
 	</div>
 	<hr>
@@ -21,7 +21,7 @@
 		<input id="fname" name="fname" class="form-control" value="${fname}" required>
 		<label for="mname">Middle Name</label>
 		<input id="mname" name="mname" class="form-control" value="${mname}">
-		<label id="lname">Last Name<span style="color: red">*</span></label>
+		<label for="lname">Last Name<span style="color: red">*</span></label>
 		<input id="lname" name="lname" class="form-control" value="${lname}" required>
 	</div>
 	<div class="col-md-6">
@@ -115,5 +115,9 @@
 </form>
 
 <script type="text/javascript" src="../../template/js/country-regions.js"></script>
+
+<script>
+
+</script>
 
 <jsp:directive.include file="../../template/foot.jsp" />

@@ -92,9 +92,8 @@
 				<h3>Settings</h3>
 				<label for="language">Preferred Language</label> <select
 					name="language" id="language" value="eng" class="form-control">
-					<option value="eng">English</option>
-					<option value="spn">Spanish</option>
-					<option value="fre">French</option>
+					<option value="EN">English</option>
+					<option value="ES">Español</option>
 				</select>
 			</div>
 		</div>
