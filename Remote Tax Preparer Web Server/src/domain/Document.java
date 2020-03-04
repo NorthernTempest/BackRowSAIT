@@ -5,25 +5,19 @@ package domain;
  * Class Description: Class that encrypts or decrypts documents attached to a
  * parcel object.
  *
- * @author Tristen Kreutz
+ * @author Tristen Kreutz, Cesar Guzman
  *
  */
 public final class Document {
 
 	private transient String filePath;
 
-	private boolean isSigned;
-
-	private boolean requiresSignature;
-
 	private String fileName;
 	
 	private long fileSize;
 
-	public Document(String filePath, boolean isSigned, boolean requiresSignature, String fileName, long fileSize) {
+	public Document(String filePath, String fileName, long fileSize) {
 		this.filePath = filePath;
-		this.isSigned = isSigned;
-		this.requiresSignature = requiresSignature;
 		this.fileName = fileName;
 		this.fileSize = fileSize;
 	}
@@ -35,24 +29,6 @@ public final class Document {
 	 */
 	public String getFilePath() {
 		return filePath;
-	}
-
-	/**
-	 * Returns the isSigned.
-	 * 
-	 * @return the isSigned
-	 */
-	public boolean isSigned() {
-		return isSigned;
-	}
-
-	/**
-	 * Returns the requiresSignature.
-	 * 
-	 * @return the requiresSignature
-	 */
-	public boolean isRequiresSignature() {
-		return requiresSignature;
 	}
 
 	/**
