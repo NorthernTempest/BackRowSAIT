@@ -83,12 +83,36 @@
 
     <hr>
 
-    <div class="col-md-6">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <h3>Settings</h3>
+                <label for="language">Preferred Language</label> <select
+                    name="language" id="language" value="eng" class="form-control">
+                <option value="EN">English</option>
+                <option value="ES">Español</option>
+            </select>
+            </div>
+        </div>
+        <div class="col-md-6"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
     </div>
 </form>
 
 <script type="text/javascript"
 	src="../../template/js/country-regions.js"></script>
+
+<script>
+    window.onload = function() {
+        let country = "${addressCountry}";
+        let state = "${addressRegion}";
+        let lang = "${language}";
+
+    }
+</script>
 
 <jsp:directive.include file="../../template/foot.jsp" />

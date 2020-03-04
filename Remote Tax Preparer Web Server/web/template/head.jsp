@@ -21,14 +21,14 @@
 
     <div class="block text-center" id="nav">
         <span class="nav-first">
-            <a href=""><button class="btn btn-primary btn-lg"><b>Create Return</b></button></a>
+            <a href="/parcel/create"><button class="btn btn-primary btn-lg"><b>Create Return</b></button></a>
         </span>
         <span class="nav-item">
             <a href="">View Returns</a>
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-            <a href="inbox">Messages</a>
+            <a href="/inbox">Messages</a>
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
