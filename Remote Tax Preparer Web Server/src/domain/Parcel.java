@@ -30,16 +30,17 @@ public final class Parcel {
 	
 	private int taxReturnYear;
 	
-	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate, int taxReturnYear) {
+	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate, int taxReturnYear, ArrayList<Document> documents) {
 		
-		setParcelID(parcelID);
-		setSubject(subject);
-		setMessage(message);
-		setSender(sender);
-		setReceiver(receiver);
-		setDateSent(dateSent);
-		setExpirationDate(expirationDate);
-		setTaxReturnYear(taxReturnYear);
+		this.parcelID = parcelID;
+		this.subject = subject;
+		this.message = message;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.dateSent = dateSent;
+		this.expirationDate = expirationDate;
+		this.taxReturnYear = taxReturnYear;
+		this.documents = documents;
 	}
 	
 	/**
@@ -47,13 +48,6 @@ public final class Parcel {
 	 */
 	public int getTaxReturn() {
 		return taxReturnYear;
-	}
-
-	/**
-	 * @param taxReturnYear the taxReturnYear to set
-	 */
-	public void setTaxReturnYear(int taxReturnYear) {
-		this.taxReturnYear = taxReturnYear;
 	}
 
 	/**
@@ -113,66 +107,9 @@ public final class Parcel {
 	}
 
 	/**
-	 * Sets the value of parcelID.
-	 * @param parcelID the parcelID to set
+	 * @return
 	 */
-	public void setParcelID(int parcelID) {
-		this.parcelID = parcelID;
-	}
-
-	/**
-	 * Sets the value of documents.
-	 * @param documents the documents to set
-	 */
-	public void setDocuments(ArrayList<Document> documents) {
-		this.documents = documents;
-	}
-
-	/**
-	 * Sets the value of message.
-	 * @param message the message to set
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	/**
-	 * Sets the value of sender.
-	 * @param sender the sender to set
-	 */
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
-
-	/**
-	 * Sets the value of receiver.
-	 * @param receiver the receiver to set
-	 */
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
-
-	/**
-	 * Sets the value of dateSent.
-	 * @param dateSent the dateSent to set
-	 */
-	public void setDateSent(Date dateSent) {
-		this.dateSent = dateSent;
-	}
-
-	/**
-	 * Sets the value of expirationDate.
-	 * @param expirationDate the expirationDate to set
-	 */
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
 	public String getSubject() {
 		return subject;
-	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
 	}
 }

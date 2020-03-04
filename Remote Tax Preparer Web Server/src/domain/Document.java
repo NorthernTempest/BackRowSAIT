@@ -16,17 +16,14 @@ public final class Document {
 
 	private boolean requiresSignature;
 
-	private int parcelID;
-
 	private String fileName;
 	
 	private long fileSize;
 
-	public Document(String filePath, boolean isSigned, boolean requiresSignature, int parcelID, String fileName, long fileSize) {
+	public Document(String filePath, boolean isSigned, boolean requiresSignature, String fileName, long fileSize) {
 		this.filePath = filePath;
 		this.isSigned = isSigned;
 		this.requiresSignature = requiresSignature;
-		this.parcelID = parcelID;
 		this.fileName = fileName;
 		this.fileSize = fileSize;
 	}
@@ -59,15 +56,6 @@ public final class Document {
 	}
 
 	/**
-	 * Returns the parcelID.
-	 * 
-	 * @return the parcelID
-	 */
-	public int getParcelID() {
-		return parcelID;
-	}
-
-	/**
 	 * 
 	 * @return
 	 */
@@ -77,57 +65,5 @@ public final class Document {
 	
 	public long getFileSize() {
 		return fileSize;
-	}
-
-	/**
-	 * Sets the value of filePath.
-	 * 
-	 * @param filePath the filePath to set
-	 */
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	/**
-	 * Sets the value of isSigned.
-	 * 
-	 * @param isSigned the isSigned to set
-	 */
-	public void setSigned(boolean isSigned) {
-		this.isSigned = isSigned;
-	}
-
-	/**
-	 * Sets the value of requiresSignature.
-	 * 
-	 * @param requiresSignature the requiresSignature to set
-	 */
-	public void setRequiresSignature(boolean requiresSignature) {
-		this.requiresSignature = requiresSignature;
-	}
-
-	/**
-	 * Sets the value of parcelID.
-	 * 
-	 * @param parcelID the parcelID to set
-	 */
-	public void setParcelID(int parcelID) {
-		this.parcelID = parcelID;
-	}
-
-	/**
-	 * 
-	 * @param fileName
-	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	
-	/**
-	 * 
-	 * @param fileSize
-	 */
-	public void setFileSize(long fileSize) {
-		this.fileSize = fileSize;
 	}
 }
