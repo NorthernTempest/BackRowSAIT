@@ -43,6 +43,7 @@ public final class Parcel {
 		this.expirationDate = expirationDate;
 		this.taxReturnYear = taxReturnYear;
 		this.documents = documents;
+		this.requiresSignature = requiresSignature;
 	}
 	
 	/**
