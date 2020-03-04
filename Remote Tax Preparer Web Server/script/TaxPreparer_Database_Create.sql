@@ -62,29 +62,25 @@ CREATE TABLE parcel (
     date_sent DATETIME NOT NULL,
     expiration_date DATE,
 	tax_return_year YEAR NOT NULL,
+	requires_signature CHAR(1) NOT NULL,
+    is_signed CHAR(1) NOT NULL,
     FOREIGN KEY (sender) REFERENCES user(email),
     FOREIGN KEY (receiver) REFERENCES user(email),
 	FOREIGN KEY (receiver, tax_return_year) REFERENCES tax_return(email, year));
+	
+ALTER TABLE parcel
+ADD CONSTRAINT CHK_parcel_requires_signature CHECK (requires_signature = 'T' OR requires_signature = 'F');
+
+ALTER TABLE parcel
+ADD CONSTRAINT CHK_parcel_is_signed CHECK (is_signed = 'T' OR is_signed = 'F');
 	
 COMMIT;
 	
 CREATE TABLE document (
     file_path VARCHAR(30) PRIMARY KEY,
-    requires_signature CHAR(1) NOT NULL,
-    is_signed CHAR(1) NOT NULL,
-    is_stored CHAR(1) NOT NULL,
     parcel_id INT UNSIGNED NOT NULL,
     FOREIGN KEY (parcel_id) REFERENCES parcel(parcel_id));
     
-ALTER TABLE document
-ADD CONSTRAINT CHK_document_requires_signature CHECK (requires_signature = 'T' OR requires_signature = 'F');
-
-ALTER TABLE document
-ADD CONSTRAINT CHK_document_is_signed CHECK (is_signed = 'T' OR is_signed = 'F');
-
-ALTER TABLE document
-ADD CONSTRAINT CHK_document_is_stored CHECK (is_stored = 'T' OR is_stored = 'F');
-
 COMMIT;
 
 CREATE TABLE log (
@@ -167,13 +163,13 @@ INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_h
 VALUES ("jdgoerzen@gmail.com", "mr", "Jesse", "David", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "1-587-123-4567", "1-587-987-6543", "5000 Riverview Pl SE", "Calgary", "Alberta", "Canada", "T2C4K6", "T", "en", "T");
 
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
-VALUES ("proton1guzman@gmail.com", "Cesar", "Guzman", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "AkJv9U1EomdagYn0SF/Hl9XiKDt2s2dLHL0TukPO3+k=", CURDATE(), "T", "eng", "T");
+VALUES ("proton1guzman@gmail.com", "Cesar", "Guzman", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "AkJv9U1EomdagYn0SF/Hl9XiKDt2s2dLHL0TukPO3+k=", CURDATE(), "T", "en", "T");
 
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);
 
-INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year)
-VALUES ("Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 2019);
+INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year, requires_signature, is_signed)
+VALUES ("Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 2019, 'F', 'F');
 
-INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year)
-VALUES ("Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 2019);
+INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year, requires_signature, is_signed)
+VALUES ("Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 2019, 'F', 'F');
