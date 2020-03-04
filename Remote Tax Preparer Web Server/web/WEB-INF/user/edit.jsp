@@ -36,7 +36,8 @@
 		<h3>Address</h3>
 		<label for="address1">Street Address<span style="color: red">*</span></label>
 		<input id="address1" name="address1" class="form-control" value="${address1}" required>
-		<input id="address2" name="address2" class="form-control" value="${address2}">
+        <label for="address2">Street Address 2<span style="color: red">*</span></label>
+        <input id="address2" name="address2" class="form-control" value="${address2}">
 		<label for="addressCity">City<span style="color: red">*</span></label>
 		<input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
 		<label for="addressRegion">Province/State<span style="color: red">*</span></label>
