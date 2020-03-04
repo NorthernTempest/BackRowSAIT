@@ -75,6 +75,8 @@ COMMIT;
 CREATE TABLE document (
     file_path VARCHAR(30) PRIMARY KEY,
     parcel_id INT UNSIGNED NOT NULL,
+    file_name VARCHAR(30) NOT NULL,
+    file_size LONG NOT NULL,
     FOREIGN KEY (parcel_id) REFERENCES parcel(parcel_id));
     
 COMMIT;
