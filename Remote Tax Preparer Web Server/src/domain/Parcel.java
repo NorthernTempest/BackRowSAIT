@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * 
@@ -12,7 +13,7 @@ import java.util.Date;
  */
 public final class Parcel {
 
-	private int parcelID;
+	private String parcelID;
 	
 	private ArrayList<Document> documents;
 	
@@ -32,9 +33,9 @@ public final class Parcel {
 	
 	private boolean requiresSignature;
 	
-	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate, int taxReturnYear, ArrayList<Document> documents, boolean requiresSignature) {
+	public Parcel (String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate, int taxReturnYear, ArrayList<Document> documents, boolean requiresSignature) {
 		
-		this.parcelID = parcelID;
+		this.parcelID = UUID.randomUUID().toString();
 		this.subject = subject;
 		this.message = message;
 		this.sender = sender;
@@ -57,7 +58,7 @@ public final class Parcel {
 	 * Returns the parcelID.
 	 * @return the parcelID
 	 */
-	public int getParcelID() {
+	public String getParcelID() {
 		return parcelID;
 	}
 
