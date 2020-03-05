@@ -622,9 +622,12 @@ public final class UserManager {
 
 	}
   
-	public static boolean isAdmin(User user) {
-		
-		return false;
+	public static int getRole(String sessionID) throws ConfigException {
+		User user = getUser(SessionManager.getEmail(sessionID));
+		if (user == null) {
+			return -1;
+		}
+		return user.getPermissionLevel();
   }
   
 	public static boolean deleteAccount(String sessionID, String ip) {

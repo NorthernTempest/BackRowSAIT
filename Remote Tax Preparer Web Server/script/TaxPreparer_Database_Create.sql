@@ -73,9 +73,9 @@ ADD CONSTRAINT CHK_parcel_requires_signature CHECK (requires_signature = 'T' OR 
 COMMIT;
 	
 CREATE TABLE document (
-    file_path VARCHAR(30) PRIMARY KEY,
+    file_path VARCHAR(420) PRIMARY KEY,
     parcel_id CHAR(36) NOT NULL,
-    file_name VARCHAR(30) NOT NULL,
+    file_name VARCHAR(69) NOT NULL,
     file_size LONG NOT NULL,
     FOREIGN KEY (parcel_id) REFERENCES parcel(parcel_id));
     
@@ -154,6 +154,12 @@ SET GLOBAL event_scheduler = ON;
 INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
 VALUES ("test@test.com", "mr", "Timmy", "Tiberius", "Turner", 1, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
 
+INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
+VALUES ("admin@test.com", "mr", "Homer", "Biggy", "Simpson", 3, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
+
+INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
+VALUES ("preparer@test.com", "mr", "Chip", "Tiberius", "Skylark", 2, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
+
 INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
 VALUES ("example@test.com", "Roger", "Rabbit", 1, "5b38e98e36f7316530be21f4ac1089d5689010ce55469f8d22c52053e32e1ea6", "EUmgQiGBpAy+pcPdAAVR1e2zd4xl8fcz0tF3sQOd5uI=", CURDATE(), "T", "en", "T");
 
@@ -166,8 +172,8 @@ VALUES ("proton1guzman@gmail.com", "Cesar", "Guzman", 1, "1aeabca5c2298936def8a3
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);
 
-INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year, requires_signature)
-VALUES ("Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 2019, 'F');
+INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, tax_return_year, requires_signature)
+VALUES ("123e4567-e89b-12d3-a456-556642440000", "Welcome", "Hello Timmy! I am Roger and I will be your bimbo for this year.", "example@test.com", "test@test.com", CURDATE(), 2019, 'F');
 
-INSERT INTO parcel (subject, message, sender, receiver, date_sent, tax_return_year, requires_signature)
-VALUES ("Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 2019, 'F');
+INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, tax_return_year, requires_signature)
+VALUES ("123e4567-e89b-12d3-a456-556642440001", "Regarding Your Return", "Good Afternoon, Timmy. Looking over your form, you seem to have forgotten literally everything. Please fix.", "example@test.com", "test@test.com", CURDATE(), 2019, 'F');
