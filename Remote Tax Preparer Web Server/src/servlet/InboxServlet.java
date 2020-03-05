@@ -49,8 +49,8 @@ public final class InboxServlet extends HttpServlet {
 
 		//give the jsp the user's messages
 		try {
-			request.setAttribute("parcels", ParcelManager.getParcels(-1, null, email, null, -1));
-			Debugger.log("Parcels: " + ParcelManager.getParcels(-1, null, email, null, -1));
+			request.setAttribute("parcels", ParcelManager.getParcels(null, null, email, null, -1));
+			Debugger.log("Parcels: " + ParcelManager.getParcels(null, null, email, null, -1));
 		} catch (ConfigException e) {
 			// TODO Auto-generated catch block
 			Debugger.log("CONFIG EXCEPTION");
