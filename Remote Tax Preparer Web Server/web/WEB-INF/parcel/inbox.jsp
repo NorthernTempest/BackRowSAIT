@@ -29,7 +29,7 @@
 				onclick="window.location='/parcel/view?parcelID=${parcel.parcelID}'">
 				<td scope="row">${parcel.sender}</td>
 				<td>${parcel.subject}</td>
-				<td>${parcel.message.substring(0,20)}...</td>
+				<td>${parcel.message}</td>
 				<td>${parcel.dateSent}</td>
 				<td>${parcel.documents.size()}</td>
 				<td>${parcel.expirationDate}</td>
@@ -38,5 +38,27 @@
 	</table>
 
 </div>
+
+<script>
+    const parcels = [
+        <c:forEach var="parcel" items="${parcels}">
+        {
+            "sender": "${parcel.sender}",
+            "receiver": "${parcel.receiver}",
+            "subject": "${parcel.subject}",
+            "message": "${parcel.message}",
+            "dateSent": Date.parse("${parcel.dateSent}"),
+            "noOfDocuments": "${parcel.documents.size()}",
+            "expirationDate": Date.parse("${parcel.expirationDate}"),
+            "taxReturnYear": "${parcel.taxReturnYear}",
+            "requiresSignature": ${parcel.requiresSignature?"true":"false"}
+        },
+        </c:forEach>
+        {}
+    ];
+    parcels.pop();
+
+
+</script>
 
 <jsp:directive.include file="../../template/foot.jsp" />

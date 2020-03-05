@@ -2,38 +2,79 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * 
- * Class Description: Class defining a parcel's attributes and methods to be used in sending messages and documents between clients.
+ * Class Description: Class defining a parcel's attributes and methods to be
+ * used in sending messages and documents between clients.
  *
  * @author Tristen Kreutz, Cesar Guzman
  *
  */
 public final class Parcel {
 
-	private int parcelID;
-	
+	private String parcelID;
+
 	private ArrayList<Document> documents;
-	
+
 	private String subject;
-	
+
 	private String message;
-	
+
 	private String sender;
-	
+
 	private String receiver;
-	
+
 	private Date dateSent;
-	
+
 	private Date expirationDate;
-	
+
 	private int taxReturnYear;
-	
+
 	private boolean requiresSignature;
-	
-	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate, int taxReturnYear, ArrayList<Document> documents, boolean requiresSignature) {
-		
+
+	/**
+	 * @param subject
+	 * @param message
+	 * @param sender
+	 * @param receiver
+	 * @param dateSent
+	 * @param expirationDate
+	 * @param taxReturnYear
+	 * @param documents
+	 * @param requiresSignature
+	 */
+	public Parcel(String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate,
+			int taxReturnYear, ArrayList<Document> documents, boolean requiresSignature) {
+
+		this.parcelID = UUID.randomUUID().toString();
+		this.subject = subject;
+		this.message = message;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.dateSent = dateSent;
+		this.expirationDate = expirationDate;
+		this.taxReturnYear = taxReturnYear;
+		this.documents = documents;
+		this.requiresSignature = requiresSignature;
+	}
+
+	/**
+	 * @param parcelID
+	 * @param subject
+	 * @param message
+	 * @param sender
+	 * @param receiver
+	 * @param dateSent
+	 * @param expirationDate
+	 * @param taxReturnYear
+	 * @param documents
+	 * @param requiresSignature
+	 */
+	public Parcel(String parcelID, String subject, String message, String sender, String receiver, Date dateSent,
+			Date expirationDate, int taxReturnYear, ArrayList<Document> documents, boolean requiresSignature) {
+
 		this.parcelID = parcelID;
 		this.subject = subject;
 		this.message = message;
@@ -45,24 +86,26 @@ public final class Parcel {
 		this.documents = documents;
 		this.requiresSignature = requiresSignature;
 	}
-	
+
 	/**
 	 * @return the taxReturn
 	 */
-	public int getTaxReturn() {
+	public int getTaxReturnYear() {
 		return taxReturnYear;
 	}
 
 	/**
 	 * Returns the parcelID.
+	 * 
 	 * @return the parcelID
 	 */
-	public int getParcelID() {
+	public String getParcelID() {
 		return parcelID;
 	}
 
 	/**
 	 * Returns the documents.
+	 * 
 	 * @return the documents
 	 */
 	public ArrayList<Document> getDocuments() {
@@ -71,6 +114,7 @@ public final class Parcel {
 
 	/**
 	 * Returns the message.
+	 * 
 	 * @return the message
 	 */
 	public String getMessage() {
@@ -79,6 +123,7 @@ public final class Parcel {
 
 	/**
 	 * Returns the sender.
+	 * 
 	 * @return the sender
 	 */
 	public String getSender() {
@@ -87,6 +132,7 @@ public final class Parcel {
 
 	/**
 	 * Returns the receiver.
+	 * 
 	 * @return the receiver
 	 */
 	public String getReceiver() {
@@ -95,6 +141,7 @@ public final class Parcel {
 
 	/**
 	 * Returns the dateSent.
+	 * 
 	 * @return the dateSent
 	 */
 	public Date getDateSent() {
@@ -103,6 +150,7 @@ public final class Parcel {
 
 	/**
 	 * Returns the expirationDate.
+	 * 
 	 * @return the expirationDate
 	 */
 	public Date getExpirationDate() {

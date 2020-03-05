@@ -37,19 +37,20 @@ public class ParcelDB {
 
 		try {
 
-			String preparedQuery = "INSERT INTO parcel (subject, message, sender, receiver, date_sent, expiration_date, year, requires_signature"
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			String preparedQuery = "INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, expiration_date, tax_return_year, requires_signature)"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
-			ps.setString(1, parcel.getSubject());
-			ps.setString(2, parcel.getMessage());
-			ps.setString(3, parcel.getSender());
-			ps.setString(4, parcel.getReceiver());
-			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
-			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
-			ps.setInt(7, parcel.getTaxReturn());
-			ps.setBoolean(8, parcel.isRequiresSignature());
+			ps.setString(1, parcel.getParcelID());
+			ps.setString(2, parcel.getSubject());
+			ps.setString(3, parcel.getMessage());
+			ps.setString(4, parcel.getSender());
+			ps.setString(5, parcel.getReceiver());
+			ps.setDate(6, new java.sql.Date(parcel.getDateSent().getTime()));
+			ps.setDate(7, new java.sql.Date(parcel.getExpirationDate().getTime()));
+			ps.setInt(8, parcel.getTaxReturnYear());
+			ps.setBoolean(9, parcel.isRequiresSignature());
 
 			rows = ps.executeUpdate();
 		}
@@ -90,7 +91,7 @@ public class ParcelDB {
 		try {
 
 			String preparedQuery = "UPDATE parcel subject = ?, message = ?, sender = ?, "
-					+ "receiver = ?, date_sent = ?, expiration_date = ?, year = ?, requires_signature = ? WHERE parcel_id = ?)";
+					+ "receiver = ?, date_sent = ?, expiration_date = ?, tax_return_year = ?, requires_signature = ? WHERE parcel_id = ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -100,9 +101,9 @@ public class ParcelDB {
 			ps.setString(4, parcel.getReceiver());
 			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
 			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
-			ps.setInt(7, parcel.getTaxReturn());
+			ps.setInt(7, parcel.getTaxReturnYear());
 			ps.setBoolean(8, parcel.isRequiresSignature());
-			ps.setInt(9, parcel.getParcelID());
+			ps.setString(9, parcel.getParcelID());
 
 			rows = ps.executeUpdate();
 		}
@@ -133,7 +134,7 @@ public class ParcelDB {
 	 * @param parcelID parcelID of the Parcel to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public static boolean delete(int parcelID) {
+	public static boolean delete(String parcelID) {
 
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -145,7 +146,7 @@ public class ParcelDB {
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
-			ps.setInt(1, parcelID);
+			ps.setString(1, parcelID);
 
 			rows = ps.executeUpdate();
 		}
@@ -176,7 +177,7 @@ public class ParcelDB {
 	 * @param parcelID parcelID of the Parcel to retrieve from the database
 	 * @return Parcel that contains the information of the requested Parcel
 	 */
-	public static Parcel get(int parcelID) {
+	public static Parcel get(String parcelID) {
 
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -189,16 +190,16 @@ public class ParcelDB {
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
-			ps.setInt(1, parcelID);
+			ps.setString(1, parcelID);
 
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
 
-				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
+				parcel = new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")), rs.getBoolean("requires_signature"));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
 			}
 		}
 
@@ -239,10 +240,10 @@ public class ParcelDB {
 
 			while (rs.next()) {
 
-				parcels.add(new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
+				parcels.add(new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")), rs.getBoolean("requires_signature")));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature"))));
 			}
 		}
 
@@ -270,7 +271,7 @@ public class ParcelDB {
 	 * @param taxReturnID
 	 * @return ArrayList<Parcel> containing all relevant Parcels from the database
 	 */
-	public static ArrayList<Parcel> getParcelsByParameter(int parcelID, String sender, String receiver, Date dateSent,
+	public static ArrayList<Parcel> getParcelsByParameter(String parcelID, String sender, String receiver, Date dateSent,
 			int year) {
 
 		ConnectionPool pool = ConnectionPool.getInstance();
@@ -282,7 +283,7 @@ public class ParcelDB {
 		
 		try {
 
-			if (parcelID < 0 && sender == null && receiver == null && dateSent == null && year < 0) {
+			if (parcelID == null && sender == null && receiver == null && dateSent == null && year < 0) {
 				preparedQuery = "SELECT * FROM parcel";
 				PreparedStatement ps = connection.prepareStatement(preparedQuery);
 				rs = ps.executeQuery();
@@ -294,7 +295,7 @@ public class ParcelDB {
 				int count = 0;
 				preparedQuery = "SELECT * FROM parcel WHERE ";
 
-				if (parcelID >= 0) {
+				if (parcelID != null) {
 					preparedQuery += "parcel_id = ? ";
 					parameters.add(parcelID);
 					count++;
@@ -342,10 +343,10 @@ public class ParcelDB {
 
 			while (rs.next()) {
 
-				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
+				parcel = new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
 				parcels.add(parcel);
 			}
 		}
@@ -372,7 +373,7 @@ public class ParcelDB {
 	 * @return true if email is allowed to view this parcel. false if not.
 	 * @throws ConfigException 
 	 */
-	public static boolean isVisibleToUser(String email, int parcelID) throws ConfigException {
+	public static boolean isVisibleToUser(String email, String parcelID) throws ConfigException {
 		Parcel parcel = get(parcelID);
 		
 		Debugger.log(parcelID);

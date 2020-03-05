@@ -20,20 +20,29 @@
     </div>
 
     <div class="block text-center" id="nav">
+		<c:if test="${role == 1}">
         <span class="nav-first">
             <a href="/parcel/create"><button class="btn btn-primary btn-lg"><b>Create Return</b></button></a>
-        </span>
+        </span></c:if>
         <span class="nav-item">
-            <a href="/inbox">View Returns</a>
-        </span>
-        <span class="nav-separator">|</span>
-        <span class="nav-item">
-            <a href="/inbox">Messages</a>
+            <a href="/inbox">Inbox</a>
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
             <a href="/settings">Account</a>
         </span>
+		<c:if test="${role > 1}">
+			<span class="nav-separator">|</span>
+        	<span class="nav-item">
+            	<a href="/admin">Reports</a>
+        	</span>
+		</c:if>
+		<c:if test="${role > 2}">
+			<span class="nav-separator">|</span>
+        	<span class="nav-item">
+            	<a href="/admin">Admin</a>
+        	</span>
+		</c:if>
         <span class="nav-separator">|</span>
         <span class="nav-item">
             <a href="/login?action=logout">Logout</a>

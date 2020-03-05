@@ -72,7 +72,7 @@ public class PaymentDB {
 	 * @param paymentID paymentID of the Payment to remove from the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public static boolean delete(int paymentID) {
+	public static boolean delete(String paymentID) {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		int rows = 0;
@@ -83,7 +83,7 @@ public class PaymentDB {
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
-			ps.setInt(1, paymentID);
+			ps.setString(1, paymentID);
 
 			rows = ps.executeUpdate();
 		}
@@ -113,7 +113,7 @@ public class PaymentDB {
 	 * @param paymentID paymentID of the Payment to retrieve from the database
 	 * @return Payment that contains the information of the requested Payment
 	 */
-	public static Payment get(int paymentID) {
+	public static Payment get(String paymentID) {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		ResultSet rs;
@@ -125,7 +125,7 @@ public class PaymentDB {
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
-			ps.setInt(1, paymentID);
+			ps.setString(1, paymentID);
 
 			rs = ps.executeQuery();
 
@@ -171,7 +171,7 @@ public class PaymentDB {
 
 			while (rs.next()) {
 
-				payments.add(new Payment(rs.getInt("paymentID"), rs.getString("payment_name"), rs.getInt("year"),
+				payments.add(new Payment(rs.getString("paymentID"), rs.getString("payment_name"), rs.getInt("year"),
 						rs.getString("payment_type"), rs.getDouble("amount"), rs.getDate("date")));
 			}
 		}
