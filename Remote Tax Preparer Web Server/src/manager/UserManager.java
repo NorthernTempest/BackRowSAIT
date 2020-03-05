@@ -398,7 +398,11 @@ public final class UserManager {
 						successMessage += "<br/> Password changes have been saved.";
 					else
 						request.setAttribute("errorMessagePassword", "There was an error setting your password.");
-				} catch (IllegalArgumentException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+				} catch (IllegalArgumentException e ) {
+					request.setAttribute("errorMessagePassword", e.getMessage());
+					LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+					e.printStackTrace();
+				} catch ( NoSuchAlgorithmException | InvalidKeySpecException e) {
 					request.setAttribute("errorMessagePassword", "There was an error setting your password.");
 					LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
 					e.printStackTrace();
