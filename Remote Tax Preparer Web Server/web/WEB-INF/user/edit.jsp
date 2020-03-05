@@ -104,12 +104,33 @@
 	</div>
 </form>
 <br>
-<form action="" method="POST">
-	<div class="col-md-6">
-		<input type="hidden" name="delete">
-		<button type="submit" class="btn btn-danger">Delete Account</button>
+<div class="col-md-6">
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm">
+		Delete Account
+	</button>
+</div>
+<div id="deleteConfirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form action="/settings" method="POST">
+				<div class="modal-body">
+					<input type="hidden" name="delete">
+					<p>Are you sure that you want to delete your account?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Yes, I want to delete my account</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
 	</div>
-</form>
+</div>
 
 <script type="text/javascript" src="../../template/js/country-regions.js"></script>
 
