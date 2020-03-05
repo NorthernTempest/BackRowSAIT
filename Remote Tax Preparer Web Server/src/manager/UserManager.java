@@ -623,4 +623,9 @@ public final class UserManager {
 		return true;
 
 	}
+	
+	public static boolean isAdmin(User user) {
+		
+		return false;
+	}
 }
