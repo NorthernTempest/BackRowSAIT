@@ -78,9 +78,7 @@ public final class UserManager {
 		if (user != null) {
 			try {
 				String pass_hash = EncryptionService.hash(password, user.getPassSalt());
-				if (user.getPassHash().equals(pass_hash)) {
-					return true;
-				}
+				return user.getPassHash().equals(pass_hash) && user.isActive();
 			} catch (InvalidKeySpecException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -623,9 +621,21 @@ public final class UserManager {
 		return true;
 
 	}
-	
+  
 	public static boolean isAdmin(User user) {
 		
 		return false;
+  }
+  
+	public static boolean deleteAccount(String sessionID, String ip) {
+		User u = UserDB.get(SessionDB.getEmail(sessionID));
+		
+		if(u != null && u.isActive() && u.isVerified()) {
+			u.setActive(false);
+			UserDB.update(u);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
