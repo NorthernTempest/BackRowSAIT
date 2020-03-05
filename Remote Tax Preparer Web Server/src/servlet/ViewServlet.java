@@ -1,7 +1,13 @@
 package servlet;
 
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,9 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import domain.Document;
+import domain.Parcel;
 import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
+import service.EncryptionService;
 import util.cesar.Debugger;
 
 /**
@@ -60,7 +69,13 @@ public final class ViewServlet extends HttpServlet {
 		try {
 			if(ParcelManager.isVisibleToUser(email, parcelID)) {
 				//push the parcel to jsp
-				session.setAttribute("parcel", ParcelManager.get(parcelID));
+				Parcel parcel = ParcelManager.get(parcelID);
+				ArrayList<String> documentPaths = new ArrayList<>();
+				for(Document document : parcel.getDocuments()) {
+					documentPaths.add(EncryptionService.decryptDocument(document));
+				}
+				session.setAttribute("parcel", parcel);
+				session.setAttribute("documentPaths", documentPaths);
 			} else {
 				//not authorized to view parcel
 				request.setAttribute("errorMessage", "Error viewing message");
@@ -80,6 +95,24 @@ public final class ViewServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			request.setAttribute("errorMessage", "Error viewing message");
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
