@@ -1,7 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.UUID;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import databaseAccess.UserDB;
 import manager.SessionManager;
 import manager.UserManager;
+import util.cesar.Debugger;
 
 /**
  * Servlet for logging into the site.
@@ -34,6 +38,34 @@ public final class RegisterServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		if (request.getParameter("action")!=null&&request.getParameter("action").equals("resend")) {
+			try {
+				UserManager.resendVerificationEmail(request.getParameter("email"));
+				String message = "Registration successful, please click the verification link sent to your email to continue. Remember to check your spam folder. If no email is sent, please click <a href=\"/register?action=resend&email="+request.getParameter("email")+"\">here</a>. If problem persists, please contact us directly.";
+				request.setAttribute("successMessage", message);
+				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+			} catch (MessagingException e) {
+				setRegisterAttributes(request);
+				request.setAttribute("message",
+						e.getMessage());
+				getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
+			}
+			
+		}
+		if (request.getParameter("verify")!=null) {
+			String registrationID = request.getParameter("verify");
+			try {
+				UserManager.verifyEmail(registrationID);
+				request.setAttribute("successMessage", "Verification successful, please log in to continue");
+				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+			} catch (Exception e) {
+				setRegisterAttributes(request);
+				request.setAttribute("message",
+						e.getMessage());
+				getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
+				return;
+			}
+		}
 		// Display Register page
 		getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
 	}
@@ -91,28 +123,31 @@ public final class RegisterServlet extends HttpServlet {
 		try {
 			created = UserManager.createUser(email, password, passwordConf, title, fName, mName, lName, phone, fax,
 					language, streetAddress, streetAddress2, city, province, country, postalCode);
-		} catch (Exception e) {
+		} catch (MessagingException e) {
+			setRegisterAttributes(request);
+			request.setAttribute("message",
+					e.getMessage());
+			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
+			//TODO
+			e.printStackTrace();
+			return;
+		}catch (Exception e) {
 			setRegisterAttributes(request);
 			request.setAttribute("errorMessage",
-					"Unexpected error occurred, please try again later. If problem persists please contact us directly");
+					e.getMessage());
+			//TODO
+			e.printStackTrace();
 			getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
 			return;
 		}
 
 		String message;
 		if (created) {
-			message = "Registration successful, please click the verification link sent to your email to continue";
+			message = "Registration successful, please click the verification link sent to your email to continue. Remember to check your spam folder. If no email is sent, please click <a href=\"/register?action=resend&email="+email+"\">here</a>. If problem persists, please contact us directly.";
 		} else {
-			message = "Something went wrong with registration, please check your enterred information and try again. If problem persists, please contact us directly";
+			message = "Something went wrong with registration, please check your entered information and try again. If problem persists, please contact us directly";
 		}
-		// dope. tell the user all is good
-		// tell the user a verification email has been sent
-		// go to login once user is like K
-		// did you not?
-		// uh oh. tell the user is not good
-		// to to register page once user is like K
-
-		// Show a page, probably login
+		request.setAttribute("successMessage", message);
 		getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 	}
 

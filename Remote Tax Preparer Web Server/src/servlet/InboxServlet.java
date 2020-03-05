@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import domain.Document;
+import domain.Parcel;
 import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
@@ -49,8 +52,14 @@ public final class InboxServlet extends HttpServlet {
 
 		//give the jsp the user's messages
 		try {
-			request.setAttribute("parcels", ParcelManager.getParcels(null, null, email, null, -1));
-			Debugger.log("Parcels: " + ParcelManager.getParcels(null, null, email, null, -1));
+			ArrayList<Parcel> parcels = ParcelManager.getParcels(null, null, email, null, -1);
+			request.setAttribute("parcels", parcels);
+			for(Parcel parcel : parcels) {
+				Debugger.log("Parcel get: " + parcel.getSubject());
+				for(Document document : parcel.getDocuments()) {
+					Debugger.log("Inbox document debug: " + document.getFileName());
+				}
+			}
 		} catch (ConfigException e) {
 			// TODO Auto-generated catch block
 			Debugger.log("CONFIG EXCEPTION");

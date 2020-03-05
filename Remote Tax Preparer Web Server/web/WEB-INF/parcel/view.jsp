@@ -17,8 +17,8 @@
 	${parcel.expirationDate}<br>
 	<p>${parcel.message}</p>
 
-    <c:forEach var="doc" items="${parcel.documents}">
-        ${doc.filePath}<br>
+    <c:forEach var="doc" items="${documentPaths}">
+        ${doc}<br>
     </c:forEach>
 
 </div>

@@ -46,7 +46,7 @@ public final class UserManager {
 	/**
 	 * Time that the recovery verification id is valid
 	 */
-	private static int recoveryTimeout;
+	private static int verificationTimeout;
 	/**
 	 * A parameter that determines whether the system has been
 	 */
@@ -57,7 +57,7 @@ public final class UserManager {
 			maxLoginAttempts = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
 			loginAttemptTimelimit = Integer.parseInt(ConfigService.fetchFromConfig("LOGIN_ATTEMPT_TIMELIMIT:"));
 			sessionTimeout = Integer.parseInt(ConfigService.fetchFromConfig("sessiontime:"));
-			recoveryTimeout = Integer.parseInt(ConfigService.fetchFromConfig("recoverytime:"));
+			verificationTimeout = Integer.parseInt(ConfigService.fetchFromConfig("verificationtime:"));
 			init = true;
 		}
 	}
@@ -157,10 +157,10 @@ public final class UserManager {
 	 * Takes an email for a User and retrieves all account information for that User
 	 * that is stored in the user table of the database.
 	 * 
-	 * @param email email of User to retrieve information for
-	 * @return Properties objects containing the account information of the request
-	 *         User
-	 * @throws ConfigException
+	 * @param request HttpServletRequest The web request to fill with the user's
+	 *                attributes.
+	 * @return HttpServletRequest The filled in request.
+	 * @throws ConfigException if the config file cannot be found.
 	 */
 	public static HttpServletRequest getAccountInfo(HttpServletRequest request) throws ConfigException {
 		init();
@@ -185,6 +185,14 @@ public final class UserManager {
 		return request;
 	}
 
+	/**
+	 * Updates the info of the user who sent the given request.
+	 * 
+	 * @param request HttpServletRequest The web request to get the user's
+	 *                attributes from.
+	 * @return HttpServletRequest The request updated with any errors.
+	 * @throws ConfigException if the config file cannot be found.
+	 */
 	public static HttpServletRequest setAccountInfo(HttpServletRequest request) throws ConfigException {
 		init();
 		String sessionID = request.getSession().getId();
@@ -458,7 +466,7 @@ public final class UserManager {
 		boolean output = false;
 		User u = UserDB.get(email);
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.MINUTE, recoveryTimeout);
+		c.add(Calendar.MINUTE, verificationTimeout);
 		output = u != null && u.isActive()
 				&& (u.getLastVerificationType() != User.VERIFY_TYPE_PASS_RESET || u.getLastVerificationAttempt() == null
 						|| !u.getLastVerificationAttempt().before(new Date())
@@ -497,7 +505,7 @@ public final class UserManager {
 		boolean output = false;
 
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.MINUTE, -recoveryTimeout);
+		c.add(Calendar.MINUTE, -verificationTimeout);
 
 		output = u != null && u.isActive() && u.isVerified() && u.getLastVerificationType() == verificationType
 				&& u.getLastVerificationAttempt() != null && u.getLastVerificationAttempt().after(c.getTime())
@@ -525,7 +533,7 @@ public final class UserManager {
 		User u = UserDB.getByVerificationID(verificationID);
 
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.MINUTE, -recoveryTimeout);
+		c.add(Calendar.MINUTE, -verificationTimeout);
 
 		boolean output = u != null && u.isActive() && u.isVerified()
 				&& u.getLastVerificationType() == User.VERIFY_TYPE_PASS_RESET && u.getLastVerificationAttempt() != null
@@ -546,19 +554,8 @@ public final class UserManager {
 					} else {
 						throw new IllegalArgumentException("You cannot use the same password twice in a row.");
 					}
-				} catch (NumberFormatException e) {
-					output = false;
-					LogEntryManager.logError(u.getEmail(), e, ip);
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					output = false;
-					LogEntryManager.logError(u.getEmail(), e, ip);
-					e.printStackTrace();
-				} catch (InvalidKeySpecException e) {
-					output = false;
-					LogEntryManager.logError(u.getEmail(), e, ip);
-					e.printStackTrace();
-				} catch (ConfigException e) {
+				} catch (NumberFormatException | NoSuchAlgorithmException | InvalidKeySpecException
+						| ConfigException e) {
 					output = false;
 					LogEntryManager.logError(u.getEmail(), e, ip);
 					e.printStackTrace();
@@ -577,49 +574,79 @@ public final class UserManager {
 	 * @return true if the user exists, false if not.
 	 */
 	public static boolean userExists(String email) {
-
-		if (UserDB.get(email) == null) {
-			return false;
-		}
-
-		return true;
+		return UserDB.get(email) != null;
 	}
 
+	/**
+	 * A little silly.
+	 * 
+	 * @param password
+	 * @param passwordConf
+	 * @return
+	 */
 	public static boolean passwordConf(String password, String passwordConf) {
-		if (password.equals(passwordConf)) {
-			return true;
-		} else {
-			return false;
-		}
+		return password.equals(passwordConf);
 	}
 
 	public static boolean createUser(String email, String password, String passwordConf, String title, String fName,
 			String mName, String lName, String phone, String fax, String language, String streetAddress,
 			String streetAddress2, String city, String province, String country, String postalCode) throws Exception {
 		User user = null;
+		UUID registrationID = UUID.randomUUID();
 		try {
-			UUID registrationID = UUID.randomUUID();
-			user = new User(email, fName, mName, lName, User.USER, phone, password, title, new Date(), fax, true,
-					streetAddress, streetAddress2, city, province, country, postalCode, language, false,
+			user = new User(email, fName, mName, lName, User.USER, phone, password, title, new Date(), fax,
+					true, streetAddress, streetAddress2, city, province, country, postalCode, language, false,
 					registrationID.toString(), new Date(), User.VERIFY_TYPE_CREATE_ACCOUNT);
+			UserDB.insert(user);
 			EmailService.sendRegisterEmail(email, registrationID);
 		} catch (NumberFormatException | ConfigException | InvalidKeySpecException | NoSuchAlgorithmException e) {
 
 			throw new Exception(
 					"Something went wrong, please try again later. If problem persists, please contact us directly");
 		} catch (MessagingException e) {
-			throw new Exception();
+			throw new MessagingException("Something went wrong with the verification email, please click <a href=\"/register?action=resend&email="+email+"\">here</a>. If problem persists, please contact us directly.");
 		}
-
-		// TODO set up email verification
-
-		// write user to database
-		if (user != null) {
-			UserDB.insert(user);
-		}
-
 		return true;
 
+	}
+
+	public static void resendVerificationEmail(String email) throws MessagingException {
+		User user = null;
+		UUID registrationID = UUID.randomUUID();
+		
+		user = UserDB.get(email);
+		user.setVerificationID(registrationID.toString());
+		UserDB.update(user);
+		
+		try {
+			EmailService.sendRegisterEmail(email, registrationID);
+		} catch (ConfigException | MessagingException e) {
+			throw new MessagingException("Something went wrong with the verification email, please click <a href=\"/register?action=resend&email="+email+"\">here</a>. If problem persists, please contact us directly.");
+		}
+	}
+
+	public static void verifyEmail(String registrationID) throws Exception {
+		User user = UserDB.getByVerificationID(registrationID);
+
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, -verificationTimeout);
+		boolean output = user != null && user.isActive()
+				&& user.getLastVerificationType() == User.VERIFY_TYPE_CREATE_ACCOUNT && user.getLastVerificationAttempt() != null
+				&& user.getLastVerificationAttempt().after(c.getTime())
+				&& user.getLastVerificationAttempt().before(new Date());
+		
+		if (output) {
+			user.setVerified(true);
+			user.setLastVerificationType(User.VERIFY_TYPE_NONE);
+			output = UserDB.update(user);
+		} else {
+			throw new Exception("Verification link has timed out");
+		}
+		if (!output) {
+			throw new Exception("An error has occured, please try again. If problem persists, please contact us directly");
+		}
+		
+		
 	}
   
 	public static int getRole(String sessionID) throws ConfigException {
@@ -630,13 +657,23 @@ public final class UserManager {
 		return user.getPermissionLevel();
   }
   
+  	/**
+	 * Deletes the account of the user with the given session.
+	 * 
+	 * @param sessionID String The session ID number of the user whose account to
+	 *                  delete.
+	 * @param ip        String The ip address of the user whose account is being
+	 *                  deleted.
+	 * @return true if the account was successfully deleted.
+	 */
 	public static boolean deleteAccount(String sessionID, String ip) {
 		User u = UserDB.get(SessionDB.getEmail(sessionID));
-		
-		if(u != null && u.isActive() && u.isVerified()) {
+
+		if (u != null && u.isActive() && u.isVerified()) {
 			u.setActive(false);
-			UserDB.update(u);
-			return true;
+			boolean output = UserDB.update(u);
+			LogEntryDB.insert(new LogEntry(u.getEmail(), "User requested.", LogEntry.DEACTIVATE_ACCOUNT, ip));
+			return output;
 		} else {
 			return false;
 		}

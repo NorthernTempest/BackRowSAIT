@@ -48,9 +48,9 @@
             "subject": "${parcel.subject}",
             "message": "${parcel.message}",
             "dateSent": Date.parse("${parcel.dateSent}"),
-            "noOfDocuments": ${parcel.documents.size()},
+            "noOfDocuments": "${parcel.documents.size()}",
             "expirationDate": Date.parse("${parcel.expirationDate}"),
-            "taxReturnYear": ${parcel.taxReturnYear},
+            "taxReturnYear": "${parcel.taxReturnYear}",
             "requiresSignature": ${parcel.requiresSignature?"true":"false"}
         },
         </c:forEach>
