@@ -279,7 +279,7 @@ public class ParcelDB {
 		Parcel parcel = null;
 		ArrayList<Parcel> parcels = new ArrayList<>();
 		String preparedQuery;
-		
+
 		try {
 
 			if (parcelID < 0 && sender == null && receiver == null && dateSent == null && year < 0) {
@@ -345,7 +345,8 @@ public class ParcelDB {
 				parcel = new Parcel(rs.getInt("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
+						DocumentDB.getByParcelID(rs.getInt("parcel_id")), rs.getBoolean("requires_signature"));
+
 				parcels.add(parcel);
 			}
 		}
