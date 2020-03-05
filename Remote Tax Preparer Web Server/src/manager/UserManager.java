@@ -565,118 +565,46 @@ public final class UserManager {
 	}
 
 	/**
-	 * Method to do basic validation of the fields submitted by the register user
-	 * form
+	 * Method to check if a user already exists in the database
 	 * 
-	 * @param email          The email associated with the new user
-	 * @param password       The password for the new user
-	 * @param passwordConf   The confirmation field for the user password
-	 * @param title          The new user's title
-	 * @param fName          The new user's first name
-	 * @param mName          The new user's middle name
-	 * @param lName          The new user's last name
-	 * @param phone          The new user's phone number
-	 * @param fax            The new user's fax number
-	 * @param language       The new user's language
-	 * @param streetAddress  The new user's first street address field
-	 * @param streetAddress2 The new user's second street address field
-	 * @param city           The new user's city
-	 * @param province       The new user's province
-	 * @param country        The new user's country
-	 * @param postalCode     The new user's postal code
-	 * @return true if successful
+	 * @param email The user to check
+	 * @return true if the user exists, false if not.
 	 */
-	public static boolean registerValidate(String email, String password, String passwordConf, String title,
-			String fName, String mName, String lName, String phone, String fax, String language, String streetAddress,
-			String streetAddress2, String city, String province, String country, String postalCode) {
+	public static boolean userExists(String email) {
 
-		if (email.length() > 100) {
+		if (UserDB.get(email) == null) {
 			return false;
 		}
-		if (password.length() > 256) {
-			return false;
-		}
-		if (passwordConf.length() > 256) {
-			return false;
-		}
-		if (password.equals(passwordConf)) {
-			return false;
-		}
-		if (title.equals("N/A") || title.equals("Mr") || title.equals("Mrs") || title.equals("Ms")
-				|| title.equals("Mx")) {
-			return false;
-		}
-		if (passwordConf.length() > 256) {
-			return false;
-		}
-		if (fName.length() > 25) {
-			return false;
-		}
-		if (mName.length() > 25) {
-			return false;
-		}
-		if (lName.length() > 25) {
-			return false;
-		}
-		if (phone.length() > 15) {
-			return false;
-		}
-		if (fax.length() > 15) {
-			return false;
-		}
-		if (language.equals("en") || language.equals("es")) {
-			return false;
-		}
-		if (streetAddress.length() > 200) {
-			return false;
-		}
-		if (streetAddress2.length() > 200) {
-			return false;
-		}
-		if (city.length() > 100) {
-			return false;
-		}
-		if (province.length() > 100) {
-			return false;
-		}
-		if (country.length() > 2) {
-			return false;
-		}
-		if (postalCode.length() > 10) {
-			return false;
-		}
+
 		return true;
+	}
+
+	
+	public static boolean passwordConf(String password, String passwordConf) {
+		if (password.equals(passwordConf)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public static boolean createUser(String email, String password, String passwordConf, String title, String fName,
 			String mName, String lName, String phone, String fax, String language, String streetAddress,
-			String streetAddress2, String city, String province, String country, String postalCode) {
-		String passSalt;
+			String streetAddress2, String city, String province, String country, String postalCode) throws Exception {
 		User user = null;
 		try {
-			passSalt = EncryptionService.getSalt();
-			String passHash = EncryptionService.hash(password, passSalt);
-			user = new User(email, fName, mName, lName, User.USER, phone, passHash, passSalt, title, new Date(), fax,
+			UUID registrationID = UUID.randomUUID();
+			user = new User(email, fName, mName, lName, User.USER, phone, password, title, new Date(), fax,
 					true, streetAddress, streetAddress2, city, province, country, postalCode, language, false,
-					UUID.randomUUID().toString(), new Date(), User.VERIFY_TYPE_CREATE_ACCOUNT);
+					registrationID.toString(), new Date(), User.VERIFY_TYPE_CREATE_ACCOUNT);
+			EmailService.sendRegisterEmail(email, registrationID);
+		} catch (NumberFormatException | ConfigException | InvalidKeySpecException | NoSuchAlgorithmException e) {
 
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-
-			e.printStackTrace();
-			return false;
-		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+			throw new Exception(
+					"Something went wrong, please try again later. If problem persists, please contact us directly");
+		} catch (MessagingException e) {
+			throw new Exception();
 		}
 
 		// TODO set up email verification

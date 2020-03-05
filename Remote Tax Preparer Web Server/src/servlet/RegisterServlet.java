@@ -34,7 +34,7 @@ public final class RegisterServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//Display Register page
+		// Display Register page
 		getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
 	}
 
@@ -44,64 +44,102 @@ public final class RegisterServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//validate and get all inputs
-		//Grab user email
+		// validate and get all inputs
+		// Grab user email
 		String email = request.getParameter("email");
-		//Grab user password
+		// Grab user password
 		String password = request.getParameter("password1");
-		//Grab user password confirmation
+		// Grab user password confirmation
 		String passwordConf = request.getParameter("password2");
-		//Grab user title
+		// Grab user title
 		String title = request.getParameter("title");
-		//Grab user first name
+		// Grab user first name
 		String fName = request.getParameter("f-name");
-		//Grab user middle name
+		// Grab user middle name
 		String mName = request.getParameter("m-name");
-		//Grab user last name
+		// Grab user last name
 		String lName = request.getParameter("l-name");
-		//Grab user phone number
+		// Grab user phone number
 		String phone = request.getParameter("phone");
-		//Grab user fax
+		// Grab user fax
 		String fax = request.getParameter("fax");
-		//Grab user language
+		// Grab user language
 		String language = request.getParameter("language");
-		//Grab user address 1
+		// Grab user address 1
 		String streetAddress = request.getParameter("address1");
-		//Grab user address 2
+		// Grab user address 2
 		String streetAddress2 = request.getParameter("address2");
-		//Grab user city
+		// Grab user city
 		String city = request.getParameter("addressCity");
-		//Grab user province
+		// Grab user province
 		String province = request.getParameter("addressRegion");
-		//Grab user country
+		// Grab user country
 		String country = request.getParameter("addressCountry");
-		//Grab user postalCode
+		// Grab user postalCode
 		String postalCode = request.getParameter("addressPostal");
-				
-		//Basic user input validation
-		Boolean valid = UserManager.registerValidate(email, password, passwordConf, title, fName, mName, lName, phone, fax, language, streetAddress, streetAddress2, city, province, country, postalCode);
-		Boolean created=false;
-		if (valid) {
-		//hey usermanager make a user in the db
-			created=UserManager.createUser(email, password, passwordConf, title, fName, mName, lName, phone, fax, language, streetAddress, streetAddress2, city, province, country, postalCode);
+		// Check if user already exists
+		Boolean alreadyExists = UserManager.userExists(email);
+
+		if (alreadyExists) {
+			setRegisterAttributes(request);
+			request.setAttribute("errorMessageEmail", "Email already in use");
+			getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
+			return;
 		}
-		
+
+		Boolean created = false;
+		try {
+			created = UserManager.createUser(email, password, passwordConf, title, fName, mName, lName, phone, fax,
+					language, streetAddress, streetAddress2, city, province, country, postalCode);
+		} catch (Exception e) {
+			setRegisterAttributes(request);
+			request.setAttribute("errorMessage",
+					"Unexpected error occurred, please try again later. If problem persists please contact us directly");
+			getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
+			return;
+		}
+
 		String message;
 		if (created) {
 			message = "Registration successful, please click the verification link sent to your email to continue";
 		} else {
-			message = "Something went wrong with registration, please check your enterred information and try again. If problem persists, please contact customer support";
+			message = "Something went wrong with registration, please check your enterred information and try again. If problem persists, please contact us directly";
 		}
-			//dope. tell the user all is good
-			//tell the user a verification email has been sent
-			//go to login once user is like K
-		//did you not?
-			//uh oh. tell the user is not good
-			//to to register page once user is like K
-		
-		
-		
-		//Show a page, probably login
+		// dope. tell the user all is good
+		// tell the user a verification email has been sent
+		// go to login once user is like K
+		// did you not?
+		// uh oh. tell the user is not good
+		// to to register page once user is like K
+
+		// Show a page, probably login
 		getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+	}
+
+	/**
+	 * Method to set the attributes for the request to repopulate the form in the
+	 * case of an error
+	 * 
+	 * @param request The request having attributes set to it.
+	 */
+	private void setRegisterAttributes(HttpServletRequest request) {
+
+		request.setAttribute("email", request.getAttribute("email"));
+		request.setAttribute("password1", request.getParameter("password1"));
+		request.setAttribute("password2", request.getParameter("password2"));
+		request.setAttribute("title", request.getParameter("title"));
+		request.setAttribute("f-name", request.getParameter("f-name"));
+		request.setAttribute("m-name", request.getParameter("m-name"));
+		request.setAttribute("l-name", request.getParameter("l-name"));
+		request.setAttribute("phone", request.getParameter("phone"));
+		request.setAttribute("fax", request.getParameter("fax"));
+		request.setAttribute("language", request.getParameter("language"));
+		request.setAttribute("address1", request.getParameter("address1"));
+		request.setAttribute("address2", request.getParameter("address2"));
+		request.setAttribute("addressCity", request.getParameter("addressCity"));
+		request.setAttribute("addressRegion", request.getParameter("addressRegion"));
+		request.setAttribute("addressCountry", request.getParameter("addressCountry"));
+		request.setAttribute("addressPostal", request.getParameter("addressPostal"));
+
 	}
 }
