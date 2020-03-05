@@ -60,7 +60,7 @@ class EncryptionServiceTest {
 			InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, ConfigException {
 		String unencryptedFilePath = "C:\\Capstone\\TestFiles\\test_pdf_large.pdf";
 
-		Document encryptedFile = EncryptionService.encryptDocument(unencryptedFilePath, false, false, 1);
+		Document encryptedFile = EncryptionService.encryptDocument(unencryptedFilePath);
 
 		String decryptedFilePath = EncryptionService.decryptDocument(encryptedFile);
 
