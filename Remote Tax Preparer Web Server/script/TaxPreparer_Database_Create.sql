@@ -54,7 +54,7 @@ CREATE TABLE tax_return (
 COMMIT;
 
 CREATE TABLE parcel (
-    parcel_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    parcel_id CHAR(36) PRIMARY KEY,
     subject VARCHAR(100),
     message VARCHAR(10000),
     sender VARCHAR(320) NOT NULL,
@@ -74,7 +74,7 @@ COMMIT;
 	
 CREATE TABLE document (
     file_path VARCHAR(30) PRIMARY KEY,
-    parcel_id INT UNSIGNED NOT NULL,
+    parcel_id CHAR(36) NOT NULL,
     file_name VARCHAR(30) NOT NULL,
     file_size LONG NOT NULL,
     FOREIGN KEY (parcel_id) REFERENCES parcel(parcel_id));
@@ -118,7 +118,7 @@ CREATE TABLE preparer_tax_return (
 COMMIT;
 
 CREATE TABLE payment (
-    payment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    payment_id CHAR(36) PRIMARY KEY,
     email VARCHAR(320) NOT NULL,
 	year YEAR NOT NULL,
     payment_type VARCHAR(20) NOT NULL,

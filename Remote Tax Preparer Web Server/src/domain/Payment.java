@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * 
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 public final class Payment {
 	
-	private int paymentID;
+	private String paymentID;
 	
 	private String paymentType;
 	
@@ -25,7 +26,17 @@ public final class Payment {
 	
 	private String billingInfo;
 	
-	public Payment (int paymentID, String email, int year, String paymentType, double amount, Date date) {
+	public Payment (String email, int year, String paymentType, double amount, Date date) {
+		paymentID = UUID.randomUUID().toString();
+		setEmail(email);
+		setYear(year);
+		setPaymentType(paymentType);
+		setAmount(amount);
+		setDate(date);
+	}
+	
+	public Payment (String paymentID, String email, int year, String paymentType, double amount, Date date) {
+		setPaymentID(paymentID);
 		setEmail(email);
 		setYear(year);
 		setPaymentType(paymentType);
@@ -37,7 +48,7 @@ public final class Payment {
 	 * Returns the paymentID.
 	 * @return the paymentID
 	 */
-	public int getPaymentID() {
+	public String getPaymentID() {
 		return paymentID;
 	}
 
@@ -77,7 +88,7 @@ public final class Payment {
 	 * Sets the value of paymentID.
 	 * @param paymentID the paymentID to set
 	 */
-	public void setPaymentID(int paymentID) {
+	public void setPaymentID(String paymentID) {
 		this.paymentID = paymentID;
 	}
 
