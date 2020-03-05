@@ -37,7 +37,7 @@ public final class ParcelManager {
 	 * @return
 	 * @throws ConfigException
 	 */
-	public static ArrayList<Parcel> getParcels(int parcelID, String senderEmail, String receiverEmail, Date dateSent,
+	public static ArrayList<Parcel> getParcels(String parcelID, String senderEmail, String receiverEmail, Date dateSent,
 			int year) throws ConfigException {
 		return ParcelDB.getParcelsByParameter(parcelID, senderEmail, receiverEmail, dateSent, year);
 	}
@@ -49,7 +49,7 @@ public final class ParcelManager {
 	 * @throws ConfigException
 	 */
 	public static ArrayList<Parcel> getByYear(String recieverEmail, int year) throws ConfigException {
-		return getParcels(-1, null, recieverEmail, null, year);
+		return getParcels(null, null, recieverEmail, null, year);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public final class ParcelManager {
 	 * @return
 	 * @throws ConfigException
 	 */
-	public static Parcel get(int parcelID) throws ConfigException {
+	public static Parcel get(String parcelID) throws ConfigException {
 		return ParcelDB.get(parcelID);
 	}
 
@@ -69,7 +69,7 @@ public final class ParcelManager {
 	 * @return true if email is allowed to view this parcel. false if not.
 	 * @throws ConfigException
 	 */
-	public static boolean isVisibleToUser(String email, int parcelID) throws ConfigException {
+	public static boolean isVisibleToUser(String email, String parcelID) throws ConfigException {
 		return ParcelDB.isVisibleToUser(email, parcelID);
 	}
 
@@ -97,7 +97,7 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);  
 		Date expDate = c.getTime();
 		
-		Parcel parcel = new Parcel(0, subject, message, sender, receiver, dateSent, expDate, taxYear, documents, requiresSignature);
+		Parcel parcel = new Parcel(subject, message, sender, receiver, dateSent, expDate, taxYear, documents, requiresSignature);
 		
 		if(ParcelDB.insert(parcel)){
 			return true;

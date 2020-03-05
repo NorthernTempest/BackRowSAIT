@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import exception.ConfigException;
 import exception.UserException;
@@ -167,10 +168,7 @@ public final class User {
 		setLName(lname);
 		setPermissionLevel(permissionLevel);
 		setPhone(phone);
-		String passSalt = createPassSalt();
-		String passHash = createPassHash(password, passSalt);
-		setPassHash(passHash);
-		setPassSalt(passSalt);
+		setPassword(password);
 		setTitle(title);
 		setCreationDate(creationDate);
 		setFax(fax);
@@ -186,18 +184,6 @@ public final class User {
 		setVerificationID(verificationID);
 		setLastVerificationAttempt(lastVerificationAttempt);
 		setLastVerificationType(lastVerificationType);
-	}
-
-	private String createPassSalt() throws NumberFormatException, ConfigException {
-		
-		return EncryptionService.getSalt();
-	}
-
-	private String createPassHash(String password, String passSalt) throws NumberFormatException, NoSuchAlgorithmException, InvalidKeySpecException, ConfigException {
-		if (password.length() > 256||password.length()<8) {
-			throw new IllegalArgumentException("Password is invalid, please try again");
-		}
-		return EncryptionService.hash(password, passSalt);
 	}
 
 	// This constructor exists only for testing purposes.
@@ -252,6 +238,41 @@ public final class User {
 	 */
 	public void setPassSalt(String passSalt) {
 		this.passSalt = passSalt;
+	}
+	
+	public void setPassword(String password) throws NumberFormatException, NoSuchAlgorithmException, InvalidKeySpecException, ConfigException {
+		if (password == null)
+			throw new IllegalArgumentException("Password is null.");
+		if (password.length() > 256)
+			throw new IllegalArgumentException("Password is too long. It must be less than or equal to 256 characters.");
+		if (password.length() < 8)
+			throw new IllegalArgumentException("Password is too short. It must be more than or equal to 8 characters.");
+		
+		Pattern p1 = Pattern.compile("[^\\w~!@#$%^&*()_\\-+=]");
+		
+		if (p1.matcher(password).find())
+			throw new IllegalArgumentException("Password contains illegal characters. Only letters, numbers, and top row punctuation are valid inputs.");
+
+		Pattern p2 = Pattern.compile("\\d");
+		Pattern p3 = Pattern.compile("\\p{Alpha}");
+		Pattern p4 = Pattern.compile("[~!@#$%^&*()_\\-+=]");
+		
+		if (!p2.matcher(password).find() || !p3.matcher(password).find() || !p4.matcher(password).find())
+			throw new IllegalArgumentException("Password must contain at least one each of letters, digits, and top row punctuation.");
+		
+		Pattern p5 = Pattern.compile("(.)\\1\\1+");
+		
+		if (p5.matcher(password).find())
+			throw new IllegalArgumentException("Password cannot have more than 2 consecutive repeating characters.");
+		
+		String passSalt = EncryptionService.getSalt();
+		String passHash = EncryptionService.hash(password, passSalt);
+		
+		if(passHash.equals(this.passHash))
+			throw new IllegalArgumentException("Your new password cannot match your old password.");
+		
+		this.passSalt = passSalt;
+		this.passHash = passHash;
 	}
 
 	/**
@@ -422,9 +443,8 @@ public final class User {
 	}
 
 	public void setLanguage(String language) {
-		if (language.equals("en") || language.equals("es")) {
+		if (!language.equals("en") && !language.equals("es"))
 			throw new IllegalArgumentException("Invalid Language, please try again");
-		}
 		this.language = language;
 	}
 
@@ -462,7 +482,7 @@ public final class User {
 	 * @param streetAddress2
 	 */
 	public void setStreetAddress2(String streetAddress2) {
-		if (streetAddress2.length() > 200) {
+		if (streetAddress2 != null && streetAddress2.length() > 200) {
 			throw new IllegalArgumentException("Address 2 is invalid, please try again");
 		}
 		this.streetAddress2 = streetAddress2;
@@ -500,7 +520,7 @@ public final class User {
 	 * @param province
 	 */
 	public void setProvince(String province) {
-		if (province.length() == 3) {
+		if (province.length() == 2) {
 			throw new IllegalArgumentException("Province is invalid, please try again");
 		}
 		this.province = province;
@@ -620,10 +640,5 @@ public final class User {
 	 */
 	public void setLastVerificationType(int lastVerificationType) {
 		this.lastVerificationType = lastVerificationType;
-	}
-
-	public void setPassword(String newPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		// TODO
-		
 	}
 }

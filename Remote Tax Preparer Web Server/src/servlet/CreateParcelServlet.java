@@ -2,10 +2,14 @@ package servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +30,7 @@ import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
 import service.ConfigService;
+import service.EncryptionService;
 import util.cesar.Debugger;
 
 /**
@@ -124,7 +129,7 @@ public final class CreateParcelServlet extends HttpServlet {
 				if (fileName != null) {
 					if (fileName != "null") {
 						part.write(writePath);
-						documents.add(new Document(uploadPath, fileName, part.getSize()));
+						documents.add(EncryptionService.encryptDocument(writePath));
 					}
 				}
 			}
@@ -148,6 +153,18 @@ public final class CreateParcelServlet extends HttpServlet {
 		} catch (ConfigException e) {
 			request.setAttribute("errorMessage", "Error, please try again");
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

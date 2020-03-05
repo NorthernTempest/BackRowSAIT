@@ -48,9 +48,9 @@ public final class ViewServlet extends HttpServlet {
 		Debugger.log("Email: " + email);
 
 		//get parcel ID
-		int parcelID = -1;
+		String parcelID = null;
 		try {
-			parcelID = Integer.parseInt(request.getParameter("parcelID"));
+			parcelID = request.getParameter("parcelID");
 		} catch (NumberFormatException e) {
 			Debugger.log("caught number format exception, is this not a number?: ");
 			Debugger.log(request.getAttribute("parcelID"));
