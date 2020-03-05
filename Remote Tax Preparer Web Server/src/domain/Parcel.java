@@ -30,7 +30,9 @@ public final class Parcel {
 	
 	private int taxReturnYear;
 	
-	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate, int taxReturnYear, ArrayList<Document> documents) {
+	private boolean requiresSignature;
+	
+	public Parcel (int parcelID, String subject, String message, String sender, String receiver, Date dateSent, Date expirationDate, int taxReturnYear, ArrayList<Document> documents, boolean requiresSignature) {
 		
 		this.parcelID = parcelID;
 		this.subject = subject;
@@ -41,6 +43,7 @@ public final class Parcel {
 		this.expirationDate = expirationDate;
 		this.taxReturnYear = taxReturnYear;
 		this.documents = documents;
+		this.requiresSignature = requiresSignature;
 	}
 	
 	/**
@@ -111,5 +114,9 @@ public final class Parcel {
 	 */
 	public String getSubject() {
 		return subject;
+	}
+
+	public boolean isRequiresSignature() {
+		return requiresSignature;
 	}
 }

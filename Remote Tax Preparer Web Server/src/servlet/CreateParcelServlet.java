@@ -110,15 +110,31 @@ public final class CreateParcelServlet extends HttpServlet {
 			String sender = email;
 			//grab receiver
 			String receiver = request.getParameter("receiver");
+			//grab requiresSignature
+			String requiresSignatureString = request.getParameter("requiresSignature");
+			boolean requiresSignature = false;
+			if (requiresSignatureString != null) {
+				requiresSignature = true;
+			}
 			//grab attachments
 			for (Part part : request.getParts()) {
 				fileName = part.getSubmittedFileName();
+				Debugger.log(fileName);
 				String writePath = uploadPath + File.separator + fileName;
-				part.write(writePath);
-				documents.add(new Document(uploadPath, isSigned, requiresSignature, fileName, part.getSize()));
+				if (fileName != null) {
+					if (fileName != "null") {
+						part.write(writePath);
+						documents.add(new Document(uploadPath, fileName, part.getSize()));
+					}
+				}
 			}
 
-			if (!ParcelManager.createParcel(documents, subject, message, sender, receiver, new Date(), null, taxYear)) {
+			Debugger.log("documents: " + documents + "\nSubject: " + subject + "\nMessage: " + message + "\nSender: "
+					+ sender + "\nReceiver: " + receiver + "\nTax Year: " + taxYear + "\nRequires Signature: "
+					+ requiresSignatureString);
+
+			if (!ParcelManager.createParcel(documents, subject, message, sender, receiver, new Date(), null, taxYear,
+					requiresSignature)) {
 				request.setAttribute("errorMessage", "Couldn't send message");
 				getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			} else {

@@ -18,7 +18,7 @@
 	<p>${parcel.message}</p>
 
     <c:forEach var="doc" items="${parcel.documents}">
-        ${doc.filePath}Spaghetti<br>
+        ${doc.filePath}<br>
     </c:forEach>
 
 </div>

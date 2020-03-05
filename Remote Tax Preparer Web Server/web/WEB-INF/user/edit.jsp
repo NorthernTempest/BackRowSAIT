@@ -10,18 +10,14 @@
 
 <form action="" method="POST">
 	<div class="col-md-6">
-		<span style="color: red">*</span>Required fields for each section
-	</div>
-	<hr>
-	<div class="col-md-6">
 		<h3>Name</h3>
-		<label for="title">Title<span style="color: red">*</span></label>
+		<label for="title">Title</label>
 		<input id="title" name="title" class="form-control" placeholder="eg. 'mr'" value="${title}" required>
-		<label for="fname">First Name<span style="color: red">*</span></label>
+		<label for="fname">First Name</label>
 		<input id="fname" name="fname" class="form-control" value="${fname}" required>
 		<label for="mname">Middle Name</label>
 		<input id="mname" name="mname" class="form-control" value="${mname}">
-		<label id="lname">Last Name<span style="color: red">*</span></label>
+		<label for="lname">Last Name</label>
 		<input id="lname" name="lname" class="form-control" value="${lname}" required>
 	</div>
 	<div class="col-md-6">
@@ -34,16 +30,17 @@
 	<hr>
 	<div class="col-md-6">
 		<h3>Address</h3>
-		<label for="address1">Street Address<span style="color: red">*</span></label>
+		<label for="address1">Street Address</label>
 		<input id="address1" name="address1" class="form-control" value="${address1}" required>
-		<input id="address2" name="address2" class="form-control" value="${address2}">
-		<label for="addressCity">City<span style="color: red">*</span></label>
+        <label for="address2">Street Address 2</label>
+        <input id="address2" name="address2" class="form-control" value="${address2}">
+		<label for="addressCity">City</label>
 		<input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
-		<label for="addressRegion">Province/State<span style="color: red">*</span></label>
-		<select id="addressRegion" class="form-control" name="addressRegion" value="${addressRegion}" required></select>
-		<label for="addressCountry">Country<span style="color: red">*</span></label>
-		<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" value="${addressCountry}" required></select>
-		<label for="addressPostal">Postal Code<span style="color: red">*</span></label>
+		<label for="addressRegion">Province/State</label>
+		<select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion}" required></select>
+		<label for="addressCountry">Country</label>
+		<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" data-default-value="${addressRegion}" required></select>
+		<label for="addressPostal">Postal Code</label>
 		<input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}" required>
 	</div>
 	<div class="col-md-6">
@@ -56,7 +53,7 @@
 	<hr>
 	<div class="col-md-6">
 		<h3>Contact Details</h3>
-		<label for="contactPhone">Phone Number<span style="color: red">*</span></label>
+		<label for="contactPhone">Phone Number</label>
 		<input type="tel" id="contactPhone" name="contactPhone" class="form-control" value="${contactPhone}" required>
 		<label for="contactFax">Fax Number</label>
 		<input type="tel" id="contactFax" name="contactFax" class="form-control" value="${contactFax}">
@@ -71,10 +68,10 @@
 	<hr>
 	<div class="col-md-6">
 		<h3>Language</h3>
-		<label for="language">Language<span style="color: red">*</span></label>
+		<label for="language">Language</label>
 		<select class="form-control" id="language" name="language" required>
-			<option ${language.equals("en")?"selected":""}>English</option>
-			<option ${language.equals("es")?"selected":""}>Español</option>
+			<option value="en" ${language.equals("en")?"selected":""}>English</option>
+			<option value="es" ${language.equals("es")?"selected":""}>Español</option>
 		</select>
 	</div>
 	<div class="col-md-6">
@@ -87,11 +84,11 @@
 	<hr>
 	<div class="col-md-6">
 		<h3>Change Password</h3>
-		<label for="oldPassword">Old Password<span style="color: red">*</span></label>
+		<label for="oldPassword">Old Password</label>
 		<input type="password" id="oldPassword" name="oldPassword" class="form-control">
-		<label for="newPassword1">New Password<span style="color: red">*</span></label>
+		<label for="newPassword1">New Password</label>
 		<input type="password" id="newPassword1" name="newPassword1" class="form-control">
-		<label for="newPassword2">Same Password<span style="color: red">*</span></label>
+		<label for="newPassword2">Same Password</label>
 		<input type="password" id="newPassword2" name="newPassword2" class="form-control">
 	</div>
 	<div class="col-md-6">
@@ -115,5 +112,9 @@
 </form>
 
 <script type="text/javascript" src="../../template/js/country-regions.js"></script>
+
+<script>
+
+</script>
 
 <jsp:directive.include file="../../template/foot.jsp" />
