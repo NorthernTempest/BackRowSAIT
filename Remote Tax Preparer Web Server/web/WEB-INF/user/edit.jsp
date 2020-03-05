@@ -70,8 +70,8 @@
 		<h3>Language</h3>
 		<label for="language">Language</label>
 		<select class="form-control" id="language" name="language" required>
-			<option value="EN" ${language.equals("EN")?"selected":""}>English</option>
-			<option value="ES" ${language.equals("ES")?"selected":""}>Español</option>
+			<option value="en" ${language.equals("en")?"selected":""}>English</option>
+			<option value="es" ${language.equals("es")?"selected":""}>Español</option>
 		</select>
 	</div>
 	<div class="col-md-6">

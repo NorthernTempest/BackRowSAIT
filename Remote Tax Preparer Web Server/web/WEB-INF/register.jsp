@@ -99,8 +99,8 @@
 				<h3>Settings</h3>
 				<label for="language">Preferred Language</label> <select
 					name="language" id="language" value="eng" class="form-control">
-					<option value="EN" ${language.equals("EN")?"selected":""}>English</option>
-					<option value="ES" ${language.equals("ES")?"selected":""}>Español</option>
+					<option value="en" ${language.equals("en")?"selected":""}>English</option>
+					<option value="es" ${language.equals("es")?"selected":""}>Español</option>
 				</select>
 			</div>
 		</div>
