@@ -1,9 +1,14 @@
 package domain;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Pattern;
 
+import exception.ConfigException;
 import exception.UserException;
+import service.EncryptionService;
 
 /**
  * Class Description: User class that defines which attributes every type of
@@ -120,6 +125,66 @@ public final class User {
 		setLastVerificationAttempt(lastVerificationAttempt);
 		setLastVerificationType(lastVerificationType);
 	}
+	
+	/**
+	 * Constructs a complete user with all fields.
+	 * 
+	 * @param email
+	 * @param fname
+	 * @param mname
+	 * @param lname
+	 * @param permissionLevel
+	 * @param phone
+	 * @param password
+	 * @param title
+	 * @param creationDate
+	 * @param fax
+	 * @param active
+	 * @param streetAddress
+	 * @param streetAddress2
+	 * @param city
+	 * @param province
+	 * @param country
+	 * @param postalCode
+	 * @param language
+	 * @param verified
+	 * @param verificationID
+	 * @param lastVerificationAttempt
+	 * @param lastVerificationType
+	 * @throws IllegalArgumentException
+	 * @throws ConfigException 
+	 * @throws InvalidKeySpecException 
+	 * @throws NoSuchAlgorithmException 
+	 */
+	public User(String email, String fname, String mname, String lname, int permissionLevel, String phone,
+			String password, String title, Date creationDate, String fax, boolean active,
+			String streetAddress, String streetAddress2, String city, String province, String country,
+			String postalCode, String language, boolean verified, String verificationID, Date lastVerificationAttempt,
+			int lastVerificationType) throws IllegalArgumentException, ConfigException, NoSuchAlgorithmException, InvalidKeySpecException {
+
+		setEmail(email);
+		setFName(fname);
+		setMName(mname);
+		setLName(lname);
+		setPermissionLevel(permissionLevel);
+		setPhone(phone);
+		setPassword(password);
+		setTitle(title);
+		setCreationDate(creationDate);
+		setFax(fax);
+		setActive(active);
+		setStreetAddress(streetAddress);
+		setStreetAddress2(streetAddress2);
+		setCity(city);
+		setProvince(province);
+		setCountry(country);
+		setPostalCode(postalCode);
+		setLanguage(language);
+		setVerified(verified);
+		setVerificationID(verificationID);
+		setLastVerificationAttempt(lastVerificationAttempt);
+		setLastVerificationType(lastVerificationType);
+	}
 
 	// This constructor exists only for testing purposes.
 	public User(String email, String f_name, String l_name, String phone, String pass_hash, String pass_salt) {
@@ -141,6 +206,9 @@ public final class User {
 	}
 
 	private void setEmail(String email) {
+		if (email.length() > 100||email.length()==0) {
+			throw new IllegalArgumentException("Email is invalid, try again");
+		}
 		this.email = email;
 	}
 
@@ -170,6 +238,41 @@ public final class User {
 	 */
 	public void setPassSalt(String passSalt) {
 		this.passSalt = passSalt;
+	}
+	
+	public void setPassword(String password) throws NumberFormatException, NoSuchAlgorithmException, InvalidKeySpecException, ConfigException {
+		if (password == null)
+			throw new IllegalArgumentException("Password is null.");
+		if (password.length() > 256)
+			throw new IllegalArgumentException("Password is too long. It must be less than or equal to 256 characters.");
+		if (password.length() < 8)
+			throw new IllegalArgumentException("Password is too short. It must be more than or equal to 8 characters.");
+		
+		Pattern p1 = Pattern.compile("[^\\w~!@#$%^&*()_\\-+=]");
+		
+		if (p1.matcher(password).find())
+			throw new IllegalArgumentException("Password contains illegal characters. Only letters, numbers, and top row punctuation are valid inputs.");
+
+		Pattern p2 = Pattern.compile("\\d");
+		Pattern p3 = Pattern.compile("\\p{Alpha}");
+		Pattern p4 = Pattern.compile("[~!@#$%^&*()_\\-+=]");
+		
+		if (!p2.matcher(password).find() || !p3.matcher(password).find() || !p4.matcher(password).find())
+			throw new IllegalArgumentException("Password must contain at least one each of letters, digits, and top row punctuation.");
+		
+		Pattern p5 = Pattern.compile("(.)\\1\\1+");
+		
+		if (p5.matcher(password).find())
+			throw new IllegalArgumentException("Password cannot have more than 2 consecutive repeating characters.");
+		
+		String passSalt = EncryptionService.getSalt();
+		String passHash = EncryptionService.hash(password, passSalt);
+		
+		if(passHash.equals(this.passHash))
+			throw new IllegalArgumentException("Your new password cannot match your old password.");
+		
+		this.passSalt = passSalt;
+		this.passHash = passHash;
 	}
 
 	/**
@@ -225,6 +328,9 @@ public final class User {
 	 * @param fName the fName to set
 	 */
 	public void setFName(String fName) {
+		if (fName.length() > 25||fName.length()==0) {
+			throw new IllegalArgumentException("First Name is invalid, please try again");
+		}
 		this.fName = fName;
 	}
 
@@ -239,6 +345,9 @@ public final class User {
 	 * @param mName the mName to set
 	 */
 	public void setMName(String mName) {
+		if (mName.length() > 25) {
+			throw new IllegalArgumentException("Middle Name is invalid, please try again");
+		}
 		this.mName = mName;
 	}
 
@@ -253,6 +362,9 @@ public final class User {
 	 * @param lName the lName to set
 	 */
 	public void setLName(String lName) {
+		if (lName.length() > 25||lName.length()==0) {
+			throw new IllegalArgumentException("Last Name is invalid, please try again");
+		}
 		this.lName = lName;
 	}
 
@@ -267,6 +379,9 @@ public final class User {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
+		if (title.equals("N/A") || title.equals("Mr") || title.equals("Mrs") || title.equals("Ms")|| title.equals("Mx")) {
+			throw new IllegalArgumentException("Title is invalid, please try again");
+		}
 		this.title = title;
 	}
 
@@ -281,6 +396,9 @@ public final class User {
 	 * @param phone the phone to set
 	 */
 	public void setPhone(String phone) {
+		if (phone.length() > 15||phone.length()==0) {
+			throw new IllegalArgumentException("Phone is invalid, please try again");
+		}
 		this.phone = phone;
 	}
 
@@ -295,6 +413,9 @@ public final class User {
 	 * @param fax the fax to set
 	 */
 	public void setFax(String fax) {
+		if (fax.length() > 15) {
+			throw new IllegalArgumentException("Fax is invalid, please try again");
+		}
 		this.fax = fax;
 	}
 
@@ -320,6 +441,8 @@ public final class User {
 	}
 
 	public void setLanguage(String language) {
+		if (!language.equals("en") && !language.equals("es"))
+			throw new IllegalArgumentException("Invalid Language, please try again");
 		this.language = language;
 	}
 
@@ -338,6 +461,9 @@ public final class User {
 	 * @param address the address to set
 	 */
 	public void setStreetAddress(String streetAddress) {
+		if (streetAddress.length() > 200||streetAddress.length()==0) {
+			throw new IllegalArgumentException("Address 1 is invalid, please try again");
+		}
 		this.streetAddress = streetAddress;
 	}
 
@@ -354,6 +480,9 @@ public final class User {
 	 * @param streetAddress2
 	 */
 	public void setStreetAddress2(String streetAddress2) {
+		if (streetAddress2 != null && streetAddress2.length() > 200) {
+			throw new IllegalArgumentException("Address 2 is invalid, please try again");
+		}
 		this.streetAddress2 = streetAddress2;
 	}
 
@@ -370,6 +499,9 @@ public final class User {
 	 * @param city
 	 */
 	public void setCity(String city) {
+		if (city.length() > 100||city.length()==0) {
+			throw new IllegalArgumentException("City is invalid, please try again");
+		}
 		this.city = city;
 	}
 
@@ -386,6 +518,9 @@ public final class User {
 	 * @param province
 	 */
 	public void setProvince(String province) {
+		if (province.length() == 2) {
+			throw new IllegalArgumentException("Province is invalid, please try again");
+		}
 		this.province = province;
 	}
 
@@ -402,6 +537,9 @@ public final class User {
 	 * @param country
 	 */
 	public void setCountry(String country) {
+		if (country.length() == 2) {
+			throw new IllegalArgumentException("Country is invalid, please try again");
+		}
 		this.country = country;
 	}
 
@@ -418,6 +556,9 @@ public final class User {
 	 * @param postalCode
 	 */
 	public void setPostalCode(String postalCode) {
+		if (postalCode.length() > 10) {
+			throw new IllegalArgumentException("Postal Code is invalid, please try again");
+		}
 		this.postalCode = postalCode;
 	}
 

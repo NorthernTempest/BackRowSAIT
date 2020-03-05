@@ -43,6 +43,14 @@ public final class EmailService {
 	 */
 	private static String recoveryTemplatePath;
 	/**
+	 * The subject line for account registry.
+	 */
+	private static String registerSubject;
+	/**
+	 * The filepath to the html template for the body account registry emails.
+	 */
+	private static String registerTemplatePath;
+	/**
 	 * Whether the static attributes in this class are initialized from config or not.
 	 */
 	private static boolean init;
@@ -113,5 +121,21 @@ public final class EmailService {
 		transport.sendMessage(email, email.getAllRecipients());
 		
 		return true;
+	}
+	
+	/**
+	 * Sends an email to a user that is trying to register a new user.
+	 * 
+	 * @param email <code>String</code> The email address to send the letter to.
+	 * @param verificationID <code>String</code> The UUID to identify which account to activate.
+	 * @return true if the email was successfully sent.
+	 * @throws ConfigException if this class was not initialized and the config file cannot be found.
+	 * @throws MessagingException if the email was not sent.
+	 */
+	public static boolean sendRegisterEmail(String email, UUID verificationID) throws ConfigException, MessagingException {
+		init();
+		String content = ConfigService.fetchContents(registerTemplatePath);
+		content = content.replaceAll("\\[verification_id\\]", verificationID.toString());
+		return sendEmail(username, email, registerSubject, content);
 	}
 }
