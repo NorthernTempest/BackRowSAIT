@@ -57,7 +57,7 @@ public final class ParcelManager {
 	 * @return
 	 * @throws ConfigException
 	 */
-	public static Parcel get(int parcelID) throws ConfigException {
+	public static Parcel get(String parcelID) throws ConfigException {
 		return ParcelDB.get(parcelID);
 	}
 
@@ -97,7 +97,7 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);  
 		Date expDate = c.getTime();
 		
-		Parcel parcel = new Parcel(0, subject, message, sender, receiver, dateSent, expDate, taxYear, documents, requiresSignature);
+		Parcel parcel = new Parcel(subject, message, sender, receiver, dateSent, expDate, taxYear, documents, requiresSignature);
 		
 		if(ParcelDB.insert(parcel)){
 			return true;
