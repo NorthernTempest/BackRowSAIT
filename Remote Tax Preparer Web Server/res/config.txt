@@ -11,7 +11,7 @@ outfiles:C:\Capstone\TestFiles\output\
 MAX_LOGIN_ATTEMPTS:5
 LOGIN_ATTEMPT_TIMELIMIT:10
 sessiontime:30
-recoverytime:15
+verificationtime:60
 smtphost:smtp.gmail.com
 smtpport:465
 emailusernamepath:C:\Capstone\TestFiles\emailusername.txt
