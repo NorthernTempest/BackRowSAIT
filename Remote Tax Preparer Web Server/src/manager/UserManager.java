@@ -17,7 +17,6 @@ import domain.LogEntry;
 import domain.Session;
 import domain.User;
 import exception.ConfigException;
-import exception.UserException;
 import service.ConfigService;
 import service.EmailService;
 import service.EncryptionService;
@@ -217,27 +216,199 @@ public final class UserManager {
 		boolean addressError = false;
 		String errorMessageContact = "";
 		boolean contactError = false;
-		String errorMessageLanguage = "";
-		boolean languageError = false;
 		String errorMessagePassword = "";
 		boolean passwordError = false;
 
+		String successMessage = "";
+		
+		// Check name update.
 		if (title == null || title.equals("")) {
 			errorMessageName += "No title given.";
+			nameError = true;
 		}
 		if (fname == null || fname.equals("")) {
-			errorMessageName += errorMessageName.equals("") ? "" : "<br/>" + "No first name given.";
+			errorMessageName += nameError ? "<br/>" : "" + "No first name given.";
+			nameError = true;
 		}
-		if (mname == null || mname.equals("")) {
-			errorMessageName += errorMessageName.equals("") ? "" : "<br/>" + "No first name given.";
+		if (mname == null) {
+			errorMessageName += nameError ? "<br/>" : "" + "No middle name given.";
+			nameError = true;
 		}
+		if (lname == null || lname.equals("")) {
+			errorMessageName += nameError ? "<br/>" : "" + "No last name given.";
+			nameError = true;
+		}
+		if (nameError)
+			request.setAttribute("errorMessageName", errorMessageName);
+		else {
+			try {
+				u.setTitle(title);
+				u.setFName(fname);
+				u.setMName(mname);
+				u.setLName(lname);
 
-		request.setAttribute("errorMessageName", errorMessageName);
-		request.setAttribute("errorMessageAddress", errorMessageAddress);
-		request.setAttribute("errorMessageContact", errorMessageContact);
-		request.setAttribute("errorMessageLanguage", errorMessageLanguage);
-		request.setAttribute("errorMessagePassword", errorMessagePassword);
+				if (UserDB.update(u))
+					successMessage += "<br/> Name changes have been saved!";
+				else
+					request.setAttribute("errorMessageName", "Failed to save changes to name.");
+			} catch (IllegalArgumentException e) {
+				request.setAttribute("errorMessageName", e.getMessage());
+				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				e.printStackTrace();
+			}
+		}
+		
+		// Check address update.
+		if (address1 == null || address1.equals("")) {
+			errorMessageAddress += "No street address given.";
+			addressError = true;
+		}
+		if (address2 == null) {
+			errorMessageAddress += addressError ? "<br/>" : "" + "No street address 2 given.";
+			addressError = true;
+		}
+		if (addressCity == null || addressCity.equals("")) {
+			errorMessageAddress += addressError ? "<br/>" : "" + "No city given.";
+			addressError = true;
+		}
+		if (addressRegion == null || addressRegion.equals("")) {
+			errorMessageAddress += addressError ? "<br/>" : "" + "No province given.";
+			addressError = true;
+		}
+		if (addressCountry == null || addressCountry.equals("")) {
+			errorMessageAddress += addressError ? "<br/>" : "" + "No country given.";
+			addressError = true;
+		}
+		if (addressPostal == null || addressPostal.equals("")) {
+			errorMessageAddress += addressError ? "<br/>" : "" + "No postal code given.";
+			addressError = true;
+		}
+		if (addressError)
+			request.setAttribute("errorMessageAddress", errorMessageAddress);
+		else if (address1.equals(u.getPhone()) && address1.equals(u.getFax())) {
+			/* Do nothing */
+		} else {
+			try {
+				u.setStreetAddress(address1);
+				u.setStreetAddress2(address2);
+				u.setCity(addressCity);
+				u.setProvince(addressRegion);
+				u.setCountry(addressCountry);
+				u.setPostalCode(addressPostal);
 
+				if (UserDB.update(u))
+					successMessage += "<br/> Address changes have been saved!";
+				else
+					request.setAttribute("errorMessageName", "Failed to save changes to address info.");
+			} catch (IllegalArgumentException e) {
+				request.setAttribute("errorMessageAddress", e.getMessage());
+				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				e.printStackTrace();
+			}
+		}
+		
+		// Check contact update.
+		if (contactPhone == null || contactPhone.equals("")) {
+			errorMessageContact += contactError ? "<br/>" : "" + "No phone number given.";
+			contactError = true;
+		}
+		if (contactFax == null) {
+			errorMessageContact += contactError ? "<br/>" : "" + "No fax number given.";
+			contactError = true;
+		}
+		if (contactError)
+			request.setAttribute("errorMessageContact", errorMessageContact);
+		else if (contactPhone.equals(u.getPhone()) && contactFax.equals(u.getFax())) {
+			/* Do nothing */
+		} else {
+			try {
+				u.setStreetAddress(contactPhone);
+				u.setStreetAddress2(contactFax);
+
+				if (UserDB.update(u))
+					successMessage += "<br/> Contact changes have been saved!";
+				else
+					request.setAttribute("errorMessageContact", "Failed to save changes to contact info.");
+			} catch (IllegalArgumentException e) {
+				request.setAttribute("errorMessageContact", e.getMessage());
+				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				e.printStackTrace();
+			}
+		}
+		
+		// Check language update.
+		if (language == null || language.equals(""))
+			request.setAttribute("errorMessageLanguage", "No language given.");
+		else if (language.equals(u.getLanguage())) {
+			/* Do nothing */
+		} else {
+			try {
+				u.setLanguage(language);
+
+				if (UserDB.update(u))
+					successMessage += "<br/> Language changes have been saved!";
+				else
+					request.setAttribute("errorMessageLanguage", "Failed to save changes to language info.");
+			} catch (IllegalArgumentException e) {
+				request.setAttribute("errorMessageLanguage", e.getMessage());
+				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				e.printStackTrace();
+			}
+		}
+		
+		// Check password update.
+		if ((oldPassword == null || oldPassword.equals("")) && (newPassword1 == null || newPassword1.equals(""))
+				&& (newPassword2 == null || newPassword2.equals(""))) {
+			/* Do nothing */
+		} else {
+			if (oldPassword == null || oldPassword.equals("")) {
+				errorMessageContact += contactError ? "<br/>" : "" + "Please enter your old password.";
+				passwordError = true;
+			}
+			if (newPassword1 == null || newPassword1.equals("")) {
+				errorMessageContact += contactError ? "<br/>" : "" + "Please enter your new password.";
+				passwordError = true;
+			}
+			if (newPassword2 == null || newPassword2.equals("")) {
+				errorMessageContact += contactError ? "<br/>" : "" + "Please enter your new password again.";
+				passwordError = true;
+			}
+			
+			String passHash = null;
+			try {
+				passHash = EncryptionService.hash(oldPassword, u.getPassSalt());
+			} catch (NumberFormatException | NoSuchAlgorithmException | InvalidKeySpecException | ConfigException e) {
+				errorMessageContact += contactError ? "<br/>" : "" + "There was an error setting your password.";
+				passwordError = true;
+				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				e.printStackTrace();
+			}
+			
+			if (passwordError)
+				request.setAttribute("errorMessagePassword", errorMessagePassword);
+			else if (!u.getPassHash().equals(passHash))
+				request.setAttribute("errorMessagePassword", "Your old password didn't match.");
+			else if (!newPassword1.equals(newPassword2))
+				request.setAttribute("errorMessagePassword", "Your new passwords didn't match.");
+			else {
+				try {
+					u.setPassword(newPassword1);
+
+					if (UserDB.update(u))
+						successMessage += "<br/> Password changes have been saved.";
+					else
+						request.setAttribute("errorMessagePassword", "There was an error setting your password.");
+				} catch (IllegalArgumentException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+					request.setAttribute("errorMessagePassword", "There was an error setting your password.");
+					LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		if(successMessage != null && !successMessage.equals(""))
+			request.setAttribute("successMessage", successMessage);
+		
 		return request;
 	}
 

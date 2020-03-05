@@ -619,4 +619,9 @@ public final class User {
 	public void setLastVerificationType(int lastVerificationType) {
 		this.lastVerificationType = lastVerificationType;
 	}
+
+	public void setPassword(String newPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		// TODO
+		
+	}
 }

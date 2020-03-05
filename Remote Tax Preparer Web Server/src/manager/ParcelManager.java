@@ -88,7 +88,7 @@ public final class ParcelManager {
 	 * @throws ConfigException
 	 */
 	public static boolean createParcel(ArrayList<Document> documents, String subject, String message, String sender,
-			String receiver, Date dateSent, Date expiryDate, int taxYear) throws NumberFormatException, ConfigException {
+			String receiver, Date dateSent, Date expiryDate, int taxYear, boolean requiresSignature) throws NumberFormatException, ConfigException {
 		init();
 		
 		//Set expiration date
@@ -97,7 +97,7 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);  
 		Date expDate = c.getTime();
 		
-		Parcel parcel = new Parcel(0, subject, message, sender, receiver, dateSent, expDate, taxYear, documents);
+		Parcel parcel = new Parcel(0, subject, message, sender, receiver, dateSent, expDate, taxYear, documents, requiresSignature);
 		
 		if(ParcelDB.insert(parcel)){
 			return true;
