@@ -623,4 +623,8 @@ public final class UserManager {
 		return true;
 
 	}
+
+	public static void deleteAccount(String sessionID, String ip) {
+		
+	}
 }

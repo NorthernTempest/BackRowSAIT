@@ -76,7 +76,7 @@ public class SettingsServlet extends HttpServlet {
 
 			getServletContext().getRequestDispatcher("/WEB-INF/user/edit.jsp").forward(request, response);
 		} else {
-			
+			UserManager.deleteAccount(request.getSession().getId(), request.getRemoteAddr());
 		}
 	}
 }
