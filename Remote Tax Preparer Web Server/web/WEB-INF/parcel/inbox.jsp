@@ -29,7 +29,7 @@
 				onclick="window.location='/parcel/view?parcelID=${parcel.parcelID}'">
 				<td scope="row">${parcel.sender}</td>
 				<td>${parcel.subject}</td>
-				<td>${parcel.message.length()>=20?parcel.message.substring(0,20)+"...":parcel.message}</td>
+				<td>${parcel.message}</td>
 				<td>${parcel.dateSent}</td>
 				<td>${parcel.documents.size()}</td>
 				<td>${parcel.expirationDate}</td>
@@ -46,7 +46,7 @@
             "sender": "${parcel.sender}",
             "receiver": "${parcel.receiver}",
             "subject": "${parcel.subject}",
-            "message": "${parcel.message.length()>=20?parcel.message.substring(0,20)+"...":parcel.message}",
+            "message": "${parcel.message}",
             "dateSent": Date.parse("${parcel.dateSent}"),
             "noOfDocuments": ${parcel.documents.size()},
             "expirationDate": Date.parse("${parcel.expirationDate}"),
