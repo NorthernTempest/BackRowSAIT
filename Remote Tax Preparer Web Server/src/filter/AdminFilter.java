@@ -7,6 +7,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,20 +17,22 @@ import manager.SessionManager;
 import manager.UserManager;
 
 /**
- * Servlet Filter implementation class AuthenticationFilter
+ * Servlet Filter implementation class AdminFilter
  */
-public class AuthenticationFilter implements Filter {
+public class AdminFilter implements Filter {
 
     /**
      * Default constructor. 
      */
-    public AuthenticationFilter() {
+    public AdminFilter() {
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see Filter#destroy()
 	 */
 	public void destroy() {
+		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -40,36 +43,38 @@ public class AuthenticationFilter implements Filter {
 		HttpSession session = request2.getSession();
 		String context = request2.getServletPath();
 		
-		if( SessionManager.isSessionActive(session.getId()) )
-		{
-			if( context != null && context.equals("/login") )
-			{
-				String action = request2.getParameter("action");
-				
-				if( action != null && action.equals("logout"))
-					chain.doFilter(request, response);
-				else
-					((HttpServletResponse) response).sendRedirect("inbox");
-			} else if (context.equals("/recover")) {
-				((HttpServletResponse) response).sendRedirect("inbox");
-			}
-			else
-				chain.doFilter(request, response);
+		try {
+			request2.setAttribute("role", UserManager.getRole(session.getId().toString()));
+		} catch (ConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		}
-		else
-		{
+		if (context != null && context.equals("/admin")) {
 			
-			if( context != null && ( context.equals("/login") || context.equals("/recover")) )
-				chain.doFilter(request, response);
-			else
-				((HttpServletResponse) response).sendRedirect("login");
-		}
+			try {
+				if (UserManager.getRole(session.getId()) > 2) {
+					chain.doFilter(request, response);
+				} else {
+					request2.setAttribute("errorMessage", "Access Denied.");
+					request2.getServletContext().getRequestDispatcher("/inbox").forward(request2, response);
+					((HttpServletResponse) response).sendRedirect("inbox");
+				}
+			} catch (ConfigException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} 
+		
+		else 
+			chain.doFilter(request, response);
 	}
 
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
+		// TODO Auto-generated method stub
 	}
+
 }
