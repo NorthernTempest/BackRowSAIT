@@ -76,7 +76,12 @@ public class SettingsServlet extends HttpServlet {
 
 			getServletContext().getRequestDispatcher("/WEB-INF/user/edit.jsp").forward(request, response);
 		} else {
-			UserManager.deleteAccount(request.getSession().getId(), request.getRemoteAddr());
+			if(UserManager.deleteAccount(request.getSession().getId(), request.getRemoteAddr()))
+				response.sendRedirect("/login?action=logout");
+			else {
+				request.setAttribute("errorMessage", "Failed to delete your account.");
+				getServletContext().getRequestDispatcher("/WEB-INF/user/edit.jsp").forward(request, response);
+			}
 		}
 	}
 }
