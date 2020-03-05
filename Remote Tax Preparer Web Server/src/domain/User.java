@@ -379,10 +379,12 @@ public final class User {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		if (title.equals("N/A") || title.equals("Mr") || title.equals("Mrs") || title.equals("Ms")|| title.equals("Mx")) {
+		if (title.equals("Na") || title.equals("Mr") || title.equals("Mrs") || title.equals("Ms")|| title.equals("Mx")) {
+			this.title = title;
+		} else {
 			throw new IllegalArgumentException("Title is invalid, please try again");
 		}
-		this.title = title;
+		
 	}
 
 	/**
