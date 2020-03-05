@@ -220,7 +220,7 @@ public final class UserManager {
 		boolean passwordError = false;
 
 		String successMessage = "";
-		
+
 		// Check name update.
 		if (title == null || title.equals("")) {
 			errorMessageName += "No title given.";
@@ -240,7 +240,9 @@ public final class UserManager {
 		}
 		if (nameError)
 			request.setAttribute("errorMessageName", errorMessageName);
-		else {
+		else if (title.equals(u.getTitle()) && fname.equals(u.getFName()) && mname.equals(u.getMName())
+				&& lname.equals(u.getLName())) {
+		} else {
 			try {
 				u.setTitle(title);
 				u.setFName(fname);
@@ -257,7 +259,7 @@ public final class UserManager {
 				e.printStackTrace();
 			}
 		}
-		
+
 		// Check address update.
 		if (address1 == null || address1.equals("")) {
 			errorMessageAddress += "No street address given.";
@@ -285,7 +287,9 @@ public final class UserManager {
 		}
 		if (addressError)
 			request.setAttribute("errorMessageAddress", errorMessageAddress);
-		else if (address1.equals(u.getPhone()) && address1.equals(u.getFax())) {
+		else if (address1.equals(u.getStreetAddress()) && address2.equals(u.getStreetAddress2())
+				&& addressCity.equals(u.getCity()) && addressRegion.equals(u.getProvince())
+				&& addressCountry.equals(u.getCountry()) && addressPostal.equals(u.getPostalCode())) {
 			/* Do nothing */
 		} else {
 			try {
@@ -306,7 +310,7 @@ public final class UserManager {
 				e.printStackTrace();
 			}
 		}
-		
+
 		// Check contact update.
 		if (contactPhone == null || contactPhone.equals("")) {
 			errorMessageContact += contactError ? "<br/>" : "" + "No phone number given.";
@@ -322,8 +326,8 @@ public final class UserManager {
 			/* Do nothing */
 		} else {
 			try {
-				u.setStreetAddress(contactPhone);
-				u.setStreetAddress2(contactFax);
+				u.setPhone(contactPhone);
+				u.setFax(contactFax);
 
 				if (UserDB.update(u))
 					successMessage += "<br/> Contact changes have been saved!";
@@ -335,7 +339,7 @@ public final class UserManager {
 				e.printStackTrace();
 			}
 		}
-		
+
 		// Check language update.
 		if (language == null || language.equals(""))
 			request.setAttribute("errorMessageLanguage", "No language given.");
@@ -355,7 +359,7 @@ public final class UserManager {
 				e.printStackTrace();
 			}
 		}
-		
+
 		// Check password update.
 		if ((oldPassword == null || oldPassword.equals("")) && (newPassword1 == null || newPassword1.equals(""))
 				&& (newPassword2 == null || newPassword2.equals(""))) {
@@ -373,7 +377,7 @@ public final class UserManager {
 				errorMessageContact += contactError ? "<br/>" : "" + "Please enter your new password again.";
 				passwordError = true;
 			}
-			
+
 			String passHash = null;
 			try {
 				passHash = EncryptionService.hash(oldPassword, u.getPassSalt());
@@ -383,7 +387,7 @@ public final class UserManager {
 				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
 				e.printStackTrace();
 			}
-			
+
 			if (passwordError)
 				request.setAttribute("errorMessagePassword", errorMessagePassword);
 			else if (!u.getPassHash().equals(passHash))
@@ -398,21 +402,21 @@ public final class UserManager {
 						successMessage += "<br/> Password changes have been saved.";
 					else
 						request.setAttribute("errorMessagePassword", "There was an error setting your password.");
-				} catch (IllegalArgumentException e ) {
+				} catch (IllegalArgumentException e) {
 					request.setAttribute("errorMessagePassword", e.getMessage());
 					LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
 					e.printStackTrace();
-				} catch ( NoSuchAlgorithmException | InvalidKeySpecException e) {
+				} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 					request.setAttribute("errorMessagePassword", "There was an error setting your password.");
 					LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
 					e.printStackTrace();
 				}
 			}
 		}
-		
-		if(successMessage != null && !successMessage.equals(""))
+
+		if (successMessage != null && !successMessage.equals(""))
 			request.setAttribute("successMessage", successMessage);
-		
+
 		return request;
 	}
 
@@ -583,12 +587,10 @@ public final class UserManager {
 		return true;
 	}
 
-	
 	public static boolean passwordConf(String password, String passwordConf) {
 		if (password.equals(passwordConf)) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -599,8 +601,8 @@ public final class UserManager {
 		User user = null;
 		try {
 			UUID registrationID = UUID.randomUUID();
-			user = new User(email, fName, mName, lName, User.USER, phone, password, title, new Date(), fax,
-					true, streetAddress, streetAddress2, city, province, country, postalCode, language, false,
+			user = new User(email, fName, mName, lName, User.USER, phone, password, title, new Date(), fax, true,
+					streetAddress, streetAddress2, city, province, country, postalCode, language, false,
 					registrationID.toString(), new Date(), User.VERIFY_TYPE_CREATE_ACCOUNT);
 			EmailService.sendRegisterEmail(email, registrationID);
 		} catch (NumberFormatException | ConfigException | InvalidKeySpecException | NoSuchAlgorithmException e) {
