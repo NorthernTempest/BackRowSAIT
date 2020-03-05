@@ -97,8 +97,8 @@
 		<div class="col-md-6">
 			<div class="form-group">
 				<h3>Settings</h3>
-				<label for="language">Preferred Language</label> <select
-					name="language" id="language" value="eng" class="form-control">
+				<label for="language">Preferred Language</label>
+                <select name="language" id="language" class="form-control">
 					<option value="en" ${language.equals("en")?"selected":""}>English</option>
 					<option value="es" ${language.equals("es")?"selected":""}>Español</option>
 				</select>
