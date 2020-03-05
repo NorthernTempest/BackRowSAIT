@@ -49,7 +49,7 @@ public class ParcelDB {
 			ps.setString(5, parcel.getReceiver());
 			ps.setDate(6, new java.sql.Date(parcel.getDateSent().getTime()));
 			ps.setDate(7, new java.sql.Date(parcel.getExpirationDate().getTime()));
-			ps.setInt(8, parcel.getTaxReturn());
+			ps.setInt(8, parcel.getTaxReturnYear());
 			ps.setBoolean(9, parcel.isRequiresSignature());
 
 			rows = ps.executeUpdate();
@@ -101,7 +101,7 @@ public class ParcelDB {
 			ps.setString(4, parcel.getReceiver());
 			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
 			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
-			ps.setInt(7, parcel.getTaxReturn());
+			ps.setInt(7, parcel.getTaxReturnYear());
 			ps.setBoolean(8, parcel.isRequiresSignature());
 			ps.setString(9, parcel.getParcelID());
 
