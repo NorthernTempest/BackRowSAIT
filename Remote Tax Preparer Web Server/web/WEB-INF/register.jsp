@@ -20,6 +20,11 @@
             <input type="password" name="password2" id="password2" maxlength="256" class="form-control password-field" required>
 		</div>
 		<div class="col-md-6">
+            <c:choose>
+                <c:when test="${errorMessageEmail!=null}">
+                    <div class="alert alert-warning"> ${errorMessageEmail} </div><br>
+                </c:when>
+            </c:choose>
             We do not send sales emails. You will only
 			receive emails regarding new messages and notifications regarding
 			your tax returns.
@@ -69,10 +74,10 @@
             <label for="addressCity">City</label>
             <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
             <label for="addressCountry">Country</label>
-			<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry">
+			<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" data-default-value="${addressCountry}">
 			</select>
             <label for="addressRegion">Province/State</label>
-            <select id="addressRegion" class="form-control" name="addressRegion">
+            <select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion}">
 			</select>
             <label for="addressPostal">Postal Code</label>
             <input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}" required>
@@ -80,11 +85,13 @@
 		<div class="col-md-6">
 			<c:choose>
 				<c:when test="${errorMessageAddress!=null}">
-					<span class="alert alert-warning"> ${errorMessageAddress} </span>
+					<div class="alert alert-warning"> ${errorMessageAddress} </div>
 				</c:when>
 			</c:choose>
 		</div>
 	</div>
+
+    <hr>
 
 	<div class="row">
 		<div class="col-md-6">
@@ -101,12 +108,11 @@
 	</div>
 	<br>
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-12">
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</div>
 		</div>
-		<div class="col-md-6"></div>
 	</div>
 </form>
 
@@ -120,11 +126,7 @@
         if(document.getElementById("password1").value!=document.getElementById("password2").value) {
             document.getElementById("password2").style.borderColor = "red";
         }
-    })
-
-    window.onload = function() {
-
-    }
+    });
 </script>
 
 <jsp:directive.include file="../template/foot.jsp" />
