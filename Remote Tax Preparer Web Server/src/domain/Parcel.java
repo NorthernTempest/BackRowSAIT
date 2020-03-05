@@ -90,7 +90,7 @@ public final class Parcel {
 	/**
 	 * @return the taxReturn
 	 */
-	public int getTaxReturn() {
+	public int getTaxReturnYear() {
 		return taxReturnYear;
 	}
 
