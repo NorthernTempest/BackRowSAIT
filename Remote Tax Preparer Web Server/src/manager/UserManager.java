@@ -621,7 +621,12 @@ public final class UserManager {
 		return true;
 
 	}
-
+  
+	public static boolean isAdmin(User user) {
+		
+		return false;
+  }
+  
 	public static boolean deleteAccount(String sessionID, String ip) {
 		User u = UserDB.get(SessionDB.getEmail(sessionID));
 		
@@ -632,6 +637,5 @@ public final class UserManager {
 		} else {
 			return false;
 		}
-		
 	}
 }

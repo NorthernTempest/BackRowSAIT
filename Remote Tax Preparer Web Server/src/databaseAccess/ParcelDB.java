@@ -199,7 +199,7 @@ public class ParcelDB {
 				parcel = new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
 			}
 		}
 
@@ -243,7 +243,7 @@ public class ParcelDB {
 				parcels.add(new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature"))));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature"))));
 			}
 		}
 
@@ -346,7 +346,7 @@ public class ParcelDB {
 				parcel = new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getInt("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
 				parcels.add(parcel);
 			}
 		}
