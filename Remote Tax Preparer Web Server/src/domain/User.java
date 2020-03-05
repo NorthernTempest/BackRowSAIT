@@ -1,5 +1,7 @@
 package domain;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -497,5 +499,10 @@ public final class User {
 	 */
 	public void setLastVerificationType(int lastVerificationType) {
 		this.lastVerificationType = lastVerificationType;
+	}
+
+	public void setPassword(String newPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		// TODO
+		
 	}
 }
