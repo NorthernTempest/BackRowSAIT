@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -35,6 +37,11 @@ public final class ViewServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 4807630350799183535L;
+	
+	/**
+	 * 
+	 */
+	private static final int BYTE_BUFFER_SIZE = 1048;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -62,16 +69,16 @@ public final class ViewServlet extends HttpServlet {
 			parcelID = request.getParameter("parcelID");
 		} catch (NumberFormatException e) {
 			Debugger.log("caught number format exception, is this not a number?: ");
-			Debugger.log(request.getAttribute("parcelID"));
+			Debugger.log(request.getParameter("parcelID"));
 		}
-		
+
 		//check that its a real parcel that the user can view
 		try {
-			if(ParcelManager.isVisibleToUser(email, parcelID)) {
+			if (ParcelManager.isVisibleToUser(email, parcelID)) {
 				//push the parcel to jsp
 				Parcel parcel = ParcelManager.get(parcelID);
 				ArrayList<String> documentPaths = new ArrayList<>();
-				for(Document document : parcel.getDocuments()) {
+				for (Document document : parcel.getDocuments()) {
 					documentPaths.add(EncryptionService.decryptDocument(document));
 				}
 				session.setAttribute("parcel", parcel);
@@ -115,7 +122,7 @@ public final class ViewServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//Display View page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/view.jsp").forward(request, response);
 	}
@@ -127,6 +134,21 @@ public final class ViewServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Debugger.log("ViewServlet.doPost");
+
+		//get selected file name
+		String filePath = null;
+		filePath = request.getParameter("filePath");
+
+		try (InputStream in = request.getServletContext().getResourceAsStream(filePath);
+				OutputStream out = response.getOutputStream()) {
+
+			byte[] buffer = new byte[BYTE_BUFFER_SIZE];
+
+			int numBytesRead;
+			while ((numBytesRead = in.read(buffer)) > 0) {
+				out.write(buffer, 0, numBytesRead);
+			}
+		}
 
 		//Display View page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/view.jsp").forward(request, response);
