@@ -15,7 +15,7 @@ CREATE TABLE user (
     title VARCHAR(5) NOT NULL,
     creation_date DATETIME NOT NULL,
     fax CHAR(15),
-    postal_code CHAR(6),
+    postal_code CHAR(10),
     city VARCHAR(100),
     country CHAR(2),
     province CHAR(2),
@@ -60,7 +60,7 @@ CREATE TABLE parcel (
     sender VARCHAR(100) NOT NULL,
     receiver VARCHAR(100),
     date_sent DATETIME NOT NULL,
-    expiration_date DATE,
+    expiration_date DATETIME,
 	tax_return_year YEAR NOT NULL,
 	requires_signature CHAR(1) NOT NULL,
     FOREIGN KEY (sender) REFERENCES user(email),
@@ -85,7 +85,7 @@ CREATE TABLE log (
     log_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100),
     type CHAR(1) NOT NULL,
-    message VARCHAR(200),
+    message VARCHAR(2000),
     date DATETIME NOT NULL);
     
 ALTER TABLE log 

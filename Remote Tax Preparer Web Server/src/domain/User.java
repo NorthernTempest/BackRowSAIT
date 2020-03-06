@@ -34,30 +34,94 @@ public final class User {
 	private int permissionLevel;
 	
 	/**
-	 * 
+	 * The title by which the user wants to be addressed.
+	 * Must be one of Na for not applicable, Mr for mister, Mrs for missus, Ms for miss, or Mx.
 	 */
 	private String title;
+	/**
+	 * The user's first name.
+	 * Must be 25 characters or less.
+	 */
 	private String fName;
+	/**
+	 * The user's middle name.
+	 * Must be 25 characters or less.
+	 */
 	private String mName;
+	/**
+	 * The user's last name.
+	 * Must be 25 characters or less.
+	 */
 	private String lName;
 
+	/**
+	 * The hashed form of the user's password. Is based on the user's salt, as well as the password only known by them.
+	 * Is 64 characters long.
+	 */
 	private String passHash;
+	/**
+	 * The random string of characters used as a salt for hashing the user's password.
+	 * Is 44 characters long.
+	 */
 	private String passSalt;
-
+	
+	/**
+	 * The day and time that the user was created.
+	 */
 	private Date creationDate;
-
+	
+	/**
+	 * The user's phone number.
+	 * Must be 15 characters or less.
+	 * TODO Must follow ....
+	 */
 	private String phone;
+	/**
+	 * The user's fax number.
+	 * Must be 15 characters or less.
+	 */
 	private String fax;
 
+	/**
+	 * The first line of the user's mailing street address.
+	 * Must be 320 characters or fewer.
+	 */
 	private String streetAddress;
+	/**
+	 * The second line of the user's mailing street address.
+	 * Must be 320 characters or fewer.
+	 */
 	private String streetAddress2;
+	/**
+	 * The city of the user's mailing address.
+	 * Must be 100 characters or fewer.
+	 */
 	private String city;
+	/**
+	 * The province of the user's mailing address.
+	 * Must follow the 2 character format of the ISO_3166-2 standard.
+	 */
 	private String province;
+	/**
+	 * The country of the user's mailing address.
+	 * Must follow the 2 character format of the ISO_3166-2 standard.
+	 */
 	private String country;
+	/**
+	 * The postal code of the user's mailing address.
+	 * Must be 10 characters long or fewer.
+	 */
 	private String postalCode;
-
+	
+	/**
+	 * The user's preferred language.
+	 * Must be either en for English, or es for Español.
+	 */
 	private String language;
-
+	
+	/**
+	 * Whether or not the
+	 */
 	private boolean verified;
 	private String verificationID;
 	private Date lastVerificationAttempt;
