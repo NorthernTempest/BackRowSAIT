@@ -34,8 +34,7 @@ public final class UserDB {
 
 		try {
 
-			String preparedQuery = "INSERT INTO user "
-					+ "values ("
+			String preparedQuery = "INSERT INTO user ("
 					+ "email, "
 					+ "f_name, "
 					+ "m_name, "
