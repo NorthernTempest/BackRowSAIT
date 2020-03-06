@@ -16,12 +16,26 @@ import service.EncryptionService;
  * @author Tristen Kreutz, Cesar Guzman, Jesse Goerzen
  */
 public final class User {
-
+	
+	/**
+	 * The email address of the user.
+	 * This is unique to each user. Must be less than or equal to 100 characters.
+	 */
 	private String email;
-
+	
+	/**
+	 * Whether the user is active in the system.
+	 */
 	private boolean active;
+	/**
+	 * The level of permission the user has in the system.
+	 * Valid values are given by the constants DEFAULT, USER, TAX_PREPARER, ADMIN, and SYSADMIN.
+	 */
 	private int permissionLevel;
-
+	
+	/**
+	 * 
+	 */
 	private String title;
 	private String fName;
 	private String mName;
