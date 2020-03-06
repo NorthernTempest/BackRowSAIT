@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import exception.ConfigException;
-import exception.UserException;
 import service.EncryptionService;
 
 /**
@@ -251,18 +250,19 @@ public final class User {
 		Pattern p1 = Pattern.compile("[^\\w~!@#$%^&*()_\\-+=]");
 		
 		if (p1.matcher(password).find())
-			throw new IllegalArgumentException("Password contains illegal characters. Only letters, numbers, and top row punctuation are valid inputs.");
+			throw new IllegalArgumentException("Password contains illegal characters. Only the following are valid: letters, numbers, and any of !@#$%^&*()-_=+");
 
 		Pattern p2 = Pattern.compile("\\d");
-		Pattern p3 = Pattern.compile("\\p{Alpha}");
-		Pattern p4 = Pattern.compile("[~!@#$%^&*()_\\-+=]");
+		Pattern p3 = Pattern.compile("[a-z]");
+		Pattern p4 = Pattern.compile("[A-Z]");
+		Pattern p5 = Pattern.compile("[~!@#$%^&*()_\\-+=]");
 		
-		if (!p2.matcher(password).find() || !p3.matcher(password).find() || !p4.matcher(password).find())
-			throw new IllegalArgumentException("Password must contain at least one each of letters, digits, and top row punctuation.");
+		if (!p2.matcher(password).find() || !p3.matcher(password).find() || !p4.matcher(password).find() || !p5.matcher(password).find())
+			throw new IllegalArgumentException("Password must contain at least one upper case letter, one lower case letter, one number, and one of the following: !@#$%^&*()-_=+");
 		
-		Pattern p5 = Pattern.compile("(.)\\1\\1+");
+		Pattern p6 = Pattern.compile("(.)\\1\\1+");
 		
-		if (p5.matcher(password).find())
+		if (p6.matcher(password).find())
 			throw new IllegalArgumentException("Password cannot have more than 2 consecutive repeating characters.");
 		
 		String passSalt = EncryptionService.getSalt();

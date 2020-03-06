@@ -157,10 +157,10 @@ public final class UserManager {
 	 * Takes an email for a User and retrieves all account information for that User
 	 * that is stored in the user table of the database.
 	 * 
-	 * @param email email of User to retrieve information for
-	 * @return Properties objects containing the account information of the request
-	 *         User
-	 * @throws ConfigException
+	 * @param request HttpServletRequest The web request to fill with the user's
+	 *                attributes.
+	 * @return HttpServletRequest The filled in request.
+	 * @throws ConfigException if the config file cannot be found.
 	 */
 	public static HttpServletRequest getAccountInfo(HttpServletRequest request) throws ConfigException {
 		init();
@@ -185,6 +185,14 @@ public final class UserManager {
 		return request;
 	}
 
+	/**
+	 * Updates the info of the user who sent the given request.
+	 * 
+	 * @param request HttpServletRequest The web request to get the user's
+	 *                attributes from.
+	 * @return HttpServletRequest The request updated with any errors.
+	 * @throws ConfigException if the config file cannot be found.
+	 */
 	public static HttpServletRequest setAccountInfo(HttpServletRequest request) throws ConfigException {
 		init();
 		String sessionID = request.getSession().getId();
@@ -546,19 +554,8 @@ public final class UserManager {
 					} else {
 						throw new IllegalArgumentException("You cannot use the same password twice in a row.");
 					}
-				} catch (NumberFormatException e) {
-					output = false;
-					LogEntryManager.logError(u.getEmail(), e, ip);
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					output = false;
-					LogEntryManager.logError(u.getEmail(), e, ip);
-					e.printStackTrace();
-				} catch (InvalidKeySpecException e) {
-					output = false;
-					LogEntryManager.logError(u.getEmail(), e, ip);
-					e.printStackTrace();
-				} catch (ConfigException e) {
+				} catch (NumberFormatException | NoSuchAlgorithmException | InvalidKeySpecException
+						| ConfigException e) {
 					output = false;
 					LogEntryManager.logError(u.getEmail(), e, ip);
 					e.printStackTrace();
@@ -577,20 +574,18 @@ public final class UserManager {
 	 * @return true if the user exists, false if not.
 	 */
 	public static boolean userExists(String email) {
-
-		if (UserDB.get(email) == null) {
-			return false;
-		}
-
-		return true;
+		return UserDB.get(email) != null;
 	}
 
+	/**
+	 * A little silly.
+	 * 
+	 * @param password
+	 * @param passwordConf
+	 * @return
+	 */
 	public static boolean passwordConf(String password, String passwordConf) {
-		if (password.equals(passwordConf)) {
-			return true;
-		} else {
-			return false;
-		}
+		return password.equals(passwordConf);
 	}
 
 	public static boolean createUser(String email, String password, String passwordConf, String title, String fName,
@@ -635,7 +630,6 @@ public final class UserManager {
 
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MINUTE, -verificationTimeout);
-
 		boolean output = user != null && user.isActive()
 				&& user.getLastVerificationType() == User.VERIFY_TYPE_CREATE_ACCOUNT && user.getLastVerificationAttempt() != null
 				&& user.getLastVerificationAttempt().after(c.getTime())
@@ -663,13 +657,23 @@ public final class UserManager {
 		return user.getPermissionLevel();
   }
   
+  	/**
+	 * Deletes the account of the user with the given session.
+	 * 
+	 * @param sessionID String The session ID number of the user whose account to
+	 *                  delete.
+	 * @param ip        String The ip address of the user whose account is being
+	 *                  deleted.
+	 * @return true if the account was successfully deleted.
+	 */
 	public static boolean deleteAccount(String sessionID, String ip) {
 		User u = UserDB.get(SessionDB.getEmail(sessionID));
-		
-		if(u != null && u.isActive() && u.isVerified()) {
+
+		if (u != null && u.isActive() && u.isVerified()) {
 			u.setActive(false);
-			UserDB.update(u);
-			return true;
+			boolean output = UserDB.update(u);
+			LogEntryDB.insert(new LogEntry(u.getEmail(), "User requested.", LogEntry.DEACTIVATE_ACCOUNT, ip));
+			return output;
 		} else {
 			return false;
 		}

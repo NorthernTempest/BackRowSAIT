@@ -12,7 +12,7 @@ CREATE TABLE user (
     phone CHAR(15),
     pass_hash VARCHAR(320) NOT NULL,
     pass_salt CHAR(44) NOT NULL,
-    title VARCHAR(5),
+    title VARCHAR(5) NOT NULL,
     creation_date DATETIME NOT NULL,
     fax CHAR(15),
     postal_code CHAR(6),
@@ -152,22 +152,22 @@ SET GLOBAL event_scheduler = ON;
  */
 
 INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
-VALUES ("test@test.com", "mr", "Timmy", "Tiberius", "Turner", 1, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
+VALUES ("test@test.com", "Mr", "Timmy", "Tiberius", "Turner", 1, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
 
 INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
-VALUES ("admin@test.com", "mr", "Homer", "Biggy", "Simpson", 3, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
+VALUES ("admin@test.com", "Mr", "Homer", "Biggy", "Simpson", 3, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
 
 INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
-VALUES ("preparer@test.com", "mr", "Chip", "Tiberius", "Skylark", 2, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
+VALUES ("preparer@test.com", "Mr", "Chip", "Tiberius", "Skylark", 2, "7e25593a4fd6e8ea3847694d367e386f50f11826eb9d7249f02a634e065ba221", "TLfqFkURJ5/lSyDlp1EOP7etmbM4CgqjPM4Hfp9g/AU=", CURDATE(), "1-707-123-4567", "1-707-123-4568", "123 Dimmriver Road", "Dimmsdale", "California", "United States", "96001", "T", "en", "T");
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
-VALUES ("example@test.com", "Roger", "Rabbit", 1, "5b38e98e36f7316530be21f4ac1089d5689010ce55469f8d22c52053e32e1ea6", "EUmgQiGBpAy+pcPdAAVR1e2zd4xl8fcz0tF3sQOd5uI=", CURDATE(), "T", "en", "T");
+INSERT INTO user (email, title, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("example@test.com", "Mr", "Roger", "Rabbit", 1, "5b38e98e36f7316530be21f4ac1089d5689010ce55469f8d22c52053e32e1ea6", "EUmgQiGBpAy+pcPdAAVR1e2zd4xl8fcz0tF3sQOd5uI=", CURDATE(), "T", "en", "T");
 
 INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_hash, pass_salt, creation_date, phone, fax, street_address_1, city, province, country, postal_code, active, language, verified)
-VALUES ("jdgoerzen@gmail.com", "mr", "Jesse", "David", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "1-587-123-4567", "1-587-987-6543", "5000 Riverview Pl SE", "Calgary", "Alberta", "Canada", "T2C4K6", "T", "en", "T");
+VALUES ("jdgoerzen@gmail.com", "Mr", "Jesse", "David", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "1-587-123-4567", "1-587-987-6543", "5000 Riverview Pl SE", "Calgary", "Alberta", "Canada", "T2C4K6", "T", "en", "T");
 
-INSERT INTO user (email, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
-VALUES ("proton1guzman@gmail.com", "Cesar", "Guzman", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "AkJv9U1EomdagYn0SF/Hl9XiKDt2s2dLHL0TukPO3+k=", CURDATE(), "T", "en", "T");
+INSERT INTO user (email, title, f_name, l_name, permission_level, pass_hash, pass_salt, creation_date, active, language, verified)
+VALUES ("proton1guzman@gmail.com", "Mr", "Cesar", "Guzman", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "AkJv9U1EomdagYn0SF/Hl9XiKDt2s2dLHL0TukPO3+k=", CURDATE(), "T", "en", "T");
 
 INSERT INTO tax_return (email, status, year)
 VALUES ("test@test.com", "new", 2019);

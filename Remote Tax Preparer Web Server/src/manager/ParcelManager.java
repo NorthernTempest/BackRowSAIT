@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 
+import databaseAccess.DocumentDB;
 import databaseAccess.ParcelDB;
 import domain.Document;
 import domain.Parcel;
@@ -91,6 +92,8 @@ public final class ParcelManager {
 			String receiver, Date dateSent, Date expiryDate, int taxYear, boolean requiresSignature) throws NumberFormatException, ConfigException {
 		init();
 		
+		boolean successfulInsert = true;
+		
 		//Set expiration date
 		Calendar c = Calendar.getInstance();
 		c.setTime(dateSent);
@@ -100,10 +103,16 @@ public final class ParcelManager {
 		Parcel parcel = new Parcel(subject, message, sender, receiver, dateSent, expDate, taxYear, documents, requiresSignature);
 		
 		if(ParcelDB.insert(parcel)){
-			return true;
+			for(Document document : documents) {
+				if(!DocumentDB.insert(document, parcel.getParcelID())) {
+					successfulInsert = false;
+				}
+			}
 		} else {
 			return false;
 		}
+		
+		return successfulInsert;
 
 	}
 	
