@@ -1,5 +1,7 @@
 package servlet;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import domain.Document;
 import domain.Parcel;
@@ -37,11 +41,6 @@ public final class ViewServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 4807630350799183535L;
-	
-	/**
-	 * 
-	 */
-	private static final int BYTE_BUFFER_SIZE = 1048;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -138,16 +137,16 @@ public final class ViewServlet extends HttpServlet {
 		//get selected file name
 		String filePath = null;
 		filePath = request.getParameter("filePath");
+		
+		response.setContentType("text/plain");
+        response.setHeader("Content-disposition", "attachment; filename=" + new File(filePath).getName());
+ 
+		
+		Debugger.log("FILEPATH: " + filePath);
 
-		try (InputStream in = request.getServletContext().getResourceAsStream(filePath);
+		try (InputStream in = new FileInputStream(filePath);
 				OutputStream out = response.getOutputStream()) {
-
-			byte[] buffer = new byte[BYTE_BUFFER_SIZE];
-
-			int numBytesRead;
-			while ((numBytesRead = in.read(buffer)) > 0) {
-				out.write(buffer, 0, numBytesRead);
-			}
+			IOUtils.copy(in, out);
 		}
 
 		//Display View page
