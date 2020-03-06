@@ -23,4 +23,4 @@ teststringpath:C:\Capstone\TestFiles\string.txt
 PARCEL_EXPIRATION_DAYS:5
 SERVER_STORAGE_PATH:C:/Capstone/TestFiles/ServerStorage
 registersubject:Activate Your MCL Taxes Account 
-registertemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\recoveryEmail.html
+registertemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\registerEmail.html

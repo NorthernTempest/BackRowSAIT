@@ -44,11 +44,13 @@ public final class RegisterServlet extends HttpServlet {
 				String message = "Registration successful, please click the verification link sent to your email to continue. Remember to check your spam folder. If no email is sent, please click <a href=\"/register?action=resend&email="+request.getParameter("email")+"\">here</a>. If problem persists, please contact us directly.";
 				request.setAttribute("successMessage", message);
 				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+				return;
 			} catch (MessagingException e) {
 				setRegisterAttributes(request);
 				request.setAttribute("message",
 						e.getMessage());
 				getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
+				return;
 			}
 			
 		}
@@ -56,8 +58,8 @@ public final class RegisterServlet extends HttpServlet {
 			String registrationID = request.getParameter("verify");
 			try {
 				UserManager.verifyEmail(registrationID);
-				request.setAttribute("successMessage", "Verification successful, please log in to continue");
-				getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+				response.sendRedirect("/login?registered");
+				return;
 			} catch (Exception e) {
 				setRegisterAttributes(request);
 				request.setAttribute("message",
