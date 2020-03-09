@@ -20,6 +20,7 @@ import exception.ConfigException;
 import service.ConfigService;
 import service.EmailService;
 import service.EncryptionService;
+import util.cesar.Debugger;
 
 /**
  * 
@@ -626,6 +627,7 @@ public final class UserManager {
 	}
 
 	public static void verifyEmail(String registrationID) throws Exception {
+		init();
 		User user = UserDB.getByVerificationID(registrationID);
 
 		Calendar c = Calendar.getInstance();
@@ -634,6 +636,8 @@ public final class UserManager {
 				&& user.getLastVerificationType() == User.VERIFY_TYPE_CREATE_ACCOUNT && user.getLastVerificationAttempt() != null
 				&& user.getLastVerificationAttempt().after(c.getTime())
 				&& user.getLastVerificationAttempt().before(new Date());
+		
+		Debugger.log(verificationTimeout);
 		
 		if (output) {
 			user.setVerified(true);

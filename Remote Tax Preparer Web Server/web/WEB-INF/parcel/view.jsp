@@ -18,7 +18,11 @@
 	<p>${parcel.message}</p>
 
     <c:forEach var="doc" items="${documentPaths}">
-        ${doc}<br>
+    	<form action="/parcel/view" method="post">
+    	 	<input type="hidden" name="filePath" value="${doc}">
+    	 	<button type="submit" class="btn btn-primary">${doc}</button>
+    	</form>
+       
     </c:forEach>
 
 </div>

@@ -1,6 +1,10 @@
 package servlet;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -14,6 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import domain.Document;
 import domain.Parcel;
@@ -62,16 +68,16 @@ public final class ViewServlet extends HttpServlet {
 			parcelID = request.getParameter("parcelID");
 		} catch (NumberFormatException e) {
 			Debugger.log("caught number format exception, is this not a number?: ");
-			Debugger.log(request.getAttribute("parcelID"));
+			Debugger.log(request.getParameter("parcelID"));
 		}
-		
+
 		//check that its a real parcel that the user can view
 		try {
-			if(ParcelManager.isVisibleToUser(email, parcelID)) {
+			if (ParcelManager.isVisibleToUser(email, parcelID)) {
 				//push the parcel to jsp
 				Parcel parcel = ParcelManager.get(parcelID);
 				ArrayList<String> documentPaths = new ArrayList<>();
-				for(Document document : parcel.getDocuments()) {
+				for (Document document : parcel.getDocuments()) {
 					documentPaths.add(EncryptionService.decryptDocument(document));
 				}
 				session.setAttribute("parcel", parcel);
@@ -115,7 +121,7 @@ public final class ViewServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//Display View page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/view.jsp").forward(request, response);
 	}
@@ -127,6 +133,21 @@ public final class ViewServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Debugger.log("ViewServlet.doPost");
+
+		//get selected file name
+		String filePath = null;
+		filePath = request.getParameter("filePath");
+		
+		response.setContentType("text/plain");
+        response.setHeader("Content-disposition", "attachment; filename=" + new File(filePath).getName());
+ 
+		
+		Debugger.log("FILEPATH: " + filePath);
+
+		try (InputStream in = new FileInputStream(filePath);
+				OutputStream out = response.getOutputStream()) {
+			IOUtils.copy(in, out);
+		}
 
 		//Display View page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/view.jsp").forward(request, response);
