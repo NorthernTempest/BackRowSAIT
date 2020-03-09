@@ -29,6 +29,7 @@
 		<url-pattern>/recover/*</url-pattern>
 		<url-pattern>/settings/*</url-pattern>
 		<url-pattern>/admin/*</url-pattern>
+		<url-pattern>/reports/*</url-pattern>
 	</filter-mapping>
 	<resource-ref>
 		<description>DB Connection</description>
