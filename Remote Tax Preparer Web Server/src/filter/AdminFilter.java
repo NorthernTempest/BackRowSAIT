@@ -69,6 +69,25 @@ public class AdminFilter implements Filter {
 			}
 		} 
 		
+		else if (context != null && context.equals("/reports")) {
+			
+			try {
+				if (UserManager.getRole(session.getId()) > 1) {
+					chain.doFilter(request, response);
+				} else {
+					request2.setAttribute("errorMessage", "Access Denied.");
+					if (SessionManager.isSessionActive(session.getId()))
+						request2.getServletContext().getRequestDispatcher("/inbox").forward(request2, response);
+					
+					else
+						request2.getServletContext().getRequestDispatcher("/login").forward(request2, response);
+				}
+			} catch (ConfigException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		else 
 			chain.doFilter(request, response);
 	}

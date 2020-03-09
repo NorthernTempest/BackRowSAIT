@@ -34,7 +34,7 @@
 		<c:if test="${role > 1}">
 			<span class="nav-separator">|</span>
         	<span class="nav-item">
-            	<a href="/admin">Reports</a>
+            	<a href="/reports">Reports</a>
         	</span>
 		</c:if>
 		<c:if test="${role > 2}">
