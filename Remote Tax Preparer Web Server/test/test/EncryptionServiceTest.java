@@ -3,7 +3,6 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -73,15 +72,13 @@ class EncryptionServiceTest {
 			InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, ConfigException, InvalidAlgorithmParameterException, IOException {
 		String unencryptedString = ConfigService.fetchContents(ConfigService.fetchFromConfig("teststringpath:"));
 
-		byte[] encryptedBytes = EncryptionService.encryptString(unencryptedString);
-		
-		String encryptedString = new String( encryptedBytes, Charset.defaultCharset() );
+		String encryptedString = EncryptionService.encryptString(unencryptedString);
 		
 		System.out.println(encryptedString);
 
 		assertFalse(unencryptedString.equals(encryptedString));
 
-		String decryptedString = EncryptionService.decryptString(encryptedBytes);
+		String decryptedString = EncryptionService.decryptString(encryptedString);
 		
 		System.out.println(decryptedString);
 		
