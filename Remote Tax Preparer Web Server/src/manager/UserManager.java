@@ -682,4 +682,50 @@ public final class UserManager {
 			return false;
 		}
 	}
+	
+	public static boolean adminDeleteAccount(String email, String sessionID) {
+		try {
+			if (getRole(sessionID) < 2) {
+				return false;
+			}
+		} catch (ConfigException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			User user = getUser(email);
+			user.setActive(false);
+			boolean flag = UserDB.update(user);
+			LogEntryDB.insert(new LogEntry(email, "Admin requested.", LogEntry.DEACTIVATE_ACCOUNT, null));
+			return flag;
+		} catch (ConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean adminRestoreAccount(String email, String sessionID) {
+		try {
+			if (getRole(sessionID) < 2) {
+				return false;
+			}
+		} catch (ConfigException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			User user = getUser(email);
+			user.setActive(true);
+			boolean flag = UserDB.update(user);
+			LogEntryDB.insert(new LogEntry(email, "Admin requested.", LogEntry.UPDATE_ACCOUNT, null));
+			return flag;
+		} catch (ConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
