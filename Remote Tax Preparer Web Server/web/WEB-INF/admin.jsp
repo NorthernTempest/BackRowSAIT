@@ -6,51 +6,57 @@
 <div class="col-12">
 	<div class=row>
 	<div class=col-md-6>
-	<h4>
+	<h1>
 		User Settings
+	</h1>
+	<h4>
+		Create New Account
 	</h4>
-	<h5>
-		Create New Account:
-	</h5>
-	<h5>
+	<form action=admin?action=createNewTaxPreparer method=POST>
+		<input type=submit class="btn btn-primary" value="Create New Tax Preparer Account">
+	</form><br>
+	<form action=admin?action=createNewAdmin method=POST>
+		<input type=submit class="btn btn-primary" value="Create New Admin Account">
+	</form><br>
+	<h4>
 		Restore Account
-	</h5>
+	</h4>
 	<form action=admin?action=restore method=POST>
 		<p>Enter the email of the account you wish to restore: 
 		<input type=email name=restoreEmail id=restoreEmail maxlength=100 class=form-control required>
-		<input type=submit value=Submit></p>
-	</form>
-	<h5>
+		<input type=submit class="btn btn-primary" value="Restore Account"></p>
+	</form><br>
+	<h4>
 		Deactivate Account
-	</h5>
+	</h4>
 	<form action=admin?action=deactivate method=POST>
 	<p>Enter the email of the account you wish to deactivate: 
 	<input type=email name=deactivateEmail id=deactivateEmail maxlength=100 class=form-control required>
-	<input type=submit value=Submit></p>
+	<input type=submit class="btn btn-danger" value="Deactivate Account"></p>
 	</form>
 	</div>
 	</div>
 </div>
 <hr class="nav-separator">
 <div class="col-12">
-	<h4>
+	<h1>
 		Backup & Restore
-	</h4>
+	</h1>
 	<h6>
 		Last Time Backed Up: 
 	</h6>
-	<h5>
+	<h4>
 		Backup:
-	</h5>
-	<h5>
+	</h4>
+	<h4>
 		Restore: 
-	</h5>
+	</h4>
 </div>
 <hr class="nav-separator">
 <div class="col-12">
-	<h4>
+	<h1>
 		Configuration Settings
-	</h4>
+	</h1>
 	<br><br><br><br>
 </div>
 
