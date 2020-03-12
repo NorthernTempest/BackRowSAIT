@@ -4,6 +4,8 @@
 <jsp:directive.include file="../../template/head.jsp" />
 
 <div class="col-12">
+	<div class=row>
+	<div class=col-md-6>
 	<h4>
 		User Settings
 	</h4>
@@ -11,11 +13,23 @@
 		Create New Account:
 	</h5>
 	<h5>
-		Restore Account:
+		Restore Account
 	</h5>
+	<form action=admin?action=restore method=POST>
+		<p>Enter the email of the account you wish to restore: 
+		<input type=email name=restoreEmail id=restoreEmail maxlength=100 class=form-control required>
+		<input type=submit value=Submit></p>
+	</form>
 	<h5>
-		Deactivate Account:
+		Deactivate Account
 	</h5>
+	<form action=admin?action=deactivate method=POST>
+	<p>Enter the email of the account you wish to deactivate: 
+	<input type=email name=deactivateEmail id=deactivateEmail maxlength=100 class=form-control required>
+	<input type=submit value=Submit></p>
+	</form>
+	</div>
+	</div>
 </div>
 <hr class="nav-separator">
 <div class="col-12">
