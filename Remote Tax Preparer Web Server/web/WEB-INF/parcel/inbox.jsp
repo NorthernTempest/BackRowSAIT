@@ -109,7 +109,7 @@
 
             for (let parcel in table) {
                 let row = document.createElement("tr");
-                row.onclick = function() {"window.location = /parcel/view?parcelID=" + table[parcel].parcelID};
+                row.onclick = goto("/parcel/view?parcelID=" + table[parcel].parcelID);
 
                 let rowSubj = document.createElement("td");
                 rowSubj.innerText = table[parcel].subject;
@@ -131,12 +131,10 @@
                 let rowExpire = document.createElement("td");
                 rowExpire.innerText = table[parcel].expirationDateString;
                 row.appendChild(rowExpire);
-                console.log(table[parcel]);
 
                 tableDom.appendChild(row);
             }
         }
-        console.log(table);
 
     }
 
@@ -150,6 +148,10 @@
             }
         }
 
+    }
+
+    function goto(where) {
+        window.location = where;
     }
 
 </script>
