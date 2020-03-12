@@ -46,7 +46,7 @@
                 ""
             ],
             "expirationDate": Date.parse("${parcel.expirationDate}"),
-            "expirationDateString": Date.parse("${parcel.expirationDate}"),
+            "expirationDateString": "${parcel.expirationDate}",
             "taxReturnYear": ${parcel.taxReturnYear},
             "requiresSignature": ${parcel.requiresSignature? true : false }
         },
@@ -55,39 +55,40 @@
     ];
     parcels.pop();
 
+    window.onload = function() {
+        fillTable(null);
+    }
+
     function fillTable(sort) {fillTable(sort, null)}
     function fillTable(sort, filter) {
         let table = parcels;
-        if (filter !== null) {
-            if (filter.year !== null) {
-                let tempTable = [];
-                for(let parcel in table) {
-                    if (parcel.taxReturnYear === filter.year) {
-                        tempTable.push(parcel);
-                    }
-                }
-                table = tempTable;
+
+        if (typeof filter === 'undefined') filter = "";
+        if (typeof filter.year !== 'undefined') {
+            let tempTable = [];
+            for(let parcel in table) {
+                if (parcel.taxReturnYear === filter.year)
+                    tempTable.push(parcel);
             }
-            if (filter.documents !== null) {
-                let tempTable = [];
-                for(let parcel in table) {
-                    if (parcel.noOfDocuments >= filter.documents) {
-                        tempTable.push(parcel);
-                    }
-                }
-                table = tempTable;
-            }
-            if (filter.reqSig !== null) {
-                let tempTable = [];
-                for(let parcel in table) {
-                    if (parcel.requiresSignature == true) {
-                        tempTable.push(parcel);
-                    }
-                }
-                table = tempTable;
-            }
+            table = tempTable;
         }
-        if(sort === null || sort === "") {
+        if (typeof filter.documents !== 'undefined') {
+            let tempTable = [];
+            for(let parcel in table) {
+                if (parcel.noOfDocuments >= filter.documents)
+                    tempTable.push(parcel);
+            }
+            table = tempTable;
+        }
+        if (typeof filter.reqSig !== 'undefined') {
+            let tempTable = [];
+            for(let parcel in table) {
+                if (parcel.requiresSignature == true)
+                    tempTable.push(parcel);
+            }
+            table = tempTable;
+        }
+        if(typeof sort === 'undefined') {
             sort = "dateSent";
         }
         table.sort((a, b) => (a[sort] > b[sort]) ? 1 : -1);
@@ -95,38 +96,47 @@
         //Print out the results.
         let tableDom = document.getElementById("tableDom");
 
-        tableDom.textContent = `<tr>
+        if (table.length < 1) {
+            tableDom.innerText = "Nothing here!";
+        } else {
+            tableDom.innerHTML = `<tr>
             <th scope="col">Subject</th>
             <th scope="col">Message</th>
             <th scope="col">Date Sent</th>
-            <th scope="col">Attached</th>
+            <th scope="col">Attached Documents</th>
             <th scope="col">Expiration Date</th>
         </tr>`;
 
-        for (let parcel in table) {
-            let row = document.createElement("tr");
-            row.onclick = ("window.location = /parcel/view?parcelID="+parcel.parcelID);
+            for (let parcel in table) {
+                let row = document.createElement("tr");
+                row.onclick = function() {"window.location = /parcel/view?parcelID=" + table[parcel].parcelID};
 
-            let rowSubj = document.createElement("td");
-            rowSubj.innerText = parcel.subject;
-            row.appendChild(rowSubj);
+                let rowSubj = document.createElement("td");
+                rowSubj.innerText = table[parcel].subject;
+                rowSubj.scope = "row";
+                row.appendChild(rowSubj);
 
-            let rowMessage = document.createElement("td");
-            rowMessage.innerText = parcel.message;
-            row.appendChild(rowMessage);
+                let rowMessage = document.createElement("td");
+                rowMessage.innerText = table[parcel].message;
+                row.appendChild(rowMessage);
 
-            let rowDate = document.createElement("td");
-            rowDate.innerText = parcel.dateSentString;
-            row.appendChild(rowDate);
+                let rowDate = document.createElement("td");
+                rowDate.innerText = table[parcel].dateSentString;
+                row.appendChild(rowDate);
 
-            let rowDocs = document.createElement("td");
-            rowDocs.innerText = parcel.noOfDocuments;
-            row.appendChild(rowDocs);
+                let rowDocs = document.createElement("td");
+                rowDocs.innerText = table[parcel].noOfDocuments;
+                row.appendChild(rowDocs);
 
-            let rowExpire = document.createElement("td");
-            rowExpire.innerText = parcel.expirationDateString;
-            row.appendChild(rowExpire);
+                let rowExpire = document.createElement("td");
+                rowExpire.innerText = table[parcel].expirationDateString;
+                row.appendChild(rowExpire);
+                console.log(table[parcel]);
+
+                tableDom.appendChild(row);
+            }
         }
+        console.log(table);
 
     }
 
