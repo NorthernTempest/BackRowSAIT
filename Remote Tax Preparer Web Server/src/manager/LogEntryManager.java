@@ -44,7 +44,15 @@ public final class LogEntryManager {
 	public static boolean createLogEntry(String email, String message, char type, String ip) {
 		return false;
 	}
-
+	
+	/**
+	 * Creates a log entry for the given error.
+	 * 
+	 * @param email String The email address of the user who triggered the error.
+	 * @param error Exception The exception that was thrown.
+	 * @param ip String The ip address of the user who triggered the error.
+	 * @return true if the error log was successfully added to the database.
+	 */
 	public static boolean logError(String email, Exception error, String ip) {
 		StringWriter sw = new StringWriter();
 		error.printStackTrace(new PrintWriter(sw));

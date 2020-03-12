@@ -26,7 +26,7 @@ public class DocumentDB {
 	 * @param doc Document to insert into the database
 	 * @return boolean based on whether or not the operation was successful
 	 */
-	public static boolean insert(Document doc, int parcelID) {
+	public static boolean insert(Document doc, String parcelID) {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		int rows = 0;
@@ -39,7 +39,7 @@ public class DocumentDB {
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
 			ps.setString(1, doc.getFilePath());
-			ps.setInt(2, parcelID);
+			ps.setString(2, parcelID);
 			ps.setString(3, doc.getFileName());
 			ps.setLong(4, doc.getFileSize());
 
@@ -154,7 +154,7 @@ public class DocumentDB {
 	 * @param parcelID parcelID of the Documents to retrieve from the database
 	 * @return Documents that contains the documents of the requested parcelID
 	 */
-	public static ArrayList<Document> getByParcelID(int parcelID) {
+	public static ArrayList<Document> getByParcelID(String parcelID) {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		ResultSet rs;
@@ -166,7 +166,7 @@ public class DocumentDB {
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
-			ps.setInt(1, parcelID);
+			ps.setString(1, parcelID);
 
 			rs = ps.executeQuery();
 

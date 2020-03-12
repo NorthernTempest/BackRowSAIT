@@ -49,9 +49,14 @@ public final class LoginServlet extends HttpServlet {
 			response.sendRedirect("login");
 		} else {
 			String recovered = request.getParameter("recovered");
+			String registered = request.getParameter("registered");
+			
 			if (recovered != null) {
 				request.setAttribute("successMessage",
 						"Success! If the given email was associated with an account, we sent you an email.");
+			}
+			if (registered!=null) {
+				request.setAttribute("successMessage", "Verification successful, please log in to continue");
 			}
 			// Display Login page
 			getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);

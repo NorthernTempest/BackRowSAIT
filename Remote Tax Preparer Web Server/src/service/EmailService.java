@@ -69,6 +69,8 @@ public final class EmailService {
 			password = ConfigService.fetchContents(ConfigService.fetchFromConfig("emailpasswordpath:"));
 			recoverySubject = ConfigService.fetchFromConfig("recoverysubject:");
 			recoveryTemplatePath = ConfigService.fetchFromConfig("recoverytemplatepath:");
+			registerSubject = ConfigService.fetchFromConfig("registersubject:");
+			registerTemplatePath = ConfigService.fetchFromConfig("registertemplatepath:");
 			init = true;
 		}
 	}

@@ -11,7 +11,7 @@ outfiles:C:\Capstone\TestFiles\output\
 MAX_LOGIN_ATTEMPTS:5
 LOGIN_ATTEMPT_TIMELIMIT:10
 sessiontime:30
-recoverytime:15
+verificationtime:60
 smtphost:smtp.gmail.com
 smtpport:465
 emailusernamepath:C:\Capstone\TestFiles\emailusername.txt
@@ -23,4 +23,4 @@ teststringpath:C:\Capstone\TestFiles\string.txt
 PARCEL_EXPIRATION_DAYS:5
 SERVER_STORAGE_PATH:C:/Capstone/TestFiles/ServerStorage
 registersubject:Activate Your MCL Taxes Account 
-registertemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\recoveryEmail.html
+registertemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\registerEmail.html

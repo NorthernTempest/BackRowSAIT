@@ -1,3 +1,5 @@
+DROP USER IF EXISTS 'remote_tax_preparer_app';
+
 CREATE USER 'remote_tax_preparer_app'
 IDENTIFIED BY 'perrywinkle69';
 

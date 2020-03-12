@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import exception.ConfigException;
 import manager.SessionManager;
+import manager.UserManager;
 
 /**
  * Servlet Filter implementation class AuthenticationFilter
@@ -53,6 +55,7 @@ public class AuthenticationFilter implements Filter {
 			}
 			else
 				chain.doFilter(request, response);
+		
 		}
 		else
 		{
