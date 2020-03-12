@@ -37,9 +37,9 @@
 		<label for="addressCity">City</label>
 		<input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
 		<label for="addressRegion">Province/State</label>
-		<select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion}" required></select>
+		<select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion}" data-value="shortcode" required></select>
 		<label for="addressCountry">Country</label>
-		<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" data-default-value="${addressCountry}" required></select>
+		<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" data-default-value="${addressCountry}" data-value="shortcode" required></select>
 		<label for="addressPostal">Postal Code</label>
 		<input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}" required>
 	</div>

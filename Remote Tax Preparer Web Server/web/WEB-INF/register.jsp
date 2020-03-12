@@ -13,7 +13,7 @@
 		<div class="col-md-6">
 			<h3>Login Details</h3>
 			<label for="email">Email</label>
-            <input type="email" name="email" id="email" maxlength="100" class="form-control" required>
+            <input type="email" name="email" id="email" maxlength="100" class="form-control" value="${email}" required>
             <label for="password1">Password</label>
             <input type="password" name="password1" id="password1" maxlength="256" class="form-control password-field" required>
             <label for="password2">Password (again)</label>
@@ -43,18 +43,18 @@
 					<option value="Ms">Ms</option>
 					<option value="Mx">Mx</option>
 				</select>
-                <label for="f-name" required>First Name</label>
+                <label for="f-name" value="${f-name}" required>First Name</label>
                 <input name="f-name" id="f-name" maxlength="25" class="form-control">
-                <label for="m-name">Middle Name</label>
+                <label for="m-name" value="${m-name}">Middle Name</label>
                 <input name="m-name" id="m-name" maxlength="25" class="form-control">
-                <label for="l-name" required>Last Name</label>
+                <label for="l-name" value="${l-name}" required>Last Name</label>
                 <input name="l-name" id="l-name" maxlength="25" class="form-control">
 			</div>
 			<div class="form-group">
-				<label for="phone" required>Primary Phone Number</label>
-                <input type="tel" name="phone" id="phone" maxlength="15" class="form-control" pattern="1?\W*([2-9][0-8][0-9])\W*([2-9][0-9]{2})\W*([0-9]{4})(\se?x?t?(\d*))?">
-				<label for="fax">Fax Number</label>
-                <input type="tel" name="fax" id="fax" maxlength="15" class="form-control" pattern="1?\W*([2-9][0-8][0-9])\W*([2-9][0-9]{2})\W*([0-9]{4})(\se?x?t?(\d*))?">
+				<label for="phone" value="${phone}" required>Primary Phone Number</label>
+                <input type="tel" name="phone" id="phone" maxlength="15" class="form-control">
+				<label for="fax" value="${fax}">Fax Number</label>
+                <input type="tel" name="fax" id="fax" maxlength="15" class="form-control">
 			</div>
 		</div>
 		<div class="col-md-6"></div>
@@ -73,10 +73,10 @@
             <label for="addressCity">City</label>
             <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
             <label for="addressCountry">Country</label>
-			<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" data-default-value="${addressCountry}">
+			<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${addressCountry}">
 			</select>
             <label for="addressRegion">Province/State</label>
-            <select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion}">
+            <select id="addressRegion" class="form-control" data-value="shortcode" name="addressRegion" data-default-value="${addressRegion}">
 			</select>
             <label for="addressPostal">Postal Code</label>
             <input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}" required>
