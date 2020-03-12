@@ -109,7 +109,9 @@
 
             for (let parcel in table) {
                 let row = document.createElement("tr");
-                row.onclick = goto("/parcel/view?parcelID=" + table[parcel].parcelID);
+                row.addEventListener('click', function() {
+                    goto('/parcel/view?parcelID=' + table[parcel].parcelID);
+                });
 
                 let rowSubj = document.createElement("td");
                 rowSubj.innerText = table[parcel].subject;
