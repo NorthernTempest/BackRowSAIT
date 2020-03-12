@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import exception.ConfigException;
+import manager.UserManager;
+
 /**
  * Servlet implementation class AdminServlet
  */
@@ -34,7 +37,36 @@ public class AdminServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
+		String action = request.getParameter("action");
+		String email;
+		
+		if (action.equals("restore")) {
+			email = request.getParameter("restoreEmail");
+			
+			if (email != null && UserManager.userExists(email)) {
+				UserManager.adminRestoreAccount(email, request.getSession().getId());
+				request.setAttribute("successMessage", "Account restored!");
+			}
+			
+			else {
+				request.setAttribute("errorMessage", "Error processing request. Ensure the email is entered correctly.");
+			}
+		}
+		
+		else if (action.equals("deactivate")) {
+			email = request.getParameter("deactivateEmail");
+			
+			if (email != null && UserManager.userExists(email)) {
+				UserManager.adminDeleteAccount(email, request.getSession().getId());
+				request.setAttribute("successMessage", "Account deactivated.");
+			}
+			
+			else {
+				request.setAttribute("errorMessage", "Error processing request. Ensure the email is entered correctly.");
+			}
+		}
+		
 		doGet(request, response);
 	}
 
