@@ -16,148 +16,189 @@ import service.EncryptionService;
  * @author Tristen Kreutz, Cesar Guzman, Jesse Goerzen
  */
 public final class User {
-	
+
 	/**
-	 * The email address of the user.
-	 * This is unique to each user. Must be less than or equal to 100 characters.
+	 * The email address of the user. This is unique to each user. Must be less than
+	 * or equal to 100 characters.
 	 */
 	private String email;
-	
+
 	/**
 	 * Whether the user is active in the system.
 	 */
 	private boolean active;
 	/**
-	 * The level of permission the user has in the system.
-	 * Valid values are given by the constants DEFAULT, USER, TAX_PREPARER, ADMIN, and SYSADMIN.
+	 * The level of permission the user has in the system. Valid values are given by
+	 * the constants DEFAULT, USER, TAX_PREPARER, ADMIN, and SYSADMIN.
 	 */
 	private int permissionLevel;
-	
+
 	/**
-	 * The title by which the user wants to be addressed.
-	 * Must be one of Na for not applicable, Mr for mister, Mrs for missus, Ms for miss, or Mx.
+	 * The title by which the user wants to be addressed. Must be one of Na for not
+	 * applicable, Mr for mister, Mrs for missus, Ms for miss, or Mx.
 	 */
 	private String title;
 	/**
-	 * The user's first name.
-	 * Must be 25 characters or less.
+	 * The user's first name. Must be 25 characters or less.
 	 */
 	private String fName;
 	/**
-	 * The user's middle name.
-	 * Must be 25 characters or less.
+	 * The user's middle name. Must be 25 characters or less.
 	 */
 	private String mName;
 	/**
-	 * The user's last name.
-	 * Must be 25 characters or less.
+	 * The user's last name. Must be 25 characters or less.
 	 */
 	private String lName;
 
 	/**
-	 * The hashed form of the user's password. Is based on the user's salt, as well as the password only known by them.
-	 * Is 64 characters long.
+	 * The hashed form of the user's password. Is based on the user's salt, as well
+	 * as the password only known by them. Is 64 characters long.
 	 */
 	private String passHash;
 	/**
-	 * The random string of characters used as a salt for hashing the user's password.
-	 * Is 44 characters long.
+	 * The random string of characters used as a salt for hashing the user's
+	 * password. Is 44 characters long.
 	 */
 	private String passSalt;
-	
+
 	/**
 	 * The day and time that the user was created.
 	 */
 	private Date creationDate;
-	
+
 	/**
-	 * The user's phone number.
-	 * Must be 15 characters or less.
-	 * TODO Must follow ....
+	 * The user's phone number. Must be 15 characters or less. TODO Must follow ....
 	 */
 	private String phone;
 	/**
-	 * The user's fax number.
-	 * Must be 15 characters or less.
+	 * The user's fax number. Must be 15 characters or less.
 	 */
 	private String fax;
 
 	/**
-	 * The first line of the user's mailing street address.
-	 * Must be 320 characters or fewer.
+	 * The first line of the user's mailing street address. Must be 320 characters
+	 * or fewer.
 	 */
 	private String streetAddress;
 	/**
-	 * The second line of the user's mailing street address.
-	 * Must be 320 characters or fewer.
+	 * The second line of the user's mailing street address. Must be 320 characters
+	 * or fewer.
 	 */
 	private String streetAddress2;
 	/**
-	 * The city of the user's mailing address.
-	 * Must be 100 characters or fewer.
+	 * The city of the user's mailing address. Must be 100 characters or fewer.
 	 */
 	private String city;
 	/**
-	 * The province of the user's mailing address.
-	 * Must follow the 2 character format of the ISO_3166-2 standard.
+	 * The province of the user's mailing address. Must follow the 2 character
+	 * format of the ISO_3166-2 standard.
 	 */
 	private String province;
 	/**
-	 * The country of the user's mailing address.
-	 * Must follow the 2 character format of the ISO_3166-2 standard.
+	 * The country of the user's mailing address. Must follow the 2 character format
+	 * of the ISO_3166-2 standard.
 	 */
 	private String country;
 	/**
-	 * The postal code of the user's mailing address.
-	 * Must be 10 characters long or fewer.
+	 * The postal code of the user's mailing address. Must be 10 characters long or
+	 * fewer.
 	 */
 	private String postalCode;
-	
+
 	/**
-	 * The user's preferred language.
-	 * Must be either en for English, or es for Español.
+	 * The user's preferred language. Must be either en for English, or es for
+	 * Español.
 	 */
 	private String language;
-	
+
 	/**
-	 * Whether or not the
+	 * Whether or not the user's email address has been verified.
 	 */
 	private boolean verified;
+	/**
+	 * The String containing the UUID used to identify this user for verification
+	 * attempts through email.
+	 */
 	private String verificationID;
+	/**
+	 * The time and date that the user last requested an action that required
+	 * verification.
+	 */
 	private Date lastVerificationAttempt;
+	/**
+	 * The last type of request the user gave for something that required
+	 * verification.
+	 */
 	private int lastVerificationType;
 
+	/**
+	 * The default user permission level. Should not be used.
+	 */
 	public static final int DEFAULT = 0;
+	/**
+	 * The user permission level for the client's customers.
+	 */
 	public static final int USER = 1;
+	/**
+	 * The user permission level for the tax preparers employed by the client.
+	 */
 	public static final int TAX_PREPARER = 2;
+	/**
+	 * The user permission level for the administrators of the system.
+	 */
 	public static final int ADMIN = 3;
+	/**
+	 * The user permission level for the system administrator of the system.
+	 */
 	public static final int SYSADMIN = 4;
 
+	/**
+	 * The code indicating that the last type of verification requested was for
+	 * creating the account.
+	 */
 	public static final int VERIFY_TYPE_CREATE_ACCOUNT = 11;
+	/**
+	 * The code indicating that the last type of verification requested was for
+	 * reseting the password.
+	 */
 	public static final int VERIFY_TYPE_PASS_RESET = 12;
+	/**
+	 * The code indicating that no verification has been requested or the last
+	 * verification was completed.
+	 */
 	public static final int VERIFY_TYPE_NONE = -1;
 
 	/**
-	 * Constructs an empty user.
+	 * Constructs an empty User object.
 	 */
 	public User() {
 
 	}
 
 	/**
-	 * Constructs a complete user with all fields.
+	 * Constructs a complete User object with all fields. Used in UserDB for reading
+	 * users from the database.
 	 * 
-	 * @param email
-	 * @param fname
-	 * @param mname
-	 * @param lname
-	 * @param permissionLevel
-	 * @param phone
-	 * @param passHash
-	 * @param passSalt
-	 * @param title
-	 * @param creationDate
-	 * @param fax
+	 * @param email                   String The email address of the user. Used as
+	 *                                the unique identifier for the user.
+	 * @param fname                   String The user's first name.
+	 * @param mname                   String The user's middle name.
+	 * @param lname                   String The user's last name.
+	 * @param permissionLevel         int The level of permission that the user has
+	 *                                in the system.
+	 * @param phone                   String The user's phone number.
+	 * @param passHash                String The hashed for of the user's password
+	 *                                that is used to identify whether correct
+	 *                                passwords are entered.
+	 * @param passSalt                String The salt string used to randomize the
+	 *                                user's hashed password.
+	 * @param title                   String The title by which the user wishes to
+	 *                                be addressed.
+	 * @param creationDate            Date The date and time on which the user
+	 *                                created their account.
+	 * @param fax                     String The fax number used to contact the
+	 *                                user.
 	 * @param active
 	 * @param streetAddress
 	 * @param streetAddress2
@@ -202,7 +243,7 @@ public final class User {
 		setLastVerificationAttempt(lastVerificationAttempt);
 		setLastVerificationType(lastVerificationType);
 	}
-	
+
 	/**
 	 * Constructs a complete user with all fields.
 	 * 
@@ -229,15 +270,15 @@ public final class User {
 	 * @param lastVerificationAttempt
 	 * @param lastVerificationType
 	 * @throws IllegalArgumentException
-	 * @throws ConfigException 
-	 * @throws InvalidKeySpecException 
-	 * @throws NoSuchAlgorithmException 
+	 * @throws ConfigException
+	 * @throws InvalidKeySpecException
+	 * @throws NoSuchAlgorithmException
 	 */
 	public User(String email, String fname, String mname, String lname, int permissionLevel, String phone,
-			String password, String title, Date creationDate, String fax, boolean active,
-			String streetAddress, String streetAddress2, String city, String province, String country,
-			String postalCode, String language, boolean verified, String verificationID, Date lastVerificationAttempt,
-			int lastVerificationType) throws IllegalArgumentException, ConfigException, NoSuchAlgorithmException, InvalidKeySpecException {
+			String password, String title, Date creationDate, String fax, boolean active, String streetAddress,
+			String streetAddress2, String city, String province, String country, String postalCode, String language,
+			boolean verified, String verificationID, Date lastVerificationAttempt, int lastVerificationType)
+			throws IllegalArgumentException, ConfigException, NoSuchAlgorithmException, InvalidKeySpecException {
 
 		setEmail(email);
 		setFName(fname);
@@ -283,7 +324,7 @@ public final class User {
 	}
 
 	private void setEmail(String email) {
-		if (email.length() > 100||email.length()==0) {
+		if (email.length() > 100 || email.length() == 0) {
 			throw new IllegalArgumentException("Email is invalid, try again");
 		}
 		this.email = email;
@@ -316,39 +357,44 @@ public final class User {
 	public void setPassSalt(String passSalt) {
 		this.passSalt = passSalt;
 	}
-	
-	public void setPassword(String password) throws NumberFormatException, NoSuchAlgorithmException, InvalidKeySpecException, ConfigException {
+
+	public void setPassword(String password)
+			throws NumberFormatException, NoSuchAlgorithmException, InvalidKeySpecException, ConfigException {
 		if (password == null)
 			throw new IllegalArgumentException("Password is null.");
 		if (password.length() > 256)
-			throw new IllegalArgumentException("Password is too long. It must be less than or equal to 256 characters.");
+			throw new IllegalArgumentException(
+					"Password is too long. It must be less than or equal to 256 characters.");
 		if (password.length() < 8)
 			throw new IllegalArgumentException("Password is too short. It must be more than or equal to 8 characters.");
-		
+
 		Pattern p1 = Pattern.compile("[^\\w~!@#$%^&*()_\\-+=]");
-		
+
 		if (p1.matcher(password).find())
-			throw new IllegalArgumentException("Password contains illegal characters. Only the following are valid: letters, numbers, and any of !@#$%^&*()-_=+");
+			throw new IllegalArgumentException(
+					"Password contains illegal characters. Only the following are valid: letters, numbers, and any of !@#$%^&*()-_=+");
 
 		Pattern p2 = Pattern.compile("\\d");
 		Pattern p3 = Pattern.compile("[a-z]");
 		Pattern p4 = Pattern.compile("[A-Z]");
 		Pattern p5 = Pattern.compile("[~!@#$%^&*()_\\-+=]");
-		
-		if (!p2.matcher(password).find() || !p3.matcher(password).find() || !p4.matcher(password).find() || !p5.matcher(password).find())
-			throw new IllegalArgumentException("Password must contain at least one upper case letter, one lower case letter, one number, and one of the following: !@#$%^&*()-_=+");
-		
+
+		if (!p2.matcher(password).find() || !p3.matcher(password).find() || !p4.matcher(password).find()
+				|| !p5.matcher(password).find())
+			throw new IllegalArgumentException(
+					"Password must contain at least one upper case letter, one lower case letter, one number, and one of the following: !@#$%^&*()-_=+");
+
 		Pattern p6 = Pattern.compile("(.)\\1\\1+");
-		
+
 		if (p6.matcher(password).find())
 			throw new IllegalArgumentException("Password cannot have more than 2 consecutive repeating characters.");
-		
+
 		String passSalt = EncryptionService.getSalt();
 		String passHash = EncryptionService.hash(password, passSalt);
-		
-		if(passHash.equals(this.passHash))
+
+		if (passHash.equals(this.passHash))
 			throw new IllegalArgumentException("Your new password cannot match your old password.");
-		
+
 		this.passSalt = passSalt;
 		this.passHash = passHash;
 	}
@@ -406,7 +452,7 @@ public final class User {
 	 * @param fName the fName to set
 	 */
 	public void setFName(String fName) {
-		if (fName.length() > 25||fName.length()==0) {
+		if (fName.length() > 25 || fName.length() == 0) {
 			throw new IllegalArgumentException("First Name is invalid, please try again");
 		}
 		this.fName = fName;
@@ -440,7 +486,7 @@ public final class User {
 	 * @param lName the lName to set
 	 */
 	public void setLName(String lName) {
-		if (lName.length() > 25||lName.length()==0) {
+		if (lName.length() > 25 || lName.length() == 0) {
 			throw new IllegalArgumentException("Last Name is invalid, please try again");
 		}
 		this.lName = lName;
@@ -457,12 +503,13 @@ public final class User {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		if (title.equals("Na") || title.equals("Mr") || title.equals("Mrs") || title.equals("Ms")|| title.equals("Mx")) {
+		if (title.equals("Na") || title.equals("Mr") || title.equals("Mrs") || title.equals("Ms")
+				|| title.equals("Mx")) {
 			this.title = title;
 		} else {
 			throw new IllegalArgumentException("Title is invalid, please try again");
 		}
-		
+
 	}
 
 	/**
@@ -476,7 +523,7 @@ public final class User {
 	 * @param phone the phone to set
 	 */
 	public void setPhone(String phone) {
-		if (phone.length() > 15||phone.length()==0) {
+		if (phone.length() > 15 || phone.length() == 0) {
 			throw new IllegalArgumentException("Phone is invalid, please try again");
 		}
 		this.phone = phone;
@@ -541,7 +588,7 @@ public final class User {
 	 * @param address the address to set
 	 */
 	public void setStreetAddress(String streetAddress) {
-		if (streetAddress.length() > 200||streetAddress.length()==0) {
+		if (streetAddress.length() > 200 || streetAddress.length() == 0) {
 			throw new IllegalArgumentException("Address 1 is invalid, please try again");
 		}
 		this.streetAddress = streetAddress;
@@ -579,7 +626,7 @@ public final class User {
 	 * @param city
 	 */
 	public void setCity(String city) {
-		if (city.length() > 100||city.length()==0) {
+		if (city.length() > 100 || city.length() == 0) {
 			throw new IllegalArgumentException("City is invalid, please try again");
 		}
 		this.city = city;
@@ -673,7 +720,7 @@ public final class User {
 		String UUIDRegex = "([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})";
 		if (verificationID != null && verificationID.matches(UUIDRegex))
 			this.verificationID = verificationID;
-		else if( verificationID == null )
+		else if (verificationID == null)
 			this.verificationID = null;
 		else
 			throw new IllegalArgumentException("Invalid Verification ID");
@@ -695,7 +742,9 @@ public final class User {
 	public void setLastVerificationAttempt(Date lastVerificationAttempt) throws IllegalArgumentException {
 		Calendar current = Calendar.getInstance();
 		current.add(Calendar.SECOND, 1);
-		if (lastVerificationAttempt != null && lastVerificationAttempt.after(new Calendar.Builder().setDate(2020, Calendar.JANUARY, 1).build().getTime())
+		if (lastVerificationAttempt != null
+				&& lastVerificationAttempt
+						.after(new Calendar.Builder().setDate(2020, Calendar.JANUARY, 1).build().getTime())
 				&& lastVerificationAttempt.before(current.getTime()))
 			this.lastVerificationAttempt = lastVerificationAttempt;
 		else if (lastVerificationAttempt == null)
