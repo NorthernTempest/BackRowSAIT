@@ -43,18 +43,18 @@
 					<option value="Ms">Ms</option>
 					<option value="Mx">Mx</option>
 				</select>
-                <label for="f-name" value="${f-name}" required>First Name</label>
-                <input name="f-name" id="f-name" maxlength="25" class="form-control">
-                <label for="m-name" value="${m-name}">Middle Name</label>
-                <input name="m-name" id="m-name" maxlength="25" class="form-control">
-                <label for="l-name" value="${l-name}" required>Last Name</label>
-                <input name="l-name" id="l-name" maxlength="25" class="form-control">
+                <label for="f-name">First Name</label>
+                <input name="f-name" id="f-name" maxlength="25" value="${f-name}" class="form-control" required>
+                <label for="m-name">Middle Name</label>
+                <input name="m-name" id="m-name" maxlength="25" class="form-control" value="${m-name}">
+                <label for="l-name">Last Name</label>
+                <input name="l-name" id="l-name" maxlength="25" class="form-control" value="${l-name}" required>
 			</div>
 			<div class="form-group">
-				<label for="phone" value="${phone}" required>Primary Phone Number</label>
-                <input type="tel" name="phone" id="phone" maxlength="15" class="form-control">
-				<label for="fax" value="${fax}">Fax Number</label>
-                <input type="tel" name="fax" id="fax" maxlength="15" class="form-control">
+				<label for="phone">Primary Phone Number</label>
+                <input type="tel" name="phone" id="phone" maxlength="15" class="form-control" value="${phone}" required>
+				<label for="fax">Fax Number</label>
+                <input type="tel" name="fax" id="fax" maxlength="15" class="form-control" value="${fax}">
 			</div>
 		</div>
 		<div class="col-md-6"></div>
