@@ -389,9 +389,9 @@ public class ParcelDB {
 		
 		if(parcel != null && parcel.getReceiver() != null && parcel.getReceiver().equals(email)) {
 			return true;
-		} else if(UserManager.getUser(email).getPermissionLevel() >= 2) {
+		} else if(parcel != null && parcel.getReceiver() == null && UserManager.getUser(email).getPermissionLevel() >= 2) {
 			return true;
-		}
+		} else
 		return false;
 	}
 }
