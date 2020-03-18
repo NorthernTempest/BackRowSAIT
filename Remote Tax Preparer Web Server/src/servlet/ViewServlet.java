@@ -140,17 +140,15 @@ public final class ViewServlet extends HttpServlet {
 		
 		response.setContentType("text/plain");
         response.setHeader("Content-disposition", "attachment; filename=" + new File(filePath).getName());
- 
-		
+        
 		Debugger.log("FILEPATH: " + filePath);
 
 		try (InputStream in = new FileInputStream(filePath);
-				OutputStream out = response.getOutputStream()) {
+			OutputStream out = response.getOutputStream()) {
 			IOUtils.copy(in, out);
 		}
-
+		
 		//Display View page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/view.jsp").forward(request, response);
-
 	}
 }
