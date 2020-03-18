@@ -47,7 +47,7 @@ public final class CreateParcelServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 4807630350769183535L;
 
-	String uploadPath;
+	private String uploadPath;
 
 	/**
 	 * @see HttpServlet#HttpServlet()

@@ -325,9 +325,9 @@ public class EncryptionService {
 	/**
 	 * Takes the String passed into the method and decrypts the String.
 	 * 
-	 * @param encrypted byte[] The array of bytes to be decrypted. This array must
-	 *                  have been produced by the <code>encrpytString()</code>
-	 *                  method.
+	 * @param encrypted String The string of bytes in hexadecimal to be decrypted.
+	 *                  This string must have been produced by the
+	 *                  <code>encrpytString()</code> method.
 	 * @return decrypted String The decrypted String object.
 	 * @throws ConfigException                    if the config file in the res
 	 *                                            directory doesn't exist.
