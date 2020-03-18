@@ -18,7 +18,7 @@ CREATE TABLE user (
     postal_code CHAR(10),
     city VARCHAR(100),
     country CHAR(2),
-    province CHAR(2),
+    province VARCHAR(20),
     street_address_1 VARCHAR(320),
     street_address_2 VARCHAR(320),
     language CHAR(2) NOT NULL,
