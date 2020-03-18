@@ -22,6 +22,8 @@ import util.cesar.Debugger;
  */
 public class ParcelDB {
 
+	final static String TAX_PREPARER = "tax_preparer";
+
 	/**
 	 * Establishes a connection with the database and inserts the Parcel object
 	 * passed into this method into the parcel table.
@@ -34,7 +36,7 @@ public class ParcelDB {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
 		int rows = 0;
-
+		
 		try {
 
 			String preparedQuery = "INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, expiration_date, tax_return_year, requires_signature)"
@@ -309,11 +311,18 @@ public class ParcelDB {
 					count++;
 				}
 
-				if (receiver != null) {
+				if (receiver != null && !receiver.equals(TAX_PREPARER)) {
 					if (count > 0)
 						preparedQuery += "AND ";
 					preparedQuery += "receiver = ? ";
 					parameters.add(receiver);
+					count++;
+				}
+				
+				if (receiver != null && receiver.equals(TAX_PREPARER)) {
+					if (count > 0)
+						preparedQuery += "AND ";
+					preparedQuery += "receiver IS NULL ";
 					count++;
 				}
 

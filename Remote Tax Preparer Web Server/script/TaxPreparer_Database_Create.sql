@@ -21,7 +21,7 @@ CREATE TABLE user (
     province VARCHAR(20),
     street_address_1 VARCHAR(320),
     street_address_2 VARCHAR(320),
-    language CHAR(3) NOT NULL,
+    language CHAR(2) NOT NULL,
     active CHAR(1) NOT NULL,
     verified CHAR(1) NOT NULL,
     verification_id CHAR(36),
