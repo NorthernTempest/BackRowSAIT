@@ -11,6 +11,7 @@ import databaseAccess.DocumentDB;
 import databaseAccess.ParcelDB;
 import domain.Document;
 import domain.Parcel;
+import domain.User;
 import exception.ConfigException;
 import service.ConfigService;
 import service.EncryptionService;
@@ -28,6 +29,8 @@ public final class ParcelManager {
 	private static boolean init;
 	
 	private static int expirationDays;
+	
+	private final static String TAX_PREPARER = "tax_preparer";
 
 	/**
 	 * @param parcelID
@@ -40,6 +43,12 @@ public final class ParcelManager {
 	 */
 	public static ArrayList<Parcel> getParcels(String parcelID, String senderEmail, String receiverEmail, Date dateSent,
 			int year) throws ConfigException {
+		init();
+		
+		if(UserManager.getUser(receiverEmail).getPermissionLevel() > User.USER) {
+			receiverEmail = TAX_PREPARER;
+		}
+		
 		return ParcelDB.getParcelsByParameter(parcelID, senderEmail, receiverEmail, dateSent, year);
 	}
 
@@ -49,8 +58,14 @@ public final class ParcelManager {
 	 * @return
 	 * @throws ConfigException
 	 */
-	public static ArrayList<Parcel> getByYear(String recieverEmail, int year) throws ConfigException {
-		return getParcels(null, null, recieverEmail, null, year);
+	public static ArrayList<Parcel> getByYear(String receiverEmail, int year) throws ConfigException {
+		init();
+		
+		if(UserManager.getUser(receiverEmail).getPermissionLevel() > User.USER) {
+			receiverEmail = TAX_PREPARER;
+		}
+		
+		return getParcels(null, null, receiverEmail, null, year);
 	}
 
 	/**
@@ -59,6 +74,7 @@ public final class ParcelManager {
 	 * @throws ConfigException
 	 */
 	public static Parcel get(String parcelID) throws ConfigException {
+		init();
 		return ParcelDB.get(parcelID);
 	}
 
@@ -71,6 +87,7 @@ public final class ParcelManager {
 	 * @throws ConfigException
 	 */
 	public static boolean isVisibleToUser(String email, String parcelID) throws ConfigException {
+		init();
 		return ParcelDB.isVisibleToUser(email, parcelID);
 	}
 
@@ -99,6 +116,10 @@ public final class ParcelManager {
 		c.setTime(dateSent);
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);  
 		Date expDate = c.getTime();
+		
+		if(UserManager.getUser(sender).getPermissionLevel() == User.USER) {
+			receiver = null;
+		}
 		
 		Parcel parcel = new Parcel(subject, message, sender, receiver, dateSent, expDate, taxYear, documents, requiresSignature);
 		

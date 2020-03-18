@@ -41,7 +41,7 @@
             "noOfDocuments": ${parcel.documents.size()},
             "documents":[
                 <c:forEach var="doc" items="${parcel.documents}">
-                "${doc.filename}",
+                "${doc.fileName}",
                 </c:forEach>
                 ""
             ],
