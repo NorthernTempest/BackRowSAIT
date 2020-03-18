@@ -12,7 +12,8 @@
     <h3>
         Inbox
     </h3>
-    <a class="btn btn-primary" href="/parcel/create" role="button">Create Return</a>
+    <a class="btn btn-primary" href="/parcel/create" role="button">New Message</a>
+    <br>
 </div>
 <div class="col-12">
 	<table id="tableDom" class="table table-hover table-dark">
@@ -100,7 +101,7 @@
             tableDom.innerText = "Nothing here!";
         } else {
             tableDom.innerHTML = `<tr>
-            <th scope="col">Subject</th>
+            <th scope="col" onclick="">Subject</th>
             <th scope="col">Message</th>
             <th scope="col">Date Sent</th>
             <th scope="col">Attached Documents</th>
