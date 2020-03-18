@@ -387,7 +387,7 @@ public class ParcelDB {
 		
 		Debugger.log(parcelID);
 		
-		if(parcel != null && parcel.getReceiver().equals(email)) {
+		if(parcel != null && parcel.getReceiver() != null && parcel.getReceiver().equals(email)) {
 			return true;
 		} else if(UserManager.getUser(email).getPermissionLevel() >= 2) {
 			return true;
