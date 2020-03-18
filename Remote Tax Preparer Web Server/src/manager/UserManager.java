@@ -600,7 +600,19 @@ public final class UserManager {
 					registrationID.toString(), new Date(), User.VERIFY_TYPE_CREATE_ACCOUNT);
 			UserDB.insert(user);
 			EmailService.sendRegisterEmail(email, registrationID);
-		} catch (NumberFormatException | ConfigException | InvalidKeySpecException | NoSuchAlgorithmException e) {
+		} catch (NumberFormatException e) {
+
+			throw new Exception(
+					"Something went wrong, please try again later. If problem persists, please contact us directly");
+		} catch (ConfigException e) {
+
+			throw new Exception(
+					"Something went wrong, please try again later. If problem persists, please contact us directly");
+		} catch (InvalidKeySpecException e) {
+
+			throw new Exception(
+					"Something went wrong, please try again later. If problem persists, please contact us directly");
+		} catch (NoSuchAlgorithmException e) {
 
 			throw new Exception(
 					"Something went wrong, please try again later. If problem persists, please contact us directly");

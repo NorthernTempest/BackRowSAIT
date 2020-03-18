@@ -108,7 +108,7 @@ public final class User {
 
 	/**
 	 * The user's preferred language. Must be either en for English, or es for
-	 * Español.
+	 * Espaï¿½ol.
 	 */
 	private String language;
 
@@ -645,7 +645,7 @@ public final class User {
 	 * @param province
 	 */
 	public void setProvince(String province) {
-		if (province.length() == 2) {
+		if (province.length() != 2) {
 			throw new IllegalArgumentException("Province is invalid, please try again");
 		}
 		this.province = province;
@@ -664,7 +664,7 @@ public final class User {
 	 * @param country
 	 */
 	public void setCountry(String country) {
-		if (country.length() == 2) {
+		if (country.length() != 2) {
 			throw new IllegalArgumentException("Country is invalid, please try again");
 		}
 		this.country = country;
