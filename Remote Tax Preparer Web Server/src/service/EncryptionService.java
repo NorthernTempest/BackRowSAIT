@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -148,8 +150,8 @@ public class EncryptionService {
 	/**
 	 * Encrypts the file at the given filepath and returns a record of the document.
 	 * 
-	 * @param filepath The filepath of the file to encrypt.
-	 * @return String The filepath of the encrypted file.
+	 * @param filepath String The filepath of the file to encrypt.
+	 * @return Document The record of the encrypted file.
 	 * @throws ConfigException          if the config file in the res folder does
 	 *                                  not exist.
 	 * @throws NumberFormatException    if iterationCount or keyLength are not
@@ -195,11 +197,59 @@ public class EncryptionService {
 
 		return new Document(outputPath, fileIn.getName(), fileIn.length());
 	}
+	
+	/**
+	 * Encrypts the incoming stream as an encrypted document with the given name and returns a record of the document.
+	 * 
+	 * @param in InputStream The input stream of the file to encrypt.
+	 * @param fileName String The name of the file to encrypt.
+	 * @return Document The record of the encrypted file.
+	 * @throws ConfigException          if the config file in the res folder does
+	 *                                  not exist.
+	 * @throws NumberFormatException    if iterationCount or keyLength are not
+	 *                                  integers in the config file.
+	 * @throws NoSuchPaddingException   if the padding of the cipher transform given
+	 *                                  in the config file is not valid according to
+	 *                                  https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 * @throws NoSuchAlgorithmException if the algorithm of the cipher transform is
+	 *                                  invalid according to
+	 *                                  https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 *                                  or if the key is invalid according to
+	 *                                  https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws InvalidKeySpecException  if the key specification created from the
+	 *                                  key and the salt from the file are invalid.
+	 * @throws InvalidKeyException      if the key used in the cipher is invalid.
+	 * @throws IOException              if the file at the given filepath does not
+	 *                                  exist or a file at the output directory
+	 *                                  cannot be created.
+	 */
+	public static Document encryptDocument(InputStream in, String fileName) throws NumberFormatException, ConfigException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
+		init();
+		Cipher cipher = getCipher();
+		
+		SecretKey key = getKey(ConfigService.fetchContents(keyPath), ConfigService.fetchContents(saltPath));
+		
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getEncoded(), cipherKeyAlgorithm));
+		
+		String outputPath = getEncryptedFilepath();
+		
+		File f = new File(outputPath);
+		f.createNewFile();
+		
+		try (FileOutputStream out = new FileOutputStream(outputPath);
+				CipherOutputStream cipherOut = new CipherOutputStream(out, cipher)) {
+			out.write(cipher.getIV());
+			
+			IOUtils.copy(in, cipherOut);
+		}
+		
+		return new Document(outputPath, fileName, f.length() - 16);
+	}
 
 	/**
 	 * Decrypts the given document and returns the filepath of the resulting file.
 	 * 
-	 * @param filepath The filepath of the file to decrypt.
+	 * @param doc Document The record of the encrypted file.
 	 * @return String The filepath of the decrypted file.
 	 * @throws NumberFormatException              if iterationCount or keyLength are
 	 *                                            not integers in the config file.
@@ -262,6 +312,65 @@ public class EncryptionService {
 		}
 
 		return output;
+	}
+	
+	/**
+	 * Decrypts the given document and sends the resulting file over the given stream.
+	 * 
+	 * @param doc Document The record of the encrypted file.
+	 * @param out OutputStream The stream of data to send the decrypted file over.
+	 * @throws NumberFormatException              if iterationCount or keyLength are
+	 *                                            not integers in the config file.
+	 * @throws FileNotFoundException              if the given document is not
+	 *                                            present.
+	 * @throws NoSuchPaddingException             if the padding of the cipher
+	 *                                            transform given in the config file
+	 *                                            is not valid according to
+	 *                                            https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 * @throws NoSuchAlgorithmException           if the algorithm of the cipher
+	 *                                            transform is invalid according to
+	 *                                            https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
+	 *                                            or if the key is invalid according
+	 *                                            to
+	 *                                            https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
+	 * @throws ConfigException                    if the config file in the res
+	 *                                            directory doesn't exist.
+	 * @throws IOException                        if the file at the given filepath
+	 *                                            does not exist or a file at the
+	 *                                            output directory cannot be
+	 *                                            created.
+	 * @throws InvalidKeySpecException            if the key specification created
+	 *                                            from the key and the salt from the
+	 *                                            file are invalid.
+	 * @throws InvalidAlgorithmParameterException if the cipher IV at the beginning
+	 *                                            of the document is invalid.
+	 * @throws InvalidKeyException                if the key used in the cipher is
+	 *                                            invalid.
+	 */
+	public static void decryptDocument(Document doc, OutputStream out)
+			throws NumberFormatException, ConfigException, FileNotFoundException, IOException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException {
+		init();
+		
+		CipherInputStream cipherIn = null;
+		
+		try (FileInputStream fileIn = new FileInputStream(doc.getFilePath())) {
+			byte[] fileIv = new byte[16];
+			fileIn.read(fileIv);
+
+			Cipher cipher = getCipher();
+
+			SecretKey key = getKey(ConfigService.fetchContents(keyPath), ConfigService.fetchContents(saltPath));
+
+			cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getEncoded(), cipherKeyAlgorithm),
+					new IvParameterSpec(fileIv));
+
+			cipherIn = new CipherInputStream(fileIn, cipher);
+			
+			IOUtils.copy(cipherIn, out);
+		} finally {
+			cipherIn.close();
+		}
 	}
 
 	/**

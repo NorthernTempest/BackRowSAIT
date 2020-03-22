@@ -3,9 +3,6 @@ package manager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
-import org.apache.tomcat.util.http.fileupload.FileItem;
 
 import databaseAccess.DocumentDB;
 import databaseAccess.ParcelDB;
@@ -14,7 +11,6 @@ import domain.Parcel;
 import domain.User;
 import exception.ConfigException;
 import service.ConfigService;
-import service.EncryptionService;
 
 /**
  * 
@@ -31,6 +27,17 @@ public final class ParcelManager {
 	private static int expirationDays;
 	
 	private final static String TAX_PREPARER = "tax_preparer";
+	
+	/**
+	 * Initializes this class from config file once upon first creation.
+	 * @throws ConfigException
+	 */
+	private static void init() throws ConfigException {
+		if (!init) {
+			expirationDays = Integer.parseInt(ConfigService.fetchFromConfig("PARCEL_EXPIRATION_DAYS:"));
+			init = true;
+		}
+	}
 
 	/**
 	 * @param parcelID
@@ -117,7 +124,12 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);  
 		Date expDate = c.getTime();
 		
-		if(UserManager.getUser(sender).getPermissionLevel() == User.USER) {
+		User u = UserManager.getUser(sender);
+		
+		if(u == null)
+			return false;
+		
+		if(u.getPermissionLevel() == User.USER) {
 			receiver = null;
 		}
 		
@@ -136,16 +148,4 @@ public final class ParcelManager {
 		return successfulInsert;
 
 	}
-	
-	/**
-	 * Initializes this class from config file once upon first creation.
-	 * @throws ConfigException
-	 */
-	private static void init() throws ConfigException {
-		if (!init) {
-			expirationDays = Integer.parseInt(ConfigService.fetchFromConfig("PARCEL_EXPIRATION_DAYS:"));
-			init = true;
-		}
-	}
-
 }
