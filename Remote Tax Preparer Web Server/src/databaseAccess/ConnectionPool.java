@@ -6,12 +6,15 @@ package databaseAccess;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.mysql.cj.jdbc.MysqlDataSource;
+
+import exception.ConfigException;
+import service.ConfigService;
+
 /**
- * @author Tristen Kreutz
+ * @author Tristen Kreutz, Jesse Goerzen
  *
  */
 public class ConnectionPool {
@@ -19,25 +22,34 @@ public class ConnectionPool {
 	private static ConnectionPool pool = null;
 	private static DataSource dataSource = null;
 	
-	private ConnectionPool() {
-		
-		try {
+	private ConnectionPool() throws ConfigException, SQLException {
+		if( "com.mysql.cj.jdbc.Driver".equals( ConfigService.fetchFromConfig("sqldriverClassName:") ) ) {
+			String url = ConfigService.fetchFromConfig("sqlurl:");
+			String username = ConfigService.fetchContents( ConfigService.fetchFromConfig("sqlusernamepath:") );
+			String password = ConfigService.fetchContents( ConfigService.fetchFromConfig("sqlpasswordpath:") );
 			
-			InitialContext ic = new InitialContext();
-			dataSource = (DataSource) ic.lookup("java:/comp/env/jdbc/tax_preparer_db");
-		}
-		
-		catch (NamingException e) {
+			MysqlDataSource ds = new MysqlDataSource();
 			
-			System.out.println(e);
+			ds.setUrl(url);
+			ds.setUser(username);
+			ds.setPassword(password);
+			
+			dataSource = ds;
 		}
 	}
 	
 	public static synchronized ConnectionPool getInstance() {
 		
 		if (pool == null) {
-			
-			pool = new ConnectionPool();
+			try {
+				pool = new ConnectionPool();
+			} catch (ConfigException e) {
+				pool = null;
+				e.printStackTrace();
+			} catch (SQLException e) {
+				pool = null;
+				e.printStackTrace();
+			}
 		}
 		
 		return pool;
@@ -51,8 +63,7 @@ public class ConnectionPool {
 		} 
 		
 		catch (SQLException e) {
-			
-			System.out.println(e);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -65,8 +76,7 @@ public class ConnectionPool {
 		}
 		
 		catch (SQLException e) {
-			
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 }

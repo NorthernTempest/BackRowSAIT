@@ -24,3 +24,14 @@ PARCEL_EXPIRATION_DAYS:5
 SERVER_STORAGE_PATH:C:/Capstone/TestFiles/ServerStorage
 registersubject:Activate Your MCL Taxes Account 
 registertemplatepath:C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\email\registerEmail.html
+dumpcommand:"C:\Program Files\MySQL\MySQL Server 5.7\bin\mysqldump.exe" --databases --add-drop-database tax_preparer_DB -u%user% -p%pass% -r%file%
+dumpfile:C:\\Capstone\\TestFiles\\dump.sql
+sqldriverClassName:com.mysql.cj.jdbc.Driver
+sqlurl:jdbc:mysql://localhost:3306/tax_preparer_db
+sqlusernamepath:C:\Capstone\TestFiles\sqlusername.txt
+sqlpasswordpath:C:\Capstone\TestFiles\sqlpassword.txt
+sqlmaxActive:20
+sqlmaxIdle:10
+sqlmaxWait:-1
+sqladminusernamepath:C:\Capstone\TestFiles\sqladminusername.txt
+sqladminpasswordpath:C:\Capstone\TestFiles\sqladminpassword.txt
