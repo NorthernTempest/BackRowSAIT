@@ -88,11 +88,11 @@ public final class RegisterServlet extends HttpServlet {
 		// Grab user title
 		String title = request.getParameter("title");
 		// Grab user first name
-		String fName = request.getParameter("f-name");
+		String fName = request.getParameter("f_name");
 		// Grab user middle name
-		String mName = request.getParameter("m-name");
+		String mName = request.getParameter("m_name");
 		// Grab user last name
-		String lName = request.getParameter("l-name");
+		String lName = request.getParameter("l_name");
 		// Grab user phone number
 		String phone = request.getParameter("phone");
 		// Grab user fax
@@ -165,9 +165,9 @@ public final class RegisterServlet extends HttpServlet {
 		request.setAttribute("password1", request.getParameter("password1"));
 		request.setAttribute("password2", request.getParameter("password2"));
 		request.setAttribute("title", request.getParameter("title"));
-		request.setAttribute("f-name", request.getParameter("f-name"));
-		request.setAttribute("m-name", request.getParameter("m-name"));
-		request.setAttribute("l-name", request.getParameter("l-name"));
+		request.setAttribute("f_name", request.getParameter("f_name"));
+		request.setAttribute("m_name", request.getParameter("m_name"));
+		request.setAttribute("l_name", request.getParameter("l_name"));
 		request.setAttribute("phone", request.getParameter("phone"));
 		request.setAttribute("fax", request.getParameter("fax"));
 		request.setAttribute("language", request.getParameter("language"));
