@@ -67,6 +67,18 @@ public class AdminServlet extends HttpServlet {
 			}
 		}
 		
+		else if (action.equals("createNewTaxPreparer")) {
+			request.setAttribute("role", "2");
+			request.setAttribute("accountType", "Tax Preparer");
+			getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
+		}
+		
+		else if (action.equals("createNewAdmin")) {
+			request.setAttribute("role", "3");
+			request.setAttribute("accountType", "Admin");
+			getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
+		}
+		
 		doGet(request, response);
 	}
 
