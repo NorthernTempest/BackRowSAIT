@@ -17,7 +17,7 @@ import manager.UserManager;
  * Servlet implementation class RecoveryServlet
  */
 @WebServlet("/recover")
-public final class RecoveryServlet extends HttpServlet {
+public final class PassRecoveryServlet extends HttpServlet {
 
 	/**
 	 * The Serial Unique ID. Was computer generated.
@@ -27,7 +27,7 @@ public final class RecoveryServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public RecoveryServlet() {
+	public PassRecoveryServlet() {
 		super();
 	}
 

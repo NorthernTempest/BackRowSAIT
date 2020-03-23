@@ -37,3 +37,4 @@ sqlmaxWait:-1
 sqladminusernamepath:C:\Capstone\TestFiles\sqladminusername.txt
 sqladminpasswordpath:C:\Capstone\TestFiles\sqladminpassword.txt
 unzipdir:C:\Capstone\TestFiles\temp
+backupfilename:Remote_App_Backup

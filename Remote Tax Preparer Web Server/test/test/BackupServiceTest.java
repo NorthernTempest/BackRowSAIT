@@ -14,7 +14,7 @@ import service.BackupService;
 
 public class BackupServiceTest {
 	
-	//@Test
+	@Test
 	void backupTest() throws FileNotFoundException, IOException, ConfigException, InterruptedException {
 		try (FileOutputStream fos = new FileOutputStream( "res/backup.zip" ) ) {
 			try {
