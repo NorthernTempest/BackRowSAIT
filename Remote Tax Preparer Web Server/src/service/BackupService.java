@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -25,22 +27,23 @@ import exception.ConfigException;
  */
 public final class BackupService {
 
-	private static String encryptedFilesDirectory;
-	private static String dumpCommand;
+	private static String encryptedFilesDirectoryPath;
 	private static String dumpFile;
+	private static String dumpCommand;
+	private static String recoverCommand;
 	private static String username;
 	private static String password;
-
 	private static boolean init = false;
 
 	private static void init() throws ConfigException {
 		if (!init) {
-			encryptedFilesDirectory = ConfigService.fetchFromConfig("encfiles:");
-			dumpCommand = ConfigService.fetchFromConfig("dumpcommand:");
+			encryptedFilesDirectoryPath = ConfigService.fetchFromConfig("encfiles:");
 			dumpFile = ConfigService.fetchFromConfig("dumpfile:");
+			dumpCommand = ConfigService.fetchFromConfig("dumpcommand:");
+			recoverCommand = ConfigService.fetchFromConfig("recovercommand:");
 			username = ConfigService.fetchContents(ConfigService.fetchFromConfig("sqladminusernamepath:"));
 			password = ConfigService.fetchContents(ConfigService.fetchFromConfig("sqladminpasswordpath:"));
-			
+
 			init = true;
 		}
 	}
@@ -61,12 +64,14 @@ public final class BackupService {
 
 		// Zip up encrypted files.
 		ZipOutputStream zipOut = new ZipOutputStream(out);
-		File toZip = new File(encryptedFilesDirectory);
+		File toZip = new File(encryptedFilesDirectoryPath);
 
 		output = zip(toZip, toZip.getName(), zipOut);
 
+		// Dump database to a script.
 		output = output && dump() == 0;
 
+		// Add dump to zip.
 		toZip = new File(dumpFile);
 
 		output = output && zip(toZip, toZip.getName(), zipOut);
@@ -83,12 +88,56 @@ public final class BackupService {
 	 * 
 	 * @param filepath filepath of the backup to restore to
 	 * @return boolean based on whteher or not the operation was a success
+	 * @throws ConfigException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws InterruptedException 
 	 */
-	public static boolean restore(InputStream in) {
-		// TODO
-		return false;
-	}
+	public static boolean restore(InputStream in) throws ConfigException, FileNotFoundException, IOException, InterruptedException {
+		init();
+		boolean output = false;
 
+		// unzip files
+		ZipInputStream zipIn = new ZipInputStream(in);
+		ZipEntry zipEntry = zipIn.getNextEntry();
+		
+		boolean dumpFound = false;
+		
+		File encryptedFilesDirectory = new File( encryptedFilesDirectoryPath );
+		
+		while (zipEntry != null) {
+			
+			File newFile = null;
+			if (zipEntry.getName().endsWith(".secure") && zipEntry.getName().startsWith(encryptedFilesDirectory.getName())) {
+				
+				newFile = new File(encryptedFilesDirectory.getParent(), zipEntry.getName());
+			} else if (zipEntry.getName().endsWith(".sql")) {
+				if( !dumpFound ) {
+					newFile = new File(dumpFile);
+					dumpFound = true;
+				} else
+					throw new IOException("Multiple dump files provided.");
+			}
+			if (newFile != null) {
+				FileOutputStream fos = new FileOutputStream(newFile);
+
+				IOUtils.copy(zipIn, fos);
+
+				fos.close();
+			}
+			zipEntry = zipIn.getNextEntry();
+		}
+		zipIn.closeEntry();
+		zipIn.close();
+		
+		if(dumpFound) {
+			output = recover() == 0;
+			new File(dumpFile).delete();
+		}
+
+		return output;
+	}
+	
 	private static boolean zip(File toZip, String fileName, ZipOutputStream zipOut)
 			throws FileNotFoundException, IOException {
 		boolean output = true;
@@ -129,17 +178,60 @@ public final class BackupService {
 		boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
 		ProcessBuilder pb = new ProcessBuilder();
-		
+
 		File f = new File(dumpFile);
-		
-		String command = dumpCommand.replaceAll("%user%", username).replaceAll("%pass%", password).replaceAll("%file%", dumpFile);
-		
+
+		String command = dumpCommand.replaceAll("%user%", username).replaceAll("%pass%", password).replaceAll("%file%",
+				dumpFile);
+
 		if (isWindows) {
 			pb.command("cmd.exe", "/c", command);
 		} else {
 			pb.command("sh", "-c", command);
 		}
 
+		pb.directory(f.getParentFile());
+
+		Process p = pb.start();
+
+		Thread t = new Thread(new Runnable() {
+
+			InputStream in;
+			Consumer<String> consumer;
+
+			@Override
+			public void run() {
+				new BufferedReader(new InputStreamReader(in)).lines().forEach(consumer);
+			}
+
+			public Runnable init(InputStream in, Consumer<String> consumer) {
+				this.in = in;
+				this.consumer = consumer;
+				return this;
+			}
+
+		}.init(p.getErrorStream(), System.out::println));
+
+		t.start();
+
+		return p.waitFor();
+	}
+	
+	private static int recover() throws InterruptedException, IOException {
+		boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
+		
+		ProcessBuilder pb = new ProcessBuilder();
+		
+		File f = new File(dumpFile);
+		
+		String command = recoverCommand.replaceAll("%user%", username).replaceAll("%pass%", password).replaceAll("%file%", dumpFile);
+		
+		if (isWindows) {
+			pb.command("cmd.exe", "/c", command);
+		} else {
+			pb.command("sh", "-c", command);
+		}
+		
 		pb.directory(f.getParentFile());
 		
 		Process p = pb.start();
@@ -148,7 +240,7 @@ public final class BackupService {
 			
 			InputStream in;
 			Consumer<String> consumer;
-			
+
 			@Override
 			public void run() {
 				new BufferedReader(new InputStreamReader(in)).lines().forEach(consumer);
@@ -160,10 +252,10 @@ public final class BackupService {
 				return this;
 			}
 			
-		}.init(p.getErrorStream(), System.out::println) );
+		}.init(p.getErrorStream(), System.out::println));
 		
 		t.start();
-
+		
 		return p.waitFor();
 	}
 }
