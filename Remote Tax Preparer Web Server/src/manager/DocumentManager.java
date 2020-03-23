@@ -1,5 +1,8 @@
 package manager;
 
+import databaseAccess.DocumentDB;
+import domain.Document;
+
 /**
  * 
  * Class Description: 	Class that communicates with the DocumentDB class as a proxy
@@ -9,6 +12,10 @@ package manager;
  *
  */
 public class DocumentManager {
+
+	public static Document get(String filePath) {
+		return DocumentDB.get(filePath);
+	}
 	
 	
 }

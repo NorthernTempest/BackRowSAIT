@@ -1,10 +1,7 @@
 package servlet;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -19,11 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-
 import domain.Document;
 import domain.Parcel;
 import exception.ConfigException;
+import manager.DocumentManager;
 import manager.ParcelManager;
 import manager.SessionManager;
 import service.EncryptionService;
@@ -78,7 +74,7 @@ public final class ViewServlet extends HttpServlet {
 				Parcel parcel = ParcelManager.get(parcelID);
 				ArrayList<String> documentPaths = new ArrayList<>();
 				for (Document document : parcel.getDocuments()) {
-					documentPaths.add(EncryptionService.decryptDocument(document));
+					documentPaths.add(document.getFilePath());
 				}
 				session.setAttribute("parcel", parcel);
 				session.setAttribute("documentPaths", documentPaths);
@@ -88,37 +84,10 @@ public final class ViewServlet extends HttpServlet {
 				getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 			}
 		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
-			request.setAttribute("errorMessage", "Error viewing message");
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 			e.printStackTrace();
 		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			request.setAttribute("errorMessage", "Error viewing message");
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			request.setAttribute("errorMessage", "Error viewing message");
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
-			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidAlgorithmParameterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -135,22 +104,33 @@ public final class ViewServlet extends HttpServlet {
 		Debugger.log("ViewServlet.doPost");
 
 		//get selected file name
-		String filePath = null;
-		filePath = request.getParameter("filePath");
+		Document file = DocumentManager.get(request.getParameter("filePath"));
 		
 		response.setContentType("text/plain");
-        response.setHeader("Content-disposition", "attachment; filename=" + new File(filePath).getName());
- 
-		
-		Debugger.log("FILEPATH: " + filePath);
+        response.setHeader("Content-disposition", "attachment; filename=" + file.getFileName());
+        
+		Debugger.log("FILEPATH: " + file.getFilePath());
 
-		try (InputStream in = new FileInputStream(filePath);
-				OutputStream out = response.getOutputStream()) {
-			IOUtils.copy(in, out);
+		try {
+			EncryptionService.decryptDocument(file, response.getOutputStream());
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			e.printStackTrace();
+		} catch (ConfigException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		//Display View page
-		getServletContext().getRequestDispatcher("/WEB-INF/parcel/view.jsp").forward(request, response);
-
 	}
 }

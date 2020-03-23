@@ -1,13 +1,11 @@
 package servlet;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.ServletException;
@@ -19,17 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-
 import domain.Document;
 import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
-import service.ConfigService;
 import service.EncryptionService;
 import util.cesar.Debugger;
 
@@ -47,19 +38,11 @@ public final class CreateParcelServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 4807630350769183535L;
 
-	String uploadPath;
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public CreateParcelServlet() {
 		super();
-		try {
-			uploadPath = ConfigService.fetchFromConfig("SERVER_STORAGE_PATH:");
-		} catch (ConfigException e) {
-			System.out.println("Failed to initialize from config");
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -92,11 +75,6 @@ public final class CreateParcelServlet extends HttpServlet {
 		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
 
-		Debugger.log(uploadPath);
-		File uploadDir = new File(uploadPath);
-		if (!uploadDir.exists())
-			uploadDir.mkdir();
-
 		String fileName;
 
 		ArrayList<Document> documents = new ArrayList<>();
@@ -105,7 +83,8 @@ public final class CreateParcelServlet extends HttpServlet {
 			//grab tax year
 			String taxYearString = request.getParameter("taxYear");
 			int taxYear = -1;
-			taxYear = Integer.parseInt(taxYearString);
+			if( taxYearString != null )
+				taxYear = Integer.parseInt(taxYearString);
 
 			//grab message
 			String message = request.getParameter("message");
@@ -125,12 +104,8 @@ public final class CreateParcelServlet extends HttpServlet {
 			for (Part part : request.getParts()) {
 				fileName = part.getSubmittedFileName();
 				Debugger.log(fileName);
-				String writePath = uploadPath + File.separator + fileName;
-				if (fileName != null) {
-					if (fileName != "null") {
-						part.write(writePath);
-						documents.add(EncryptionService.encryptDocument(writePath));
-					}
+				if (fileName != null && !fileName.equals("null")) {
+					documents.add(EncryptionService.encryptDocument(part.getInputStream(), fileName));
 				}
 			}
 
@@ -146,6 +121,9 @@ public final class CreateParcelServlet extends HttpServlet {
 				request.setAttribute("successMessage", "Message Sent");
 			}
 
+			//Display NewMessage? page
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+
 		} catch (NumberFormatException e) {
 			request.setAttribute("errorMessage", "Error in year format, this shouln't happen");
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
@@ -154,22 +132,17 @@ public final class CreateParcelServlet extends HttpServlet {
 			request.setAttribute("errorMessage", "Error, please try again");
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			request.setAttribute("errorMessage", "Your files exceed the maximum file size limit (25 MB)");
+			e.printStackTrace();
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		//Display NewMessage? page
-		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
-
 	}
 }
