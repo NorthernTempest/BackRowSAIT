@@ -740,4 +740,34 @@ public final class UserManager {
 		}
 		return false;
 	}
+	
+	public static boolean createSpecialUser(int role, String email, String password, String confirmPassword, String title, String fName,
+											String lName, String phone, String language) throws Exception {
+		User user = null;
+		UUID registrationID = UUID.randomUUID();
+		try {
+			user = new User(email, fName, "", lName, role, phone, password, title, new Date(), "",
+							true, "na", "", "na", "na", "na", "na", language, true,
+							registrationID.toString(), new Date(), User.VERIFY_TYPE_NONE);
+			UserDB.insert(user);
+		} catch (NumberFormatException e) {
+
+			throw new Exception(
+					"Something went wrong, please try again later. If problem persists, please contact us directly");
+		} catch (ConfigException e) {
+
+			throw new Exception(
+					"Something went wrong, please try again later. If problem persists, please contact us directly");
+		} catch (InvalidKeySpecException e) {
+
+			throw new Exception(
+					"Something went wrong, please try again later. If problem persists, please contact us directly");
+		} catch (NoSuchAlgorithmException e) {
+
+			throw new Exception(
+					"Something went wrong, please try again later. If problem persists, please contact us directly");
+		}
+		return true;
+
+	}
 }
