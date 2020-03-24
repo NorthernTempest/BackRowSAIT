@@ -134,6 +134,7 @@ public final class CreateParcelServlet extends HttpServlet {
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
 			request.setAttribute("errorMessage", "Your files exceed the maximum file size limit (25 MB)");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
