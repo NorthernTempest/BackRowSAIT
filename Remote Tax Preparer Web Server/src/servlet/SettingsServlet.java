@@ -36,7 +36,13 @@ public class SettingsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			UserManager.getAccountInfo(request);
+			String email; 
+			if (request.getAttribute("userEmail")!=null) {
+				email = (String) request.getAttribute("userEmail");
+			} else {
+				email = UserManager.getEmailFromSession(request);
+			}
+			UserManager.getAccountInfo(request,email);
 		} catch (ConfigException e) {
 			request.setAttribute("errorMessage",
 					"There was an error accessing your data." + request.getAttribute("errorMessage"));
@@ -57,7 +63,13 @@ public class SettingsServlet extends HttpServlet {
 		if (delete == null) {
 
 			try {
-				UserManager.setAccountInfo(request);
+				String email; 
+				if (request.getAttribute("userEmail")!=null || request.getAttribute("userEmail").equals("")) {
+					email = (String) request.getAttribute("userEmail");
+				} else {
+					email = UserManager.getEmailFromSession(request);
+				}
+				UserManager.setAccountInfo(request, email);
 			} catch (ConfigException e) {
 				request.setAttribute("errorMessage",
 						"There was an error saving your changes." + request.getAttribute("errorMessage"));
@@ -66,7 +78,13 @@ public class SettingsServlet extends HttpServlet {
 			}
 
 			try {
-				UserManager.getAccountInfo(request);
+				String email; 
+				if (request.getAttribute("userEmail")!=null || request.getAttribute("userEmail").equals("")) {
+					email = (String) request.getAttribute("userEmail");
+				} else {
+					email = UserManager.getEmailFromSession(request);
+				}
+				UserManager.getAccountInfo(request, email);
 			} catch (ConfigException e) {
 				request.setAttribute("errorMessage",
 						"There was an error accessing your data." + request.getAttribute("errorMessage"));
