@@ -645,7 +645,7 @@ public final class User {
 	 * @param province
 	 */
 	public void setProvince(String province) {
-		if (province.length() != 2) {
+		if (province.length() > 20 || province.length() == 0) {
 			throw new IllegalArgumentException("Province is invalid, please try again");
 		}
 		this.province = province;

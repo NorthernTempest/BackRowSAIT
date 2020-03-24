@@ -154,6 +154,22 @@ public final class UserManager {
 		return false;
 	}
 
+	
+	/**
+	 * Gets the currently logged in user email from the session.
+	 * 
+	 * @param request HttpServletRequest The web request to fill with the user's
+	 *                attributes.
+	 * @return The email of the logged in user.
+	 */
+	public static String getEmailFromSession(HttpServletRequest request) {
+		String sessionID = request.getSession().getId();
+
+		User u = UserDB.get(SessionDB.getEmail(sessionID));
+		
+		return u.getEmail();
+	}
+	
 	/**
 	 * Takes an email for a User and retrieves all account information for that User
 	 * that is stored in the user table of the database.
@@ -163,29 +179,37 @@ public final class UserManager {
 	 * @return HttpServletRequest The filled in request.
 	 * @throws ConfigException if the config file cannot be found.
 	 */
-	public static HttpServletRequest getAccountInfo(HttpServletRequest request) throws ConfigException {
+	public static HttpServletRequest getAccountInfo(HttpServletRequest request, String email) throws ConfigException {
 		init();
 		String sessionID = request.getSession().getId();
+		
+		User loggedUser = UserDB.get(SessionDB.getEmail(sessionID));
+		
+		User editUser = UserDB.get(email);
+		
+		if (!editUser.equals(loggedUser) && loggedUser.getPermissionLevel()<User.ADMIN) {
+			throw new IllegalArgumentException();
+		}
+		
 
-		User u = UserDB.get(SessionDB.getEmail(sessionID));
-
-		request.setAttribute("title", u.getTitle());
-		request.setAttribute("fname", u.getFName());
-		request.setAttribute("mname", u.getMName());
-		request.setAttribute("lname", u.getLName());
-		request.setAttribute("address1", u.getStreetAddress());
-		request.setAttribute("address2", u.getStreetAddress2());
-		request.setAttribute("addressCity", u.getCity());
-		request.setAttribute("addressRegion", u.getProvince());
-		request.setAttribute("addressCountry", u.getCountry());
-		request.setAttribute("addressPostal", u.getPostalCode());
-		request.setAttribute("contactPhone", u.getPhone());
-		request.setAttribute("contactFax", u.getFax());
-		request.setAttribute("language", u.getLanguage());
+		request.setAttribute("title", editUser.getTitle());
+		request.setAttribute("fname", editUser.getFName());
+		request.setAttribute("mname", editUser.getMName());
+		request.setAttribute("lname", editUser.getLName());
+		request.setAttribute("address1", editUser.getStreetAddress());
+		request.setAttribute("address2", editUser.getStreetAddress2());
+		request.setAttribute("addressCity", editUser.getCity());
+		request.setAttribute("addressRegion", editUser.getProvince());
+		request.setAttribute("addressCountry", editUser.getCountry());
+		request.setAttribute("addressPostal", editUser.getPostalCode());
+		request.setAttribute("contactPhone", editUser.getPhone());
+		request.setAttribute("contactFax", editUser.getFax());
+		request.setAttribute("language", editUser.getLanguage());
 
 		return request;
 	}
-
+	
+	
 	/**
 	 * Updates the info of the user who sent the given request.
 	 * 
@@ -194,11 +218,17 @@ public final class UserManager {
 	 * @return HttpServletRequest The request updated with any errors.
 	 * @throws ConfigException if the config file cannot be found.
 	 */
-	public static HttpServletRequest setAccountInfo(HttpServletRequest request) throws ConfigException {
+	public static HttpServletRequest setAccountInfo(HttpServletRequest request, String email) throws ConfigException {
 		init();
 		String sessionID = request.getSession().getId();
-
-		User u = UserDB.get(SessionDB.getEmail(sessionID));
+		
+		User loggedUser = UserDB.get(SessionDB.getEmail(sessionID));
+		
+		User editUser = UserDB.get(email);
+		
+		if (!editUser.equals(loggedUser) || loggedUser.getPermissionLevel()>=User.ADMIN) {
+			throw new IllegalArgumentException();
+		}
 
 		String title = request.getParameter("title");
 		String fname = request.getParameter("fname");
@@ -247,22 +277,22 @@ public final class UserManager {
 		}
 		if (nameError)
 			request.setAttribute("errorMessageName", errorMessageName);
-		else if (title.equals(u.getTitle()) && fname.equals(u.getFName()) && mname.equals(u.getMName())
-				&& lname.equals(u.getLName())) {
+		else if (title.equals(editUser.getTitle()) && fname.equals(editUser.getFName()) && mname.equals(editUser.getMName())
+				&& lname.equals(editUser.getLName())) {
 		} else {
 			try {
-				u.setTitle(title);
-				u.setFName(fname);
-				u.setMName(mname);
-				u.setLName(lname);
+				editUser.setTitle(title);
+				editUser.setFName(fname);
+				editUser.setMName(mname);
+				editUser.setLName(lname);
 
-				if (UserDB.update(u))
+				if (UserDB.update(editUser))
 					successMessage += "<br/> Name changes have been saved!";
 				else
 					request.setAttribute("errorMessageName", "Failed to save changes to name.");
 			} catch (IllegalArgumentException e) {
 				request.setAttribute("errorMessageName", e.getMessage());
-				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				LogEntryManager.logError(editUser.getEmail(), e, request.getRemoteAddr());
 				e.printStackTrace();
 			}
 		}
@@ -294,26 +324,26 @@ public final class UserManager {
 		}
 		if (addressError)
 			request.setAttribute("errorMessageAddress", errorMessageAddress);
-		else if (address1.equals(u.getStreetAddress()) && address2.equals(u.getStreetAddress2())
-				&& addressCity.equals(u.getCity()) && addressRegion.equals(u.getProvince())
-				&& addressCountry.equals(u.getCountry()) && addressPostal.equals(u.getPostalCode())) {
+		else if (address1.equals(editUser.getStreetAddress()) && address2.equals(editUser.getStreetAddress2())
+				&& addressCity.equals(editUser.getCity()) && addressRegion.equals(editUser.getProvince())
+				&& addressCountry.equals(editUser.getCountry()) && addressPostal.equals(editUser.getPostalCode())) {
 			/* Do nothing */
 		} else {
 			try {
-				u.setStreetAddress(address1);
-				u.setStreetAddress2(address2);
-				u.setCity(addressCity);
-				u.setProvince(addressRegion);
-				u.setCountry(addressCountry);
-				u.setPostalCode(addressPostal);
+				editUser.setStreetAddress(address1);
+				editUser.setStreetAddress2(address2);
+				editUser.setCity(addressCity);
+				editUser.setProvince(addressRegion);
+				editUser.setCountry(addressCountry);
+				editUser.setPostalCode(addressPostal);
 
-				if (UserDB.update(u))
+				if (UserDB.update(editUser))
 					successMessage += "<br/> Address changes have been saved!";
 				else
 					request.setAttribute("errorMessageName", "Failed to save changes to address info.");
 			} catch (IllegalArgumentException e) {
 				request.setAttribute("errorMessageAddress", e.getMessage());
-				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				LogEntryManager.logError(editUser.getEmail(), e, request.getRemoteAddr());
 				e.printStackTrace();
 			}
 		}
@@ -329,20 +359,20 @@ public final class UserManager {
 		}
 		if (contactError)
 			request.setAttribute("errorMessageContact", errorMessageContact);
-		else if (contactPhone.equals(u.getPhone()) && contactFax.equals(u.getFax())) {
+		else if (contactPhone.equals(editUser.getPhone()) && contactFax.equals(editUser.getFax())) {
 			/* Do nothing */
 		} else {
 			try {
-				u.setPhone(contactPhone);
-				u.setFax(contactFax);
+				editUser.setPhone(contactPhone);
+				editUser.setFax(contactFax);
 
-				if (UserDB.update(u))
+				if (UserDB.update(editUser))
 					successMessage += "<br/> Contact changes have been saved!";
 				else
 					request.setAttribute("errorMessageContact", "Failed to save changes to contact info.");
 			} catch (IllegalArgumentException e) {
 				request.setAttribute("errorMessageContact", e.getMessage());
-				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				LogEntryManager.logError(editUser.getEmail(), e, request.getRemoteAddr());
 				e.printStackTrace();
 			}
 		}
@@ -350,19 +380,19 @@ public final class UserManager {
 		// Check language update.
 		if (language == null || language.equals(""))
 			request.setAttribute("errorMessageLanguage", "No language given.");
-		else if (language.equals(u.getLanguage())) {
+		else if (language.equals(editUser.getLanguage())) {
 			/* Do nothing */
 		} else {
 			try {
-				u.setLanguage(language);
+				editUser.setLanguage(language);
 
-				if (UserDB.update(u))
+				if (UserDB.update(editUser))
 					successMessage += "<br/> Language changes have been saved!";
 				else
 					request.setAttribute("errorMessageLanguage", "Failed to save changes to language info.");
 			} catch (IllegalArgumentException e) {
 				request.setAttribute("errorMessageLanguage", e.getMessage());
-				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				LogEntryManager.logError(editUser.getEmail(), e, request.getRemoteAddr());
 				e.printStackTrace();
 			}
 		}
@@ -387,35 +417,35 @@ public final class UserManager {
 
 			String passHash = null;
 			try {
-				passHash = EncryptionService.hash(oldPassword, u.getPassSalt());
+				passHash = EncryptionService.hash(oldPassword, editUser.getPassSalt());
 			} catch (NumberFormatException | NoSuchAlgorithmException | InvalidKeySpecException | ConfigException e) {
 				errorMessageContact += contactError ? "<br/>" : "" + "There was an error setting your password.";
 				passwordError = true;
-				LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+				LogEntryManager.logError(editUser.getEmail(), e, request.getRemoteAddr());
 				e.printStackTrace();
 			}
 
 			if (passwordError)
 				request.setAttribute("errorMessagePassword", errorMessagePassword);
-			else if (!u.getPassHash().equals(passHash))
+			else if (!editUser.getPassHash().equals(passHash))
 				request.setAttribute("errorMessagePassword", "Your old password didn't match.");
 			else if (!newPassword1.equals(newPassword2))
 				request.setAttribute("errorMessagePassword", "Your new passwords didn't match.");
 			else {
 				try {
-					u.setPassword(newPassword1);
+					editUser.setPassword(newPassword1);
 
-					if (UserDB.update(u))
+					if (UserDB.update(editUser))
 						successMessage += "<br/> Password changes have been saved.";
 					else
 						request.setAttribute("errorMessagePassword", "There was an error setting your password.");
 				} catch (IllegalArgumentException e) {
 					request.setAttribute("errorMessagePassword", e.getMessage());
-					LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+					LogEntryManager.logError(editUser.getEmail(), e, request.getRemoteAddr());
 					e.printStackTrace();
 				} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 					request.setAttribute("errorMessagePassword", "There was an error setting your password.");
-					LogEntryManager.logError(u.getEmail(), e, request.getRemoteAddr());
+					LogEntryManager.logError(editUser.getEmail(), e, request.getRemoteAddr());
 					e.printStackTrace();
 				}
 			}
