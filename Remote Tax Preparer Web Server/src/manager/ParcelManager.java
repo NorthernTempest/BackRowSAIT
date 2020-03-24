@@ -1,8 +1,16 @@
 package manager;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+
+import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.Part;
 
 import databaseAccess.DocumentDB;
 import databaseAccess.ParcelDB;
@@ -11,6 +19,8 @@ import domain.Parcel;
 import domain.User;
 import exception.ConfigException;
 import service.ConfigService;
+import service.EncryptionService;
+import util.cesar.Debugger;
 
 /**
  * 
@@ -21,15 +31,16 @@ import service.ConfigService;
  *
  */
 public final class ParcelManager {
-	
+
 	private static boolean init;
-	
+
 	private static int expirationDays;
-	
+
 	private final static String TAX_PREPARER = "tax_preparer";
-	
+
 	/**
 	 * Initializes this class from config file once upon first creation.
+	 * 
 	 * @throws ConfigException
 	 */
 	private static void init() throws ConfigException {
@@ -51,11 +62,11 @@ public final class ParcelManager {
 	public static ArrayList<Parcel> getParcels(String parcelID, String senderEmail, String receiverEmail, Date dateSent,
 			int year) throws ConfigException {
 		init();
-		
-		if(UserManager.getUser(receiverEmail).getPermissionLevel() > User.USER) {
+
+		if (UserManager.getUser(receiverEmail).getPermissionLevel() > User.USER) {
 			receiverEmail = TAX_PREPARER;
 		}
-		
+
 		return ParcelDB.getParcelsByParameter(parcelID, senderEmail, receiverEmail, dateSent, year);
 	}
 
@@ -67,11 +78,11 @@ public final class ParcelManager {
 	 */
 	public static ArrayList<Parcel> getByYear(String receiverEmail, int year) throws ConfigException {
 		init();
-		
-		if(UserManager.getUser(receiverEmail).getPermissionLevel() > User.USER) {
+
+		if (UserManager.getUser(receiverEmail).getPermissionLevel() > User.USER) {
 			receiverEmail = TAX_PREPARER;
 		}
-		
+
 		return getParcels(null, null, receiverEmail, null, year);
 	}
 
@@ -98,54 +109,139 @@ public final class ParcelManager {
 		return ParcelDB.isVisibleToUser(email, parcelID);
 	}
 
-
 	/**
 	 * @param fileItemsList the List of FileItems to include with the Parcel
-	 * @param subject the subject
-	 * @param message the message
-	 * @param sender the email of the sender
-	 * @param receiver the email of the receiver
-	 * @param dateSent the date parcel was created
-	 * @param expiryDate the date parcel will expire
-	 * @param taxYear the tax year this parcel is associated with
+	 * @param subject       the subject
+	 * @param message       the message
+	 * @param sender        the email of the sender
+	 * @param receiver      the email of the receiver
+	 * @param dateSent      the date parcel was created
+	 * @param expiryDate    the date parcel will expire
+	 * @param taxYear       the tax year this parcel is associated with
 	 * @return true if parcel created in database successfully
 	 * @throws NumberFormatException
 	 * @throws ConfigException
 	 */
 	public static boolean createParcel(ArrayList<Document> documents, String subject, String message, String sender,
-			String receiver, Date dateSent, Date expiryDate, int taxYear, boolean requiresSignature) throws NumberFormatException, ConfigException {
+			String receiver, Date dateSent, Date expiryDate, int taxYear, boolean requiresSignature)
+			throws NumberFormatException, ConfigException {
 		init();
-		
+
 		boolean successfulInsert = true;
-		
+
 		//Set expiration date
 		Calendar c = Calendar.getInstance();
 		c.setTime(dateSent);
-		c.add(Calendar.DAY_OF_MONTH, expirationDays);  
+		c.add(Calendar.DAY_OF_MONTH, expirationDays);
 		Date expDate = c.getTime();
-		
+
 		User u = UserManager.getUser(sender);
-		
-		if(u == null)
+
+		if (u == null)
 			return false;
-		
-		if(u.getPermissionLevel() == User.USER) {
+
+		if (u.getPermissionLevel() == User.USER) {
 			receiver = null;
 		}
-		
-		Parcel parcel = new Parcel(subject, message, sender, receiver, dateSent, expDate, taxYear, documents, requiresSignature);
-		
-		if(ParcelDB.insert(parcel)){
-			for(Document document : documents) {
-				if(!DocumentDB.insert(document, parcel.getParcelID())) {
+
+		Parcel parcel = new Parcel(subject, message, sender, receiver, dateSent, expDate, taxYear, documents,
+				requiresSignature);
+
+		if (ParcelDB.insert(parcel)) {
+			for (Document document : documents) {
+				if (!DocumentDB.insert(document, parcel.getParcelID())) {
 					successfulInsert = false;
 				}
 			}
 		} else {
 			return false;
 		}
+
+		return successfulInsert;
+	}
+
+	/**
+	 * @param parts
+	 * @param subject
+	 * @param message
+	 * @param sender
+	 * @param receiver
+	 * @param dateSent
+	 * @param expiryDate
+	 * @param taxYear
+	 * @param requiresSignature
+	 * @return
+	 */
+	public static boolean createParcel(Collection<Part> parts, String subject, String message, String sender,
+			String receiver, Date dateSent, Date expiryDate, int taxYear, boolean requiresSignature) {
+		Debugger.log("createParcel(parts)");
+		boolean successfulInsert = true;
+		
+		try {
+			init();
+
+			String fileName;
+			ArrayList<Document> documents = new ArrayList<>();
+
+			for (Part part : parts) {
+				fileName = part.getSubmittedFileName();
+				Debugger.log(fileName);
+				if (fileName != null && !fileName.equals("null")) {
+					documents.add(EncryptionService.encryptDocument(part.getInputStream(), fileName));
+				}
+			}
+
+			//Set expiration date
+			Calendar c = Calendar.getInstance();
+			c.setTime(dateSent);
+			c.add(Calendar.DAY_OF_MONTH, expirationDays);
+			Date expDate = c.getTime();
+
+			User u = UserManager.getUser(sender);
+
+			if (u == null)
+				return false;
+
+			if (u.getPermissionLevel() == User.USER) {
+				receiver = null;
+			}
+
+			Parcel parcel = new Parcel(subject, message, sender, receiver, dateSent, expDate, taxYear, documents,
+					requiresSignature);
+
+			if (ParcelDB.insert(parcel)) {
+				for (Document document : documents) {
+					if (!DocumentDB.insert(document, parcel.getParcelID())) {
+						successfulInsert = false;
+					}
+				}
+			} else {
+				return false;
+			}
+
+		} catch (ConfigException e) {
+			e.printStackTrace();
+			return false;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+			return false;
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			return false;
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+			return false;
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 		
 		return successfulInsert;
-
 	}
 }
