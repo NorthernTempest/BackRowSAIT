@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import manager.ParcelManager;
 import manager.SessionManager;
@@ -65,17 +68,34 @@ public final class CreateParcelServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
+		
+		//get attachments
+		Collection<Part> parts = null;
+		try {
+			parts = request.getParts();
+		} catch (IllegalStateException e) {
+			request.setAttribute("errorMessage", "Attachments exceed size limit");
+			Debugger.log("caught IllegalStateException");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
+			//response.sendError(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE, "File too large");
+			return;
+		}
 
 		//grab tax year
 		String taxYearString = request.getParameter("taxYear");
-		int taxYear = -1;
-		if (taxYearString != null) {
-			taxYear = Integer.parseInt(taxYearString);
-		} else {
-			request.setAttribute("errorMessage", "File size too large");
+		if (taxYearString == null) {
+			request.setAttribute("errorMessage", "Couldn't send message");
 			Debugger.log("taxYearString == null");
-			Debugger.log("errorMessage: " + request.getAttribute("errorMessage"));
-			
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
+			return;
+		}
+		int taxYear = -1;
+		try {
+			taxYear = Integer.parseInt(taxYearString);
+		} catch (NumberFormatException e) {
+			request.setAttribute("errorMessage", "Couldn't send message");
+			Debugger.log("taxYearString not an integer");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			return;
 		}
 
@@ -87,6 +107,7 @@ public final class CreateParcelServlet extends HttpServlet {
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			return;
 		}
+
 		//grab subject
 		String subject = request.getParameter("subject");
 		if (subject == null) {
@@ -95,6 +116,7 @@ public final class CreateParcelServlet extends HttpServlet {
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 			return;
 		}
+
 		//grab sender
 		String sender = email;
 		//grab receiver
@@ -110,8 +132,8 @@ public final class CreateParcelServlet extends HttpServlet {
 				+ "\nSender: " + sender + "\nReceiver: " + receiver + "\nTax Year: " + taxYear
 				+ "\nRequires Signature: " + requiresSignatureString);
 
-		if (!ParcelManager.createParcel(request.getParts(), subject, message, sender, receiver, new Date(), null,
-				taxYear, requiresSignature)) {
+		if (!ParcelManager.createParcel(parts, subject, message, sender, receiver, new Date(), null, taxYear,
+				requiresSignature)) {
 			request.setAttribute("errorMessage", "Couldn't send message");
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 		} else {
