@@ -183,12 +183,12 @@ public class EncryptionService {
 
 		String outputPath = getEncryptedFilepath();
 
-		File f = new File(outputPath);
+		File f = new File(encryptedFilesDirectory + outputPath + ".secure");
 		f.createNewFile();
 		File fileIn = new File(filepath);
 
 		try (FileInputStream in = new FileInputStream(filepath);
-				FileOutputStream out = new FileOutputStream(outputPath);
+				FileOutputStream out = new FileOutputStream(f);
 				CipherOutputStream cipherOut = new CipherOutputStream(out, cipher)) {
 			out.write(cipher.getIV());
 
@@ -233,10 +233,10 @@ public class EncryptionService {
 		
 		String outputPath = getEncryptedFilepath();
 		
-		File f = new File(outputPath);
+		File f = new File(encryptedFilesDirectory + outputPath + ".secure");
 		f.createNewFile();
 		
-		try (FileOutputStream out = new FileOutputStream(outputPath);
+		try (FileOutputStream out = new FileOutputStream(f);
 				CipherOutputStream cipherOut = new CipherOutputStream(out, cipher)) {
 			out.write(cipher.getIV());
 			
@@ -289,7 +289,7 @@ public class EncryptionService {
 		CipherInputStream cipherIn = null;
 		FileOutputStream out = null;
 
-		try (FileInputStream fileIn = new FileInputStream(doc.getFilePath());) {
+		try (FileInputStream fileIn = new FileInputStream(encryptedFilesDirectory + doc.getFilePath() + ".secure");) {
 			byte[] fileIv = new byte[16];
 			fileIn.read(fileIv);
 
@@ -302,7 +302,7 @@ public class EncryptionService {
 
 			cipherIn = new CipherInputStream(fileIn, cipher);
 
-			out = new FileOutputStream(outputFilesDirectory + doc.getFileName());
+			out = new FileOutputStream(output);
 
 			IOUtils.copy(cipherIn, out);
 
@@ -354,7 +354,7 @@ public class EncryptionService {
 		
 		CipherInputStream cipherIn = null;
 		
-		try (FileInputStream fileIn = new FileInputStream(doc.getFilePath())) {
+		try (FileInputStream fileIn = new FileInputStream(encryptedFilesDirectory + doc.getFilePath() + ".secure")) {
 			byte[] fileIv = new byte[16];
 			fileIn.read(fileIv);
 
@@ -572,6 +572,6 @@ public class EncryptionService {
 	 * @return String A random and unique filepath in the encrypted files directory.
 	 */
 	private static String getEncryptedFilepath() {
-		return encryptedFilesDirectory + UUID.randomUUID().toString() + ".secure";
+		return UUID.randomUUID().toString();
 	}
 }

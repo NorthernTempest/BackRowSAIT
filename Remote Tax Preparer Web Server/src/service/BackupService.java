@@ -138,6 +138,16 @@ public final class BackupService {
 		return output;
 	}
 	
+	/**
+	 * Adds files and directories to the given ZipOutputStream. Recursively adds the contents of directories too.
+	 * 
+	 * @param toZip File The file to be added to the ZipOutputStream.
+	 * @param fileName String The entire path to place the file in inside the zip file.
+	 * @param zipOut ZipOutputStream The ZipOutputStream to be added to.
+	 * @return true if the file and all its contents were added to the drive.
+	 * @throws FileNotFoundException if one of the files to be added are not found.
+	 * @throws IOException if the file failed to be added to the zip file.
+	 */
 	private static boolean zip(File toZip, String fileName, ZipOutputStream zipOut)
 			throws FileNotFoundException, IOException {
 		boolean output = true;
@@ -172,7 +182,14 @@ public final class BackupService {
 		}
 		return output;
 	}
-
+	
+	/**
+	 * Creates an sql scirpt containing all the database data.
+	 * 
+	 * @return int the exit value of the process that 
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	private static int dump() throws IOException, InterruptedException {
 
 		boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
