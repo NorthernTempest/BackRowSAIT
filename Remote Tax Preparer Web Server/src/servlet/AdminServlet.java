@@ -65,6 +65,31 @@ public class AdminServlet extends HttpServlet {
 			else {
 				request.setAttribute("errorMessage", "Error processing request. Ensure the email is entered correctly.");
 			}
+		} else if (action.equals("edit")) {
+			email=request.getParameter("editEmail");
+			
+			if (email != null && UserManager.userExists(email)) {
+				request.setAttribute("userEmail", email);
+				try {
+					UserManager.getAccountInfo(request, email);
+				} catch (ConfigException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				getServletContext().getRequestDispatcher("/WEB-INF/user/edit.jsp").forward(request, response);
+			}
+		}
+		
+		else if (action.equals("createNewTaxPreparer")) {
+			request.setAttribute("role", "2");
+			request.setAttribute("accountType", "Tax Preparer");
+			getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
+		}
+		
+		else if (action.equals("createNewAdmin")) {
+			request.setAttribute("role", "3");
+			request.setAttribute("accountType", "Admin");
+			getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
 		}
 		
 		doGet(request, response);

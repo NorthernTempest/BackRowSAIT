@@ -42,15 +42,10 @@
 	<h1>
 		Backup & Restore
 	</h1>
-	<h6>
-		Last Time Backed Up: 
-	</h6>
-	<h4>
-		Backup:
-	</h4>
-	<h4>
-		Restore: 
-	</h4>
+	<b>Last Time Backed Up:</b>
+    <span id="lastBackedUp">${lastBackedUp}</span><br>
+    <a href="/backup" class="btn btn-primary">Backup</a>
+    <a href="/restore" class="btn btn-primary">Restore</a>
 </div>
 <hr class="nav-separator">
 <div class="col-12">
