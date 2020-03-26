@@ -60,12 +60,8 @@ public final class ViewServlet extends HttpServlet {
 
 		//get parcel ID
 		String parcelID = null;
-		try {
-			parcelID = request.getParameter("parcelID");
-		} catch (NumberFormatException e) {
-			Debugger.log("caught number format exception, is this not a number?: ");
-			Debugger.log(request.getParameter("parcelID"));
-		}
+		parcelID = request.getParameter("parcelID");
+		
 
 		//check that its a real parcel that the user can view
 		try {
@@ -110,7 +106,7 @@ public final class ViewServlet extends HttpServlet {
         response.setHeader("Content-disposition", "attachment; filename=" + file.getFileName());
         
 		Debugger.log("FILEPATH: " + file.getFilePath());
-
+		
 		try {
 			EncryptionService.decryptDocument(file, response.getOutputStream());
 		} catch (NumberFormatException e) {
