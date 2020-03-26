@@ -43,12 +43,12 @@
 					<option value="Ms">Ms</option>
 					<option value="Mx">Mx</option>
 				</select>
-                <label for="f-name">First Name</label>
-                <input name="f-name" id="f-name" maxlength="25" value="${f-name}" class="form-control" required>
-                <label for="m-name">Middle Name</label>
-                <input name="m-name" id="m-name" maxlength="25" class="form-control" value="${m-name}">
-                <label for="l-name">Last Name</label>
-                <input name="l-name" id="l-name" maxlength="25" class="form-control" value="${l-name}" required>
+                <label for="f_name">First Name</label>
+                <input name="f_name" id="f_name" maxlength="25" value="${f_name}" class="form-control" required>
+                <label for="m_name">Middle Name</label>
+                <input name="m_name" id="m_name" maxlength="25" class="form-control" value="${m_name}">
+                <label for="l_name">Last Name</label>
+                <input name="l_name" id="l_name" maxlength="25" class="form-control" value="${l_name}" required>
 			</div>
 			<div class="form-group">
 				<label for="phone">Primary Phone Number</label>
