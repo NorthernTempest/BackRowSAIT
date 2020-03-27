@@ -68,12 +68,8 @@ public final class ViewServlet extends HttpServlet {
 			if (ParcelManager.isVisibleToUser(email, parcelID)) {
 				//push the parcel to jsp
 				Parcel parcel = ParcelManager.get(parcelID);
-				ArrayList<String> documentPaths = new ArrayList<>();
-				for (Document document : parcel.getDocuments()) {
-					documentPaths.add(document.getFilePath());
-				}
 				session.setAttribute("parcel", parcel);
-				session.setAttribute("documentPaths", documentPaths);
+				session.setAttribute("documents", parcel.getDocuments());
 			} else {
 				//not authorized to view parcel
 				request.setAttribute("errorMessage", "Error viewing message");
@@ -110,22 +106,31 @@ public final class ViewServlet extends HttpServlet {
 		try {
 			EncryptionService.decryptDocument(file, response.getOutputStream());
 		} catch (NumberFormatException e) {
+			//TODO
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
+			//TODO
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
+			//TODO
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
+			//TODO
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
+			//TODO
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
+			//TODO
 			e.printStackTrace();
 		} catch (InvalidAlgorithmParameterException e) {
+			//TODO
 			e.printStackTrace();
 		} catch (ConfigException e) {
+			//TODO
 			e.printStackTrace();
 		} catch (IOException e) {
+			//TODO
 			e.printStackTrace();
 		}
 	}
