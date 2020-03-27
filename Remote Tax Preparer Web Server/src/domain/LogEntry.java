@@ -20,8 +20,10 @@ public final class LogEntry {
 	public static final char ERROR = 'E';
 	public static final char DEACTIVATE_ACCOUNT = 'D';
 	public static final char UPDATE_ACCOUNT = 'U';
-	public static final char RECOVER_PASSWORD = 'R';
+	public static final char RECOVER_PASSWORD = 'P';
 	public static final char SESSION_UPDATE = 'S';
+	public static final char BACKUP = 'B';
+	public static final char RESTORE_SYSTEM = 'R';
 	
 	public LogEntry(String email, String message, char type, String ip) {
 		this.logEntryID = -1;
@@ -104,6 +106,8 @@ public final class LogEntry {
 			case RECOVER_PASSWORD:
 			case UPDATE_ACCOUNT:
 			case SESSION_UPDATE:
+			case BACKUP:
+			case RESTORE_SYSTEM:
 				this.type = type;
 				break;
 			default:
