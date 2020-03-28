@@ -38,6 +38,10 @@ public final class ParcelManager {
 
 	private final static String TAX_PREPARER = "tax_preparer";
 
+	private static String NEW_RETURN_SUBJECT;
+
+	private static String NEW_RETURN_MESSAGE;
+
 	/**
 	 * Initializes this class from config file once upon first creation.
 	 * 
@@ -46,6 +50,8 @@ public final class ParcelManager {
 	private static void init() throws ConfigException {
 		if (!init) {
 			expirationDays = Integer.parseInt(ConfigService.fetchFromConfig("PARCEL_EXPIRATION_DAYS:"));
+			NEW_RETURN_SUBJECT = ConfigService.fetchContents("NEW_RETURN_SUBJECT");
+			NEW_RETURN_MESSAGE = ConfigService.fetchContents("NEW_RETURN_MESSAGE:");
 			init = true;
 		}
 	}
@@ -178,7 +184,7 @@ public final class ParcelManager {
 			String receiver, Date dateSent, Date expiryDate, int taxYear, boolean requiresSignature) {
 		Debugger.log("createParcel(parts)");
 		boolean successfulInsert = true;
-		
+
 		try {
 			init();
 
@@ -243,7 +249,51 @@ public final class ParcelManager {
 			e.printStackTrace();
 			return false;
 		}
-		
+
+		return successfulInsert;
+	}
+
+	/**
+	 * @param documents
+	 * @param fName
+	 * @param lName
+	 * @param email
+	 * @param taxYear
+	 * @return
+	 * @throws ConfigException
+	 */
+	public static boolean createNewReturnParcel(ArrayList<Document> documents, String fName, String lName, String email,
+			int taxYear) throws ConfigException {
+		init();
+
+		boolean successfulInsert = true;
+
+		//Set expiration date
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.DAY_OF_MONTH, expirationDays);
+		Date expDate = c.getTime();
+
+		User u = UserManager.getUser(email);
+
+		if (u == null) {
+			return false;
+		}
+
+		String receiver = email;
+
+		Parcel parcel = new Parcel(NEW_RETURN_SUBJECT + " " + taxYear, fName + " " + lName + NEW_RETURN_MESSAGE, email, receiver, new Date(), expDate,
+				taxYear, documents, false);
+
+		if (ParcelDB.insert(parcel)) {
+			for (Document document : documents) {
+				if (!DocumentDB.insert(document, parcel.getParcelID())) {
+					successfulInsert = false;
+				}
+			}
+		} else {
+			return false;
+		}
 		return successfulInsert;
 	}
 }
