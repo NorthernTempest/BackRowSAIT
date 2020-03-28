@@ -16,14 +16,32 @@
     <br>
 </div>
 <div class="col-12">
-	<table id="tableDom" class="table table-hover table-dark">
-		<tr>
-			<th scope="col">Subject</th>
-			<th scope="col">Message</th>
-			<th scope="col">Date Sent</th>
-			<th scope="col">Attached</th>
-			<th scope="col">Expiration Date</th>
-		</tr>
+	<div class="form-group">
+		<label for="taxYear">Tax Year</label>
+		<select name="taxYear" id="taxYear" class="form-control" value="${taxYear}" onclick="updateFilter(this)">
+		</select>
+	</div>
+	<div class="form-check">
+		<input type="checkbox" class="form-check-input" id="hasDocuments" onclick="updateFilter(this)">
+		<label class="form-check-label" for="hasDocuments">Has documents</label>
+	</div>
+	<div class="form-check">
+		<input type="checkbox" class="form-check-input" id="reqSig" onclick="updateFilter(this)">
+		<label class="form-check-label" for="reqSig">Requires Signature</label>
+	</div>
+	<table class="table table-hover table-dark">
+		<thead>
+			<tr>
+				<th scope="col" onclick="fillTable('subject')">Subject</th>
+				<th scope="col">Message</th>
+				<th scope="col" onclick="fillTable('dateSentString')">Date Sent</th>
+				<th scope="col" onclick="fillTable('noOfDocuments')">Attached</th>
+				<th scope="col" onclick="fillTable('expirationDateString')">Expiration Date</th>
+			</tr>
+		</thead>
+		<tbody id="tableDom">
+
+		</tbody>
 	</table>
 
 </div>
@@ -48,7 +66,7 @@
             ],
             "expirationDate": Date.parse("${parcel.expirationDate}"),
             "expirationDateString": "${parcel.expirationDate}",
-            "taxReturnYear": ${parcel.taxReturnYear},
+            "taxReturnYear": "${parcel.taxReturnYear}",
             "requiresSignature": ${parcel.requiresSignature? true : false }
         },
         </c:forEach>
@@ -56,62 +74,100 @@
     ];
     parcels.pop();
 
-    window.onload = function() {
+	let yearEl;
+	let today = new Date().getFullYear();
+
+	let savedSort;
+	let filter = {
+		"year": (today-1).toString(),
+		"documents": false,
+		"reqSig": false
+	};
+
+	window.onload = function() {
+		yearEl = document.getElementById("taxYear");
+		let years = [];
+
+		for (let parcel in parcels) {
+			if(years.indexOf(parcels[parcel].taxReturnYear) === -1) {
+				years.push(parcels[parcel].taxReturnYear);
+			}
+		}
+		for (let year in years) {
+			let opt = document.createElement("option");
+			opt.value = ""+years[year];
+			opt.textContent = ""+years[year];
+			yearEl.appendChild(opt);
+		}
+
+		document.getElementById("hasDocuments").checked = false;
+		document.getElementById("reqSig").checked = false;
+
         fillTable(null);
     }
 
-    function fillTable(sort) {fillTable(sort, null)}
-    function fillTable(sort, filter) {
+	function updateFilter(el) {
+		switch (el.id) {
+			case "taxYear":
+				let taxYearEl = document.getElementById("taxYear");
+				filter.year = taxYearEl.options[taxYearEl.selectedIndex].value;
+				break;
+			case "hasDocuments":
+				filter.documents = !filter.documents;
+				break;
+			case "reqSig":
+				filter.reqSig = !filter.reqSig;
+				break;
+		}
+		fillTable(savedSort);
+	}
+
+    function fillTable(sort) {
         let table = parcels;
 
-        if (typeof filter === 'undefined') filter = "";
+        if(sort !== null && typeof sort !== 'undefined') savedSort = sort;
+        else savedSort = "dateSent";
+
         if (typeof filter.year !== 'undefined') {
             let tempTable = [];
             for(let parcel in table) {
-                if (parcel.taxReturnYear === filter.year)
-                    tempTable.push(parcel);
+                if (table[parcel].taxReturnYear === filter.year) {
+					tempTable.push(table[parcel]);
+				} else {
+				}
             }
             table = tempTable;
         }
-        if (typeof filter.documents !== 'undefined') {
+        if (filter.documents) {
             let tempTable = [];
             for(let parcel in table) {
-                if (parcel.noOfDocuments >= filter.documents)
-                    tempTable.push(parcel);
+                if (table[parcel].noOfDocuments >= 1)
+                    tempTable.push(table[parcel]);
             }
             table = tempTable;
         }
-        if (typeof filter.reqSig !== 'undefined') {
+        if (filter.reqSig) {
             let tempTable = [];
             for(let parcel in table) {
-                if (parcel.requiresSignature == true)
-                    tempTable.push(parcel);
+                if (table[parcel].requiresSignature)
+                    tempTable.push(table[parcel]);
             }
             table = tempTable;
         }
-        if(typeof sort === 'undefined') {
-            sort = "dateSent";
-        }
-        table.sort((a, b) => (a[sort] > b[sort]) ? 1 : -1);
+        table.sort((a, b) => (a[savedSort] > b[savedSort]) ? 1 : -1);
 
         //Print out the results.
         let tableDom = document.getElementById("tableDom");
 
+        tableDom.innerHTML = "";
+
         if (table.length < 1) {
             tableDom.innerText = "Nothing here!";
         } else {
-            tableDom.innerHTML = `<tr>
-            <th scope="col" onclick="">Subject</th>
-            <th scope="col">Message</th>
-            <th scope="col">Date Sent</th>
-            <th scope="col">Attached Documents</th>
-            <th scope="col">Expiration Date</th>
-        </tr>`;
-
             for (let parcel in table) {
                 let row = document.createElement("tr");
                 row.addEventListener('click', function() {
-                    goto('/parcel/view?parcelID=' + table[parcel].parcelID);
+                    fillTable(null, )
                 });
 
                 let rowSubj = document.createElement("td");
@@ -141,21 +197,10 @@
 
     }
 
-    function getQuery(tag) {
-        let url = window.location.search.substring(1);
-        let tags = url.split("&");
-        for (let x in tags) {
-            let pair = x.split("=");
-            if (pair[0] === tag) {
-                return decodeURIComponent(pair[1]);
-            }
-        }
-
-    }
-
-    function goto(where) {
-        window.location = where;
-    }
+	function toggleCheckbox(element)
+	{
+		element.checked = !element.checked;
+	}
 
 </script>
 
