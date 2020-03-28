@@ -63,15 +63,17 @@ public final class ParcelManager {
 			int year) throws ConfigException {
 		init();
 
-		if (UserManager.getUser(receiverEmail).getPermissionLevel() > User.USER) {
-			receiverEmail = TAX_PREPARER;
+		if (receiverEmail != null) {
+			if (UserManager.getUser(receiverEmail).getPermissionLevel() > User.USER) {
+				receiverEmail = TAX_PREPARER;
+			}
 		}
 
 		return ParcelDB.getParcelsByParameter(parcelID, senderEmail, receiverEmail, dateSent, year);
 	}
 
 	/**
-	 * @param recieverEmail
+	 * @param receiverEmail
 	 * @param year
 	 * @return
 	 * @throws ConfigException

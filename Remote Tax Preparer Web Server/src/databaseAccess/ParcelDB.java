@@ -270,7 +270,7 @@ public class ParcelDB {
 	 * @param sender
 	 * @param receiver
 	 * @param dateSent
-	 * @param taxReturnID
+	 * @param year
 	 * @return ArrayList<Parcel> containing all relevant Parcels from the database
 	 */
 	public static ArrayList<Parcel> getParcelsByParameter(String parcelID, String sender, String receiver, Date dateSent,
@@ -390,6 +390,8 @@ public class ParcelDB {
 		if(parcel != null && parcel.getReceiver() != null && parcel.getReceiver().equals(email)) {
 			return true;
 		} else if(parcel != null && parcel.getReceiver() == null && UserManager.getUser(email).getPermissionLevel() >= 2) {
+			return true;
+		} else if(parcel.getSender() != null && parcel.getSender().equals(email)) {
 			return true;
 		} else
 		return false;
