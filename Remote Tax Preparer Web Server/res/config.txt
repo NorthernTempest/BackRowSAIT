@@ -38,3 +38,6 @@ sqladminusernamepath:C:\Capstone\TestFiles\sqladminusername.txt
 sqladminpasswordpath:C:\Capstone\TestFiles\sqladminpassword.txt
 unzipdir:C:\Capstone\TestFiles\temp
 backupfilename:Remote_App_Backup
+AUTH_REQ_FILEPATH:C:\Capstone\TestFiles\AuthReq.pdf
+NEW_RETURN_SUBJECT:C:\Capstone\TestFiles\newReturnSubject.txt
+NEW_RETURN_MESSAGE:C:\Capstone\TestFiles\newReturnMessage.txt
