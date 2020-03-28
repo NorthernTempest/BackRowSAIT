@@ -32,11 +32,11 @@
 	<table class="table table-hover table-dark">
 		<thead>
 			<tr>
-				<th scope="col" onclick="fillTable('subject')">Subject</th>
+				<th scope="col" onclick="fillTable('subject')" id="subjectSort">Subject</th>
 				<th scope="col">Message</th>
-				<th scope="col" onclick="fillTable('dateSentString')">Date Sent</th>
-				<th scope="col" onclick="fillTable('noOfDocuments')">Attached</th>
-				<th scope="col" onclick="fillTable('expirationDateString')">Expiration Date</th>
+				<th scope="col" onclick="fillTable('dateSentString')" id="dateSort">Date Sent</th>
+				<th scope="col" onclick="fillTable('noOfDocuments')" id="attachSort">Attached</th>
+				<th scope="col" onclick="fillTable('expirationDateString')" id="expireSort">Expiration Date</th>
 			</tr>
 		</thead>
 		<tbody id="tableDom">
@@ -77,7 +77,7 @@
 	let yearEl;
 	let today = new Date().getFullYear();
 
-	let savedSort;
+	let savedSort = "";
 	let filter = {
 		"year": (today-1).toString(),
 		"documents": false,
@@ -86,7 +86,7 @@
 
 	window.onload = function() {
 		yearEl = document.getElementById("taxYear");
-		let years = [];
+		let years = [(today-1).toString()];
 
 		for (let parcel in parcels) {
 			if(years.indexOf(parcels[parcel].taxReturnYear) === -1) {
@@ -103,7 +103,7 @@
 		document.getElementById("hasDocuments").checked = false;
 		document.getElementById("reqSig").checked = false;
 
-        fillTable(null);
+        fillTable("dateSentString");
     }
 
 	function updateFilter(el) {
@@ -124,9 +124,6 @@
 
     function fillTable(sort) {
         let table = parcels;
-
-        if(sort !== null && typeof sort !== 'undefined') savedSort = sort;
-        else savedSort = "dateSent";
 
         if (typeof filter.year !== 'undefined') {
             let tempTable = [];
@@ -154,7 +151,44 @@
             }
             table = tempTable;
         }
-        table.sort((a, b) => (a[savedSort] > b[savedSort]) ? 1 : -1);
+
+		if(savedSort === sort) {
+			savedSort = "-"+sort;
+		} else {
+			savedSort = sort;
+		}
+
+		document.getElementById("subjectSort").innerText = "Subject";
+		document.getElementById("dateSort").innerText = "Date Sent";
+		document.getElementById("attachSort").innerText = "Attached";
+		document.getElementById("expireSort").innerText = "Expiration Date";
+
+		let arrow = "↓";
+        if(savedSort.charAt(0) === '-') {
+			table.sort((a, b) => (a[savedSort] < b[savedSort]) ? 1 : -1);
+		} else {
+			table.sort((a, b) => (a[savedSort] > b[savedSort]) ? 1 : -1);
+			arrow = "↑";
+		}
+
+        switch (savedSort) {
+        	case "subject":
+			case "-subject":
+				document.getElementById("subjectSort").innerText = "Subject "+arrow;
+				break;
+			case "dateSentString":
+			case "-dateSentString":
+				document.getElementById("dateSort").innerText = "Date Sent "+arrow;
+				break;
+			case "noOfDocuments":
+			case "-noOfDocuments":
+				document.getElementById("attachSort").innerText = "Attached "+arrow;
+				break;
+			case "expirationDateString":
+			case "-expirationDateString":
+				document.getElementById("expireSort").innerText = "Expiration Date "+arrow;
+				break;
+		}
 
         //Print out the results.
         let tableDom = document.getElementById("tableDom");
@@ -167,7 +201,7 @@
             for (let parcel in table) {
                 let row = document.createElement("tr");
                 row.addEventListener('click', function() {
-                    fillTable(null, )
+                    window.location = '/parcel/view?parcelID=' + table[parcel].parcelID;
                 });
 
                 let rowSubj = document.createElement("td");
