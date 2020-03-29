@@ -64,7 +64,8 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5 offset-md-1">
+            <br>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="nameChange" id="nameChange">
                 <label class="form-check-label" for="nameChange">Did your name change during <span class="taxYear">this last year</span>?</label>
@@ -74,7 +75,7 @@
     <br>
     <%--Married, Common Law, Widowed, Divorced, Separated, Single--%>
     <div class="row">
-        <div class="col-12">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="maritalStatus">Marital Status</label>
                 <select class="form-control" name="maritalStatus" id="maritalStatus">
@@ -86,6 +87,7 @@
                     <option value="Single" ${maritalStatus.equals("Single")?"selected":""}>Single</option>
                 </select>
             </div>
+            <br>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="maritalChange" id="maritalChange" ${maritalChange?"checked":""}>
                 <label class="form-check-label" for="maritalChange" >Did your marital status change during <span class="taxYear">this last year</span>?</label>
@@ -121,6 +123,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
+
             </div>
         </div>
     </div>
@@ -163,6 +166,14 @@
     <%--AND/OR--%>
     <%--Register with Canada Revenue agency for online mail--%>
     <%--already registered--%>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <button type="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+
 </form>
 
 <script>
