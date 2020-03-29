@@ -13,6 +13,8 @@ import manager.UserManager;
 
 /**
  * Servlet implementation class SettingsServlet
+ * 
+ * @author Jesse Goerzen
  */
 @WebServlet(description = "Edits user's settings.", urlPatterns = { "/settings" })
 public class SettingsServlet extends HttpServlet {
