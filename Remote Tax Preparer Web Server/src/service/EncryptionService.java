@@ -368,6 +368,9 @@ public class EncryptionService {
 			cipherIn = new CipherInputStream(fileIn, cipher);
 			
 			IOUtils.copy(cipherIn, out);
+		} catch (NumberFormatException | ConfigException | IOException | NoSuchAlgorithmException |
+				NoSuchPaddingException | InvalidKeySpecException | InvalidKeyException | InvalidAlgorithmParameterException e) {
+			e.printStackTrace();
 		} finally {
 			cipherIn.close();
 		}

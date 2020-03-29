@@ -1,16 +1,21 @@
 package manager;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
+import javax.servlet.http.Part;
+
 import databaseAccess.LogEntryDB;
+import databaseAccess.SessionDB;
 import databaseAccess.UserDB;
 import domain.LogEntry;
+import domain.Session;
 import domain.User;
 import exception.ConfigException;
 import service.BackupService;
@@ -95,21 +100,29 @@ public final class LogEntryManager {
 		return output;
 	}
 
-	public static boolean recover(InputStream in, String sessionID, String ip) {
+	public static boolean recover(Collection<Part> parts, String sessionID, String ip) {
 		boolean output = false;
 		
 		String email = SessionManager.getEmail(sessionID);
+		
 		User user = null;
 		if(email != null && !email.equals("")) {
 			user = UserDB.get(email);
 			if (user != null && user.getPermissionLevel() >= User.ADMIN) {
 				try {
-					BackupService.restore(in);
 					
-					LogEntry le = new LogEntry(email, "SUCCESS", LogEntry.RESTORE_SYSTEM, ip);
+					output = BackupService.restore(parts.iterator().next().getInputStream());
+					
+					LogEntry le = new LogEntry(email, output ? "SUCCESS" : "FAILED", LogEntry.RESTORE_SYSTEM, ip);
 					LogEntryDB.insert(le);
 					
-					output = true;
+					Calendar c = Calendar.getInstance();
+					
+					c.add(Calendar.MINUTE, 15);
+					
+					Session s = new Session(email, sessionID, c.getTime());
+					
+					SessionDB.insert(s);
 				} catch (ConfigException | IOException | InterruptedException e) {
 					logError(email, e, ip);
 					e.printStackTrace();
