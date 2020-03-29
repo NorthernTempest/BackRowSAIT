@@ -292,13 +292,19 @@
     <%--already registered--%>
     <div class="row">
         <div class="col-md-6">
+            <p>How would you like to receive your notice of assessment?</p>
             <div class="form-group">
-                <label for="noticeAssesment">How would you like to recieve your notice of assesment?</label>
-                <select class="form-control" name="noticeAssesment" id="noticeAssesment">
-                    <option value="mail">Mail (Canada Post)</option>
-                    <option value="cra" ${noticeAssesment.equals("cra")?"selected":""}>Register with Canadian Revenue Agency</option>
-                    <option value="na" ${noticeAssesment.equals("na")?"selected":""}>Already Registered</option>
-                </select>
+                <input type="checkbox" class="form-check-input" name="mailAssess" id="mailAssess" value="y" ${mailAssess?"checked":""}>
+                <label class="form-check-label" for="mailAssess">Mail (Canada Post)</label>
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="craAssess" id="craAssess" value="y" ${craAssess?"checked":""}>
+                <label class="form-check-label" for="craAssess">Register with Canada Revenue Agency for online mail</label>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="alreadyRegistered" id="alreadyRegistered" value="y" ${alreadyRegistered?"checked":""}>
+                <label class="form-check-label" for="alreadyRegistered">I'm already registered for CRA online mail</label>
             </div>
         </div>
     </div>
