@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +26,6 @@ import util.cesar.Debugger;
  * @author Cesar Guzman
  */
 @WebServlet("/createReturn")
-@MultipartConfig(fileSizeThreshold = 0, maxFileSize = 1024 * 1024 * 1, maxRequestSize = 1024 * 1024 * 1 * 2) //0mb, 25mb, 10x 25mb
 public class CreateReturnServlet extends HttpServlet {
 	private static final long serialVersionUID = 2607698730769064715L;
 
