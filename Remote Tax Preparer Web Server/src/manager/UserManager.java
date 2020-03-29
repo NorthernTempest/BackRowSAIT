@@ -187,7 +187,7 @@ public final class UserManager {
 		
 		User editUser = UserDB.get(email);
 		
-		if (!editUser.equals(loggedUser) && loggedUser.getPermissionLevel()<User.ADMIN) {
+		if (!editUser.getEmail().equals(loggedUser.getEmail()) && loggedUser.getPermissionLevel()<User.ADMIN) {
 			throw new IllegalArgumentException();
 		}
 		
