@@ -12,7 +12,13 @@
 
 <div class="container">
     <div class="">
-        <div class="col-md-6"></div>
+        <div class="col-12">
+            <p>${parcel.subject}</p>
+            <p>${parcel.documents.get(0).filePath}</p>
+            <object data="/document?filePath=${parcel.documents.get(0).filePath}" type="application/pdf">
+                <embed src="/document?filePath=${parcel.documents.get(0).filePath}" type="application/pdf" />
+            </object>
+        </div>
     </div>
 </div>
 
