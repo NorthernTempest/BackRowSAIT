@@ -38,7 +38,7 @@
                 <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="${dateOfBirth}" required>
             </div>
             <div class="form-group">
-                <label for="dateOfBirth">SIN</label>
+                <label for="sin">SIN</label>
                 <input class="form-control" type="number" min="100000000" max="999999999" name="sin" id="sin" value="${sin}" required>
             </div>
         </div>
@@ -182,9 +182,9 @@
                 <p>Below are the required details of your dependant partner</p>
             </div>
             <div class="form-group">
-                <label for="dateOfBirth">Date of Birth</label>
+                <label for="partnerDateOfBirth">Date of Birth</label>
                 <input class="form-control spouser" type="date" name="partnerDateOfBirth" id="partnerDateOfBirth" value="${partnerDateOfBirth}">
-                <label for="dateOfBirth">SIN</label>
+                <label for="partnerSin">SIN</label>
                 <input class="form-control spouser" type="number" min="100000000" max="999999999" name="partnerSin" id="partnerSin" value="${partnerSin}">
             </div>
             <br>
