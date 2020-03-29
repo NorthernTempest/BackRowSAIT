@@ -1,26 +1,44 @@
 package servlet;
 
-import domain.Document;
-import domain.Parcel;
-import exception.ConfigException;
-import manager.DocumentManager;
-import manager.ParcelManager;
-
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-@WebServlet("/signDoc")
+import domain.Parcel;
+import exception.ConfigException;
+import manager.ParcelManager;
+
+/**
+ * Servlet implementation class SignDocumentServlet
+ */
+@WebServlet("/SignDocumentServlet")
 public class SignDocumentServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public SignDocumentServlet() {
+        super();
+        // TODO Auto-generated constructor stub
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
 
-        Parcel parcel = null;
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Parcel parcel = null;
         try {
             parcel = ParcelManager.get(request.getParameter("parcel"));
             request.setAttribute("parcel", parcel);
@@ -36,5 +54,6 @@ public class SignDocumentServlet extends HttpServlet {
         }
 
         getServletContext().getRequestDispatcher("/WEB-INF/parcel/signDocument.jsp").forward(request, response);
-    }
+	}
+
 }
