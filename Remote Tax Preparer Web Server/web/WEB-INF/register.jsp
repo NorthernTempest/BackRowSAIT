@@ -36,13 +36,7 @@
 			<div class="form-group">
 				<h3>Personal Info</h3>
 				<label for="title">Title</label>
-                <select name="title" id="title" class="form-control" required>
-					<option value="Na" selected>N/A</option>
-					<option value="Mr">Mr</option>
-					<option value="Mrs">Mrs</option>
-					<option value="Ms">Ms</option>
-					<option value="Mx">Mx</option>
-				</select>
+				<input id="title" name="title" class="form-control" placeholder="eg. 'Mr'" value="${title}">
                 <label for="f_name">First Name</label>
                 <input name="f_name" id="f_name" maxlength="25" value="${f_name}" class="form-control" required>
                 <label for="m_name">Middle Name</label>
