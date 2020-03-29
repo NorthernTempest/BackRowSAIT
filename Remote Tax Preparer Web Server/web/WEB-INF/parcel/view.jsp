@@ -17,10 +17,10 @@
 	${parcel.expirationDate}<br>
 	<p>${parcel.message}</p>
 
-    <c:forEach var="doc" items="${documentPaths}">
+    <c:forEach var="doc" items="${parcel.documents}">
     	<form action="/parcel/view" method="post">
-    	 	<input type="hidden" name="filePath" value="${doc}">
-    	 	<button type="submit" class="btn btn-primary">${doc}</button>
+    	 	<input type="hidden" name="filePath" value="${doc.filePath}">
+    	 	<button type="submit" class="btn btn-primary">${doc.fileName}</button>
     	</form>
        
     </c:forEach>

@@ -105,6 +105,11 @@ div#content {
 	text-align: left;
 }
 
+div.row {
+	background: black;
+	border-radius: 5px;
+}
+
 .btn-primary {
 	background: #48bfbb;
 	border: 0;
