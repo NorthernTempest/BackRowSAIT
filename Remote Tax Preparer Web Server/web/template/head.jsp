@@ -22,7 +22,7 @@
     <div class="block text-center" id="nav">
 		<c:if test="${role == 1}">
         <span class="nav-first">
-            <a href="/parcel/create"><button class="btn btn-primary btn-lg"><b>Create Return</b></button></a>
+            <a href="/createReturn"><button class="btn btn-primary btn-lg"><b>Create Return</b></button></a>
         </span></c:if>
         <span class="nav-item">
             <a href="/inbox">Inbox</a>

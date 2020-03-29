@@ -21,6 +21,8 @@
 		<url-pattern>/inbox/*</url-pattern>
 		<url-pattern>/recover/*</url-pattern>
 		<url-pattern>/settings/*</url-pattern>
+		<url-pattern>/parcel/*</url-pattern>
+		<url-pattern>/createReturn/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>AdminFilter</filter-name>
