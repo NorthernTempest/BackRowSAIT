@@ -55,6 +55,7 @@ public final class InboxServlet extends HttpServlet {
 			ArrayList<Parcel> parcels = ParcelManager.getParcels(null, null, email, null, -1);
 			parcels.addAll(ParcelManager.getParcels(null, email, null, null, -1));
 			request.setAttribute("parcels", parcels);
+			request.setAttribute("user", email);
 			for(Parcel parcel : parcels) {
 				Debugger.log("Parcel get: " + parcel.getSubject());
 				for(Document document : parcel.getDocuments()) {

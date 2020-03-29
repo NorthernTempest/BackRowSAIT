@@ -119,6 +119,16 @@ div.row {
   color: black;
 }
 
+div.inboxIcon {
+	background: #48bfbb;
+	color: white;
+	font-weight: bold;
+	box-sizing: border-box;
+	border-radius: 5px;
+	padding: 2px;
+	width: 100%
+}
+
 @media only screen and (max-width: 850px) {
 	div.main {
 		margin: 0;
