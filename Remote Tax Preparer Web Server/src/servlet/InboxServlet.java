@@ -82,6 +82,6 @@ public final class InboxServlet extends HttpServlet {
 
 		//Display Inbox page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
-
+		doGet(request, response);
 	}
 }

@@ -123,6 +123,10 @@ div.row {
   color: black;
 }
 
+div.modal-content {
+	color: black;
+}
+
 div.inboxIcon {
 	background: #48bfbb;
 	color: white;

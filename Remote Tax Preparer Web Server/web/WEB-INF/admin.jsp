@@ -60,6 +60,10 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#backupModal">
         Backup Users and Messages
     </button>
+	<br>
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal">
+		Restore Users and Messages
+	</button>
 </div>
 <hr class="nav-separator">
 <div class="col-12">
@@ -69,30 +73,56 @@
 	<br><br><br><br>
 </div>
 
-
+<jsp:directive.include file="../template/foot.jsp" />
 <%-- Modals --%>
 <div class="modal fade" id="backupModal" tabindex="-1" role="dialog" aria-labelledby="backupModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="backupModalLabel">Backup</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                This will save a file containing current user accounts and current messages.
-                User files will not be backed up.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <form action="/admin" method="POST">
-                    <input type="hidden" name="action" value="backupDownload">
-                    <button type="submit" class="btn btn-primary">Download Backup</button>
-                </form>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="backupModalLabel">Backup</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				This will save a file containing current user accounts and current messages.
+				User files will not be backed up.
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<form action="/backup" method="POST">
+					<input type="hidden" name="action" value="backup">
+					<button type="submit" class="btn btn-primary">Download Backup</button>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
+<div class="modal fade" id="restoreModal" tabindex="-1" role="dialog" aria-labelledby="restoreModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<form action="/backup" method="POST">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="restoreModalLabel">Restore</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					This will save a file containing current user accounts and current messages.
+					User files will not be backed up.
+					<div class="form-group">
+						<label for="restoreFile">Restore File</label>
+						<input type="file" class="form-control" id="restoreFile" name="restoreFile" required>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<input type="hidden" name="action" value="restore">
+					<button type="submit" class="btn btn-primary">Restore</button>
 
-<jsp:directive.include file="../template/foot.jsp" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

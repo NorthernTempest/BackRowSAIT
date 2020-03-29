@@ -213,19 +213,19 @@
         switch (savedSort) {
         	case "subject":
 			case "-subject":
-				document.getElementById("subjectSort").innerText = "Subject "+arrow;
+				document.getElementById("subjectSort").innerHTML = "Subject "+arrow;
 				break;
 			case "dateSentString":
 			case "-dateSentString":
-				document.getElementById("dateSort").innerText = "Date Sent "+arrow;
+				document.getElementById("dateSort").innerHTML = "Date Sent "+arrow;
 				break;
 			case "noOfDocuments":
 			case "-noOfDocuments":
-				document.getElementById("attachSort").innerText = "Attached "+arrow;
+				document.getElementById("attachSort").innerHTML = "Attached "+arrow;
 				break;
 			case "expirationDateString":
 			case "-expirationDateString":
-				document.getElementById("expireSort").innerText = "Expiration Date "+arrow;
+				document.getElementById("expireSort").innerHTML = "Expiration Date "+arrow;
 				break;
 		}
 
