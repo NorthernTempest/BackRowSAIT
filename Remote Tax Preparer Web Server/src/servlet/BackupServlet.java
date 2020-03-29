@@ -60,7 +60,7 @@ public class BackupServlet extends HttpServlet {
 			try {
 				myInit();
 				response.setContentType("text/plain");
-		        response.setHeader("Content-disposition", "attachment; filename=" + backupFileName + new Date().toString().replaceAll("\\s{1,}", "_").replaceAll(":", "-"));
+		        response.setHeader("Content-disposition", "attachment; filename=" + backupFileName + new Date().toString().replaceAll("\\s{1,}", "_").replaceAll(":", "-") + ".zip");
 		        
 				LogEntryManager.sendBackup(response.getOutputStream(), request.getSession().getId(), request.getRemoteAddr());
 			} catch (ConfigException e) {
