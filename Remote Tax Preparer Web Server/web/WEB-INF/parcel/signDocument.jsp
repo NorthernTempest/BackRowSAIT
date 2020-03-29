@@ -16,8 +16,8 @@
             <p>${parcel.subject}</p>
             <p>${parcel.documents.get(0).filePath}</p>
 
-            <object data="${parcel.documents.get(0).filePath}" type="application/pdf" width="300" height="200">
-                alt : <a href="${parcel.documents.get(0).filePath}">${parcel.documents.get(0).fileName}</a>
+            <object data="/DocumentServlet?filePath=${parcel.documents.get(0).filePath}" type="application/pdf" width="100%" height="700px">
+                alt : <a href="/DocumentServlet?filePath=${parcel.documents.get(0).filePath}">${parcel.documents.get(0).fileName}</a>
             </object>
         </div>
     </div>

@@ -127,10 +127,17 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="address1">Street Address</label>
-                <input id="address1" name="address1" class="form-control" value="${address1}">
-                <label for="address1">Street Address 2</label>
-                <input id="address2" name="address2" class="form-control" value="${address2}">
+                <label for="address">Street Address</label>
+                <input id="address" name="address" class="form-control" value="${address}">
+                <label for="apartment">Apartment</label>
+                <input id="apartment" name="apartment" class="form-control" value="${apartment}">
+                <br>
+                <label for="po">PO Box</label>
+                <input id="po" name="po" class="form-control" value="${po}">
+                <label for="poLocation">PO Box Location</label>
+                <input id="poLocation" name="poLocation" class="form-control" value="${poLocation}">
+                <label for="rr">RR#</label>
+                <input id="rr" name="rr" class="form-control" value="${rr}">
                 <br>
                 <label for="addressCity">City</label>
                 <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}">
@@ -217,10 +224,17 @@
             <br>
             <div class="form-group">
                 <h3>Address</h3>
-                <label for="partnerAddress1">Street Address</label>
-                <input id="partnerAddress1" name="partnerAddress1" class="form-control" value="${partnerAddress1}">
-                <label for="partnerAddress2">Street Address 2</label>
-                <input id="partnerAddress2" name="partnerAddress2" class="form-control" value="${partnerAddress2}">
+                <label for="partnerAddress">Street Address</label>
+                <input id="partnerAddress" name="partnerAddress1" class="form-control" value="${partnerAddress}">
+                <label for="partnerApartment">Apartment</label>
+                <input id="partnerApartment" name="partnerApartment" class="form-control" value="${partnerApartment}">
+                <br>
+                <label for="partnerPo">PO Box</label>
+                <input id="partnerPo" name="po" class="form-control" value="${po}">
+                <label for="partnerPoLocation">PO Box Location</label>
+                <input id="partnerPoLocation" name="poLocation" class="form-control" value="${poLocation}">
+                <label for="partnerrr">RR#</label>
+                <input id="partnerrr" name="partnerrr" class="form-control" value="${partnerrr}">
                 <br>
                 <label for="partnerAddressCity">City</label>
                 <input id="partnerAddressCity" name="partnerAddressCity" class="form-control" value="${partnerAddressCity}">
