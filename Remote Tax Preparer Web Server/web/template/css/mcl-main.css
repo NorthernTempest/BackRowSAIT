@@ -113,7 +113,10 @@ div.row {
 .btn-primary {
 	background: #48bfbb;
 	border: 0;
-	margin-top: 2px;
+}
+
+.btn {
+	margin-top: 5px;
 }
 
 .card {

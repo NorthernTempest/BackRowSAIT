@@ -34,10 +34,26 @@
 
 		</div>
 		<div class="col-md-6">
+			<c:choose>
+				<c:when test="${parcel.requiresSignature}">
+					<a href="signDocument">
+						<div class='inboxIcon'>
+						<i class="fas fa-file-signature"></i>
+						<span>Requires Signature</span>
+						</div>
+					</a>
+					<br>
+				</c:when>
+			</c:choose>
+			<c:choose>
+				<c:when test="${parcel.documents.size() > 0}">
+					<b>Attachments:</b><br>
+				</c:when>
+			</c:choose>
 			<c:forEach var="doc" items="${parcel.documents}">
 				<form action="/parcel/view" method="post">
 					<input type="hidden" name="filePath" value="${doc.filePath}">
-					<button type="submit" class="btn btn-link btn-sm"><i class="fas fa-file"></i> ${doc.fileName}</button>
+					<button type="submit" class="btn btn-light btn-sm"><i class="fas fa-file"></i> ${doc.fileName}</button>
 				</form>
 
 			</c:forEach>

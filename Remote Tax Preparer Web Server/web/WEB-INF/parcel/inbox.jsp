@@ -201,9 +201,9 @@
 		document.getElementById("attachSort").innerText = "Attached";
 		document.getElementById("expireSort").innerText = "Expiration Date";
 
-		let arrow = "↑";
+		let arrow = "<b>↑</b>";
         if(savedSort.charAt(0) !== '-') {
-			arrow = "↓";
+			arrow = "<b>↓</b>";
 		}
 
         if (table.length > 1) {
