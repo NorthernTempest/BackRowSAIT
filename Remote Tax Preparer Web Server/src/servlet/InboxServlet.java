@@ -45,6 +45,8 @@ public final class InboxServlet extends HttpServlet {
 			throws ServletException, IOException {
 		Debugger.log("InboxServlet.doGet");
 
+		request.setAttribute("successMessage", request.getParameter("successMessage"));
+
 		//get session email
 		HttpSession session = request.getSession();
 		String email = SessionManager.getEmail(session.getId());

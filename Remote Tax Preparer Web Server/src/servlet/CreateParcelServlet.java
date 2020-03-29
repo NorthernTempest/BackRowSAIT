@@ -141,23 +141,7 @@ public final class CreateParcelServlet extends HttpServlet {
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 		} else {
 			request.setAttribute("successMessage", "Message Sent");
-			try {
-				ArrayList<Parcel> parcels = ParcelManager.getParcels(null, null, email, null, -1);
-				parcels.addAll(ParcelManager.getParcels(null, email, null, null, -1));
-				request.setAttribute("parcels", parcels);
-				request.setAttribute("user", email);
-				for(Parcel parcel : parcels) {
-					Debugger.log("Parcel get: " + parcel.getSubject());
-					for(Document document : parcel.getDocuments()) {
-						Debugger.log("Inbox document debug: " + document.getFileName());
-					}
-				}
-			} catch (ConfigException e) {
-				// TODO Auto-generated catch block
-				Debugger.log("CONFIG EXCEPTION");
-				e.printStackTrace();
-			}
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+			response.sendRedirect("/inbox?successMessage=Successfully sent message");
 		}
 
 	}
