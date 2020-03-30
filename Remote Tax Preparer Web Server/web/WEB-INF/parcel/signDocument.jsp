@@ -29,7 +29,9 @@
             <button type="button" class="btn btn-primary" onclick="sendSignature()">Send Signature</button>
         </div>
         <div class="col-md-6">
-            <button type="button" class="btn btn-light" onclick="clearSignature()"></button>
+            <br>
+            <br>
+            <button type="button" class="btn btn-light" onclick="signaturePad.clear();">Clear</button>
         </div>
     </div>
 </div>
@@ -68,6 +70,10 @@
         }).done(function( data ) {
             window.location = "/inbox?successMessage=Document <b>${parcel.subject}</b> successfully signed";
         });
+    }
+
+    function clearSignature() {
+
     }
 
 
