@@ -1,11 +1,16 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.Collection;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import bean.PaymentBean;
+import manager.PaymentManager;
 
 /**
  * Servlet implementation class PaymentsServlet
@@ -25,7 +30,9 @@ public class PaymentsServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Collection<PaymentBean> payments = PaymentManager.getPayments(request.getSession().getId());
 		
+		request.setAttribute("payments", payments);
 		
 		getServletContext().getRequestDispatcher("/WEB-INF/payments.jsp").forward(request, response);
 	}

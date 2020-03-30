@@ -187,4 +187,40 @@ public class PaymentDB {
 
 		return payments;
 	}
+
+	public static ArrayList<Payment> getByEmail(String email) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		ArrayList<Payment> payments = new ArrayList<>();
+
+		try {
+
+			String preparedQuery = "SELECT * FROM payment WHERE email = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(1, email);
+			
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				payments.add(new Payment(rs.getString("paymentID"), rs.getString("payment_name"), rs.getInt("year"),
+						rs.getString("payment_type"), rs.getDouble("amount"), rs.getDate("date")));
+			}
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return payments;
+	}
 }

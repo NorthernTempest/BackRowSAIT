@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * A copy of the Payment domain class used to pass necessary info to display to the user.
  * 
  * @author Jesse Goerzen
- *
  */
-public class PaymentBean implements Serializable {
+public final class PaymentBean implements Serializable {
 	private static final long serialVersionUID = -1168441519386944499L;
 	
 	private int year;
@@ -16,6 +16,14 @@ public class PaymentBean implements Serializable {
 	private double amount;
 	private Date date;
 	private String billingInfo;
+	
+	public PaymentBean(int year, String paymentType, double amount, Date date, String billingInfo) {
+		this.year = year;
+		this.paymentType = paymentType;
+		this.amount = amount;
+		this.date = date;
+		this.billingInfo = billingInfo;
+	}
 	
 	public int getYear() {
 		return year;
