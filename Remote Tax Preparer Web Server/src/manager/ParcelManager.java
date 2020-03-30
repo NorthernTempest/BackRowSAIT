@@ -50,8 +50,8 @@ public final class ParcelManager {
 	private static void init() throws ConfigException {
 		if (!init) {
 			expirationDays = Integer.parseInt(ConfigService.fetchFromConfig("PARCEL_EXPIRATION_DAYS:"));
-			NEW_RETURN_SUBJECT = ConfigService.fetchContents("NEW_RETURN_SUBJECT");
-			NEW_RETURN_MESSAGE = ConfigService.fetchContents("NEW_RETURN_MESSAGE:");
+			NEW_RETURN_SUBJECT = ConfigService.fetchContents(ConfigService.fetchFromConfig("NEW_RETURN_SUBJECT:"));
+			NEW_RETURN_MESSAGE = ConfigService.fetchContents(ConfigService.fetchFromConfig("NEW_RETURN_MESSAGE:"));
 			init = true;
 		}
 	}

@@ -13,6 +13,8 @@ import manager.UserManager;
 
 /**
  * Servlet implementation class SettingsServlet
+ * 
+ * @author Jesse Goerzen
  */
 @WebServlet(description = "Edits user's settings.", urlPatterns = { "/settings" })
 public class SettingsServlet extends HttpServlet {
@@ -64,7 +66,7 @@ public class SettingsServlet extends HttpServlet {
 
 			try {
 				String email; 
-				if (request.getAttribute("userEmail")!=null || request.getAttribute("userEmail").equals("")) {
+				if (request.getAttribute("userEmail")!=null) {
 					email = (String) request.getAttribute("userEmail");
 				} else {
 					email = UserManager.getEmailFromSession(request);
@@ -76,10 +78,9 @@ public class SettingsServlet extends HttpServlet {
 				LogEntryManager.logError(null, e, request.getRemoteAddr());
 				e.printStackTrace();
 			}
-
 			try {
 				String email; 
-				if (request.getAttribute("userEmail")!=null || request.getAttribute("userEmail").equals("")) {
+				if (request.getAttribute("userEmail")!=null) {
 					email = (String) request.getAttribute("userEmail");
 				} else {
 					email = UserManager.getEmailFromSession(request);

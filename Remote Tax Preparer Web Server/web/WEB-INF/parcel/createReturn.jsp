@@ -37,6 +37,10 @@
                 <label for="dateOfBirth">Date of Birth</label>
                 <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="${dateOfBirth}" required>
             </div>
+            <div class="form-group">
+                <label for="sin">SIN</label>
+                <input class="form-control" type="number" min="100000000" max="999999999" name="sin" id="sin" value="${sin}" required>
+            </div>
         </div>
     </div>
     <br>
@@ -67,7 +71,7 @@
         <div class="col-md-5 offset-md-1">
             <br>
             <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="nameChange" id="nameChange">
+                <input type="checkbox" class="form-check-input" name="nameChange" id="nameChange" value="y" ${nameChange?"checked":""}>
                 <label class="form-check-label" for="nameChange">Did your name change during <span class="taxYear">this last year</span>?</label>
             </div>
         </div>
@@ -89,7 +93,7 @@
             </div>
             <br>
             <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="maritalChange" id="maritalChange" ${maritalChange?"checked":""}>
+                <input type="checkbox" class="form-check-input" name="maritalChange" id="maritalChange" value="y"  ${maritalChange?"checked":""}>
                 <label class="form-check-label" for="maritalChange" >Did your marital status change during <span class="taxYear">this last year</span>?</label>
             </div>
             <div class="form-group">
@@ -112,7 +116,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="canadianCitizen" id="canadianCitizen"  ${canadianCitizen?"checked":""}>
+                <input type="checkbox" class="form-check-input" name="canadianCitizen" id="canadianCitizen" value="y" ${canadianCitizen?"checked":""}>
                 <label class="form-check-label" for="canadianCitizen">Are you currently a Canadian Citizen?</label>
             </div>
         </div>
@@ -123,19 +127,46 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-
+                <label for="address">Street Address</label>
+                <input id="address" name="address" class="form-control" value="${address}">
+                <label for="apartment">Apartment</label>
+                <input id="apartment" name="apartment" class="form-control" value="${apartment}">
+                <br>
+                <label for="po">PO Box</label>
+                <input id="po" name="po" class="form-control" value="${po}">
+                <label for="poLocation">PO Box Location</label>
+                <input id="poLocation" name="poLocation" class="form-control" value="${poLocation}">
+                <label for="rr">RR#</label>
+                <input id="rr" name="rr" class="form-control" value="${rr}">
+                <br>
+                <label for="addressCity">City</label>
+                <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}">
+                <label for="addressCountry">Country</label>
+                <select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${addressCountry}">
+                </select>
+                <label for="addressRegion">Province/State</label>
+                <select id="addressRegion" class="form-control" data-value="shortcode" name="addressRegion" data-default-value="${addressRegion}">
+                </select>
+                <label for="addressPostal">Postal Code</label>
+                <input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}">
+            </div>
+        </div>
+    </div>
+    <br>
+    <%--Contact--%>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" type="email" id="email" name="email" value="${email}" required>
+                <label for="phone">Phone</label>
+                <input class="form-control" type="tel" id="phone" name="phone" value="${phone}" required>
             </div>
         </div>
     </div>
     <br>
 
-    <%--Email address--%>
-
-    <%--Mobile phone--%>
-
     <%--if MARRIED / COMMON LAW (FOR PARTNER)--%>
-    <%--SIN--%>
-    <%--DOB--%>
 
     <%--Mr, Miss, Mrs, Ms--%>
 
@@ -151,21 +182,147 @@
 
     <%--Mobile phone--%>
     <%--ENDIF--%>
+    <div class="row" id="partnerDetails">
+        <div class="col-md-6">
+            <div class="form-group">
+                <h1>Partners Details</h1>
+                <p>Below are the required details of your dependant partner</p>
+            </div>
+            <div class="form-group">
+                <label for="partnerDateOfBirth">Date of Birth</label>
+                <input class="form-control spouser" type="date" name="partnerDateOfBirth" id="partnerDateOfBirth" value="${partnerDateOfBirth}">
+                <label for="partnerSin">SIN</label>
+                <input class="form-control spouser" type="number" min="100000000" max="999999999" name="partnerSin" id="partnerSin" value="${partnerSin}">
+            </div>
+            <br>
+            <div class="form-group">
+                <h3>Personal Information</h3>
+                <label for="partnerTitle">Title</label>
+                <input id="partnerTitle" name="partnerTitle" class="form-control" placeholder="eg. 'Mr'" value="${partnerTitle}">
+            </div>
+            <div class="form-group">
+                <label for="partnerFname">First Name</label>
+                <input class="form-control spouser" name="partnerFname" id="partnerFname" value="${partnerFname}">
+                <label for="partnerInitial">Middle Initial</label>
+                <input class="form-control" name="partnerInital" id="partnerInitial" value="${partnerInitial}">
+                <label for="partnerLname">Last Name</label>
+                <input class="form-control spouser" name="partnerLname" id="partnerLname" value="${partnerLname}">
+            </div>
+            <div class="form-group">
+                <label for="partnerGender">Gender</label>
+                <select class="form-control" name="partnerGender" id="partnerGender">
+                    <option value="f" ${partnerGender.equals("f")?"selected":""}>Female</option>
+                    <option value="m" ${partnerGender.equals("m")?"selected":""}>Male</option>
+                    <option value="x" ${partnerGender.equals("x")?"selected":""}>Other/prefer not to say</option>
+                </select>
+            </div>
+            <br>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" name="partnerCanadianCitizen" id="partnerCanadianCitizen" value="y" ${partnerCanadianCitizen?"checked":""}>
+                <label class="form-check-label" for="partnerCanadianCitizen">Are they currently a Canadian Citizen?</label>
+            </div>
+            <br>
+            <div class="form-group">
+                <h3>Address</h3>
+                <label for="partnerAddress">Street Address</label>
+                <input id="partnerAddress" name="partnerAddress1" class="form-control" value="${partnerAddress}">
+                <label for="partnerApartment">Apartment</label>
+                <input id="partnerApartment" name="partnerApartment" class="form-control" value="${partnerApartment}">
+                <br>
+                <label for="partnerPo">PO Box</label>
+                <input id="partnerPo" name="po" class="form-control" value="${po}">
+                <label for="partnerPoLocation">PO Box Location</label>
+                <input id="partnerPoLocation" name="poLocation" class="form-control" value="${poLocation}">
+                <label for="partnerrr">RR#</label>
+                <input id="partnerrr" name="partnerrr" class="form-control" value="${partnerrr}">
+                <br>
+                <label for="partnerAddressCity">City</label>
+                <input id="partnerAddressCity" name="partnerAddressCity" class="form-control" value="${partnerAddressCity}">
+                <label for="partnerAddressCountry">Country</label>
+                <select class="crs-country form-control" id="partnerAddressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${partnerAddressCountry}">
+                </select>
+                <label for="partnerAddressRegion">Province/State</label>
+                <select id="partnerAddressRegion" class="form-control" data-value="shortcode" name="partnerAddressRegion" data-default-value="${partnerAddressRegion}">
+                </select>
+                <label for="partnerAddressPostal">Postal Code</label>
+                <input class="form-control" id="partnerAddressPostal" name="partnerAddressPostal" value="${partnerAddressPostal}">
+            </div>
+            <br>
+            <div class="form-group">
+                <h3>Contact Details</h3>
+                <label for="email">Email</label>
+                <input class="form-control" type="email" id="partnerEmail" name="partnerEmail" value="${partnerEmail}" required>
+                <label for="phone">Phone</label>
+                <input class="form-control" type="tel" id="partnerPhone" name="partnerPhone" value="${partnerPhone}" required>
+            </div>
+        </div>
+    </div>
+    <br>
 
     <%--Provide information to elections canada Y/N--%>
-
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="electionsCanada" id="electionsCanada" value="y" ${electionsCanada?"checked":""}>
+                <label class="form-check-label" for="electionsCanada">Would you like to provide your information to Elections Canada?</label>
+            </div>
+        </div>
+    </div>
     <%--Did you own foreign property at any time in (year)--%>
     <%--with a total cost of more than $100,000? Y/N--%>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="foreignProperty" id="foreignProperty" value="y" ${foreignProperty?"checked":""}>
+                <label class="form-check-label" for="foreignProperty">Did you own foreign property at any time in <span class="taxYear">this last year</span> with a total cost of more than $100,000?</label>
+            </div>
+        </div>
+    </div>
 
     <%--Did you sell a home in 2019? Y/N--%>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="sellHome" id="sellHome" value="y" ${sellHome?"checked":""}>
+                <label class="form-check-label" for="sellHome">Did you sell a home in <span class="taxYear">this last year</span>?</label>
+            </div>
+        </div>
+    </div>
 
     <%--Is this your first time filing your taxes? Y/N--%>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="firstTime" id="firstTime" value="y" ${firstTime?"checked":""}>
+                <label class="form-check-label" for="firstTime">Is this your first time filing your taxes?</label>
+            </div>
+        </div>
+    </div>
 
     <%--How do you want to recieve your Notice of Assessment?--%>
     <%--Mail (Canada Post)--%>
     <%--AND/OR--%>
     <%--Register with Canada Revenue agency for online mail--%>
     <%--already registered--%>
+    <div class="row">
+        <div class="col-md-6">
+            <p>How would you like to receive your notice of assessment?</p>
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="mailAssess" id="mailAssess" value="y" ${mailAssess?"checked":""}>
+                <label class="form-check-label" for="mailAssess">Mail (Canada Post)</label>
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="craAssess" id="craAssess" value="y" ${craAssess?"checked":""}>
+                <label class="form-check-label" for="craAssess">Register with Canada Revenue Agency for online mail</label>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" name="alreadyRegistered" id="alreadyRegistered" value="y" ${alreadyRegistered?"checked":""}>
+                <label class="form-check-label" for="alreadyRegistered">I'm already registered for CRA online mail</label>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -191,6 +348,12 @@
             elsM[x].innerHTML = document.getElementById("taxYear").value-1;
         }
     }
+
+    function setReq() {
+
+    }
 </script>
+
+<script type="text/javascript" src="../../template/js/country-regions.js"></script>
 
 <jsp:directive.include file = "../../template/foot.jsp" />

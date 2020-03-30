@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -138,7 +137,7 @@ public final class CreateParcelServlet extends HttpServlet {
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
 		} else {
 			request.setAttribute("successMessage", "Message Sent");
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+			response.sendRedirect("/inbox?successMessage=Successfully sent message");
 		}
 
 	}

@@ -12,9 +12,11 @@ import javax.servlet.http.HttpSession;
 
 import domain.Document;
 import domain.Parcel;
+import domain.TaxReturn;
 import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
+import manager.TaxReturnManager;
 import util.cesar.Debugger;
 
 /**
@@ -45,6 +47,8 @@ public final class InboxServlet extends HttpServlet {
 			throws ServletException, IOException {
 		Debugger.log("InboxServlet.doGet");
 
+		request.setAttribute("successMessage", request.getParameter("successMessage"));
+
 		//get session email
 		HttpSession session = request.getSession();
 		String email = SessionManager.getEmail(session.getId());
@@ -62,8 +66,10 @@ public final class InboxServlet extends HttpServlet {
 					Debugger.log("Inbox document debug: " + document.getFileName());
 				}
 			}
+			
+			ArrayList<TaxReturn> taxReturns = TaxReturnManager.getByEmail(email);
+			request.setAttribute("returns", taxReturns);
 		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
 			Debugger.log("CONFIG EXCEPTION");
 			e.printStackTrace();
 		}
@@ -82,6 +88,6 @@ public final class InboxServlet extends HttpServlet {
 
 		//Display Inbox page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
-
+		doGet(request, response);
 	}
 }

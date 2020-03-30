@@ -162,7 +162,6 @@ public final class SessionDB {
 		String email = null;
 
 		try {
-
 			String preparedQuery = "SELECT * FROM session WHERE session_id = ?";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
