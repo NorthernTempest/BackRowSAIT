@@ -138,6 +138,103 @@ public class CreateReturnServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 
 		//get all info from form
+		String taxYear = request.getParameter("taxYear");
+		String dateOfBirth = request.getParameter("dateOfBirth");
+		String SIN = request.getParameter("sin");
+		String title = request.getParameter("title");
+		String fName = request.getParameter("fname");
+		String middleInitial = request.getParameter("initial");
+		String lName = request.getParameter("lname");
+		String gender = request.getParameter("gender");
+		boolean nameChange = false;
+		if (request.getParameter("nameChange")!=null) {
+			nameChange = true;
+		}
+		String maritalStatus = request.getParameter("maritalStatus");
+		boolean maritalChange = false;
+		if (request.getParameter("maritalChange")!=null) {
+			maritalChange = true;
+		}
+		String prevMaritalStatus="";
+		if (maritalChange) {
+			prevMaritalStatus = request.getParameter("prevMaritalStatus");
+		}
+		boolean canadianCitizen = false;
+		if (request.getParameter("canadianCitizen")!=null) {
+			canadianCitizen = true;
+		}
+		String address1 = request.getParameter("address1");
+		String address2 = request.getParameter("address2");
+		String poBox = request.getParameter("poBox");
+		String poBoxLocation = request.getParameter("poBoxLocation");
+		String rrNum = request.getParameter("rr#");
+		String city = request.getParameter("city");
+		String region = request.getParameter("region");
+		String postalCode = request.getParameter("postalCode");
+		
+		//TODO emailAddress/MobilePhone? Do we get SIN for user elsewhere for the user
+		
+		String partnerSIN="";
+		String partnerDOB="";
+		String partnerTitle="";
+		String partnerFName="";
+		String partnerInitial="";
+		String partnerLName="";
+		String partnerGender="";
+		boolean partnerCanadianCitizen=false;
+		String partnerStreetNum="";
+		String partnerApartmentNum="";
+		String partnerPoBox="";
+		String partnerPoBoxLocation="";
+		String partnerRRNum="";
+		String partnerCity="";
+		String partnerRegion="";
+		String partnerPostalCode="";
+		String partnerEmailAddress="";
+		String partnerMobilePhone="";
+		if (maritalStatus.equals("MARRIED")||maritalStatus.equals("COMMON LAW")) {
+			partnerSIN = request.getParameter("partnerSIN");
+			partnerDOB = request.getParameter("partnerDOB");
+			partnerTitle = request.getParameter("partnerTitle");
+			partnerFName = request.getParameter("partnerFName");
+			partnerInitial = request.getParameter("partnerInitial");
+			partnerLName = request.getParameter("partnerLName");
+			partnerGender = request.getParameter("partnerGender");
+			if (request.getParameter("partnerCanadianCitizen")!=null) {
+				partnerCanadianCitizen=true;
+			}
+			partnerStreetNum = request.getParameter("partnerStreetNum");
+			partnerApartmentNum = request.getParameter("partnerApartmentNum");
+			partnerPoBox = request.getParameter("partnerPoBox");
+			partnerPoBoxLocation = request.getParameter("partnerPoBoxLocation");
+			partnerRRNum = request.getParameter("partnerRRNum");
+			partnerCity = request.getParameter("partnerCity");
+			partnerRegion = request.getParameter("partnerRegion");
+			partnerPostalCode = request.getParameter("partnerPostalCode");
+			partnerEmailAddress = request.getParameter("partnerEmailAddress");
+			partnerMobilePhone = request.getParameter("partnerMobilePhone");
+		}
+		boolean electionsCanada = false;
+		if (request.getParameter("electionsCanada")!=null) {
+			electionsCanada = true;
+		}
+		boolean foriegnProperty = false;
+		if (request.getParameter("foreignProperty")!=null) {
+			foriegnProperty = true;
+		}
+		boolean soldHome = false;
+		if (request.getParameter("soldHome")!=null) {
+			soldHome = true;
+		}
+		boolean firstTime = false;
+		if (request.getParameter("firstTime")!=null) {
+			firstTime = true;
+		}
+		//Notice of Assessment
+		boolean snailMail = false;
+		if (request.getParameter("snailMail")!=null) {
+			snailMail = true;
+		}
 		//make sure info isn't bad
 		// dateOfBirth (Date?)
 		// title (Mr, Miss, Mrs, Ms)
