@@ -143,6 +143,6 @@ public final class Payment {
 	}
 	
 	public PaymentBean copy() {
-		return null;
+		return new PaymentBean(year, paymentType, amount, date, billingInfo);
 	}
 }
