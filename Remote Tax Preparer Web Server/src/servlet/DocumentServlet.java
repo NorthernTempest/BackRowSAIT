@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import domain.Document;
 import domain.Parcel;
 import exception.ConfigException;
-import manager.DocumentManager;
 import manager.ParcelManager;
 import manager.SessionManager;
 import service.EncryptionService;
@@ -35,7 +34,6 @@ public class DocumentServlet extends HttpServlet {
 	 */
 	public DocumentServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
