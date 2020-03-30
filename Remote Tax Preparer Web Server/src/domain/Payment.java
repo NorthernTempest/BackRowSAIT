@@ -3,6 +3,8 @@ package domain;
 import java.util.Date;
 import java.util.UUID;
 
+import bean.PaymentBean;
+
 /**
  * 
  * Class Description: Class defining attributes and method for a single payment.
@@ -138,5 +140,9 @@ public final class Payment {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public PaymentBean copy() {
+		return new PaymentBean(year, paymentType, amount, date, billingInfo);
 	}
 }
