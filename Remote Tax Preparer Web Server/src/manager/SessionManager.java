@@ -4,8 +4,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import databaseAccess.SessionDB;
+import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.Session;
+import domain.User;
 
 /**
  * 
@@ -69,5 +71,21 @@ public final class SessionManager {
 	 */
 	public static String getEmail(String id) {
 		return SessionDB.getEmail(id);
+	}
+
+	public static int getPermissionLevel(String sessionID) {
+		int output = User.DEFAULT;
+		
+		String email = SessionDB.getEmail(sessionID);
+		
+		User u = null;
+		
+		if(email != null && !email.equals(""))
+			u = UserDB.get(email);
+		
+		if(u != null)
+			output = u.getPermissionLevel();
+		
+		return output;
 	}
 }
