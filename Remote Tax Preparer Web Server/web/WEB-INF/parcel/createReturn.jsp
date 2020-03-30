@@ -262,27 +262,28 @@
     <%--Provide information to elections canada Y/N--%>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
+            <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="electionsCanada" id="electionsCanada" value="y" ${electionsCanada?"checked":""}>
                 <label class="form-check-label" for="electionsCanada">Would you like to provide your information to Elections Canada?</label>
             </div>
         </div>
     </div>
+    <br>
     <%--Did you own foreign property at any time in (year)--%>
     <%--with a total cost of more than $100,000? Y/N--%>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
+            <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="foreignProperty" id="foreignProperty" value="y" ${foreignProperty?"checked":""}>
                 <label class="form-check-label" for="foreignProperty">Did you own foreign property at any time in <span class="taxYear">this last year</span> with a total cost of more than $100,000?</label>
             </div>
         </div>
     </div>
-
+    <br>
     <%--Did you sell a home in 2019? Y/N--%>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
+            <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="sellHome" id="sellHome" value="y" ${sellHome?"checked":""}>
                 <label class="form-check-label" for="sellHome">Did you sell a home in <span class="taxYear">this last year</span>?</label>
             </div>
@@ -292,13 +293,13 @@
     <%--Is this your first time filing your taxes? Y/N--%>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
+            <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="firstTime" id="firstTime" value="y" ${firstTime?"checked":""}>
                 <label class="form-check-label" for="firstTime">Is this your first time filing your taxes?</label>
             </div>
         </div>
     </div>
-
+    <br>
     <%--How do you want to recieve your Notice of Assessment?--%>
     <%--Mail (Canada Post)--%>
     <%--AND/OR--%>
@@ -307,26 +308,26 @@
     <div class="row">
         <div class="col-md-6">
             <p>How would you like to receive your notice of assessment?</p>
-            <div class="form-group">
+            <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="mailAssess" id="mailAssess" value="y" ${mailAssess?"checked":""}>
                 <label class="form-check-label" for="mailAssess">Mail (Canada Post)</label>
             </div>
             <br>
-            <div class="form-group">
+            <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="craAssess" id="craAssess" value="y" ${craAssess?"checked":""}>
                 <label class="form-check-label" for="craAssess">Register with Canada Revenue Agency for online mail</label>
             </div>
-            <div class="form-group">
+            <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="alreadyRegistered" id="alreadyRegistered" value="y" ${alreadyRegistered?"checked":""}>
                 <label class="form-check-label" for="alreadyRegistered">I'm already registered for CRA online mail</label>
             </div>
         </div>
     </div>
-
+    <br>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <button type="submit">Submit</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </div>
