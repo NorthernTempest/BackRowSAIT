@@ -89,7 +89,7 @@ CREATE TABLE log (
     date DATETIME NOT NULL);
     
 ALTER TABLE log 
-ADD CONSTRAINT CHK_log_type CHECK (type IN ('L', 'E', 'D', 'U'));
+ADD CONSTRAINT CHK_log_type CHECK (type IN ('L', 'E', 'D', 'U', 'B', 'R'));
 
 COMMIT;
 
