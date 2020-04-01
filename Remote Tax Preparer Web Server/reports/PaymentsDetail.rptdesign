@@ -522,7 +522,7 @@ JOIN tax_return ON payment.email = tax_return.email;]]></xml-property>
                     <property name="name">year</property>
                     <text-property name="displayName">year</text-property>
                     <expression name="expression" type="javascript">dataSetRow["year"]</expression>
-                    <property name="dataType">string</property>
+                    <property name="dataType">date</property>
                     <property name="allowExport">true</property>
                 </structure>
                 <structure>
@@ -560,6 +560,13 @@ JOIN tax_return ON payment.email = tax_return.email;]]></xml-property>
                     <text-property name="displayName">date</text-property>
                     <expression name="expression" type="javascript">dataSetRow["date"]</expression>
                     <property name="dataType">date-time</property>
+                </structure>
+            </list-property>
+            <list-property name="sort">
+                <structure>
+                    <expression name="key" type="javascript">row["date"]</expression>
+                    <property name="direction">desc</property>
+                    <property name="strength">-1</property>
                 </structure>
             </list-property>
             <column id="79">
@@ -759,6 +766,10 @@ JOIN tax_return ON payment.email = tax_return.email;]]></xml-property>
                         <property name="borderTopWidth">thin</property>
                         <data id="58">
                             <property name="fontSize">12pt</property>
+                            <structure name="dateTimeFormat">
+                                <property name="category">Custom</property>
+                                <property name="pattern">yyyy</property>
+                            </structure>
                             <property name="resultSetColumn">year</property>
                         </data>
                     </cell>
