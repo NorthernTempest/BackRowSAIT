@@ -13,14 +13,23 @@
 <div class="container">
     <div class="">
         <div class="col-12">
-            <p>${parcel.subject}</p>
-            <p>${parcel.documents.get(0).filePath}</p>
-
-            <object data="/DocumentServlet?filePath=${parcel.documents.get(0).filePath}" type="application/pdf" width="100%" height="700px">
-                alt : <a href="/DocumentServlet?filePath=${parcel.documents.get(0).filePath}">${parcel.documents.get(0).fileName}</a>
+            <h1>${parcel.subject}</h1>
+            <p>${parcel.documents.get(0).fileName}</p>
+            <object data="/parcel/document?parcelID=${parcel.parcelID}" type="application/pdf" width="100%" height="700px">
+                Not a valid PDF! <a href="https://www.mcltaxes.com/contact">Contact us</a> for further options.
             </object>
+            <br>
+            <p>Sign below to verify all the details above.</p>
+            <div class="wrapper">
+                <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
+            </div>
         </div>
     </div>
 </div>
 
+<script src="../../template/js/signaturepad.js" type="text/javascript"></script>
+<script>
+    let canvas = document.getElementById("signature-pad");
+
+</script>
 <jsp:directive.include file="../../template/foot.jsp" />
