@@ -40,6 +40,4 @@ public class TaxReturnBean implements Serializable {
 	public void setAmountOwed(double amountOwed) {
 		this.amountOwed = amountOwed;
 	}
-	
-	
 }
