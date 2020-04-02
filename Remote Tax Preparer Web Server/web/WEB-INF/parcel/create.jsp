@@ -42,6 +42,15 @@
                 </c:choose>
                 <label for="subject">Subject</label>
                 <input name="subject" id="subject" class="form-control" value="${parcel.subject==null?"":"RE: "}${parcel.subject}">
+
+            </div>
+            <div class="form-group form-check">
+                <c:choose>
+                    <c:when test="${role > 1}">
+                        <input type="checkbox" class="form-check-input" name="reqSig" id="reqSig" value="y" ${reqSig?"checked":""}>
+                        <label class="form-check-label" for="reqSig">Requires a Signature</label>
+                    </c:when>
+                </c:choose>
             </div>
         </div>
         <div class="col-md-6">

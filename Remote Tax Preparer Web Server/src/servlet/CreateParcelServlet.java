@@ -63,13 +63,11 @@ public final class CreateParcelServlet extends HttpServlet {
 		}
 
 		//compare parcel to user, to determine who the new receiver should be
-		String sendTo = null;
-		if (parcel.getReceiver() != null && parcel.getReceiver().equals(email)) {
+		String sendTo = "";
+		if (parcel.getSender() != null && !parcel.getSender().equals(email)) {
 			sendTo = parcel.getSender();
-		} else if (parcel.getSender() != null && parcel.getSender().equals(email)) {
+		} else if (parcel.getReceiver() != null && !parcel.getReceiver().equals(email)) {
 			sendTo = parcel.getReceiver();
-		} else if (parcel != null) {
-			sendTo = "";
 		}
 
 		//Send parcel and sendTo to page
@@ -145,8 +143,14 @@ public final class CreateParcelServlet extends HttpServlet {
 		String sender = email;
 		//grab receiver
 		String receiver = request.getParameter("receiver");
+		if (receiver == null) {
+			receiver = "";
+			Debugger.log("receiver == null");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
+			return;
+		}
 		//grab requiresSignature
-		String requiresSignatureString = request.getParameter("requiresSignature");
+		String requiresSignatureString = request.getParameter("reqSig");
 		boolean requiresSignature = false;
 		if (requiresSignatureString != null) {
 			requiresSignature = true;
