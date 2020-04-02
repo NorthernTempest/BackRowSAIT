@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import bean.UserBean;
 import exception.ConfigException;
 import service.EncryptionService;
 
@@ -767,5 +768,11 @@ public final class User {
 	 */
 	public void setLastVerificationType(int lastVerificationType) {
 		this.lastVerificationType = lastVerificationType;
+	}
+
+	public UserBean copy() {
+		UserBean output = new UserBean( email, title, fName, mName, lName, phone, fax, streetAddress, streetAddress2, city, province, country, postalCode, language );
+		
+		return output;
 	}
 }

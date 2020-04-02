@@ -296,4 +296,22 @@ public final class ParcelManager {
 		}
 		return successfulInsert;
 	}
+
+	/**
+	 * @param signedPDF
+	 */
+	public static boolean createSignedDocParcel(Document signedPDF, String sender, int taxYear) {
+		ArrayList<Document> documents = new ArrayList<Document>();
+		documents.add(signedPDF);
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.DAY_OF_MONTH, expirationDays);
+		Date expDate = c.getTime();
+		
+		Parcel parcel = new Parcel("subject", "message", sender, "receiver", new Date(), expDate,
+				taxYear, documents, false);
+		
+		return true;
+	}
 }
