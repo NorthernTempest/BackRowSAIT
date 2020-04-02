@@ -51,14 +51,14 @@ public class AuthenticationFilter implements Filter {
 				else
 					((HttpServletResponse) response).sendRedirect("inbox");
 			} else if (context.equals("/recover")) {
-				((HttpServletResponse) response).sendRedirect("inbox");
+				((HttpServletResponse) response).sendRedirect("/inbox");
 			} else
 				chain.doFilter(request, response);
 		} else if (context != null && (context.equals("/login") || context.equals("/recover")
 				|| context.equals("/register")))
 			chain.doFilter(request, response);
 		else
-			((HttpServletResponse) response).sendRedirect("login");
+			((HttpServletResponse) response).sendRedirect("/login");
 	}
 
 	/**
