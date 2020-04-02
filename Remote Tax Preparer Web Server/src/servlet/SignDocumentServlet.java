@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import domain.Document;
+import domain.Parcel;
 import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
@@ -92,24 +93,27 @@ public final class SignDocumentServlet extends HttpServlet {
 		//make a parcel with preset message to taxPreparer saying its a signed document
 		if (signedPDF != null) {
 			try {
-				ParcelManager.createSignedDocParcel(signedPDF, email, ParcelManager.get(parcelID).getTaxReturnYear());
+				Parcel parcel = ParcelManager.get(parcelID);
+				ParcelManager.createSignedDocParcel(signedPDF, email, parcel.getTaxReturnYear());
 				Debugger.log("we made it to here hopefully we got a parcel?");
+				//let user know their signature has been confirmed
+				request.setAttribute("successMessage", "Your document was successfully signed.");
+				//resend the parcel that had document to be signed attached, but this time without the req signature tag
+				ParcelManager.createParcel(parcel.getDocuments(), parcel.getSubject(), parcel.getMessage(),
+						parcel.getSender(), parcel.getReceiver(), parcel.getDateSent(), parcel.getExpirationDate(),
+						parcel.getTaxReturnYear(), false);
+				//delete the one with req signature tag
+				ParcelManager.delete(parcelID);
 			} catch (ConfigException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 		} else {
 			//bad bad no bad awful nightmare bad no
+			//this is when we dont sign a doc because of some error woops
 			//TODO
 		}
-		
-		
-
-		//let user know their signature has been confirmed
-		//resend the parcel that had document to be signed attached, but this time without the req signature tag
-		//delete the one with req signature tag
-
 		//don't redirect
 	}
-
 }

@@ -297,8 +297,12 @@ public final class ParcelManager {
 		return successfulInsert;
 	}
 
+	
 	/**
 	 * @param signedPDF
+	 * @param sender
+	 * @param taxYear
+	 * @return
 	 */
 	public static boolean createSignedDocParcel(Document signedPDF, String sender, int taxYear) {
 		ArrayList<Document> documents = new ArrayList<Document>();
@@ -312,6 +316,15 @@ public final class ParcelManager {
 		Parcel parcel = new Parcel("subject", "message", sender, "receiver", new Date(), expDate,
 				taxYear, documents, false);
 		
+		return true;
+	}
+
+	/**
+	 * @param parcelID
+	 * @return
+	 */
+	public static boolean delete(String parcelID) {
+		ParcelDB.delete(parcelID);
 		return true;
 	}
 }
