@@ -57,9 +57,11 @@
         let form = new FormData();
 
         form.append("parcelID", "${parcelID}");
-        canvas.toBlob(function(blob) {
-            form.append("signature", blob, "signature.png");
-        });
+        // canvas.toBlob(function(blob) {
+        //     form.append("signature", blob, "signature.png");
+        // });
+
+        form.append("signature", signaturePad.toDataURL())
 
         form.append('comment', "signature");
         form.append('minorEdit', "true");
@@ -68,7 +70,7 @@
             type: 'post',
             data: form,
             cache: false,
-            contentType: false, //required for multipart
+            contentType: "multipart/form-data", //required for multipart
             processData: false  //required for multipart
         }).done(function( data ) {
             window.location = "/inbox?successMessage=Document <b>${parcel.subject}</b> successfully signed";
