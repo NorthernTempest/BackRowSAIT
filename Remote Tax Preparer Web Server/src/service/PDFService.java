@@ -1,5 +1,6 @@
 package service;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.Part;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -125,24 +127,14 @@ public final class PDFService {
 	 * @return
 	 * @throws ConfigException
 	 */
-	public static Document signForm(Collection<Part> parts, String parcelID) throws ConfigException {
+	public static Document signForm(String signatureDataURL, String parcelID) throws ConfigException {
 		//TODO
 		init();
 		String fileName = null;
-		Part signature = null;
-		ByteArrayInputStream signatureBytes = null;
-		//get signature bytes from parts
-		for (Part part : parts) {
-			Debugger.log("part size:" + part.getSize());
-			fileName = part.getSubmittedFileName();
-			Debugger.log(fileName);
-			if (fileName.equals("signature.png")) {
-				signature = part;
-			}
-		}
+		//get signature bytes from signatureDataURL
+		byte[] imagedata = DatatypeConverter.parseBase64Binary(signatureDataURL.substring(signatureDataURL.indexOf(",") + 1));
 
 		try {
-			signatureBytes = (ByteArrayInputStream) signature.getInputStream();
 
 			//get Document to sign from parcel (get parcel from parcel ID)
 			Document pdfToSignDoc = null;
@@ -153,10 +145,7 @@ public final class PDFService {
 
 			PDPage page = pdfToSign.getPage(0);
 
-			byte[] targetArray;
-			targetArray = new byte[signatureBytes.available()];
-			signatureBytes.read(targetArray);
-			PDImageXObject pdImage = PDImageXObject.createFromByteArray(pdfToSign, targetArray, "signature.png");
+			PDImageXObject pdImage = PDImageXObject.createFromByteArray(pdfToSign, imagedata, "signature.png");
 
 			PDPageContentStream contentStream = new PDPageContentStream(pdfToSign, page);
 
