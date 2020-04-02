@@ -37,6 +37,12 @@
             	<a href="/reports">Reports</a>
         	</span>
 		</c:if>
+        <c:if test="${role == 1}">
+            <span class="nav-separator">|</span>
+            <span class="nav-item">
+            	<a href="/payments">Payments</a>
+        	</span>
+        </c:if>
 		<c:if test="${role > 2}">
 			<span class="nav-separator">|</span>
         	<span class="nav-item">
