@@ -3,7 +3,9 @@ package servlet;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -14,11 +16,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bean.TaxReturnBean;
 import databaseAccess.PaymentDB;
 import databaseAccess.SessionDB;
 import databaseAccess.UserDB;
 import domain.Payment;
 import manager.PaymentManager;
+import manager.TaxReturnManager;
 
 /**
  * Servlet implementation class PaymentsServlet
@@ -46,9 +50,9 @@ public class PaymentsServlet extends HttpServlet {
 		
 		request.setAttribute("payments", PaymentManager.getPayments(request.getSession().getId()));
 		
-		request.setAttribute("amount", 3.50);
+		Collection<TaxReturnBean> taxReturns = PaymentManager.getReturns(request.getSession().getId());
 		
-		request.setAttribute("year", 2019);
+		request.setAttribute("taxReturns", taxReturns);
 		
 		getServletContext().getRequestDispatcher("/WEB-INF/payment.jsp").forward(request, response);
 	}
