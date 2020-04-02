@@ -25,7 +25,6 @@ import util.cesar.Debugger;
  * Servlet implementation class SignDocumentServlet
  */
 @WebServlet("/parcel/signDoc")
-@MultipartConfig(fileSizeThreshold = 0, maxFileSize = 1024 * 1024 * 1, maxRequestSize = 1024 * 1024 * 1) //0mb, 1mb, 1x 1mb
 public final class SignDocumentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -44,6 +43,7 @@ public final class SignDocumentServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String parcelID = request.getParameter("parcelID");
+		Debugger.log("parcelID: " + parcelID);
 
 		try {
 			request.setAttribute("parcel", ParcelManager.get(parcelID));
@@ -68,24 +68,15 @@ public final class SignDocumentServlet extends HttpServlet {
 		Debugger.log("Email: " + email);
 
 		//get signature
-		Collection<Part> parts = null;
-		try {
-			parts = request.getParts();
-		} catch (IllegalStateException e) {
-			request.setAttribute("errorMessage", "Error gettin signature, try again");
-			Debugger.log("caught IllegalStateException");
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
-			return;
-		}
-
+		String signatureDataURL = request.getParameter("signature");
 		//get parcel ID
 		String parcelID = request.getParameter("parcelID");
 
 		//Give parcelID and signature to PDFService to sign the document
 		Document signedPDF = null;
 		try {
-			signedPDF = PDFService.signForm(parts, parcelID);
 			Debugger.log("we tryna sign the form");
+			signedPDF = PDFService.signForm(signatureDataURL, parcelID);
 		} catch (ConfigException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
