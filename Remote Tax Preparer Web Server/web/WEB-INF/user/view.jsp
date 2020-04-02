@@ -8,9 +8,15 @@
 
 <jsp:directive.include file="../../template/head.jsp" />
 
-<div class="col-md-6">
-	<h2>${user.title}. ${user.f_name} ${user.l_name}</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
 
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
 </div>
 
 <jsp:directive.include file="../../template/foot.jsp" />

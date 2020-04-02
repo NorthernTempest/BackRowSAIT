@@ -65,7 +65,7 @@
             type: 'post',
             data: form,
             cache: false,
-            contentType: false, //required for multipart
+            contentType: "multipart/form-data", //required for multipart
             processData: false  //required for multipart
         }).done(function( data ) {
             window.location = "/inbox?successMessage=Document <b>${parcel.subject}</b> successfully signed";

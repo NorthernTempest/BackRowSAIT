@@ -49,7 +49,12 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="title">Title</label>
-                <input id="title" name="title" class="form-control" placeholder="eg. 'Mr'" value="${title}">
+                <select id="title" name="title" class="form-control">
+                    <option value="Mr">Mr</option>
+                    <option value="Ms" ${title.equals("Ms")?"selected":""}>Ms</option>
+                    <option value="Mrs" ${title.equals("Mrs")?"selected":""}>Mrs</option>
+                    <option value="Miss" ${title.equals("Miss")?"selected":""}>Miss</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="fname">First Name</label>
@@ -198,7 +203,12 @@
             <div class="form-group">
                 <h3>Personal Information</h3>
                 <label for="partnerTitle">Title</label>
-                <input id="partnerTitle" name="partnerTitle" class="form-control" placeholder="eg. 'Mr'" value="${partnerTitle}">
+                <select id="partnerTitle" name="partnerTitle" class="form-control">
+                    <option value="Mr">Mr</option>
+                    <option value="Ms" ${partnerTitle.equals("Ms")?"selected":""}>Ms</option>
+                    <option value="Mrs" ${partnerTitle.equals("Mrs")?"selected":""}>Mrs</option>
+                    <option value="Miss" ${partnerTitle.equals("Miss")?"selected":""}>Miss</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="partnerFname">First Name</label>
@@ -213,7 +223,6 @@
                 <select class="form-control" name="partnerGender" id="partnerGender">
                     <option value="f" ${partnerGender.equals("f")?"selected":""}>Female</option>
                     <option value="m" ${partnerGender.equals("m")?"selected":""}>Male</option>
-                    <option value="x" ${partnerGender.equals("x")?"selected":""}>Other/prefer not to say</option>
                 </select>
             </div>
             <br>

@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <title>MCL Taxes &amp; Bookkeeping</title>
 <?-- CSS -->
-    <link rel="stylesheet" href="../template/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../template/css/mcl-main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/template/css/mcl-main.css">
     <?-- Javascript -->
-    <script type="text/javascript" src="../template/js/jQuery.min.js"></script>
-    <script type="text/javascript" src="../template/js/bootstrap.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/template/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/template/js/bootstrap.js"></script>
     <script src="https://kit.fontawesome.com/1213a7076a.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="main">
     <div class="text-center" id="logo">
-        <a href="https://www.mcltaxes.com/"><img id="logo-image" src="../template/img/MCL-logo-large.png" width="283px"/></a>
+        <a href="https://www.mcltaxes.com/"><img id="logo-image" src="${pageContext.request.contextPath}/template/img/MCL-logo-large.png" width="283px"/></a>
         <i id="burger" class="fas fa-bars" onclick="toggleNav()"></i>
     </div>
 
