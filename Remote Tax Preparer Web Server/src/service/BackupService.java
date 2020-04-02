@@ -27,14 +27,40 @@ import exception.ConfigException;
  */
 public final class BackupService {
 
+	/**
+	 * The directory used to contain the encrypted files.
+	 */
 	private static String encryptedFilesDirectoryPath;
+	/**
+	 * The filepath to the sql script used to recover the database to an earlier state.
+	 */
 	private static String dumpFile;
+	/**
+	 * The command to dump the entirety of the database to an sql script.
+	 */
 	private static String dumpCommand;
+	/**
+	 * The command to recover the database from an sql script.
+	 */
 	private static String recoverCommand;
+	/**
+	 * The username used to access the database.
+	 */
 	private static String username;
+	/**
+	 * The password used to access the database.
+	 */
 	private static String password;
+	/**
+	 * Whether the private static methods in BackupService are initialized.
+	 */
 	private static boolean init = false;
-
+	
+	/**
+	 * Initializes the private static methods in BackupService.
+	 * 
+	 * @throws ConfigException if the config file is missing.
+	 */
 	private static void init() throws ConfigException {
 		if (!init) {
 			encryptedFilesDirectoryPath = ConfigService.fetchFromConfig("encfiles:");
@@ -234,6 +260,13 @@ public final class BackupService {
 		return p.waitFor();
 	}
 	
+	/**
+	 * Recovers the database from the dump file.
+	 * 
+	 * @return int The exit value of the recovery command.
+	 * @throws InterruptedException if the process that recovers the database is interrupted.
+	 * @throws IOException if the directory containing the dump file is not a valid directory.
+	 */
 	private static int recover() throws InterruptedException, IOException {
 		boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 		

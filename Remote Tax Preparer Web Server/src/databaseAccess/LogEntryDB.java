@@ -1,10 +1,10 @@
 package databaseAccess;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 /**
  * 
  * Class Description: 	Class that establishes a connection and communicates directly
@@ -41,7 +41,7 @@ public class LogEntryDB {
 			ps.setString(1, logEntry.getEmail());
 			ps.setString(2, logEntry.getType() + "");
 			ps.setString(3, logEntry.getMessage());
-			ps.setDate(4, new Date( logEntry.getDate().getTime() ));
+			ps.setTimestamp(4, new Timestamp( logEntry.getDate().getTime() ));
 			
 			rows = ps.executeUpdate();
 		}
@@ -179,9 +179,9 @@ public class LogEntryDB {
 				
 				PreparedStatement ps = connection.prepareStatement(preparedQuery);
 				
-				for (int i = 0; i < parameters.size(); i++) {
+				for (int i = 1; i <= parameters.size(); i++) {
 					
-					ps.setString(i + 1, parameters.get(i));
+					ps.setString(i, parameters.get(i - 1));
 				}
 				
 				rs = ps.executeQuery();
@@ -237,7 +237,7 @@ public class LogEntryDB {
 			while (rs.next()) { 
 				
 				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("message"),
-						rs.getString("type").charAt(0), rs.getDate("date"), rs.getString("ip"));
+						rs.getString("type").charAt(0), rs.getTimestamp("date"), rs.getString("ip"));
 				
 				logEntries.add(logEntry);
 			}
@@ -281,7 +281,7 @@ public class LogEntryDB {
 			while (rs.next()) {
 				
 				logEntry = new LogEntry(rs.getInt("log_id"), rs.getString("email"), rs.getString("message"), 
-										rs.getString("type").charAt(0), rs.getDate("date"), rs.getString("ip"));
+										rs.getString("type").charAt(0), rs.getTimestamp("date"), rs.getString("ip"));
 				
 				logEntries.add(logEntry);
 			}

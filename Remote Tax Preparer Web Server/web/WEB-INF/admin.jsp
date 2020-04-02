@@ -53,7 +53,7 @@
 <hr class="nav-separator">
 <div class="col-12">
 	<h1>
-		Backup & Restore
+		Backup &amp; Restore
 	</h1>
 	<b>Last Time Backed Up:</b>
     <span id="lastBackedUp">${lastBackedUp}</span><br>
@@ -100,7 +100,6 @@
 </div>
 <div class="modal fade" id="restoreModal" tabindex="-1" role="dialog" aria-labelledby="restoreModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
-		<form action="/backup" method="POST" enctype=multipart/form-data>
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="restoreModalLabel">Restore</h5>
@@ -112,17 +111,17 @@
 					This will save a file containing current user accounts and current messages.
 					User files will not be backed up.
 					<div class="form-group">
-						<label for="restoreFile">Restore File</label>
-						<input type="file" class="form-control" id="restoreFile" name="restoreFile" required>
+						<form id="restoreForm" action="/backup" method="POST" enctype="multipart/form-data">
+							<label for="restoreFile">Restore File</label>
+							<input type="file" class="form-control" id="restoreFile" name="multiPartServlet" required>
+						</form>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<input type="hidden" name="action" value="restore">
-					<button type="submit" class="btn btn-primary">Restore</button>
+					<button type="submit" form="restoreForm" class="btn btn-primary">Restore</button>
 
 				</div>
 			</div>
-		</form>
 	</div>
 </div>

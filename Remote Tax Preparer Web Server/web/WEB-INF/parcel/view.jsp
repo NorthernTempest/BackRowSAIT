@@ -35,12 +35,10 @@
 		</div>
 		<div class="col-md-6">
 			<c:choose>
-				<c:when test="${parcel.requiresSignature}">
-					<a href="signDocument">
-						<div class='inboxIcon'>
+				<c:when test="${!parcel.requiresSignature}">
+					<a class="btn btn-primary" href="/parcel/signDoc?parcelID=${parcel.parcelID}">
 						<i class="fas fa-file-signature"></i>
-						<span>Requires Signature</span>
-						</div>
+						Requires Signature
 					</a>
 					<br>
 				</c:when>
