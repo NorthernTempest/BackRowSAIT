@@ -13,9 +13,13 @@
 <div class="container">
 	<div class="row">
 		<div class="col-6">
-			<div id="paypal-button-container"></div>
-			<script
-				src="https://www.paypal.com/sdk/js?intent=capture&currency=CAD&client-id=AdKunkE584jUYp7FJSMWj3JL3pRi0hxt63F9LvEl_zgB47GGi4xamMyNRv0sYUvPQ_2_9hJxvFmyODyl"></script>
+			<div class="container">
+				<h1>Payments</h1>
+				<h2>Amount Owing: ${String.format("$%.2f",amount)}</h2>
+				
+			</div>
+			<div class="container" id="paypal-button-container"></div>
+			<script src="https://www.paypal.com/sdk/js?intent=capture&currency=CAD&client-id=AdKunkE584jUYp7FJSMWj3JL3pRi0hxt63F9LvEl_zgB47GGi4xamMyNRv0sYUvPQ_2_9hJxvFmyODyl"></script>
 			<script>
 				/*
 				var myOrder = {
@@ -103,16 +107,38 @@
 					}
 				}).render('#paypal-button-container');
 			</script>
+			<c:if test="${payments != null && payments.size() > 0}">
+				<table class="table" id="payments">
+					<thead>
+						<th>Tax Year</th>
+						<th>Type</th>
+						<th>Amount Paid</th>
+						<th>Date Paid</th>
+					</thead>
+					<tbody>
+						<tr></tr>
+						<c:forEach var="payment" items="${payments}">
+							<tr>
+								<td>${payment.year}</td>
+								<td>${payment.paymentType}</td>
+								<td>${String.format("$%.2f",payment.amount)}</td>
+								<td>${payment.date}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</c:if>
 		</div>
 	</div>
 </div>
 <form id="payment-results" action="/payments" method="POST" hidden>
 	<input id="payment-id" type="hidden" name="id">
-	<input id="payment-type" type="hidden" name="type" value="paypal"/>
-	<input id="payment-amount" type="hidden" name="amount"/>
-	<input id="payment-date-time" type="hidden" name="dateTime"/>
-	<input id="payment-year" type="hidden" name="taxYear" value="${year}"/>
-	<input id="payment-status" type="hidden" name="status"/>
+	<input id="payment-type" type="hidden" name="type" value="PayPal" />
+	<input id="payment-amount" type="hidden" name="amount" />
+	<input id="payment-date-time" type="hidden" name="dateTime" />
+	<input id="payment-year" type="hidden" name="taxYear" value="${year}" />
+	<input id="payment-status" type="hidden" name="status" />
+	<input id="payee-email" type="hidden" name="email" value="${user.email}" />
 </form>
 
 <jsp:directive.include file="../template/foot.jsp" />

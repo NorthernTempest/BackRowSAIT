@@ -43,7 +43,7 @@ public class AuthenticationFilter implements Filter {
 		request2.setAttribute("role", SessionManager.getPermissionLevel(session.getId()));
 
 		if (SessionManager.isSessionActive(session.getId())) {
-			if (context != null && context.equals("/login")) {
+			if (context != null && ( context.equals("/login"))) {
 				String action = request2.getParameter("action");
 
 				if (action != null && action.equals("logout"))
@@ -55,7 +55,7 @@ public class AuthenticationFilter implements Filter {
 			} else
 				chain.doFilter(request, response);
 		} else if (context != null && (context.equals("/login") || context.equals("/recover")
-				|| context.equals("/register")))
+				|| context.equals("/register") || (context.equals("/payments") && request2.getMethod().equals("POST"))))
 			chain.doFilter(request, response);
 		else
 			((HttpServletResponse) response).sendRedirect("login");
