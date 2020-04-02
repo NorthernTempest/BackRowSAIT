@@ -72,6 +72,9 @@ public final class SignDocumentServlet extends HttpServlet {
 		//get parcel ID
 		String parcelID = request.getParameter("parcelID");
 
+		Debugger.log("signatureDataURL: " + signatureDataURL);
+		Debugger.log("parcelID: " + parcelID);
+		
 		//Give parcelID and signature to PDFService to sign the document
 		Document signedPDF = null;
 		try {
