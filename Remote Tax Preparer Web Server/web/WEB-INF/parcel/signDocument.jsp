@@ -24,13 +24,19 @@
         <div class="col-md-6">
             <p>Sign below to verify all the details above.</p>
             <div class="wrapper">
-                <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
+                <canvas id="signature-pad" class="signature-pad" width=400 height=200 style="border-radius: 5px;"></canvas>
             </div>
-            <button type="button" class="btn btn-primary" onclick="sendSignature()">Send Signature</button>
+            <form method="post" action="">
+                <input type="hidden" name="signature" id="sigData" value="">
+                <input type="hidden" name="parcelID" value="${parcelID}">
+                <button type="submit" class="btn btn-primary">Submit Signature</button>
+            </form>
+<%--            <button type="button" class="btn btn-primary" onclick="sendSignature()">Send Signature</button>--%>
         </div>
         <div class="col-md-6">
             <br>
             <br>
+
             <button type="button" class="btn btn-light" onclick="signaturePad.clear();">Clear</button>
         </div>
     </div>
@@ -52,33 +58,37 @@
     window.onresize = resizeCanvas;
     resizeCanvas();
 
-    function sendSignature() {
-        let url = "/parcel/signDoc"
-        let form = new FormData();
+    setInterval(function() {
+        document.getElementById("sigData").value = signaturePad.toDataURL();
+    }, 10);
 
-        form.append("parcelID", "${parcelID}");
-        // canvas.toBlob(function(blob) {
-        //     form.append("signature", blob, "signature.png");
-        // });
+ //  function sendSignature() {
+ //      let url = "/parcel/signDoc"
+ //      let form = new FormData();
 
-        form.append("signature", signaturePad.toDataURL());
-        console.log("got to this point");
-        $.ajax({
-            url: url,
-            type: 'post',
-            data: form,
-            processData: false,
-            contentType: false,
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(errorThrown);
-            }
-        }).done(function( data ) {
-            console.log("DONE");
-            window.location = "/inbox?successMessage=Document <b>${parcel.subject}</b> successfully signed";
-        });
-    }
+ //      form.append("parcelID", "${parcelID}");
+ //      // canvas.toBlob(function(blob) {
+ //      //     form.append("signature", blob, "signature.png");
+ //      // });
+
+ //      form.append("signature", signaturePad.toDataURL());
+ //      console.log("got to this point");
+ //      $.ajax({
+ //          url: url,
+ //          type: 'post',
+ //          data: form,
+ //          processData: false,
+ //          contentType: false,
+ //          error: function(jqXHR, textStatus, errorThrown) {
+ //              console.log(jqXHR);
+ //              console.log(textStatus);
+ //              console.log(errorThrown);
+ //          }
+ //      }).done(function( data ) {
+ //          console.log("DONE");
+ //          window.location = "/inbox?successMessage=Document <b>${parcel.subject}</b> successfully signed";
+ //      });
+ //  }
 
     function clearSignature() {
 
