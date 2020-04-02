@@ -207,7 +207,7 @@ public class PaymentDB {
 
 			while (rs.next()) {
 
-				payments.add(new Payment(rs.getString("paymentID"), rs.getString("payment_name"), rs.getInt("year"),
+				payments.add(new Payment(rs.getString("payment_id"), rs.getString("email"), rs.getInt("year"),
 						rs.getString("payment_type"), rs.getDouble("amount"), rs.getTimestamp("date")));
 			}
 		}

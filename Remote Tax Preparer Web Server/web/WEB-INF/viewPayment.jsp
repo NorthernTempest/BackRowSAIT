@@ -11,27 +11,27 @@
 <jsp:directive.include file="../template/head.jsp" />
 
 <div class="container">
-    <div class="row">
-        <div class="col-12">
-            <table id="payments">
-                <thead>
-                    <tr>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="payment" items="payments">
-                    <tr>
-                        <td>${payment.year}</td>
-                        <td>${payment.paymentType}</td>
-                        <td>$${payment.amount}</td>
-                        <td>${payment.date}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-12">
+			<table id="payments">
+				<thead>
+					<tr>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="payment" items="payments">
+						<tr>
+							<td>${payment.year}</td>
+							<td>${payment.paymentType}</td>
+							<td>$${payment.amount}</td>
+							<td>${payment.date}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 
 <jsp:directive.include file="../template/foot.jsp" />

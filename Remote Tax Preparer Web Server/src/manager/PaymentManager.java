@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import bean.PaymentBean;
+import bean.TaxReturnBean;
 import databaseAccess.PaymentDB;
 import databaseAccess.SessionDB;
+import databaseAccess.TaxReturnDB;
 import domain.Payment;
+import domain.TaxReturn;
 
 /**
  * 
@@ -33,6 +36,33 @@ public class PaymentManager {
 		
 		for(Payment p : payments)
 			output.add(p.copy());
+		
+		return output;
+	}
+	
+	public static Collection<TaxReturnBean> getReturns(String sessionID) {
+		ArrayList<TaxReturnBean> output = new ArrayList<>();
+		
+		String email = SessionDB.getEmail(sessionID);
+		
+		ArrayList<TaxReturn> returns = TaxReturnDB.getByUser(email);
+		
+		ArrayList<Payment> payments = PaymentDB.getByEmail(email);
+		
+		for( TaxReturn tr : returns ) {
+			double totalPaid = 0.0;
+			
+			for( Payment p : payments ) {
+				if (tr.getYear() == p.getYear())
+					totalPaid += p.getAmount();
+			}
+			
+			if(totalPaid < tr.getCost()) {
+				TaxReturnBean bean = tr.copy();
+				bean.setAmountOwed(tr.getCost() - totalPaid);
+				output.add( bean );
+			}
+		}
 		
 		return output;
 	}
