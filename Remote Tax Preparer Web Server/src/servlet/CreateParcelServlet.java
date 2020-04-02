@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import domain.Parcel;
+import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
 import util.cesar.Debugger;
@@ -50,6 +52,29 @@ public final class CreateParcelServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
+
+		//get parcel
+		Parcel parcel = null;
+		try {
+			parcel = ParcelManager.get(request.getParameter("parcelID"));
+		} catch (ConfigException e) {
+			request.setAttribute("errorMessage", "Count not retrieve reply");
+			e.printStackTrace();
+		}
+
+		//compare parcel to user, to determine who the new receiver should be
+		String sendTo = null;
+		if (parcel.getReceiver() != null && parcel.getReceiver().equals(email)) {
+			sendTo = parcel.getSender();
+		} else if (parcel.getSender() != null && parcel.getSender().equals(email)) {
+			sendTo = parcel.getReceiver();
+		} else if (parcel != null) {
+			sendTo = "";
+		}
+
+		//Send parcel and sendTo to page
+		request.setAttribute("parcel", parcel);
+		request.setAttribute("sendTo", sendTo);
 
 		//Display NewMessage page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
