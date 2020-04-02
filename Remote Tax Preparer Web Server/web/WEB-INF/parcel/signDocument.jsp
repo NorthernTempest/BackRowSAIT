@@ -57,20 +57,25 @@
         let form = new FormData();
 
         form.append("parcelID", "${parcelID}");
-        canvas.toBlob(function(blob) {
-            form.append("signature", blob, "signature.png");
-        });
+        // canvas.toBlob(function(blob) {
+        //     form.append("signature", blob, "signature.png");
+        // });
 
-        form.append('comment', "signature");
-        form.append('minorEdit', "true");
+        form.append("signature", signaturePad.toDataURL());
+        console.log("got to this point");
         $.ajax({
             url: url,
             type: 'post',
             data: form,
-            cache: false,
-            contentType: false, //required for multipart
-            processData: false  //required for multipart
+            processData: false,
+            contentType: false,
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
         }).done(function( data ) {
+            console.log("DONE");
             window.location = "/inbox?successMessage=Document <b>${parcel.subject}</b> successfully signed";
         });
     }
