@@ -60,12 +60,15 @@
         canvas.toBlob(function(blob) {
             form.append("signature", blob, "signature.png");
         });
+
+        form.append('comment', "signature");
+        form.append('minorEdit', "true");
         $.ajax({
             url: url,
             type: 'post',
             data: form,
             cache: false,
-            contentType: "multipart/form-data", //required for multipart
+            contentType: false, //required for multipart
             processData: false  //required for multipart
         }).done(function( data ) {
             window.location = "/inbox?successMessage=Document <b>${parcel.subject}</b> successfully signed";
