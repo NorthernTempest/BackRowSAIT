@@ -1,11 +1,7 @@
 package servlet;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -16,18 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-
 import domain.Document;
-import domain.Parcel;
 import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
-import service.EncryptionService;
 import service.PDFService;
 import util.cesar.Debugger;
 
