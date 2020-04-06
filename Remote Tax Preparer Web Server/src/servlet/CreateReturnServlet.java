@@ -310,17 +310,17 @@ public class CreateReturnServlet extends HttpServlet {
 		}
 		// maritalStatus (Married, Common Law, Widowed, Divorced, Separated, Single)
 		if (!maritalStatus.equals("Married") && !maritalStatus.equals("Common Law") && !maritalStatus.equals("Widowed")
-				&& !maritalStatus.equals("Divorced") && !maritalStatus.equals("Seperated")
+				&& !maritalStatus.equals("Divorced") && !maritalStatus.equals("Separated")
 				&& !maritalStatus.equals("Single")) {
 			// TODO
 			Debugger.log("maritalStatus validation if statement");
 			throw new Exception("Invalid Marital Status, please try again");
 		}
 		// prevMaritalStatus (opt / same options)
-		if (prevMaritalStatus != null) {
+		if (maritalChange != false) {
 			if (!prevMaritalStatus.equals("Married") && !prevMaritalStatus.equals("Common Law")
 					&& !prevMaritalStatus.equals("Widowed") && !prevMaritalStatus.equals("Divorced")
-					&& !prevMaritalStatus.equals("Seperated") && !prevMaritalStatus.equals("Single")) {
+					&& !prevMaritalStatus.equals("Separated") && !prevMaritalStatus.equals("Single") && !prevMaritalStatus.equals("na")) {
 				// TODO
 				Debugger.log("prevMaritalStatus validation if statement");
 				throw new Exception("Invalid Previous Marital Status, please try again");
@@ -524,7 +524,7 @@ public class CreateReturnServlet extends HttpServlet {
 			nameChange = true;
 		}
 		request.setAttribute("nameChange", nameChange);
-		request.setAttribute("Marital Status", request.getParameter("maritalStatus"));
+		request.setAttribute("MaritalStatus", request.getParameter("maritalStatus"));
 		boolean maritalChange = false;
 		if (request.getParameter("maritalChange") != null) {
 			maritalChange = true;
