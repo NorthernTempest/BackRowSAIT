@@ -33,7 +33,7 @@ import util.cesar.Debugger;
 @WebServlet("/createReturn")
 public class CreateReturnServlet extends HttpServlet {
 	private static final long serialVersionUID = 2607698730769064715L;
-	private static final Calendar DOBCutOff = new GregorianCalendar(2013, 0, 31);
+	private static final Calendar DOBCutOff = new GregorianCalendar(1900, 01, 01);
 
 	// Form fields
 	private String dateOfBirth, sin, title, fName, initial, lName, gender, maritalStatus, prevMaritalStatus; // TODO
@@ -125,6 +125,7 @@ public class CreateReturnServlet extends HttpServlet {
 			documents.add(PDFService.createAuthorizationRequest(sin, fName, lName));
 
 			ParcelManager.createNewReturnParcel(documents, fName, lName, email, taxYear);
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (ConfigException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMessage", "Error, please try again.");
