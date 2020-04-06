@@ -12,7 +12,12 @@
 	<div class="col-md-6">
 		<h3>Name</h3>
 		<label for="title">Title</label>
-		<input id="title" name="title" class="form-control" placeholder="eg. 'mr'" value="${title}" required>
+		<select id="title" name="title" class="form-control">
+			<option value="Mr">Mr</option>
+			<option value="Ms" ${title.equals("Ms")?"selected":""}>Ms</option>
+			<option value="Mrs" ${title.equals("Mrs")?"selected":""}>Mrs</option>
+			<option value="Miss" ${title.equals("Miss")?"selected":""}>Miss</option>
+		</select>
 		<label for="fname">First Name</label>
 		<input id="fname" name="fname" class="form-control" value="${fname}" required>
 		<label for="mname">Middle Name</label>

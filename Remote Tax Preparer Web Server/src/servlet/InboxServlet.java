@@ -12,9 +12,11 @@ import javax.servlet.http.HttpSession;
 
 import domain.Document;
 import domain.Parcel;
+import domain.TaxReturn;
 import exception.ConfigException;
 import manager.ParcelManager;
 import manager.SessionManager;
+import manager.TaxReturnManager;
 import util.cesar.Debugger;
 
 /**
@@ -60,12 +62,15 @@ public final class InboxServlet extends HttpServlet {
 			request.setAttribute("user", email);
 			for(Parcel parcel : parcels) {
 				Debugger.log("Parcel get: " + parcel.getSubject());
+				Debugger.log("Parcel sig: " + parcel.isRequiresSignature());
 				for(Document document : parcel.getDocuments()) {
 					Debugger.log("Inbox document debug: " + document.getFileName());
 				}
 			}
+			
+			ArrayList<TaxReturn> taxReturns = TaxReturnManager.getByEmail(email);
+			request.setAttribute("returns", taxReturns);
 		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
 			Debugger.log("CONFIG EXCEPTION");
 			e.printStackTrace();
 		}

@@ -2,6 +2,8 @@ package domain;
 
 import java.util.ArrayList;
 
+import bean.TaxReturnBean;
+
 /**
  * 
  * Class Description: Class defining attributes and methods for a single tax return.
@@ -135,5 +137,12 @@ public final class TaxReturn {
 		this.householdID = householdID;
 	}
 
-	
+	public TaxReturnBean copy() {
+		TaxReturnBean output = new TaxReturnBean();
+		
+		output.setCost(cost);
+		output.setYear(year);
+		
+		return output;
+	}
 }

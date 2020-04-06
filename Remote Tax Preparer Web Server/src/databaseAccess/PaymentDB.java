@@ -1,10 +1,10 @@
 package databaseAccess;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import domain.Payment;
@@ -32,8 +32,8 @@ public class PaymentDB {
 
 		try {
 
-			String preparedQuery = "INSERT INTO payment (email, year, payment_type, amount, date)"
-					+ "VALUES (?, ?, ?, ?, ?)";
+			String preparedQuery = "INSERT INTO payment (email, year, payment_type, amount, date, payment_id)"
+					+ "VALUES (?, ?, ?, ?, ?, ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -41,7 +41,8 @@ public class PaymentDB {
 			ps.setInt(2, payment.getYear());
 			ps.setString(3, payment.getPaymentType());
 			ps.setDouble(4, payment.getAmount());
-			ps.setDate(5, (Date) payment.getDate());
+			ps.setTimestamp(5, new Timestamp( payment.getDate().getTime()) );
+			ps.setString(6, payment.getPaymentID());
 
 			rows = ps.executeUpdate();
 		}
@@ -131,7 +132,7 @@ public class PaymentDB {
 			if (rs.next()) {
 
 				payment = new Payment(paymentID, rs.getString("payment_name"), rs.getInt("year"),
-										rs.getString("payment_type"), rs.getDouble("amount"), rs.getDate("date"));
+										rs.getString("payment_type"), rs.getDouble("amount"), rs.getTimestamp("date"));
 			}
 		}
 
@@ -171,7 +172,43 @@ public class PaymentDB {
 			while (rs.next()) {
 
 				payments.add(new Payment(rs.getString("paymentID"), rs.getString("payment_name"), rs.getInt("year"),
-						rs.getString("payment_type"), rs.getDouble("amount"), rs.getDate("date")));
+						rs.getString("payment_type"), rs.getDouble("amount"), rs.getTimestamp("date")));
+			}
+		}
+
+		catch (SQLException e) {
+
+			System.out.println(e);
+		}
+
+		finally {
+
+			pool.closeConnection(connection);
+		}
+
+		return payments;
+	}
+
+	public static ArrayList<Payment> getByEmail(String email) {
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = pool.getConnection();
+		ResultSet rs;
+		ArrayList<Payment> payments = new ArrayList<>();
+
+		try {
+
+			String preparedQuery = "SELECT * FROM payment WHERE email = ?";
+
+			PreparedStatement ps = connection.prepareStatement(preparedQuery);
+			
+			ps.setString(1, email);
+			
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				payments.add(new Payment(rs.getString("payment_id"), rs.getString("email"), rs.getInt("year"),
+						rs.getString("payment_type"), rs.getDouble("amount"), rs.getTimestamp("date")));
 			}
 		}
 

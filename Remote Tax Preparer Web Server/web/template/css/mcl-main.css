@@ -108,15 +108,14 @@ div#content {
 div.row {
 	background: black;
 	border-radius: 5px;
+	box-sizing: border-box;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 .btn-primary {
 	background: #48bfbb;
 	border: 0;
-}
-
-.btn {
-	margin-top: 5px;
 }
 
 .card {

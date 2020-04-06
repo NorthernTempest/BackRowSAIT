@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import domain.Document;
 import domain.Parcel;
 import exception.ConfigException;
 import manager.ParcelManager;
@@ -54,6 +52,27 @@ public final class CreateParcelServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
+
+		//get parcel
+		Parcel parcel = null;
+		try {
+			parcel = ParcelManager.get(request.getParameter("parcelID"));
+		} catch (ConfigException e) {
+			request.setAttribute("errorMessage", "Count not retrieve reply");
+			e.printStackTrace();
+		}
+
+		//compare parcel to user, to determine who the new receiver should be
+		String sendTo = "";
+		if (parcel.getSender() != null && !parcel.getSender().equals(email)) {
+			sendTo = parcel.getSender();
+		} else if (parcel.getReceiver() != null && !parcel.getReceiver().equals(email)) {
+			sendTo = parcel.getReceiver();
+		}
+
+		//Send parcel and sendTo to page
+		request.setAttribute("parcel", parcel);
+		request.setAttribute("sendTo", sendTo);
 
 		//Display NewMessage page
 		getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
@@ -124,8 +143,14 @@ public final class CreateParcelServlet extends HttpServlet {
 		String sender = email;
 		//grab receiver
 		String receiver = request.getParameter("receiver");
+		if (receiver == null) {
+			receiver = "";
+			Debugger.log("receiver == null");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/create.jsp").forward(request, response);
+			return;
+		}
 		//grab requiresSignature
-		String requiresSignatureString = request.getParameter("requiresSignature");
+		String requiresSignatureString = request.getParameter("reqSig");
 		boolean requiresSignature = false;
 		if (requiresSignatureString != null) {
 			requiresSignature = true;

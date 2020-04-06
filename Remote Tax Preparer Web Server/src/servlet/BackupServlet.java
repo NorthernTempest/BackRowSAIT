@@ -19,6 +19,8 @@ import service.ConfigService;
 
 /**
  * Servlet implementation class BackupServlet
+ * 
+ * @author Jesse Goerzen
  */
 @WebServlet("/backup")
 @MultipartConfig(fileSizeThreshold = 0, maxFileSize = 1024 * 1024 * 100, maxRequestSize = 1024 * 1024 * 100)

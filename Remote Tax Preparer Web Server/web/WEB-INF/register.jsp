@@ -36,7 +36,12 @@
 			<div class="form-group">
 				<h3>Personal Info</h3>
 				<label for="title">Title</label>
-				<input id="title" name="title" class="form-control" placeholder="eg. 'Mr'" value="${title}">
+				<select id="title" name="title" class="form-control">
+					<option value="Mr">Mr</option>
+					<option value="Ms" ${title.equals("Ms")?"selected":""}>Ms</option>
+					<option value="Mrs" ${title.equals("Mrs")?"selected":""}>Mrs</option>
+					<option value="Miss" ${title.equals("Miss")?"selected":""}>Miss</option>
+				</select>
                 <label for="f_name">First Name</label>
                 <input name="f_name" id="f_name" maxlength="25" value="${f_name}" class="form-control" required>
                 <label for="m_name">Middle Name</label>
