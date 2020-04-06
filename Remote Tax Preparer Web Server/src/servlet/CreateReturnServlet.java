@@ -36,8 +36,8 @@ public class CreateReturnServlet extends HttpServlet {
 	private static final Calendar DOBCutOff = new GregorianCalendar(1900, 01, 01);
 
 	// Form fields
-	private String dateOfBirth, sin, title, fName, initial, lName, gender, maritalStatus, prevMaritalStatus; // TODO
-
+	private String taxYear, dateOfBirth, sin, title, fName, middleInitial, lName, gender, maritalStatus, prevMaritalStatus, address, apartment, poBox, poBoxLocation, rrNum, city, region, country, postalCode, email, phone, partnerDOB, partnerSIN, partnerTitle, partnerFName, partnerInitial, partnerLName, partnerGender, partnerAddress, partnerApartment, partnerPoBox, partnerPoBoxLocation, partnerRRNum, partnerCity, partnerCountry, partnerRegion, partnerPostalCode, partnerEmailAddress, partnerMobilePhone; // TODO
+	private boolean nameChange, maritalChange, canadianCitizen, partnerCanadianCitizen, electionsCanada, foriegnProperty, soldHome, firstTime, canadaPost, CRAOnline, alreadyRegistered;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -155,63 +155,63 @@ public class CreateReturnServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 
 		// get all info from form
-		String taxYear = request.getParameter("taxYear");
-		String dateOfBirth = request.getParameter("dateOfBirth"); // returned in yyyy-mm-dd format from the jsp
-		String SIN = request.getParameter("sin");
-		String title = request.getParameter("title");
-		String fName = request.getParameter("fname");
-		String middleInitial = request.getParameter("initial");
-		String lName = request.getParameter("lname");
-		String gender = request.getParameter("gender");
-		boolean nameChange = false;
+		taxYear = request.getParameter("taxYear");
+		dateOfBirth = request.getParameter("dateOfBirth"); // returned in yyyy-mm-dd format from the jsp
+		sin = request.getParameter("sin");
+		title = request.getParameter("title");
+		fName = request.getParameter("fname");
+		middleInitial = request.getParameter("initial");
+		lName = request.getParameter("lname");
+		gender = request.getParameter("gender");
+		nameChange = false;
 		if (request.getParameter("nameChange") != null) {
 			nameChange = true;
 		}
-		String maritalStatus = request.getParameter("maritalStatus");
-		boolean maritalChange = false;
+		maritalStatus = request.getParameter("maritalStatus");
+		maritalChange = false;
 		if (request.getParameter("maritalChange") != null) {
 			maritalChange = true;
 		}
-		String prevMaritalStatus = "";
+		prevMaritalStatus = "";
 		if (maritalChange) {
 			prevMaritalStatus = request.getParameter("prevMaritalStatus");
 		}
-		boolean canadianCitizen = false;
+		canadianCitizen = false;
 		if (request.getParameter("canadianCitizen") != null) {
 			canadianCitizen = true;
 		}
-		String address = request.getParameter("address");
-		String apartment = request.getParameter("apartment");
-		String poBox = request.getParameter("po");
-		String poBoxLocation = request.getParameter("poLocation");
-		String rrNum = request.getParameter("rr");
-		String city = request.getParameter("addressCity");
-		String region = request.getParameter("addressRegion");
-		String country = request.getParameter("adressCountry");
-		String postalCode = request.getParameter("addressPostal");
+		address = request.getParameter("address");
+		apartment = request.getParameter("apartment");
+		poBox = request.getParameter("po");
+		poBoxLocation = request.getParameter("poLocation");
+		rrNum = request.getParameter("rr");
+		city = request.getParameter("addressCity");
+		region = request.getParameter("addressRegion");
+		country = request.getParameter("adressCountry");
+		postalCode = request.getParameter("addressPostal");
 
-		String email = request.getParameter("email");
-		String phone = request.getParameter("phone");
+		email = request.getParameter("email");
+		phone = request.getParameter("phone");
 
-		String partnerDOB = "";
-		String partnerSIN = "";
-		String partnerTitle = "";
-		String partnerFName = "";
-		String partnerInitial = "";
-		String partnerLName = "";
-		String partnerGender = "";
-		boolean partnerCanadianCitizen = false;
-		String partnerAddress = "";
-		String partnerApartment = "";
-		String partnerPoBox = "";
-		String partnerPoBoxLocation = "";
-		String partnerRRNum = "";
-		String partnerCity = "";
-		String partnerCountry = "";
-		String partnerRegion = "";
-		String partnerPostalCode = "";
-		String partnerEmailAddress = "";
-		String partnerMobilePhone = "";
+		partnerDOB = "";
+		partnerSIN = "";
+		partnerTitle = "";
+		partnerFName = "";
+		partnerInitial = "";
+		partnerLName = "";
+		partnerGender = "";
+		partnerCanadianCitizen = false;
+		partnerAddress = "";
+		partnerApartment = "";
+		partnerPoBox = "";
+		partnerPoBoxLocation = "";
+		partnerRRNum = "";
+		partnerCity = "";
+		partnerCountry = "";
+		partnerRegion = "";
+		partnerPostalCode = "";
+		partnerEmailAddress = "";
+		partnerMobilePhone = "";
 		if (maritalStatus.equals("Married") || maritalStatus.equals("Common Law")) {
 			partnerDOB = request.getParameter("partnerDateOfBirth");
 			partnerSIN = request.getParameter("partnerSin");
@@ -235,32 +235,32 @@ public class CreateReturnServlet extends HttpServlet {
 			partnerEmailAddress = request.getParameter("partnerEmail");
 			partnerMobilePhone = request.getParameter("partnerPhone");
 		}
-		boolean electionsCanada = false;
+		electionsCanada = false;
 		if (request.getParameter("electionsCanada") != null) {
 			electionsCanada = true;
 		}
-		boolean foriegnProperty = false;
+		foriegnProperty = false;
 		if (request.getParameter("foreignProperty") != null) {
 			foriegnProperty = true;
 		}
-		boolean soldHome = false;
+		soldHome = false;
 		if (request.getParameter("sellHome") != null) {
 			soldHome = true;
 		}
-		boolean firstTime = false;
+		firstTime = false;
 		if (request.getParameter("firstTime") != null) {
 			firstTime = true;
 		}
 		// Notice of Assessment
-		boolean canadaPost = false;
+		canadaPost = false;
 		if (request.getParameter("mailAssess") != null) {
 			canadaPost = true;
 		}
-		boolean CRAOnline = false;
+		CRAOnline = false;
 		if (request.getParameter("craAssess") != null) {
 			CRAOnline = true;
 		}
-		boolean alreadyRegistered = false;
+		alreadyRegistered = false;
 		if (request.getParameter("alreadyRegistered") != null) {
 			alreadyRegistered = true;
 		}
@@ -285,7 +285,7 @@ public class CreateReturnServlet extends HttpServlet {
 		}
 
 		// SIN
-		if (SIN == null || SIN.length() > 12 || SIN.length() == 0) {
+		if (sin == null || sin.length() > 12 || sin.length() == 0) {
 			// TODO
 			Debugger.log("SIN if statement");
 			throw new Exception("Invalid SIN, please try again");
@@ -510,7 +510,7 @@ public class CreateReturnServlet extends HttpServlet {
 		 * How do you want to recieve your Notice of Assessment? Mail (Canada Post)
 		 * AND/OR Register with Canada Revenue agency for online mail already registered
 		 */
-		if (canadaPost != true && CRAOnline != true) {
+		if ((canadaPost != true && CRAOnline != true)||(canadaPost != true && alreadyRegistered != true)) {
 			// TODO
 			Debugger.log("notice of assessment validation if statement");
 			throw new Exception(
@@ -535,7 +535,7 @@ public class CreateReturnServlet extends HttpServlet {
 			nameChange = true;
 		}
 		request.setAttribute("nameChange", nameChange);
-		request.setAttribute("MaritalStatus", request.getParameter("maritalStatus"));
+		request.setAttribute("maritalStatus", request.getParameter("maritalStatus"));
 		boolean maritalChange = false;
 		if (request.getParameter("maritalChange") != null) {
 			maritalChange = true;
