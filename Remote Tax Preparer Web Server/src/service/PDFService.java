@@ -1,6 +1,5 @@
 package service;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,11 +10,9 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Collection;
 import java.util.List;
 
 import javax.crypto.NoSuchPaddingException;
-import javax.servlet.http.Part;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.pdfbox.pdmodel.PDDocument;

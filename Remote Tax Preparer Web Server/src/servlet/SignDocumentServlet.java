@@ -72,6 +72,9 @@ public final class SignDocumentServlet extends HttpServlet {
 		//get parcel ID
 		String parcelID = request.getParameter("parcelID");
 
+		Debugger.log("signatureDataURL: " + signatureDataURL);
+		Debugger.log("parcelID: " + parcelID);
+		
 		//Give parcelID and signature to PDFService to sign the document
 		Document signedPDF = null;
 		try {
@@ -90,12 +93,16 @@ public final class SignDocumentServlet extends HttpServlet {
 				Debugger.log("we made it to here hopefully we got a parcel?");
 				//let user know their signature has been confirmed
 				request.setAttribute("successMessage", "Your document was successfully signed.");
+				//delete the one with req signature tag
+				boolean didDelete = ParcelManager.delete(parcelID);
+				Debugger.log(didDelete +": we just tried to delete parcelID: " + parcelID);
 				//resend the parcel that had document to be signed attached, but this time without the req signature tag
-				ParcelManager.createParcel(parcel.getDocuments(), parcel.getSubject(), parcel.getMessage(),
+				boolean didCreate = ParcelManager.createParcel(parcel.getDocuments(), parcel.getSubject(), parcel.getMessage(),
 						parcel.getSender(), parcel.getReceiver(), parcel.getDateSent(), parcel.getExpirationDate(),
 						parcel.getTaxReturnYear(), false);
-				//delete the one with req signature tag
-				ParcelManager.delete(parcelID);
+				Debugger.log(didCreate +": we just tried to create");
+				
+				
 			} catch (ConfigException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
