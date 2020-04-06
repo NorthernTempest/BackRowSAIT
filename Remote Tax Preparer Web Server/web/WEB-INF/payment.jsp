@@ -32,9 +32,11 @@
 										year : ${tr.getYear()},
 										cost : ${tr.getCost()},
 										amountOwing : ${tr.getAmountOwed()}
-									}
+									},
 								</c:forEach>
+								{}
 							];
+							taxReturns.pop();
 							
 							var activeTaxReturn = taxReturns[0];
 							
@@ -42,7 +44,7 @@
 							window.onload = function() {
 								var select = document.getElementById("selectedTaxReturn");
 								
-								for(tr in taxReturns) {
+								for(let tr in taxReturns) {
 									option = document.createElement("option");
 									option.value = taxReturns[tr].year + "";
 									option.innerHTML = taxReturns[tr].year + "";
@@ -59,9 +61,9 @@
 							function changeYear() {
 								var year = document.getElementById("selectedTaxReturn").value;
 								
-								for(tr in taxReturns) {
-									if(tr.year == year) {
-										activeTaxReturn = tr;
+								for(let tr in taxReturns) {
+									if(taxReturns[tr].year == year) {
+										activeTaxReturn = taxReturns[tr];
 									}
 								}
 			
@@ -73,7 +75,7 @@
 						<form>
 							<div class="form-group">
 								<label for="selectedTaxReturn">Tax Return Year</label>
-								<select class="form-control" id="selectedTaxReturn" name="selectedReturn" onSelect="changeYear()">
+								<select class="form-control" id="selectedTaxReturn" name="selectedReturn" onchange="changeYear()">
 								</select>
 							</div>
 						</form>
