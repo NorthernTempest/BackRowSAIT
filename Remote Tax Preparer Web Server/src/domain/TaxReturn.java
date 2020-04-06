@@ -8,7 +8,7 @@ import bean.TaxReturnBean;
  * 
  * Class Description: Class defining attributes and methods for a single tax return.
  *
- * @author Tristen Kreutz
+ * @author Tristen Kreutz, Cesar Guzman, Taylor Hanlon
  *
  */
 public final class TaxReturn {
@@ -33,6 +33,13 @@ public final class TaxReturn {
 		setYear(year);
 		setCost(cost);
 	}
+	
+	public TaxReturn (String email, String status, int year) {
+		this.email = email;
+		this.status = status;
+		this.year = year;
+	}
+	
 	/**
 	 * Returns the user.
 	 * @return the user

@@ -90,6 +90,7 @@ public final class PDFService {
 		InputStream inStream = stream.createInputStream();
 
 		Document document = null;
+		
 		try {
 			document = EncryptionService.encryptDocument(inStream, fName + "_" + lName + "_AuthRequest.pdf");
 		} catch (NumberFormatException e) {
@@ -115,6 +116,8 @@ public final class PDFService {
 			return null;
 		}
 
+		authReqPDF.close();
+		
 		return document;
 	}
 

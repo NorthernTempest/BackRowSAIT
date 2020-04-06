@@ -113,18 +113,24 @@ public class CreateReturnServlet extends HttpServlet {
 		// if all info ok
 		try {
 			validateForm(request);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			request.setAttribute("errorMessage", e1.getMessage());
-			backfillForm(request);
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/createReturn.jsp").forward(request, response);
-		}
-		// send the user a parcel with the pdf for signing
-		try {
+			
 			ArrayList<Document> documents = new ArrayList<Document>();
 			documents.add(PDFService.createAuthorizationRequest(sin, fName, lName));
 
-			ParcelManager.createNewReturnParcel(documents, fName, lName, email, taxYear);
+			//TODO
+			if(TaxReturnManager.createNewTaxReturn(email, taxYear)) {
+				Debugger.log("we made a tax return probably");
+				if(ParcelManager.createNewReturnParcel(documents, fName, lName, email, taxYear)) {
+					Debugger.log("we made a new return Parcel probably");
+				} else {
+					//very bad
+					Debugger.log("bad no parcel make ahhh");
+				}
+			} else {
+				//bad
+				Debugger.log("no tax return :( oh no bad");
+			}
+			
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (ConfigException e) {
 			e.printStackTrace();
@@ -134,6 +140,11 @@ public class CreateReturnServlet extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMessage", "Error, please try again.");
+			backfillForm(request);
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/createReturn.jsp").forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("errorMessage", e.getMessage());
 			backfillForm(request);
 			getServletContext().getRequestDispatcher("/WEB-INF/parcel/createReturn.jsp").forward(request, response);
 		}
