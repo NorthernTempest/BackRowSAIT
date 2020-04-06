@@ -590,31 +590,37 @@ public class CreateReturnServlet extends HttpServlet {
 		if (request.getParameter("electionsCanada") != null) {
 			electionsCanada = true;
 		}
-		request.setAttribute("electionsCanada", partnerCanadianCitizen);
+		request.setAttribute("electionsCanada", electionsCanada);
 		boolean foriegnProperty = false;
 		if (request.getParameter("foreignProperty") != null) {
 			foriegnProperty = true;
 		}
+		request.setAttribute("foreignProperty", foriegnProperty);
 		boolean soldHome = false;
 		if (request.getParameter("sellHome") != null) {
 			soldHome = true;
 		}
+		request.setAttribute("sellHome", soldHome);
 		boolean firstTime = false;
 		if (request.getParameter("firstTime") != null) {
 			firstTime = true;
 		}
+		request.setAttribute("firstTime", firstTime);
 		// Notice of Assessment
 		boolean canadaPost = false;
 		if (request.getParameter("mailAssess") != null) {
 			canadaPost = true;
 		}
+		request.setAttribute("mailAssess", canadaPost);
 		boolean CRAOnline = false;
 		if (request.getParameter("craAssess") != null) {
 			CRAOnline = true;
 		}
+		request.setAttribute("craAssess", CRAOnline);
 		boolean alreadyRegistered = false;
 		if (request.getParameter("alreadyRegistered") != null) {
 			alreadyRegistered = true;
 		}
+		request.setAttribute("alreadyRegistered", alreadyRegistered);
 	}
 }
