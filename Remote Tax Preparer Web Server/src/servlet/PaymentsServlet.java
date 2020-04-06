@@ -3,11 +3,9 @@ package servlet;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.servlet.ServletException;
@@ -22,7 +20,6 @@ import databaseAccess.SessionDB;
 import databaseAccess.UserDB;
 import domain.Payment;
 import manager.PaymentManager;
-import manager.TaxReturnManager;
 
 /**
  * Servlet implementation class PaymentsServlet
@@ -74,7 +71,6 @@ public class PaymentsServlet extends HttpServlet {
 			email = request.getParameter("email");
 			sessionValid = false;
 		}
-		String status = request.getParameter("status");
 		String id = request.getParameter("id");
 		String type = request.getParameter("type");
 		double amount = Double.parseDouble(request.getParameter("amount"));
