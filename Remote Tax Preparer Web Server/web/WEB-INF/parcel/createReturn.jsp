@@ -58,11 +58,11 @@
             </div>
             <div class="form-group">
                 <label for="fname">First Name</label>
-                <input class="form-control" name="fname" id="fname" value="${fname}" required>
+                <input class="form-control" name="fname" id="fname" maxlength="25" value="${fname}" required>
                 <label for="initial">Middle Initial</label>
-                <input class="form-control" name="inital" id="initial" value="${initial}">
+                <input class="form-control" name="initial" id="initial" maxlength="1" value="${initial}">
                 <label for="lname">Last Name</label>
-                <input class="form-control" name="lname" id="lname" value="${lname}" required>
+                <input class="form-control" name="lname" id="lname" maxlength="25" value="${lname}" required>
             </div>
             <div class="form-group">
                 <label for="gender">Gender</label>
@@ -214,7 +214,7 @@
                 <label for="partnerFname">First Name</label>
                 <input class="form-control spouser" name="partnerFname" id="partnerFname" value="${partnerFname}">
                 <label for="partnerInitial">Middle Initial</label>
-                <input class="form-control" name="partnerInital" id="partnerInitial" value="${partnerInitial}">
+                <input class="form-control" name="partnerInitial" id="partnerInitial" value="${partnerInitial}">
                 <label for="partnerLname">Last Name</label>
                 <input class="form-control spouser" name="partnerLname" id="partnerLname" value="${partnerLname}">
             </div>
@@ -234,21 +234,21 @@
             <div class="form-group">
                 <h3>Address</h3>
                 <label for="partnerAddress">Street Address</label>
-                <input id="partnerAddress" name="partnerAddress1" class="form-control" value="${partnerAddress}">
+                <input id="partnerAddress" name="partnerAddress" class="form-control" value="${partnerAddress}">
                 <label for="partnerApartment">Apartment</label>
                 <input id="partnerApartment" name="partnerApartment" class="form-control" value="${partnerApartment}">
                 <br>
                 <label for="partnerPo">PO Box</label>
-                <input id="partnerPo" name="po" class="form-control" value="${po}">
+                <input id="partnerPo" name="partnerPo" class="form-control" value="${po}">
                 <label for="partnerPoLocation">PO Box Location</label>
-                <input id="partnerPoLocation" name="poLocation" class="form-control" value="${poLocation}">
+                <input id="partnerPoLocation" name="partnerPoLocation" class="form-control" value="${poLocation}">
                 <label for="partnerrr">RR#</label>
                 <input id="partnerrr" name="partnerrr" class="form-control" value="${partnerrr}">
                 <br>
                 <label for="partnerAddressCity">City</label>
                 <input id="partnerAddressCity" name="partnerAddressCity" class="form-control" value="${partnerAddressCity}">
                 <label for="partnerAddressCountry">Country</label>
-                <select class="crs-country form-control" id="partnerAddressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${partnerAddressCountry}">
+                <select class="crs-country form-control" id="partnerAddressCountry" data-region-id="addressRegion" data-value="shortcode" name="partnerAddressCountry" data-default-value="${partnerAddressCountry}">
                 </select>
                 <label for="partnerAddressRegion">Province/State</label>
                 <select id="partnerAddressRegion" class="form-control" data-value="shortcode" name="partnerAddressRegion" data-default-value="${partnerAddressRegion}">
@@ -260,9 +260,9 @@
             <div class="form-group">
                 <h3>Contact Details</h3>
                 <label for="email">Email</label>
-                <input class="form-control" type="email" id="partnerEmail" name="partnerEmail" value="${partnerEmail}" required>
+                <input class="form-control" type="email" id="partnerEmail" name="partnerEmail" value="${partnerEmail}">
                 <label for="phone">Phone</label>
-                <input class="form-control" type="tel" id="partnerPhone" name="partnerPhone" value="${partnerPhone}" required>
+                <input class="form-control" type="tel" id="partnerPhone" name="partnerPhone" value="${partnerPhone}">
             </div>
         </div>
     </div>
