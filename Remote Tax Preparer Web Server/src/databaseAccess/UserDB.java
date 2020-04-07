@@ -274,6 +274,13 @@ public final class UserDB {
 		return users;
 	}
 	
+	/**
+	 * Establishes a connection with the database and retrieves the row from the
+	 * user table that has a verificationID matching the one supplies by the
+	 * calling method.
+	 * @param verificationID verification ID to search
+	 * @return User user with matching verification ID
+	 */
 	public static User getByVerificationID(String verificationID) {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
@@ -303,11 +310,12 @@ public final class UserDB {
 	}
 	
 	/**
-	 * 
-	 * @param set
-	 * @return
+	 * Method that takes in a result set and retrieves the appropriate values to
+	 * construct a User object.
+	 * @param set result set to retrieve values from
+	 * @return User user that was created using the values from the result set
 	 * @throws IllegalArgumentException
-	 * @throws SQLException
+	 * @throws SQLException 
 	 */
 	private static User createUser(ResultSet set) throws IllegalArgumentException, SQLException {
 		User output = new User(set.getString("email"),
@@ -337,6 +345,17 @@ public final class UserDB {
 		return output;
 	}
 	
+	/**
+	 * Method that takes a User, PreparedStatement, and an isUpdate boolean to set up
+	 * the PreparedStatement using the values from the supplied User to utilize in
+	 * inserting or updating a User in the database. The isUpdate boolean determines
+	 * whether the operation is an insert or update.
+	 * @param user user to insert or update
+	 * @param statement prepared statement for JPA usage
+	 * @param isUpdate boolean defining whether it is an insert or update
+	 * @return PreparedStatement that is now ready to use with the database
+	 * @throws SQLException
+	 */
 	private static PreparedStatement prepare(User user, PreparedStatement statement, boolean isUpdate) throws SQLException {
 		int add = isUpdate?0:1;
 		statement.setString(isUpdate?23:1, user.getEmail());

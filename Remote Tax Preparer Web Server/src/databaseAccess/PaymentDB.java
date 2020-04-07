@@ -189,6 +189,12 @@ public class PaymentDB {
 		return payments;
 	}
 
+	/**
+	 * Establishes a connection with the database and retrieves all rows of
+	 * Payments that match the supplies email.
+	 * @param email email to search
+	 * @return ArrayList<Payment> Payments that have a matching email
+	 */
 	public static ArrayList<Payment> getByEmail(String email) {
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = pool.getConnection();
