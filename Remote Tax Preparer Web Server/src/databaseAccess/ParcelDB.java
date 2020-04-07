@@ -198,10 +198,15 @@ public class ParcelDB {
 
 			if (rs.next()) {
 
+				boolean requireSignature = false;
+				if(rs.getString("requires_signature").equals("T")) {
+					requireSignature = true;
+				}
+
 				parcel = new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), requireSignature);
 			}
 		}
 
@@ -242,10 +247,15 @@ public class ParcelDB {
 
 			while (rs.next()) {
 
+				boolean requireSignature = false;
+				if(rs.getString("requires_signature").equals("T")) {
+					requireSignature = true;
+				}
+
 				parcels.add(new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature"))));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), requireSignature));
 			}
 		}
 
@@ -352,10 +362,15 @@ public class ParcelDB {
 
 			while (rs.next()) {
 
+				boolean requireSignature = false;
+				if(rs.getString("requires_signature").equals("T")) {
+					requireSignature = true;
+				}
+
 				parcel = new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
 						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
 						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
-						DocumentDB.getByParcelID(rs.getString("parcel_id")), Boolean.parseBoolean(rs.getString("requires_signature")));
+						DocumentDB.getByParcelID(rs.getString("parcel_id")), requireSignature);
 				parcels.add(parcel);
 			}
 		}

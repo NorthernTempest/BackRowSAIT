@@ -35,7 +35,7 @@
 		</div>
 		<div class="col-md-6">
 			<c:choose>
-				<c:when test="${!parcel.requiresSignature}">
+				<c:when test="${parcel.requiresSignature}">
 					<a class="btn btn-primary" href="/parcel/signDoc?parcelID=${parcel.parcelID}">
 						<i class="fas fa-file-signature"></i>
 						Requires Signature

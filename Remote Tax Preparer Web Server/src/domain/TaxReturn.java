@@ -2,14 +2,26 @@ package domain;
 
 import java.util.ArrayList;
 
+import bean.TaxReturnBean;
+
 /**
  * 
  * Class Description: Class defining attributes and methods for a single tax return.
  *
- * @author Tristen Kreutz
+ * @author Tristen Kreutz, Cesar Guzman, Taylor Hanlon
  *
  */
 public final class TaxReturn {
+	
+	public static final char INSTANTIATED = 'i';
+	public static final char REQUEST_SENT = 'r';
+	public static final char ACCEPTED = 'a';
+	public static final char PROCESSING = 'p';
+	public static final char WAITING_FOR_CUSTOMER = 'c';
+	public static final char WAITING_FOR_PAYMENT = 'w';
+	public static final char PAID = '$';
+	public static final char FILED = 'f';
+	public static final char CANCELLED = 'x';
 	
 	private String email;
 	
@@ -31,6 +43,13 @@ public final class TaxReturn {
 		setYear(year);
 		setCost(cost);
 	}
+	
+	public TaxReturn (String email, String status, int year) {
+		this.email = email;
+		this.status = status;
+		this.year = year;
+	}
+	
 	/**
 	 * Returns the user.
 	 * @return the user
@@ -135,5 +154,12 @@ public final class TaxReturn {
 		this.householdID = householdID;
 	}
 
-	
+	public TaxReturnBean copy() {
+		TaxReturnBean output = new TaxReturnBean();
+		
+		output.setCost(cost);
+		output.setYear(year);
+		
+		return output;
+	}
 }

@@ -41,6 +41,10 @@ public final class ParcelManager {
 	private static String NEW_RETURN_SUBJECT;
 
 	private static String NEW_RETURN_MESSAGE;
+	
+	private static String SIGNED_DOC_SUBJECT;
+	
+	private static String SIGNED_DOC_MESSAGE;
 
 	/**
 	 * Initializes this class from config file once upon first creation.
@@ -52,6 +56,8 @@ public final class ParcelManager {
 			expirationDays = Integer.parseInt(ConfigService.fetchFromConfig("PARCEL_EXPIRATION_DAYS:"));
 			NEW_RETURN_SUBJECT = ConfigService.fetchContents(ConfigService.fetchFromConfig("NEW_RETURN_SUBJECT:"));
 			NEW_RETURN_MESSAGE = ConfigService.fetchContents(ConfigService.fetchFromConfig("NEW_RETURN_MESSAGE:"));
+			SIGNED_DOC_SUBJECT = ConfigService.fetchContents(ConfigService.fetchFromConfig("SIGNED_DOC_SUBJECT:"));
+			SIGNED_DOC_MESSAGE = ConfigService.fetchContents(ConfigService.fetchFromConfig("SIGNED_DOC_MESSAGE:"));
 			init = true;
 		}
 	}
@@ -282,8 +288,8 @@ public final class ParcelManager {
 
 		String receiver = email;
 
-		Parcel parcel = new Parcel(NEW_RETURN_SUBJECT + " " + taxYear, fName + " " + lName + NEW_RETURN_MESSAGE, email, receiver, new Date(), expDate,
-				taxYear, documents, false);
+		Parcel parcel = new Parcel(NEW_RETURN_SUBJECT + " " + taxYear, fName + " " + lName + NEW_RETURN_MESSAGE, email,
+				receiver, new Date(), expDate, taxYear, documents, false);
 
 		if (ParcelDB.insert(parcel)) {
 			for (Document document : documents) {
@@ -295,5 +301,49 @@ public final class ParcelManager {
 			return false;
 		}
 		return successfulInsert;
+	}
+
+	/**
+	 * @param signedPDF
+	 * @param sender
+	 * @param taxYear
+	 * @return
+	 */
+	public static boolean createSignedDocParcel(Document signedPDF, String sender, int taxYear) {
+		ArrayList<Document> documents = new ArrayList<Document>();
+		documents.add(signedPDF);
+		
+		boolean successfulInsert = true;
+
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.DAY_OF_MONTH, expirationDays);
+		Date expDate = c.getTime();
+
+		Parcel parcel = new Parcel(SIGNED_DOC_SUBJECT + sender,
+				sender + SIGNED_DOC_MESSAGE + taxYear, sender, TAX_PREPARER,
+				new Date(), expDate, taxYear, documents, false);
+
+		if (ParcelDB.insert(parcel)) {
+			for (Document document : documents) {
+				if (!DocumentDB.insert(document, parcel.getParcelID())) {
+					successfulInsert = false;
+				}
+			}
+		} else {
+			return false;
+		}
+		
+		return successfulInsert;
+	}
+
+	/**
+	 * @param parcelID
+	 * @return
+	 */
+	public static boolean delete(String parcelID) {
+		DocumentManager.delete(parcelID);
+		ParcelDB.delete(parcelID);
+		return true;
 	}
 }
