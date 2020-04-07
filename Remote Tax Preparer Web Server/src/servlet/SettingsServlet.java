@@ -1,15 +1,15 @@
 package servlet;
 
-import java.io.IOException;
+import exception.ConfigException;
+import manager.LogEntryManager;
+import manager.UserManager;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import exception.ConfigException;
-import manager.LogEntryManager;
-import manager.UserManager;
+import java.io.IOException;
 
 /**
  * Servlet implementation class SettingsServlet
@@ -39,12 +39,13 @@ public class SettingsServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			String email; 
-			if (request.getAttribute("userEmail")!=null) {
-				email = (String) request.getAttribute("userEmail");
+			if (request.getParameter("email")!=null) {
+				email = (String) request.getParameter("email");
 			} else {
 				email = UserManager.getEmailFromSession(request);
 			}
-			UserManager.getAccountInfo(request,email);
+			request = UserManager.getAccountInfo(request,email);
+			request.setAttribute("email", email);
 		} catch (ConfigException e) {
 			request.setAttribute("errorMessage",
 					"There was an error accessing your data." + request.getAttribute("errorMessage"));

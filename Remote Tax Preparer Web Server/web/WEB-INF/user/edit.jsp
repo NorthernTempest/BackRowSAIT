@@ -9,6 +9,7 @@
 <jsp:directive.include file="../../template/head.jsp" />
 
 <form action="" method="POST">
+	<input type="hidden" name="email" value="${email}">
 	<div class="col-md-6">
 		<h3>Name</h3>
 		<label for="title">Title</label>
@@ -41,10 +42,10 @@
         <input id="address2" name="address2" class="form-control" value="${address2}">
 		<label for="addressCity">City</label>
 		<input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
-		<label for="addressRegion">Province/State</label>
-		<select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion}" data-value="shortcode" required></select>
 		<label for="addressCountry">Country</label>
 		<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" data-default-value="${addressCountry}" data-value="shortcode" required></select>
+		<label for="addressRegion">Province/State</label>
+		<select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion}" data-value="shortcode" required></select>
 		<label for="addressPostal">Postal Code</label>
 		<input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}" required>
 	</div>
