@@ -42,7 +42,7 @@ public final class SessionManager {
 		Session s = SessionDB.get(sessionID);
 		boolean output = s != null;
 		
-		output = output && s.getTimeout().before(new Date());
+		output = output && s.getTimeout().after(new Date());
 		
 		return output;
 	}
