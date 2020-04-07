@@ -122,7 +122,7 @@ public class CreateReturnServlet extends HttpServlet {
 			//TODO
 			if(TaxReturnManager.createNewTaxReturn(email, taxYear)) {
 				Debugger.log("we made a tax return probably");
-				if(ParcelManager.createNewReturnParcel(documents, nrf.getfName(), nrf.getlName(), email, taxYear)) {
+				if(ParcelManager.createNewReturnParcels(documents, nrf, email)) {
 					Debugger.log("we made a new return Parcel probably");
 				} else {
 					//very bad
