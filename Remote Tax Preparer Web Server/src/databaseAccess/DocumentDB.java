@@ -10,7 +10,7 @@ import domain.Document;
 
 /**
  * 
- * Class Description: 	EH! Class that establishes a connection and communicates directly
+ * Class Description: 	Class that establishes a connection and communicates directly
  * 						with the document table in the database.
  *
  * @author Tristen Kreutz
@@ -23,6 +23,7 @@ public class DocumentDB {
 	 * into this method into the document table. The Document being inserted must be a
 	 * part of a Parcel object.
 	 * @param doc Document to insert into the database
+	 * @param parcelID Parcel ID of the parcel that the document is tied to
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public static boolean insert(Document doc, String parcelID) {
@@ -151,7 +152,7 @@ public class DocumentDB {
 	 * document table that has a Primary Key matching the filePath being passed
 	 * into this method.
 	 * @param parcelID parcelID of the Documents to retrieve from the database
-	 * @return Documents that contains the documents of the requested parcelID
+	 * @return ArrayList<Document> Documents that contains the documents of the requested parcelID
 	 */
 	public static ArrayList<Document> getByParcelID(String parcelID) {
 		ConnectionPool pool = ConnectionPool.getInstance();
@@ -192,7 +193,7 @@ public class DocumentDB {
 	 * Establishes a connection with the database and selects all the Documents
 	 * within the document table. It then adds them to a newly created ArrayList
 	 * and returns that to the calling object.
-	 * @return ArrayList<Document> containing all of the Documents from the database
+	 * @return ArrayList<Document> Documents containing all of the Documents from the database
 	 */
 	public static ArrayList<Document> getAll() {
 		ConnectionPool pool = ConnectionPool.getInstance();
