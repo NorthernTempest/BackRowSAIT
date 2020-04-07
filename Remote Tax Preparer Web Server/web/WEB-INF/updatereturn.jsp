@@ -12,7 +12,7 @@
 		<div class="col-12">
 			<div class="container">
 				<h1>${locked.equals("t") ? "View" : "Update"} Returns</h1>
-				<form action="/return/edit" method='${locked.equals("t") ? "GET" : "POST"}'>
+				<form action="/return" method='${locked.equals("t") ? "GET" : "POST"}'>
 					<div class="form-group">
 						<label for="email">User (E-Mail)</label>
 						<input id="email" class="form-control" type="text" name="email" placeholder="user@example.com" value="${email}" ${locked.equals("t") ? "readOnly" : ""} required>

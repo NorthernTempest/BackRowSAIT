@@ -103,6 +103,7 @@ public class TaxReturnEditServlet extends HttpServlet {
 		try {
 			role = UserManager.getRole(request.getSession().getId());
 		} catch (ConfigException e) {
+			LogEntryManager.logError(SessionManager.getEmail(request.getSession().getId()), e, request.getRemoteAddr());
 			e.printStackTrace();
 		}
 		
