@@ -15,6 +15,7 @@ import javax.servlet.http.Part;
 import databaseAccess.DocumentDB;
 import databaseAccess.ParcelDB;
 import domain.Document;
+import domain.NewReturnForm;
 import domain.Parcel;
 import domain.User;
 import exception.ConfigException;
@@ -41,9 +42,9 @@ public final class ParcelManager {
 	private static String NEW_RETURN_SUBJECT;
 
 	private static String NEW_RETURN_MESSAGE;
-	
+
 	private static String SIGNED_DOC_SUBJECT;
-	
+
 	private static String SIGNED_DOC_MESSAGE;
 
 	/**
@@ -268,8 +269,8 @@ public final class ParcelManager {
 	 * @return
 	 * @throws ConfigException
 	 */
-	public static boolean createNewReturnParcel(ArrayList<Document> documents, String fName, String lName, String email,
-			int taxYear) throws ConfigException {
+	public static boolean createNewReturnParcels(ArrayList<Document> documents, NewReturnForm nrf, String email)
+			throws ConfigException {
 		init();
 
 		boolean successfulInsert = true;
@@ -280,26 +281,36 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);
 		Date expDate = c.getTime();
 
-		User u = UserManager.getUser(email);
+		User u = UserManager.getUser(nrf.getEmail());
 
 		if (u == null) {
 			return false;
 		}
 
-		String receiver = email;
+		//create and insert parcel to user
+		Parcel userParcel = new Parcel(NEW_RETURN_SUBJECT + " " + nrf.getTaxYear(),
+				nrf.getfName() + " " + nrf.getlName() + NEW_RETURN_MESSAGE, email, email, new Date(),
+				expDate, Integer.parseInt(nrf.getTaxYear()), documents, false);
 
-		Parcel parcel = new Parcel(NEW_RETURN_SUBJECT + " " + taxYear, fName + " " + lName + NEW_RETURN_MESSAGE, email,
-				receiver, new Date(), expDate, taxYear, documents, false);
-
-		if (ParcelDB.insert(parcel)) {
+		if (ParcelDB.insert(userParcel)) {
 			for (Document document : documents) {
-				if (!DocumentDB.insert(document, parcel.getParcelID())) {
+				if (!DocumentDB.insert(document, userParcel.getParcelID())) {
 					successfulInsert = false;
 				}
 			}
 		} else {
 			return false;
 		}
+
+		//create and insert parcel to tax preparers
+		Parcel taxPrepParcel = new Parcel("Tax Information for " + nrf.getfName() + " " + nrf.getlName(),
+				"this is a message with nicely formatted tax info", email /*sender*/, /*receiver*/ TAX_PREPARER, /*datesent*/ new Date(),
+				/*expDate*/ expDate, /*taxYear*/ Integer.parseInt(nrf.getTaxYear()), null, false);
+
+		if (!ParcelDB.insert(taxPrepParcel)) {
+			successfulInsert = false;
+		}
+
 		return successfulInsert;
 	}
 
@@ -312,7 +323,7 @@ public final class ParcelManager {
 	public static boolean createSignedDocParcel(Document signedPDF, String sender, int taxYear) {
 		ArrayList<Document> documents = new ArrayList<Document>();
 		documents.add(signedPDF);
-		
+
 		boolean successfulInsert = true;
 
 		Calendar c = Calendar.getInstance();
@@ -320,9 +331,8 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);
 		Date expDate = c.getTime();
 
-		Parcel parcel = new Parcel(SIGNED_DOC_SUBJECT + sender,
-				sender + SIGNED_DOC_MESSAGE + taxYear, sender, TAX_PREPARER,
-				new Date(), expDate, taxYear, documents, false);
+		Parcel parcel = new Parcel(SIGNED_DOC_SUBJECT + sender, sender + SIGNED_DOC_MESSAGE + taxYear, sender,
+				TAX_PREPARER, new Date(), expDate, taxYear, documents, false);
 
 		if (ParcelDB.insert(parcel)) {
 			for (Document document : documents) {
@@ -333,7 +343,7 @@ public final class ParcelManager {
 		} else {
 			return false;
 		}
-		
+
 		return successfulInsert;
 	}
 
