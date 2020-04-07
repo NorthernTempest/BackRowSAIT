@@ -167,7 +167,7 @@ INSERT INTO user (email, title, f_name, m_name, l_name, permission_level, pass_h
 VALUES ("jdgoerzen@gmail.com", "Mr", "Jesse", "David", "Goerzen", 1, "1aeabca5c2298936def8a3be36fc04329a850dc3e64af379221b523b34a7785e", "w/RM8dL10GWXEETXyatiIhbB+SHcMWirDt54sYNfVxU=", CURDATE(), "1-587-123-4567", "1-587-987-6543", "5000 Riverview Pl SE", "Calgary", "ab", "ca", "T2C4K6", "T", "en", "T");
 
 INSERT INTO tax_return (email, status, year)
-VALUES ("test@test.com", "new", 2019);
+VALUES ("test@test.com", "a", 2019);
 
 INSERT INTO parcel (parcel_id, subject, message, sender, receiver, date_sent, tax_return_year, requires_signature)
 VALUES ("123e4567-e89b-12d3-a456-556642440000", "Welcome", "Hello Timmy! I am Roger and I will be your tax preparer for this year.", "example@test.com", "test@test.com", CURDATE(), 2019, 'F');

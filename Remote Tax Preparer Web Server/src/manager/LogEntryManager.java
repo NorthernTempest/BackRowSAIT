@@ -25,7 +25,7 @@ import service.BackupService;
  * Class Description: Class that communicates with the LogEntryDB class as a
  * proxy to pass information utilized in communicating with the database.
  *
- * @author Tristen Kreutz, Cesar Guzman, Taylor Hanlon
+ * @author Tristen Kreutz, Cesar Guzman, Taylor Hanlon, Jesse Goerzen
  *
  */
 public final class LogEntryManager {

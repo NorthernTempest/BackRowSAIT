@@ -46,4 +46,10 @@ public final class TaxReturnManager {
 		
 		return hasReturn;
 	}
+
+	public static boolean updateReturn(String email, int year, String status, double amount, String sessionID) {
+		boolean output = false;
+		
+		return output;
+	}
 }

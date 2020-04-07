@@ -13,6 +13,16 @@ import bean.TaxReturnBean;
  */
 public final class TaxReturn {
 	
+	public static final char INSTANTIATED = 'i';
+	public static final char REQUEST_SENT = 'r';
+	public static final char ACCEPTED = 'a';
+	public static final char PROCESSING = 'p';
+	public static final char WAITING_FOR_CUSTOMER = 'c';
+	public static final char WAITING_FOR_PAYMENT = 'w';
+	public static final char PAID = '$';
+	public static final char FILED = 'f';
+	public static final char CANCELLED = 'x';
+	
 	private String email;
 	
 	private ArrayList<User> taxPreparers;
