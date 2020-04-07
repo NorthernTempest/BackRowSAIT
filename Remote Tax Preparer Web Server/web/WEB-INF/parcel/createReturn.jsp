@@ -353,7 +353,7 @@
             let option = document.createElement('option');
             option.value = x;
             option.innerText = x;
-            if (x === ${taxYear}) {
+            if (x === ${taxYear != null ? taxYear : -10000}) {
                 option.selected = true;
             }
             yearEl.appendChild(option);
