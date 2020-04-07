@@ -52,6 +52,7 @@ public class AdminServlet extends HttpServlet {
 			else {
 				request.setAttribute("errorMessage", "Error processing request. Ensure the email is entered correctly.");
 			}
+			doGet(request, response);
 		}
 		
 		else if (action.equals("deactivate")) {
@@ -65,6 +66,7 @@ public class AdminServlet extends HttpServlet {
 			else {
 				request.setAttribute("errorMessage", "Error processing request. Ensure the email is entered correctly.");
 			}
+			doGet(request, response);
 		} else if (action.equals("edit")) {
 			email=request.getParameter("editEmail");
 			
