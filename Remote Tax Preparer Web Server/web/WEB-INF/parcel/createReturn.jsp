@@ -146,10 +146,10 @@
                 <label for="addressCity">City</label>
                 <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}">
                 <label for="addressCountry">Country</label>
-                <select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${addressCountry}">
+                <select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${addressCountry.toUpperCase()}">
                 </select>
                 <label for="addressRegion">Province/State</label>
-                <select id="addressRegion" class="form-control" data-value="shortcode" name="addressRegion" data-default-value="${addressRegion}">
+                <select id="addressRegion" class="form-control" data-value="shortcode" name="addressRegion" data-default-value="${addressRegion.toUpperCase()}">
                 </select>
                 <label for="addressPostal">Postal Code</label>
                 <input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}">
@@ -247,10 +247,10 @@
                 <label for="partnerAddressCity">City</label>
                 <input id="partnerAddressCity" name="partnerAddressCity" class="form-control" value="${partnerAddressCity}">
                 <label for="partnerAddressCountry">Country</label>
-                <select class="crs-country form-control" id="partnerAddressCountry" data-region-id="addressRegion" data-value="shortcode" name="partnerAddressCountry" data-default-value="${partnerAddressCountry}">
+                <select class="crs-country form-control" id="partnerAddressCountry" data-region-id="addressRegion" data-value="shortcode" name="partnerAddressCountry" data-default-value="${partnerAddressCountry.toUpperCase()}">
                 </select>
                 <label for="partnerAddressRegion">Province/State</label>
-                <select id="partnerAddressRegion" class="form-control" data-value="shortcode" name="partnerAddressRegion" data-default-value="${partnerAddressRegion}">
+                <select id="partnerAddressRegion" class="form-control" data-value="shortcode" name="partnerAddressRegion" data-default-value="${partnerAddressRegion.toUpperCase()}">
                 </select>
                 <label for="partnerAddressPostal">Postal Code</label>
                 <input class="form-control" id="partnerAddressPostal" name="partnerAddressPostal" value="${partnerAddressPostal}">
