@@ -42,10 +42,7 @@ public final class SessionManager {
 		Session s = SessionDB.get(sessionID);
 		boolean output = s != null;
 		
-		if(s.getTimeout().before(new Date())) {
-			output = false;
-			SessionDB.delete(sessionID);
-		}
+		output = output && s.getTimeout().before(new Date());
 		
 		return output;
 	}
