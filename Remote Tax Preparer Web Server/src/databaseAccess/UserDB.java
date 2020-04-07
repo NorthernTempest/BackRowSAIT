@@ -169,7 +169,7 @@ public final class UserDB {
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
-			ps.setBoolean(1, false);
+			ps.setString(1, "F");
 			ps.setString(2, email);
 
 			rows = ps.executeUpdate();

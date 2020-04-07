@@ -8,18 +8,29 @@ import databaseAccess.UserDB;
 import domain.LogEntry;
 import domain.Session;
 import domain.User;
+import exception.ConfigException;
+import service.ConfigService;
 
 /**
  * 
  * Class Description: 	Class that communicates with the SessionDB class as a proxy
  * 						to pass information utilized in communicating with the database.
  *
- * @author Cesar Guzman, Tristen Kreutz
+ * @author Cesar Guzman, Tristen Kreutz, Jesse Goerzen
  *
  */
 public final class SessionManager {
+
+	private static int sessionTimeout;
 	
-	public static final int SESSION_TIMEOUT = 30;
+	private static boolean init;
+
+	private static void init() throws ConfigException {
+		if (!init) {
+			sessionTimeout = Integer.parseInt(ConfigService.fetchFromConfig("sessiontime:"));
+			init = true;
+		}
+	}
 	
 	/**
 	 * Takes the sessionID and checks the session table in the database
@@ -41,12 +52,14 @@ public final class SessionManager {
 	 * @param email email to create a Session object for
 	 * @param sessionID the sessionID to set for the Session object
 	 * @return true if session created successfully, false if not
+	 * @throws ConfigException 
 	 */
-	public static boolean createSession(String email, String sessionID, String ip) {
+	public static boolean createSession(String email, String sessionID, String ip) throws ConfigException {
+		init();
 		//Create session with correct timeout date
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		cal.add(Calendar.MINUTE, SESSION_TIMEOUT);
+		cal.add(Calendar.MINUTE, sessionTimeout);
 		Date timeoutDate = cal.getTime();
 		Session session = new Session(email, sessionID, timeoutDate);
 		

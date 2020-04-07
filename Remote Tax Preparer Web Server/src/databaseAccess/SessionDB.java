@@ -57,7 +57,7 @@ public final class SessionDB {
 	 * @return
 	 */
 	public static boolean update(Session session) {
-		// TODO
+		// NODO
 		return false;
 	}
 
@@ -144,6 +144,7 @@ public final class SessionDB {
 	 * @return ArrayList<Session> containing all of the Sessions from the database
 	 */
 	public static ArrayList<Session> getAll() {
+		//NODO
 		return null;
 	}
 

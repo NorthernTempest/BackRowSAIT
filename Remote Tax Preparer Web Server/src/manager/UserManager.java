@@ -80,11 +80,8 @@ public final class UserManager {
 			try {
 				String pass_hash = EncryptionService.hash(password, user.getPassSalt());
 				return user.getPassHash().equals(pass_hash) && user.isActive();
-			} catch (InvalidKeySpecException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
+			} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+				LogEntryManager.logError(email, e, null);
 				e.printStackTrace();
 			}
 		}
@@ -469,6 +466,7 @@ public final class UserManager {
 	 * @throws ConfigException
 	 */
 	public static boolean loggedIn(String email, String password, String ip) throws ConfigException {
+		// TODO DELETE
 		init();
 		return false;
 	}
@@ -730,9 +728,9 @@ public final class UserManager {
 			if (getRole(sessionID) < 2) {
 				return false;
 			}
-		} catch (ConfigException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (ConfigException e) {
+			LogEntryManager.logError(email, e, null);
+			e.printStackTrace();
 		}
 		
 		try {
@@ -742,7 +740,7 @@ public final class UserManager {
 			LogEntryDB.insert(new LogEntry(email, "Admin requested.", LogEntry.DEACTIVATE_ACCOUNT, null));
 			return flag;
 		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
+			LogEntryManager.logError(email, e, null);
 			e.printStackTrace();
 		}
 		return false;

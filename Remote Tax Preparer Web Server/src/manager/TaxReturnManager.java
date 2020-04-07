@@ -2,8 +2,11 @@ package manager;
 
 import java.util.ArrayList;
 
+import databaseAccess.SessionDB;
 import databaseAccess.TaxReturnDB;
+import databaseAccess.UserDB;
 import domain.TaxReturn;
+import domain.User;
 import exception.ConfigException;
 
 /**
@@ -55,5 +58,26 @@ public final class TaxReturnManager {
 		}
 		
 		return hasReturn;
+	}
+
+	public static boolean updateReturn(String email, int year, String status, double amount, String sessionID) {
+		boolean output = false;
+		
+		String userEmail = SessionDB.getEmail(sessionID);
+		User u = null;
+		if( userEmail != null && !userEmail.equals(""))
+			u = UserDB.get(userEmail);
+		
+		if(u != null && u.getPermissionLevel() >= User.TAX_PREPARER) {
+			TaxReturn tr = TaxReturnDB.get(email, year);
+			if( tr != null ) {
+				tr.setStatus(status);
+				tr.setCost(amount);
+				
+				TaxReturnDB.update(tr);
+			}
+		}
+		
+		return output;
 	}
 }

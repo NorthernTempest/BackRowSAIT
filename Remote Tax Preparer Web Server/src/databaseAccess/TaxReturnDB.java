@@ -76,8 +76,8 @@ public class TaxReturnDB {
 		int rows = 0;
 
 		try {
-
-			String preparedQuery = "UPDATE tax_return household_id = ?, status = ?, cost = ? "
+      
+			String preparedQuery = "UPDATE tax_return SET household_id = ?, status = ?, cost = ?"
 					+ " WHERE email = ? AND year = ?";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
