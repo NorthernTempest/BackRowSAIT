@@ -499,7 +499,7 @@ public class CreateReturnServlet extends HttpServlet {
 		 * How do you want to recieve your Notice of Assessment? Mail (Canada Post)
 		 * AND/OR Register with Canada Revenue agency for online mail already registered
 		 */
-		if ((canadaPost != true && CRAOnline != true)||(canadaPost != true && alreadyRegistered != true)) {
+		if ((canadaPost != true && CRAOnline != true && alreadyRegistered!=true)||(CRAOnline==true&&alreadyRegistered==true)) {
 			// TODO
 			Debugger.log("notice of assessment validation if statement");
 			throw new Exception(
@@ -543,7 +543,7 @@ public class CreateReturnServlet extends HttpServlet {
 		request.setAttribute("rr", request.getParameter("rr"));
 		request.setAttribute("addressCity",request.getParameter("addressCity"));
 		request.setAttribute("addressRegion", request.getParameter("addressRegion"));
-		request.setAttribute("addressCountry", request.getParameter("adressCountry"));
+		request.setAttribute("addressCountry", request.getParameter("addressCountry"));
 		request.setAttribute("addressPostal", request.getParameter("addressPostal"));
 
 		request.setAttribute("email",request.getParameter("email"));
