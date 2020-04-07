@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -18,6 +19,7 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
@@ -85,37 +87,55 @@ public final class PDFService {
 				field.setValue(fName + " " + lName);
 			}
 		}
-
-		PDStream stream = new PDStream(authReqPDF);
-		InputStream inStream = stream.createInputStream();
-
+		
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		authReqPDF.save(outStream);
+		
+		ByteArrayInputStream inStream = new ByteArrayInputStream(outStream.toByteArray());
+		outStream.close();
+		
 		Document document = null;
 		
 		try {
 			document = EncryptionService.encryptDocument(inStream, fName + "_" + lName + "_AuthRequest.pdf");
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
+			inStream.close();
+			authReqPDF.close();
 			return null;
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
+			inStream.close();
+			authReqPDF.close();
 			return null;
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+			inStream.close();
+			authReqPDF.close();
 			return null;
 		} catch (NoSuchPaddingException e) {
 			e.printStackTrace();
+			inStream.close();
+			authReqPDF.close();
 			return null;
 		} catch (InvalidKeySpecException e) {
 			e.printStackTrace();
+			inStream.close();
+			authReqPDF.close();
 			return null;
 		} catch (ConfigException e) {
 			e.printStackTrace();
+			inStream.close();
+			authReqPDF.close();
 			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
+			inStream.close();
+			authReqPDF.close();
 			return null;
 		}
-
+		
+		inStream.close();
 		authReqPDF.close();
 		
 		return document;
@@ -139,26 +159,29 @@ public final class PDFService {
 			//get Document to sign from parcel (get parcel from parcel ID)
 			Document pdfToSignDoc = null;
 			pdfToSignDoc = ParcelManager.get(parcelID).getDocuments().get(0);
+			fileName = ParcelManager.get(parcelID).getDocuments().get(0).getFileName() + "_SIGNED.pdf";
 			String filepath = EncryptionService.decryptDocument(pdfToSignDoc);
 			File pdfToSignFile = new File(filepath);
 			PDDocument pdfToSign = PDDocument.load(pdfToSignFile);
+			
+			//FINE UP TILL NOW
 
 			PDPage page = pdfToSign.getPage(0);
 
 			PDImageXObject pdImage = PDImageXObject.createFromByteArray(pdfToSign, imagedata, "signature.png");
 
-			PDPageContentStream contentStream = new PDPageContentStream(pdfToSign, page);
-
+			PDPageContentStream contentStream = new PDPageContentStream(pdfToSign, page, AppendMode.APPEND, true);
+			
 			//CHECK WHICH DOC WE USING CHANGE COORDS BASED ON THAT
 			int sigX = T183_X_POS;
 			int sigY = T183_Y_POS;
-
 			List<PDField> list = pdfToSign.getDocumentCatalog().getAcroForm().getFields();
 			if (list.get(0).getPartialName().equals(FIELD_SIN)) {
 				sigX = AUTH_X_POS;
 				sigY = AUTH_Y_POS;
 			}
-
+			
+			//THIS LINE DOESNT BREAK IT
 			contentStream.drawImage(pdImage, sigX, sigY);
 			contentStream.close();
 
@@ -169,7 +192,7 @@ public final class PDFService {
 			
 			Document signedDoc = EncryptionService.encryptDocument(in, fileName);
 			
-			pdfToSignFile.delete(); //is this right?
+			pdfToSignFile.delete(); //is this right? TODO
 			
 			return signedDoc;
 			
