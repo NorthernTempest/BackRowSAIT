@@ -52,6 +52,7 @@ public class AdminServlet extends HttpServlet {
 			else {
 				request.setAttribute("errorMessage", "Error processing request. Ensure the email is entered correctly.");
 			}
+			doGet(request, response);
 		}
 		
 		else if (action.equals("deactivate")) {
@@ -65,6 +66,7 @@ public class AdminServlet extends HttpServlet {
 			else {
 				request.setAttribute("errorMessage", "Error processing request. Ensure the email is entered correctly.");
 			}
+			doGet(request, response);
 		} else if (action.equals("edit")) {
 			email=request.getParameter("editEmail");
 			
@@ -90,8 +92,7 @@ public class AdminServlet extends HttpServlet {
 			request.setAttribute("role", "3");
 			request.setAttribute("accountType", "Admin");
 			getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
-		}
-		
+		} else
 		doGet(request, response);
 	}
 

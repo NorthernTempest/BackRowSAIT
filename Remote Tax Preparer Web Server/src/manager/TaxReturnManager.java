@@ -31,8 +31,12 @@ public final class TaxReturnManager {
 	}
 	
 	public static boolean createNewTaxReturn(String email, int year) {
-		String status = "new";
+		String status = "i";
 		TaxReturn taxReturn = new TaxReturn(email, status, year);
+		
+		System.out.println("AOSDFKASDKAHJSD");
+		
+		System.out.println(taxReturn.getStatus());
 		
 		if(TaxReturnDB.insert(taxReturn)) {
 			return true;

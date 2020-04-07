@@ -64,7 +64,7 @@
             "sender": "${parcel.sender}",
             "receiver": "${parcel.receiver}",
             "subject": "${parcel.subject}",
-            "message": "${parcel.message}",
+            "message": '${parcel.message.replaceAll("\\n{1,}","<br>")}',
             "dateSent": Date.parse("${parcel.dateSent}"),
             "dateSentString": "${parcel.dateSent}",
             "noOfDocuments": "${parcel.documents.size()}",
@@ -265,7 +265,7 @@
                 row.appendChild(rowSubj);
 
                 let rowMessage = document.createElement("td");
-                rowMessage.innerText = table[parcel].message;
+                rowMessage.innerHTML = table[parcel].message;
                 row.appendChild(rowMessage);
 
                 let rowDate = document.createElement("td");

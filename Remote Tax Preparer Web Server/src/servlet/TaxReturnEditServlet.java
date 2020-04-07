@@ -115,7 +115,10 @@ public class TaxReturnEditServlet extends HttpServlet {
 			int year = Integer.parseInt(request.getParameter("year"));
 			double amount = Double.parseDouble(request.getParameter("amount"));
 			
-			TaxReturnManager.updateReturn(email, year, status, amount, request.getSession().getId());
+			if(TaxReturnManager.updateReturn(email, year, status, amount, request.getSession().getId()))
+				request.setAttribute("successMessage", "User updated!");
+			else
+				request.setAttribute("errorMessage", "Failed to update user.");
 		}
 		
 		doGet(request, response);
