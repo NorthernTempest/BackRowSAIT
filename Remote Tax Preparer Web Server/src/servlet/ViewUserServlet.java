@@ -4,6 +4,7 @@ import domain.User;
 import exception.ConfigException;
 import manager.SessionManager;
 import manager.UserManager;
+import util.cesar.Debugger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,8 +34,6 @@ public class ViewUserServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        getServletContext().getRequestDispatcher("/WEB-INF/user/view.jsp").forward(request, response);
-
         User user;
 
         HttpSession session = request.getSession();
@@ -48,6 +47,8 @@ public class ViewUserServlet extends HttpServlet {
 
             if (email.equals(user.getEmail()) || curUser.getPermissionLevel() > 1) {
                 request.setAttribute("user",user);
+                request.setAttribute("role", curUser.getPermissionLevel());
+                Debugger.log("User: "+user.getEmail());
             } else {
                 response.sendRedirect("/inbox");
             }
@@ -56,6 +57,8 @@ public class ViewUserServlet extends HttpServlet {
             request.setAttribute("errorMessage","Error retrieving user data");
         }
 
+
+        getServletContext().getRequestDispatcher("/WEB-INF/user/view.jsp").forward(request, response);
 
 
 
@@ -66,6 +69,8 @@ public class ViewUserServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
+
+
     }
 
 }

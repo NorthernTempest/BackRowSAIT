@@ -8,26 +8,55 @@
 
 <jsp:directive.include file="../../template/head.jsp" />
 
+<style>
+    td:first-child {
+        width: 35%;
+        text-align: right;
+    }
+</style>
+
 <div class="container">
-    <div class="row">
-        <div class="col-md-6">
+    <div class="row" style="background: none;">
+        <div class="col-md-8" style="background: black;border-radius: 5px">
+            <h2>Name</h2>
             <table class="table table-dark table-borderless">
                 <tbody>
                 <tr>
                     <td><b>First Name</b></td>
-                    <td>${user.fName}</td>
+                    <td>${user.getFName()}</td>
                 </tr>
                 <tr>
                     <td><b>Middle Name</b></td>
-                    <td>${user.mName}</td>
+                    <td>${user.getMName()}</td>
                 </tr>
                 <tr>
                     <td><b>Last Name</b></td>
-                    <td>${user.lName}</td>
+                    <td>${user.getLName()}</td>
                 </tr>
                 </tbody>
             </table>
-            <br>
+            <h2>Contact Details</h2>
+            <table class="table table-dark table-borderless">
+                <tbody>
+                <tr>
+                    <td><b>Email</b></td>
+                    <td><a href="mailto:${user.email}">${user.email}</a></td>
+                </tr>
+                <tr>
+                    <td><b>Phone Number</b></td>
+                    <td>${user.phone}</td>
+                </tr>
+                <c:choose>
+                    <c:when test='${!user.fax.equals("")}'>
+                        <tr>
+                            <td><b>Fax Number</b></td>
+                            <td>${user.fax}</td>
+                        </tr>
+                    </c:when>
+                </c:choose>
+                </tbody>
+            </table>
+            <h2>Website Permissions</h2>
             <table class="table table-dark table-borderless">
                 <tbody>
                 <tr>
@@ -54,28 +83,7 @@
                 </tr>
                 </tbody>
             </table>
-            <br>
-            <table class="table table-dark table-borderless">
-                <tbody>
-                <tr>
-                    <td><b>Email</b></td>
-                    <td>${user.email}</td>
-                </tr>
-                <tr>
-                    <td><b>Phone Number</b></td>
-                    <td>${user.phone}</td>
-                </tr>
-                <c:choose>
-                    <c:when test='${!user.fax.equals("")}'>
-                        <tr>
-                            <td><b>Fax Number</b></td>
-                            <td>${user.fax}</td>
-                        </tr>
-                    </c:when>
-                </c:choose>
-                </tbody>
-            </table>
-            <br>
+            <h2>Address</h2>
             <table class="table table-dark table-borderless">
                 <tbody>
                 <tr>
@@ -106,26 +114,43 @@
                 </tr>
                 </tbody>
             </table>
-            <br>
-            <table class="table table-dark table-borderless">
-                <tbody>
-                <tr>
-                    <td><b>First Name</b></td>
-                    <td>${user.fName}</td>
-                </tr>
-                <tr>
-                    <td><b>Middle Name</b></td>
-                    <td>${user.mName}</td>
-                </tr>
-                <tr>
-                    <td><b>Last Name</b></td>
-                    <td>${user.lName}</td>
-                </tr>
-                </tbody>
-            </table>
         </div>
-        <div class="col-md-6">
-
+        <div class="col-md-4 text-md-right align-content-md-end">
+            <c:if test="${role > 1}">
+                <form action="" method="post">
+                    <input type="hidden" name="action" value="charge">
+                    <button class="btn btn-success" type="submit">Charge User</button>
+                </form>
+                <br>
+            </c:if>
+            <c:if test="${role > 1}">
+                <form action="" method="post">
+                    <input type="hidden" name="action" value="edit">
+                    <button class="btn btn-primary" type="submit">Edit User</button>
+                </form>
+                <br>
+            </c:if>
+            <c:if test="${role > 2 && !user.active}">
+                <form action="" method="post">
+                    <input type="hidden" name="action" value="activate">
+                    <button class="btn btn-primary" type="submit">Activate User</button>
+                </form>
+                <br>
+            </c:if>
+            <c:if test="${role > 2 && user.active}">
+                <form action="" method="post">
+                    <input type="hidden" name="action" value="deactivate">
+                    <button class="btn btn-danger" type="submit">Deactivate User</button>
+                </form>
+                <br>
+            </c:if>
+            <c:if test="${role == 1 && user.active}">
+                <form action="" method="post">
+                    <input type="hidden" name="action" value="deactivate">
+                    <button class="btn btn-danger" type="submit">Delete Account</button>
+                </form>
+                <br>
+            </c:if>
         </div>
     </div>
 </div>
