@@ -115,6 +115,8 @@ public final class SignDocumentServlet extends HttpServlet {
 			//TODO
 		}
 		
-		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+		request.setAttribute("redirectTimer", 4000);
+		request.setAttribute("redirectLocation", "/inbox");
+		getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
 	}
 }
