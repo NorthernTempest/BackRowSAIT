@@ -50,10 +50,10 @@ public final class PDFService {
 	private final static String FIELD_DATE = "date";
 
 	//x & y positions for signtures
-	private final static int T183_X_POS = 27;
-	private final static int T183_Y_POS = 32;
+	private final static int T183_X_POS = 35;
+	private final static int T183_Y_POS = 37;
 	private final static int AUTH_X_POS = 50;
-	private final static int AUTH_Y_POS = 170;
+	private final static int AUTH_Y_POS = 155;
 
 	/**
 	 * @param sin
@@ -180,9 +180,9 @@ public final class PDFService {
 			if (list.get(0).getPartialName().equals(FIELD_SIN)) {
 				sigX = AUTH_X_POS;
 				sigY = AUTH_Y_POS;
-				contentStream.drawImage(pdImage, sigX, sigY, 270, 70);
+				contentStream.drawImage(pdImage, sigX, sigY, 216, 56); //scale for auth form
 			} else {
-				contentStream.drawImage(pdImage, sigX, sigY, 200, 52); //scale may be different
+				contentStream.drawImage(pdImage, sigX, sigY, 160, 42); //scale for T183
 			}
 			
 			//THIS LINE DOESNT BREAK IT
