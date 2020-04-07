@@ -90,8 +90,7 @@ public class AdminServlet extends HttpServlet {
 			request.setAttribute("role", "3");
 			request.setAttribute("accountType", "Admin");
 			getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
-		}
-		
+		} else
 		doGet(request, response);
 	}
 

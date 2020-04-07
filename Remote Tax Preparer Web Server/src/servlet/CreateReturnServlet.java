@@ -512,7 +512,7 @@ public class CreateReturnServlet extends HttpServlet {
 		 * How do you want to recieve your Notice of Assessment? Mail (Canada Post)
 		 * AND/OR Register with Canada Revenue agency for online mail already registered
 		 */
-		if ((nrf.isCanadaPost() != true && nrf.isCRAOnline() != true)||(nrf.isCanadaPost() != true && nrf.isAlreadyRegistered() != true)) {
+		if ((nrf.isCanadaPost() != true && nrf.isCRAOnline() != true && nrf.isAlreadyRegistered())||(nrf.isCRAOnline() == true && nrf.isAlreadyRegistered() == true)) {
 			// TODO
 			Debugger.log("notice of assessment validation if statement");
 			throw new Exception(
