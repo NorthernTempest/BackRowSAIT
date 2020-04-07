@@ -21,7 +21,9 @@ import manager.UserManager;
 import service.ConfigService;
 
 /**
- * Servlet implementation class TaxReturnEditServlet
+ * Servlet to display information about the customer's tax return and allow tax preparers to edit the status of a customer's tax return
+ * 
+ * @author Jesse Goerzen
  */
 @WebServlet("/return")
 public class TaxReturnEditServlet extends HttpServlet {
