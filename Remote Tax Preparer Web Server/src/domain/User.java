@@ -1,14 +1,14 @@
 package domain;
 
+import bean.UserBean;
+import exception.ConfigException;
+import service.EncryptionService;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
-
-import bean.UserBean;
-import exception.ConfigException;
-import service.EncryptionService;
 
 /**
  * Class Description: User class that defines which attributes every type of

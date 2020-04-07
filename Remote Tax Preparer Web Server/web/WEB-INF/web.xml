@@ -29,6 +29,7 @@
 		<url-pattern>/register/*</url-pattern>
 		<url-pattern>/reports/*</url-pattern>
 		<url-pattern>/payments/*</url-pattern>
+		<url-pattern>/return/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>AdminFilter</filter-name>

@@ -52,16 +52,6 @@ public final class SessionDB {
 	}
 
 	/**
-	 * 
-	 * @param session
-	 * @return
-	 */
-	public static boolean update(Session session) {
-		// TODO
-		return false;
-	}
-
-	/**
 	 * Establishes a connection with the database and removes the Session from the
 	 * session table that has a Primary Key matching the sessionID being passed into
 	 * this method.
@@ -144,6 +134,7 @@ public final class SessionDB {
 	 * @return ArrayList<Session> containing all of the Sessions from the database
 	 */
 	public static ArrayList<Session> getAll() {
+		//NODO
 		return null;
 	}
 

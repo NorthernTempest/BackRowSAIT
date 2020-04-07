@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Kerk Day
+  User: Kerk Day, Jesse Goerzen
   Date: 2020-03-30
   Time: 12:08 p.m.
   To change this template use File | Settings | File Templates.
@@ -8,7 +8,6 @@
 <%@page import="bean.TaxReturnBean"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="bean.TaxReturnBean" %>
 
 <jsp:directive.include file="../template/head.jsp" />
 

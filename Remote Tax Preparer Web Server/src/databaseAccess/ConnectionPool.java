@@ -14,6 +14,10 @@ import exception.ConfigException;
 import service.ConfigService;
 
 /**
+ * Class Description:	Creates and supplies a connection to the database
+ * 						using appropriate login credentials from the config
+ * 						file.
+ * 
  * @author Tristen Kreutz, Jesse Goerzen
  *
  */
@@ -22,6 +26,13 @@ public class ConnectionPool {
 	private static ConnectionPool pool = null;
 	private static DataSource dataSource = null;
 	
+	/**
+	 * Private constructor for the connection pool. Fetches values from the config file
+	 * and then establishes a connection with the database to be used by the 
+	 * database access classes.
+	 * @throws ConfigException if the config file cannot be found/opened
+	 * @throws SQLException if there is an error connecting to the database
+	 */
 	private ConnectionPool() throws ConfigException, SQLException {
 		if( "com.mysql.cj.jdbc.Driver".equals( ConfigService.fetchFromConfig("sqldriverClassName:") ) ) {
 			String url = ConfigService.fetchFromConfig("sqlurl:");
@@ -38,6 +49,12 @@ public class ConnectionPool {
 		}
 	}
 	
+	/**
+	 * Public get method that will check to see if the connection pool has been initialized.
+	 * If not, it will initialize it with a new ConnectionPool, and then return the connection
+	 * to the calling method.
+	 * @return ConnectionPool for database connections
+	 */
 	public static synchronized ConnectionPool getInstance() {
 		
 		if (pool == null) {
@@ -55,6 +72,11 @@ public class ConnectionPool {
 		return pool;
 	}
 	
+	/**
+	 * Method that returns a connection object to the calling method
+	 * to establish a connection with the database.
+	 * @return Connection
+	 */
 	public Connection getConnection() {
 		
 		try {
@@ -68,6 +90,10 @@ public class ConnectionPool {
 		}
 	}
 	
+	/**
+	 * Terminates the connection that is passed into the method to free up resources.
+	 * @param c Connection to terminate
+	 */
 	public void closeConnection(Connection c) {
 		
 		try {

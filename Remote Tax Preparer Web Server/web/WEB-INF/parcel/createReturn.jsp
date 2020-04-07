@@ -89,7 +89,7 @@
                 <label for="maritalStatus">Marital Status</label>
                 <select class="form-control" name="maritalStatus" id="maritalStatus">
                     <option value="Married" ${maritalStatus.equals("Married")?"selected":""}>Married</option>
-                    <option value="Common Law" ${maritalStatus.equals("Common Law")?"selected":""}>Common Law</option>
+                    <option value="Commonlaw" ${maritalStatus.equals("Commonlaw")?"selected":""}>Common Law</option>
                     <option value="Widowed" ${maritalStatus.equals("Widowed")?"selected":""}>Widowed</option>
                     <option value="Divorced" ${maritalStatus.equals("Divorced")?"selected":""}>Divorced</option>
                     <option value="Separated" ${maritalStatus.equals("Separated")?"selected":""}>Separated</option>
@@ -101,17 +101,16 @@
                 <input type="checkbox" class="form-check-input" name="maritalChange" id="maritalChange" value="y"  ${maritalChange?"checked":""}>
                 <label class="form-check-label" for="maritalChange" >Did your marital status change during <span class="taxYear">this last year</span>?</label>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="maritalChangeBox">
                 <label for="prevMaritalStatus"><span class="taxYearMinus">Last year</span>s Marital Status</label>
                 <select class="form-control" name="prevMaritalStatus" id="prevMaritalStatus">
                     <option value="na">Not Applicable</option>
                     <option value="Married" ${prevMaritalStatus.equals("Married")?"selected":""}>Married</option>
-                    <option value="Common Law" ${prevMaritalStatus.equals("Common Law")?"selected":""}>Common Law</option>
+                    <option value="Commonlaw" ${prevMaritalStatus.equals("Commonlaw")?"selected":""}>Common Law</option>
                     <option value="Widowed" ${prevMaritalStatus.equals("Widowed")?"selected":""}>Widowed</option>
                     <option value="Divorced" ${prevMaritalStatus.equals("Divorced")?"selected":""}>Divorced</option>
                     <option value="Separated" ${prevMaritalStatus.equals("Separated")?"selected":""}>Separated</option>
                     <option value="Single" ${prevMaritalStatus.equals("Single")?"selected":""}>Single</option>
-
                 </select>
             </div>
         </div>
@@ -298,7 +297,7 @@
             </div>
         </div>
     </div>
-
+    <br>
     <%--Is this your first time filing your taxes? Y/N--%>
     <div class="row">
         <div class="col-md-6">
@@ -317,18 +316,19 @@
     <div class="row">
         <div class="col-md-6">
             <p>How would you like to receive your notice of assessment?</p>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" name="alreadyRegistered" id="alreadyRegistered" value="y" ${alreadyRegistered?"checked":""}>
+                <label class="form-check-label" for="alreadyRegistered">I'm already registered for CRA online mail</label>
+            </div>
+
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="mailAssess" id="mailAssess" value="y" ${mailAssess?"checked":""}>
                 <label class="form-check-label" for="mailAssess">Mail (Canada Post)</label>
             </div>
-            <br>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="craAssess" id="craAssess" value="y" ${craAssess?"checked":""}>
                 <label class="form-check-label" for="craAssess">Register with Canada Revenue Agency for online mail</label>
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="alreadyRegistered" id="alreadyRegistered" value="y" ${alreadyRegistered?"checked":""}>
-                <label class="form-check-label" for="alreadyRegistered">I'm already registered for CRA online mail</label>
             </div>
         </div>
     </div>
@@ -360,8 +360,34 @@
     }
 
     function setReq() {
-
     }
+
+    function updateForm() {
+        let e = document.getElementById("maritalStatus"), selected = e.options[e.selectedIndex].value;
+        if(selected == "Married" || selected == "Commonlaw") {
+            document.getElementById("partnerDetails").style.display = "box";
+        } else {
+            document.getElementById("partnerDetails").style.display = "none";
+        }
+
+        if (document.getElementById("maritalChange").checked) {
+            document.getElementById("maritalChangeBox").style.display = "";
+        } else {
+            document.getElementById("maritalChangeBox").style.display = "none";
+        }
+
+        if(document.getElementById("alreadyRegistered").checked) {
+            document.getElementById("mailAssess").disabled = true;
+            document.getElementById("craAssess").disabled = true;
+            document.getElementById("mailAssess").checked = false;
+            document.getElementById("craAssess").checked = false;
+        } else {
+            document.getElementById("mailAssess").disabled = false;
+            document.getElementById("craAssess").disabled = false;
+        }
+    }
+
+    setInterval(updateForm, 100);
 </script>
 
 <script type="text/javascript" src="../../template/js/country-regions.js"></script>

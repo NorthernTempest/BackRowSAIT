@@ -276,11 +276,11 @@ public class ParcelDB {
 	 * Method that, using the supplied parameters, retrieves all parcels in the
 	 * database with that information and returns a list to the calling program.
 	 * 
-	 * @param parcelID
-	 * @param sender
-	 * @param receiver
-	 * @param dateSent
-	 * @param year
+	 * @param parcelID parcel ID to search
+	 * @param sender sender to search
+	 * @param receiver receiver to search
+	 * @param dateSent date sent to search
+	 * @param year year to search
 	 * @return ArrayList<Parcel> containing all relevant Parcels from the database
 	 */
 	public static ArrayList<Parcel> getParcelsByParameter(String parcelID, String sender, String receiver, Date dateSent,
@@ -395,7 +395,7 @@ public class ParcelDB {
 	 * @param email the email to check against
 	 * @param parcelID the parcelID to check against
 	 * @return true if email is allowed to view this parcel. false if not.
-	 * @throws ConfigException 
+	 * @throws ConfigException if config file is not found or cannot be opened
 	 */
 	public static boolean isVisibleToUser(String email, String parcelID) throws ConfigException {
 		Parcel parcel = get(parcelID);

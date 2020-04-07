@@ -19,10 +19,10 @@
 	</div>
 	<div class="row" style="border-radius: 5px 5px 0 0;">
 		<div class="col-md-6">
-			<b>From:</b> ${parcel.sender}<br>
+			<b>From:</b> <a href="/user/view?email=${parcel.sender}">${parcel.sender}</a><br>
 			<c:choose>
 				<c:when test="${parcel.receiver!=null}">
-					<b>To:</b> ${parcel.receiver}<br>
+					<b>To:</b> <a href="/user/view?email=${parcel.receiver}">${parcel.receiver}</a><br>
 				</c:when>
 			</c:choose>
 			<b>Date Sent:</b> ${parcel.dateSent}<br>

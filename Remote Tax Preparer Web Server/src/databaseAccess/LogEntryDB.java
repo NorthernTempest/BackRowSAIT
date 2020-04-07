@@ -17,6 +17,13 @@ import java.util.ArrayList;
 
 import domain.LogEntry;
 
+/**
+ * Class Description:	Class that establishes a connection and communicates directly
+ * 						with the LogEntry table in the database.
+ * 
+ * @author Tristen Kreutz
+ *
+ */
 public class LogEntryDB {
 
 	/**
@@ -112,12 +119,12 @@ public class LogEntryDB {
 	 * Establishes a connection with the database and selects all Logs in the
 	 * logEntry table that have parameters matching the parameters being passed
 	 * into this method.
-	 * @param email
-	 * @param type
-	 * @param startDate
-	 * @param endDate
-	 * @param ip
-	 * @return
+	 * @param email email to search
+	 * @param type type to search
+	 * @param startDate start date to search
+	 * @param endDate end date to search
+	 * @param ip ip to search
+	 * @return ArrayList<LogEntry> Log entries matching search criteria
 	 */
 	public static ArrayList<LogEntry> getByParameters(String email, char type, java.util.Date startDate, java.util.Date endDate, String ip){
 		/*
@@ -214,7 +221,7 @@ public class LogEntryDB {
 	 * logEntry table that has an email matching the email being passed
 	 * into this method.
 	 * @param email email of the Logs to retrieve from the database
-	 * @return ArrayList<Log> that contains information of the requested Logs
+	 * @return ArrayList<LogEntry> Log entries that contain information of the requested Logs
 	 */
 	public static ArrayList<LogEntry> getByEmail(String email) {
 		
@@ -260,7 +267,7 @@ public class LogEntryDB {
 	 * Establishes a connection with the database and selects all the Logs
 	 * within the logEntry table. It then adds them to a newly created ArrayList
 	 * and returns that to the calling object.
-	 * @return ArrayList<LogEntry> containing all of the Logs from the database
+	 * @return ArrayList<LogEntry> Log entries containing all of the Logs from the database
 	 */
 	public static ArrayList<LogEntry> getAll() {
 		
