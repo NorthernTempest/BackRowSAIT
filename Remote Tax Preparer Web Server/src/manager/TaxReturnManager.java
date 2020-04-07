@@ -31,6 +31,16 @@ public final class TaxReturnManager {
 		return TaxReturnDB.getByUser(email);
 	}
 	
+	public static boolean createNewTaxReturn(String email, int year) {
+		String status = "new";
+		TaxReturn taxReturn = new TaxReturn(email, status, year);
+		
+		if(TaxReturnDB.insert(taxReturn)) {
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * @param email the email to check if return exists for
 	 * @param taxYear the tax year to check if return exists for

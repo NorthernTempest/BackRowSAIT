@@ -31,7 +31,7 @@ public class TaxReturnDB {
 
 		try {
 
-			String preparedQuery = "INSERT INTO tax_return (email, status, cost, year) "
+			String preparedQuery = "INSERT INTO tax_return (email, status, cost, year)"
 					+ "VALUES (?, ?, ?, ?)";
 
 			PreparedStatement ps = connection.prepareStatement(preparedQuery);
@@ -76,7 +76,7 @@ public class TaxReturnDB {
 		int rows = 0;
 
 		try {
-
+      
 			String preparedQuery = "UPDATE tax_return SET household_id = ?, status = ?, cost = ?"
 					+ " WHERE email = ? AND year = ?";
 
