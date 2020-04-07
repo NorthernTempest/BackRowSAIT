@@ -56,6 +56,7 @@
                 </c:choose>
                 </tbody>
             </table>
+            <c:if test="${role > 1}">
             <h2>Website Permissions</h2>
             <table class="table table-dark table-borderless">
                 <tbody>
@@ -83,6 +84,7 @@
                 </tr>
                 </tbody>
             </table>
+            </c:if>
             <h2>Address</h2>
             <table class="table table-dark table-borderless">
                 <tbody>
@@ -116,23 +118,24 @@
             </table>
         </div>
         <div class="col-md-4 text-md-right align-content-md-end">
-            <c:if test="${role > 1}">
-                <form action="" method="post">
-                    <input type="hidden" name="action" value="charge">
-                    <button class="btn btn-success" type="submit">Charge User</button>
-                </form>
+            <c:if test="${role > 1 && user.permissionLevel == 1}">
+                <a href="/return">
+                    <button class="btn btn-success" type="button">Charge User</button>
+                </a>
+                <br>
                 <br>
             </c:if>
             <c:if test="${role > 1}">
-                <form action="" method="post">
-                    <input type="hidden" name="action" value="edit">
-                    <button class="btn btn-primary" type="submit">Edit User</button>
-                </form>
+                <a href="/settings?email=${user.email}">
+                    <button class="btn btn-primary" type="button">Edit User</button>
+                </a>
+                <br>
                 <br>
             </c:if>
             <c:if test="${role > 2 && !user.active}">
                 <form action="" method="post">
                     <input type="hidden" name="action" value="activate">
+                    <input type="hidden" name="email" value="${user.email}">
                     <button class="btn btn-primary" type="submit">Activate User</button>
                 </form>
                 <br>
@@ -140,6 +143,7 @@
             <c:if test="${role > 2 && user.active}">
                 <form action="" method="post">
                     <input type="hidden" name="action" value="deactivate">
+                    <input type="hidden" name="email" value="${user.email}">
                     <button class="btn btn-danger" type="submit">Deactivate User</button>
                 </form>
                 <br>
@@ -147,6 +151,7 @@
             <c:if test="${role == 1 && user.active}">
                 <form action="" method="post">
                     <input type="hidden" name="action" value="deactivate">
+                    <input type="hidden" name="email" value="${user.email}">
                     <button class="btn btn-danger" type="submit">Delete Account</button>
                 </form>
                 <br>

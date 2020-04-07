@@ -44,7 +44,6 @@ public class ViewUserServlet extends HttpServlet {
         try {
             user = UserManager.getUser(request.getParameter("email"));
             curUser = UserManager.getUser(email);
-
             if (email.equals(user.getEmail()) || curUser.getPermissionLevel() > 1) {
                 request.setAttribute("user",user);
                 request.setAttribute("role", curUser.getPermissionLevel());
@@ -55,6 +54,8 @@ public class ViewUserServlet extends HttpServlet {
         } catch (ConfigException e) {
             e.printStackTrace();
             request.setAttribute("errorMessage","Error retrieving user data");
+        } catch (NullPointerException e) {
+            response.sendRedirect("/inbox");
         }
 
 
@@ -68,9 +69,28 @@ public class ViewUserServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String action = request.getParameter("action");
+        String email = request.getParameter("email");
+
+        if(action.equals("deactivate")) {
+            if (email != null && UserManager.userExists(email)) {
+                UserManager.adminDeleteAccount(email, request.getSession().getId());
+                request.setAttribute("successMessage", "Account "+email+" deactivated.");
+            } else {
+                request.setAttribute("errorMessage", "Error processing request. Could not deactivate "+email);
+            }
+        }
+        if(action.equals("activate")) {
+            if (email != null && UserManager.userExists(email)) {
+                UserManager.adminRestoreAccount(email, request.getSession().getId());
+                request.setAttribute("successMessage", "Account "+email+" activated.");
+            } else {
+                request.setAttribute("errorMessage", "Error processing request. Could not activate "+email);
+            }
+        }
+
         doGet(request, response);
-
-
     }
 
 }
