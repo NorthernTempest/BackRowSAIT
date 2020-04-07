@@ -35,7 +35,7 @@
         </span>
         <span class="nav-separator">|</span>
         <span class="nav-item">
-            <a href="/settings">Account</a>
+            <a href="/user/view">Account</a>
         </span>
 		<c:if test="${role > 1}">
 			<span class="nav-separator">|</span>
