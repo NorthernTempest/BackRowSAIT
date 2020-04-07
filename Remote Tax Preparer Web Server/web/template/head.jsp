@@ -24,6 +24,10 @@
         <span class="nav-first">
             <a href="/createReturn"><button class="btn btn-primary btn-lg"><b>Create Return</b></button></a>
         </span></c:if>
+        <c:if test="${role == 1}">
+        <span class="nav-first">
+            <a href="/return">My Returns</a>
+        </span></c:if>
         <span class="nav-item">
             <a href="/inbox">Inbox</a>
         </span>

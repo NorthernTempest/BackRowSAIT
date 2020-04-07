@@ -1,17 +1,17 @@
 package servlet;
 
-import java.io.IOException;
+import domain.User;
+import exception.ConfigException;
+import manager.SessionManager;
+import manager.UserManager;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import domain.User;
-import exception.ConfigException;
-import manager.SessionManager;
-import manager.UserManager;
+import java.io.IOException;
 
 /**
  * Servlet implementation class AdminServlet
@@ -35,28 +35,28 @@ public class ViewUserServlet extends HttpServlet {
 
         getServletContext().getRequestDispatcher("/WEB-INF/user/view.jsp").forward(request, response);
 
-        User user = null;
+        User user;
 
         HttpSession session = request.getSession();
         String email = SessionManager.getEmail(session.getId());
-        User curUser = null;
+        User curUser;
+
 
         try {
             user = UserManager.getUser(request.getParameter("email"));
             curUser = UserManager.getUser(email);
+
+            if (email.equals(user.getEmail()) || curUser.getPermissionLevel() > 1) {
+                request.setAttribute("user",user);
+            } else {
+                response.sendRedirect("/inbox");
+            }
         } catch (ConfigException e) {
             e.printStackTrace();
             request.setAttribute("errorMessage","Error retrieving user data");
         }
 
-        if (email.equals(user.getEmail()) || curUser.getPermissionLevel() > 1) {
 
-            if(curUser.getPermissionLevel() > 1) {
-
-            }
-        } else {
-            response.sendRedirect("/inbox");
-        }
 
 
     }
