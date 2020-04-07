@@ -1,21 +1,5 @@
 package servlet;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import domain.Document;
 import domain.NewReturnForm;
 import exception.ConfigException;
@@ -24,6 +8,20 @@ import manager.SessionManager;
 import manager.TaxReturnManager;
 import service.PDFService;
 import util.cesar.Debugger;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Servlet implementation class CreateReturnServlet
@@ -556,7 +554,7 @@ public class CreateReturnServlet extends HttpServlet {
 		request.setAttribute("rr", request.getParameter("rr"));
 		request.setAttribute("addressCity",request.getParameter("addressCity"));
 		request.setAttribute("addressRegion", request.getParameter("addressRegion"));
-		request.setAttribute("addressCountry", request.getParameter("adressCountry"));
+		request.setAttribute("addressCountry", request.getParameter("addressCountry"));
 		request.setAttribute("addressPostal", request.getParameter("addressPostal"));
 
 		request.setAttribute("email",request.getParameter("email"));
