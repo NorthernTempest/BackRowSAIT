@@ -48,20 +48,17 @@ public class ViewUserServlet extends HttpServlet {
                 request.setAttribute("user",user);
                 request.setAttribute("role", curUser.getPermissionLevel());
                 Debugger.log("User: "+user.getEmail());
+                getServletContext().getRequestDispatcher("/WEB-INF/user/view.jsp").forward(request, response);
             } else {
-                response.sendRedirect("/inbox");
+                response.sendRedirect("/inbox?errorMessage=Insufficient privileges to view page");
             }
         } catch (ConfigException e) {
             e.printStackTrace();
             request.setAttribute("errorMessage","Error retrieving user data");
+            getServletContext().getRequestDispatcher("/WEB-INF/user/view.jsp").forward(request, response);
         } catch (NullPointerException e) {
             response.sendRedirect("/inbox");
         }
-
-
-        getServletContext().getRequestDispatcher("/WEB-INF/user/view.jsp").forward(request, response);
-
-
 
     }
 
