@@ -281,20 +281,21 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);
 		Date expDate = c.getTime();
 
-		User u = UserManager.getUser(nrf.getEmail());
+		User u = UserManager.getUser(email);
 
 		if (u == null) {
 			return false;
 		}
 
 		//create and insert parcel to user
-		Parcel userParcel = new Parcel(NEW_RETURN_SUBJECT + " " + nrf.getTaxYear(),
-				nrf.getfName() + " " + nrf.getlName() + NEW_RETURN_MESSAGE, email, email, new Date(),
+		Parcel userParcel = new Parcel(NEW_RETURN_SUBJECT + nrf.getTaxYear(),
+				nrf.getfName() + " " + nrf.getlName() + NEW_RETURN_MESSAGE, "preparer@test.com", email, new Date(),
 				expDate, Integer.parseInt(nrf.getTaxYear()), documents, false);
 
 		if (ParcelDB.insert(userParcel)) {
 			for (Document document : documents) {
 				if (!DocumentDB.insert(document, userParcel.getParcelID())) {
+					Debugger.log("user parcel went bad");
 					successfulInsert = false;
 				}
 			}
@@ -304,10 +305,11 @@ public final class ParcelManager {
 
 		//create and insert parcel to tax preparers
 		Parcel taxPrepParcel = new Parcel("Tax Information for " + nrf.getfName() + " " + nrf.getlName(),
-				"this is a message with nicely formatted tax info", email /*sender*/, /*receiver*/ TAX_PREPARER, /*datesent*/ new Date(),
+				"this is a message with nicely formatted tax info", email /*sender*/, /*receiver*/ null, /*datesent*/ new Date(),
 				/*expDate*/ expDate, /*taxYear*/ Integer.parseInt(nrf.getTaxYear()), null, false);
 
 		if (!ParcelDB.insert(taxPrepParcel)) {
+			Debugger.log("tax prep parcel went bad");
 			successfulInsert = false;
 		}
 
