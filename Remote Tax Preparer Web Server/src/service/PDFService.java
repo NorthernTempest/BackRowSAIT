@@ -50,10 +50,10 @@ public final class PDFService {
 	private final static String FIELD_DATE = "date";
 
 	//x & y positions for signtures
-	private final static int T183_X_POS = 0;
-	private final static int T183_Y_POS = 0;
-	private final static int AUTH_X_POS = 0;
-	private final static int AUTH_Y_POS = 0;
+	private final static int T183_X_POS = 27;
+	private final static int T183_Y_POS = 32;
+	private final static int AUTH_X_POS = 50;
+	private final static int AUTH_Y_POS = 170;
 
 	/**
 	 * @param sin
@@ -163,6 +163,7 @@ public final class PDFService {
 			String filepath = EncryptionService.decryptDocument(pdfToSignDoc);
 			File pdfToSignFile = new File(filepath);
 			PDDocument pdfToSign = PDDocument.load(pdfToSignFile);
+			pdfToSign.setAllSecurityToBeRemoved(true);
 			
 			//FINE UP TILL NOW
 
@@ -179,10 +180,13 @@ public final class PDFService {
 			if (list.get(0).getPartialName().equals(FIELD_SIN)) {
 				sigX = AUTH_X_POS;
 				sigY = AUTH_Y_POS;
+				contentStream.drawImage(pdImage, sigX, sigY, 270, 70);
+			} else {
+				contentStream.drawImage(pdImage, sigX, sigY, 200, 52); //scale may be different
 			}
 			
 			//THIS LINE DOESNT BREAK IT
-			contentStream.drawImage(pdImage, sigX, sigY);
+			
 			contentStream.close();
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();

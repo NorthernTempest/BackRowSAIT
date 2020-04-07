@@ -105,14 +105,16 @@ public final class SignDocumentServlet extends HttpServlet {
 				
 			} catch (ConfigException e) {
 				// TODO Auto-generated catch block
+				request.setAttribute("errorMessage", "Error: Your document was not signed.");
 				e.printStackTrace();
 			}
 
 		} else {
 			//bad bad no bad awful nightmare bad no
-			//this is when we dont sign a doc because of some error woops
+			request.setAttribute("errorMessage", "Error: Your document was not signed.");
 			//TODO
 		}
-		//don't redirect
+		
+		getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 	}
 }
