@@ -64,7 +64,7 @@
             "sender": "${parcel.sender}",
             "receiver": "${parcel.receiver}",
             "subject": "${parcel.subject}",
-            "message": '${parcel.message.replaceAll("\\n{1,}","<br>")}',
+            "message": '${parcel.message.replaceAll("[\\n\\r\\f]{1,}","<br>")}',
             "dateSent": Date.parse("${parcel.dateSent}"),
             "dateSentString": "${parcel.dateSent}",
             "noOfDocuments": "${parcel.documents.size()}",
