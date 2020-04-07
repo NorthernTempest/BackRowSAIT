@@ -56,7 +56,7 @@ public final class ViewServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
-
+		
 		//get parcel ID
 		String parcelID = null;
 		parcelID = request.getParameter("parcelID");
