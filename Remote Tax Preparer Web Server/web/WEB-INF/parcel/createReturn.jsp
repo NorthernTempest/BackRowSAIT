@@ -25,7 +25,8 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="taxYear">Tax Year</label>
-                <input class="form-control" type="number" onchange="setYear()" name="taxYear" id="taxYear" value="${taxYear}" required>
+                <select class="form-control" id="taxYear" name="taxYear">
+                </select>
             </div>
         </div>
     </div>
@@ -69,7 +70,6 @@
                 <select class="form-control" name="gender" id="gender">
                     <option value="f" ${gender.equals("f")?"selected":""}>Female</option>
                     <option value="m" ${gender.equals("m")?"selected":""}>Male</option>
-                    <option value="x" ${gender.equals("x")?"selected":""}>Other/prefer not to say</option>
                 </select>
             </div>
         </div>
@@ -146,7 +146,7 @@
                 <label for="addressCity">City</label>
                 <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}">
                 <label for="addressCountry">Country</label>
-                <select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${addressCountry.toUpperCase()}">
+                <select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-preferred="CA,US" data-default-value="${addressCountry.toUpperCase()}">
                 </select>
                 <label for="addressRegion">Province/State</label>
                 <select id="addressRegion" class="form-control" data-value="shortcode" name="addressRegion" data-default-value="${addressRegion.toUpperCase()}">
@@ -247,7 +247,7 @@
                 <label for="partnerAddressCity">City</label>
                 <input id="partnerAddressCity" name="partnerAddressCity" class="form-control" value="${partnerAddressCity}">
                 <label for="partnerAddressCountry">Country</label>
-                <select class="crs-country form-control" id="partnerAddressCountry" data-region-id="addressRegion" data-value="shortcode" name="partnerAddressCountry" data-default-value="${partnerAddressCountry.toUpperCase()}">
+                <select class="crs-country form-control" id="partnerAddressCountry" data-region-id="partnerAddressRegion" data-value="shortcode" name="partnerAddressCountry" data-default-value="${partnerAddressCountry.toUpperCase()}">
                 </select>
                 <label for="partnerAddressRegion">Province/State</label>
                 <select id="partnerAddressRegion" class="form-control" data-value="shortcode" name="partnerAddressRegion" data-default-value="${partnerAddressRegion.toUpperCase()}">
@@ -318,13 +318,13 @@
             <p>How would you like to receive your notice of assessment?</p>
 
             <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="alreadyRegistered" id="alreadyRegistered" value="y" ${alreadyRegistered?"checked":""}>
-                <label class="form-check-label" for="alreadyRegistered">I'm already registered for CRA online mail</label>
+                <input type="checkbox" class="form-check-input" name="mailAssess" id="mailAssess" value="y" ${mailAssess?"checked":""}>
+                <label class="form-check-label" for="mailAssess">Mail (Canada Post)</label>
             </div>
 
             <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="mailAssess" id="mailAssess" value="y" ${mailAssess?"checked":""}>
-                <label class="form-check-label" for="mailAssess">Mail (Canada Post)</label>
+                <input type="checkbox" class="form-check-input" name="alreadyRegistered" id="alreadyRegistered" value="y" ${alreadyRegistered?"checked":""}>
+                <label class="form-check-label" for="alreadyRegistered">I'm already registered for CRA online mail</label>
             </div>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="craAssess" id="craAssess" value="y" ${craAssess?"checked":""}>
@@ -344,9 +344,21 @@
 </form>
 
 <script>
-    document.getElementById("taxYear").min = new Date().getFullYear()-6;
-    document.getElementById("taxYear").max = new Date().getFullYear()-1;
-    document.getElementById("taxYear").value = new Date().getFullYear()-1;
+    let yearMin = new Date().getFullYear()-6;
+    let yearMax = new Date().getFullYear()-1;
+    let yearEl = document.getElementById("taxYear");
+
+    window.onload = function() {
+        for(let x = yearMin; x <= yearMax; x++) {
+            let option = document.createElement('option');
+            option.value = x;
+            option.innerText = x;
+            if (x === ${taxYear}) {
+                option.selected = true;
+            }
+            yearEl.appendChild(option);
+        }
+    }
 
     function setYear() {
         let els = document.getElementsByClassName("taxYear");
@@ -357,9 +369,6 @@
         for (let x in els) {
             elsM[x].innerHTML = document.getElementById("taxYear").value-1;
         }
-    }
-
-    function setReq() {
     }
 
     function updateForm() {
@@ -377,12 +386,9 @@
         }
 
         if(document.getElementById("alreadyRegistered").checked) {
-            document.getElementById("mailAssess").disabled = true;
             document.getElementById("craAssess").disabled = true;
-            document.getElementById("mailAssess").checked = false;
             document.getElementById("craAssess").checked = false;
         } else {
-            document.getElementById("mailAssess").disabled = false;
             document.getElementById("craAssess").disabled = false;
         }
     }
