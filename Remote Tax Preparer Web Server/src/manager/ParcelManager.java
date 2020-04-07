@@ -197,11 +197,12 @@ public final class ParcelManager {
 
 			String fileName;
 			ArrayList<Document> documents = new ArrayList<>();
-
+			
+			
 			for (Part part : parts) {
 				fileName = part.getSubmittedFileName();
 				Debugger.log(fileName);
-				if (fileName != null && !fileName.equals("null")) {
+				if (fileName != null && !fileName.equals("null") && !fileName.equals("") ) {
 					documents.add(EncryptionService.encryptDocument(part.getInputStream(), fileName));
 				}
 			}
