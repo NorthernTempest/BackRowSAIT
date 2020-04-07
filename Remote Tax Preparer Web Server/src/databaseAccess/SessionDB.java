@@ -52,16 +52,6 @@ public final class SessionDB {
 	}
 
 	/**
-	 * 
-	 * @param session
-	 * @return
-	 */
-	public static boolean update(Session session) {
-		// NODO
-		return false;
-	}
-
-	/**
 	 * Establishes a connection with the database and removes the Session from the
 	 * session table that has a Primary Key matching the sessionID being passed into
 	 * this method.

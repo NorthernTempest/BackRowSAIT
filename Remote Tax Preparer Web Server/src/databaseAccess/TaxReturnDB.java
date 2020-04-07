@@ -111,9 +111,10 @@ public class TaxReturnDB {
 	
 	/**
 	 * Establishes a connection with the database and removes the TaxReturn from the
-	 * tax_return table that has a Primary Key matching the taxReturnID being passed
+	 * tax_return table that has a Primary Key matching the email and year being passed
 	 * into this method.
-	 * @param taxReturnID taxReturnID of the TaxReturn to remove from the database
+	 * @param email email of primary key to delete
+	 * @param year year of primary key to delete
 	 * @return boolean based on whether or not the operation was successful
 	 */
 	public static boolean delete(String email, int year) {
@@ -153,9 +154,10 @@ public class TaxReturnDB {
 	
 	/**
 	 * Establishes a connection with the database and selects the TaxReturn in the
-	 * tax_return table that has a Primary Key matching the taxReturnID being passed
+	 * tax_return table that has a Primary Key matching the email and year being passed
 	 * into this method.
-	 * @param taxReturnID taxReturnID of the TaxReturn to retrieve from the database
+	 * @param email email of primary key to retrieve
+	 * @param year year of primary key to retrieve
 	 * @return TaxReturn that contains the information of the requested TaxReturn
 	 */
 	public static TaxReturn get(String email, int year) {
@@ -196,9 +198,9 @@ public class TaxReturnDB {
 	
 	/**
 	 * Establishes a connection with the database and selects the TaxReturns in the
-	 * tax_return table that have a user matching the User being passed
+	 * tax_return table that have an email matching the email being passed
 	 * into this method.
-	 * @param user the User of the TaxReturn to retrieve from the database
+	 * @param email email of the TaxReturn to retrieve from the database
 	 * @return TaxReturn that contains the information of the requested TaxReturn
 	 */
 	public static ArrayList<TaxReturn> getByUser(String email) {
