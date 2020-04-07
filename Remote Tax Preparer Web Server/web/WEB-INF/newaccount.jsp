@@ -8,7 +8,7 @@
 
 <jsp:directive.include file="../template/head.jsp" />
 
-<form method="post" action="NewAccount">
+<form method="post" action="/newAccount">
 	<div class="row">
 		<div class="col-md-6">
 			<h2>Creating New ${accountType}</h2>
