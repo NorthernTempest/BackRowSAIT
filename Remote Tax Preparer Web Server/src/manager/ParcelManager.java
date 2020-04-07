@@ -290,7 +290,7 @@ public final class ParcelManager {
 		//create and insert parcel to user
 		Parcel userParcel = new Parcel(NEW_RETURN_SUBJECT + nrf.getTaxYear(),
 				nrf.getfName() + " " + nrf.getlName() + NEW_RETURN_MESSAGE, "preparer@test.com", email, new Date(),
-				expDate, Integer.parseInt(nrf.getTaxYear()), documents, false);
+				expDate, Integer.parseInt(nrf.getTaxYear()), documents, true);
 
 		if (ParcelDB.insert(userParcel)) {
 			for (Document document : documents) {
@@ -334,7 +334,7 @@ public final class ParcelManager {
 		Date expDate = c.getTime();
 
 		Parcel parcel = new Parcel(SIGNED_DOC_SUBJECT + sender, sender + SIGNED_DOC_MESSAGE + taxYear, sender,
-				TAX_PREPARER, new Date(), expDate, taxYear, documents, false);
+				null, new Date(), expDate, taxYear, documents, false);
 
 		if (ParcelDB.insert(parcel)) {
 			for (Document document : documents) {
