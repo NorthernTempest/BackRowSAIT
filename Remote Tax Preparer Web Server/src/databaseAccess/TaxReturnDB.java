@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import domain.TaxReturn;
 
 /**
- * 
  * Class Description: 	Class that establishes a connection and communicates directly
  * 						with the tax_return table in the database.
  *
