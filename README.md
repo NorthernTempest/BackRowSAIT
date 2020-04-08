@@ -27,7 +27,7 @@ http://localhost:8080/manager/text/deploy?war=wcl
 11. For reporting, BIRT runtime must also be installed. Down the zip file from the following linK: https://www.eclipse.org/downloads/download.php?file=/birt/downloads/drops/R-R1-4.8.0-201806261756/birt-runtime-4.8.0-20180626.zip
 12. Unzip the folder onto your computer.
 13. Copy the folder named WebViewerExample into the webapps directory of the Tomcat installation and rename it to "birt-viewer".
-14. Copy the files from the reports folder to the "birt-viewer/reports/" directory.
+14. Copy the files from the reports folder in the wcl_remote_tax_prep folder to the "birt-viewer/reports/" directory.
 
 ### Startup Instructions
 1. Run \[Catalina Home\]\\bin\\startup.bat
