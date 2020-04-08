@@ -6,28 +6,49 @@ import java.util.UUID;
 import bean.PaymentBean;
 
 /**
- * 
- * Class Description: Class defining attributes and methods for a single payment.
+ * Class Description: A record of a user paying for their tax return.
  *
- * @author Tristen Kreutz
- *
+ * @author Tristen Kreutz, Jesse Goerzen
  */
 public final class Payment {
-	
+	/**
+	 * The id of the payment.
+	 */
 	private String paymentID;
-	
+	/**
+	 * The type of payment made by the user.
+	 */
 	private String paymentType;
-	
+	/**
+	 * The amount that the user paid.
+	 */
 	private double amount;
-	
+	/**
+	 * The date and time that the payment was made.
+	 */
 	private Date date;
-	
+	/**
+	 * The tax year of the tax return for which this payment was made.
+	 */
 	private int year;
-	
+	/**
+	 * The email of the user whose tax return was paid for.
+	 */
 	private String email;
-	
+	/**
+	 * Any additional information about the bill of sale.
+	 */
 	private String billingInfo;
 	
+	/**
+	 * Constructs a new payment record.
+	 * 
+	 * @param email The email of the user whose tax return was paid for.
+	 * @param year The tax year of the tax return for which this payment was made.
+	 * @param paymentType The type of payment made by the user.
+	 * @param amount The amount that the user paid.
+	 * @param date The date and time that the payment was made.
+	 */
 	public Payment (String email, int year, String paymentType, double amount, Date date) {
 		paymentID = UUID.randomUUID().toString();
 		setEmail(email);
@@ -37,6 +58,16 @@ public final class Payment {
 		setDate(date);
 	}
 	
+	/**
+	 * Constructs a payment record from the database.
+	 * 
+	 * @param paymentID
+	 * @param email
+	 * @param year
+	 * @param paymentType
+	 * @param amount
+	 * @param date
+	 */
 	public Payment (String paymentID, String email, int year, String paymentType, double amount, Date date) {
 		setPaymentID(paymentID);
 		setEmail(email);

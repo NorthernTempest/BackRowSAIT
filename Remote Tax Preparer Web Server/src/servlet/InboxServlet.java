@@ -62,7 +62,7 @@ public final class InboxServlet extends HttpServlet {
 			request.setAttribute("user", email);
 			for(Parcel parcel : parcels) {
 				Debugger.log("Parcel get: " + parcel.getSubject());
-				Debugger.log("Parcel sig: " + parcel.isRequiresSignature());
+				Debugger.log("Parcel sig: " + parcel.requiresSignature());
 				for(Document document : parcel.getDocuments()) {
 					Debugger.log("Inbox document debug: " + document.getFileName());
 				}
