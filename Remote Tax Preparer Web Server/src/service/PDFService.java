@@ -3,10 +3,7 @@ package service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -20,48 +17,75 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
-import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import domain.Document;
 import exception.ConfigException;
+import manager.LogEntryManager;
 import manager.ParcelManager;
-import util.cesar.Debugger;
 
 /**
- * Class Description:
+ * Handles the creation and signing of forms.
  *
  * @author Tristen Kreutz, Cesar Guzman
- *
  */
 public final class PDFService {
-
+	
+	/**
+	 * Whether the class's static variable has been initialized.
+	 */
 	private static boolean init;
-
+	/**
+	 * The file path to an authorization request pdf.
+	 */
 	private static String authReqPDFFilePath;
 
 	//fillable pdf field names
+	/**
+	 * The field that contains the user's sin number.
+	 */
 	private final static String FIELD_SIN = "sin";
+	/**
+	 * The field that contains the user's first name.
+	 */
 	private final static String FIELD_FNAME = "fName";
+	/**
+	 * The field that contains the user's last name.
+	 */
 	private final static String FIELD_LNAME = "lName";
+	/**
+	 * The field that contains the user's full name.
+	 */
 	private final static String FIELD_FULLNAME = "fullName";
-	private final static String FIELD_SIGNATURE = "signature";
-	private final static String FIELD_DATE = "date";
 
 	//x & y positions for signtures
+	/**
+	 * The x position for the signature required for the T183 form.
+	 */
 	private final static int T183_X_POS = 35;
+	/**
+	 * The y position for the signature required for the T183 form.
+	 */
 	private final static int T183_Y_POS = 37;
+	/**
+	 * The x position for the signature required for the authorization request form.
+	 */
 	private final static int AUTH_X_POS = 50;
+	/**
+	 * The y position for the signature required for the authorization request form.
+	 */
 	private final static int AUTH_Y_POS = 155;
 
 	/**
-	 * @param sin
-	 * @param fName
-	 * @param lName
-	 * @return
-	 * @throws ConfigException
-	 * @throws IOException
+	 * Creates an authorization request form filled in with the user's name and sin number.
+	 * 
+	 * @param sin String The social insurance number of the user.
+	 * @param fName String The first name of the user.
+	 * @param lName String The last name of the user.
+	 * @return Document The record of the encrypted authorization request pdf document that was created.
+	 * @throws ConfigException If the config file was not found.
+	 * @throws IOException If the authorization request file cannot be found.
 	 */
 	public static Document createAuthorizationRequest(String sin, String fName, String lName)
 			throws ConfigException, IOException {
@@ -98,38 +122,9 @@ public final class PDFService {
 		
 		try {
 			document = EncryptionService.encryptDocument(inStream, fName + "_" + lName + "_AuthRequest.pdf");
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException | ConfigException | IOException e) {
 			e.printStackTrace();
-			inStream.close();
-			authReqPDF.close();
-			return null;
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-			inStream.close();
-			authReqPDF.close();
-			return null;
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			inStream.close();
-			authReqPDF.close();
-			return null;
-		} catch (NoSuchPaddingException e) {
-			e.printStackTrace();
-			inStream.close();
-			authReqPDF.close();
-			return null;
-		} catch (InvalidKeySpecException e) {
-			e.printStackTrace();
-			inStream.close();
-			authReqPDF.close();
-			return null;
-		} catch (ConfigException e) {
-			e.printStackTrace();
-			inStream.close();
-			authReqPDF.close();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
+			LogEntryManager.logError(null, e, null);
 			inStream.close();
 			authReqPDF.close();
 			return null;
@@ -141,14 +136,15 @@ public final class PDFService {
 		return document;
 	}
 
-	/**TODO only works with the 2 forms we need to sign 
-	 * @param parts
-	 * @param parcelID
-	 * @return
-	 * @throws ConfigException
+	/**
+	 * Creates a signed form from a signature and a form.
+	 * 
+	 * @param signatureDataURL String The signature in the form of a string of characters.
+	 * @param parcelID String The id number for the parcel containing the form.
+	 * @return Document The record of the encrypted signed pdf form document that was created.
+	 * @throws ConfigException If the config file is missing.
 	 */
 	public static Document signForm(String signatureDataURL, String parcelID) throws ConfigException {
-		//TODO
 		init();
 		String fileName = null;
 		//get signature bytes from signatureDataURL
@@ -196,42 +192,23 @@ public final class PDFService {
 			
 			Document signedDoc = EncryptionService.encryptDocument(in, fileName);
 			
-			pdfToSignFile.delete(); //is this right? TODO
+			pdfToSignFile.delete(); //is this right?
 			
 			return signedDoc;
 			
-		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidAlgorithmParameterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (ConfigException | NumberFormatException | IOException | InvalidAlgorithmParameterException | InvalidKeySpecException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException e) {
+			LogEntryManager.logError(null, e, null);
 			e.printStackTrace();
 		}
 
 		return null;
 	}
 
+	/**
+	 * Initializes the config-derived semi-constants in this class.
+	 * 
+	 * @throws ConfigException if the config file is missing.
+	 */
 	private static void init() throws ConfigException {
 		if (!init) {
 			authReqPDFFilePath = ConfigService.fetchFromConfig("AUTH_REQ_FILEPATH:");
