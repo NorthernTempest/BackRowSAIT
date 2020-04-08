@@ -690,40 +690,48 @@ FROM user;]]></xml-property>
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">title</property>
+                    <property name="analysis">dimension</property>
                     <text-property name="displayName">title</text-property>
                     <text-property name="heading">title</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">name</property>
+                    <property name="analysis">dimension</property>
                     <text-property name="displayName">name</text-property>
                     <text-property name="heading">name</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">email</property>
+                    <property name="analysis">dimension</property>
                     <text-property name="displayName">email</text-property>
                     <text-property name="heading">email</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">phone</property>
+                    <property name="analysis">dimension</property>
                     <text-property name="displayName">phone</text-property>
                     <text-property name="heading">phone</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">postal_code</property>
+                    <property name="analysis">dimension</property>
                     <text-property name="displayName">postal_code</text-property>
                     <text-property name="heading">postal_code</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">address</property>
+                    <property name="analysis">dimension</property>
                     <text-property name="displayName">address</text-property>
                     <text-property name="heading">address</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">creation_date</property>
+                    <property name="analysis">dimension</property>
                     <text-property name="displayName">creation_date</text-property>
                     <text-property name="heading">creation_date</text-property>
                 </structure>
             </list-property>
+            <list-property name="parameters"/>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
@@ -816,7 +824,8 @@ FROM user;]]></xml-property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[SELECT title, CONCAT(l_name, ", ", f_name) AS name, email, phone, postal_code, CONCAT(street_address_1, ", ", city, ", ", province, ", ", country) AS address, creation_date
-FROM user;]]></xml-property>
+FROM user
+WHERE permission_level = 1;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -1038,6 +1047,13 @@ FROM user;]]></xml-property>
                     <text-property name="displayName">creation_date</text-property>
                     <expression name="expression" type="javascript">dataSetRow["creation_date"]</expression>
                     <property name="dataType">date-time</property>
+                </structure>
+            </list-property>
+            <list-property name="sort">
+                <structure>
+                    <expression name="key" type="javascript">row["name"]</expression>
+                    <property name="direction">asc</property>
+                    <property name="strength">-1</property>
                 </structure>
             </list-property>
             <column id="157">

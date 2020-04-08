@@ -25,20 +25,24 @@ public final class Document {
 	/**
 	 * Returns the filePath.
 	 * 
-	 * @return the filePath
+	 * @return filePath
 	 */
 	public String getFilePath() {
 		return filePath;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the filename.
+	 * @return filename
 	 */
 	public String getFileName() {
 		return fileName;
 	}
 	
+	/**
+	 * Returns the file size.
+	 * @return file size
+	 */
 	public long getFileSize() {
 		return fileSize;
 	}

@@ -45,7 +45,9 @@ public class AdminFilter implements Filter {
 		if( email != null && !email.equals("") ) {
 			User u = UserDB.get(email);
 			
-			if( u == null || u.getPermissionLevel() < User.ADMIN )
+			if( u == null || u.getPermissionLevel() < User.ADMIN && request2.getServletPath().equals("/admin"))
+				((HttpServletResponse) response).sendRedirect("/inbox?errorMessage=Only admins can go there.");
+			else if ( u == null || u.getPermissionLevel() < User.TAX_PREPARER && request2.getServletPath().equals("/reports"))
 				((HttpServletResponse) response).sendRedirect("/inbox?errorMessage=Only admins can go there.");
 			else
 				chain.doFilter(request, response);

@@ -132,7 +132,8 @@ public class CreateReturnServlet extends HttpServlet {
 				Debugger.log("no tax return :( oh no bad");
 			}
 
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+			//getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+			response.sendRedirect("/inbox");
 		} catch (ConfigException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMessage", "Error, please try again.");

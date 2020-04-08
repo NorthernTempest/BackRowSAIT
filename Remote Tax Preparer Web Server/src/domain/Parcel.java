@@ -158,12 +158,17 @@ public final class Parcel {
 	}
 
 	/**
-	 * @return
+	 * Returns the subject.
+	 * @return subject
 	 */
 	public String getSubject() {
 		return subject;
 	}
 
+	/**
+	 * Returns boolean for whether or not the parcel requires a signature.
+	 * @return boolean requiresSignature
+	 */
 	public boolean isRequiresSignature() {
 		return requiresSignature;
 	}

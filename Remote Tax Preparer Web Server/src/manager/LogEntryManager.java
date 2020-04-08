@@ -72,6 +72,13 @@ public final class LogEntryManager {
 		return LogEntryDB.insert(new LogEntry(email, sw.toString(), LogEntry.ERROR, ip));
 	}
 
+	/**
+	 * Enters backup operation into the LogEntry table of the database.
+	 * @param out
+	 * @param sessionID
+	 * @param ip
+	 * @return
+	 */
 	public static boolean sendBackup(OutputStream out, String sessionID, String ip) {
 		boolean output = false;
 
@@ -100,6 +107,13 @@ public final class LogEntryManager {
 		return output;
 	}
 
+	/**
+	 * Enters restore operation into the LogEntry table of the database.
+	 * @param parts
+	 * @param sessionID
+	 * @param ip
+	 * @return
+	 */
 	public static boolean recover(Collection<Part> parts, String sessionID, String ip) {
 		boolean output = false;
 		

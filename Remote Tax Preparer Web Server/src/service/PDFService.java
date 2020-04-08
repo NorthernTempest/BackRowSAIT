@@ -63,11 +63,11 @@ public final class PDFService {
 	/**
 	 * The x position for the signature required for the T183 form.
 	 */
-	private final static int T183_X_POS = 27;
+	private final static int T183_X_POS = 35;
 	/**
 	 * The y position for the signature required for the T183 form.
 	 */
-	private final static int T183_Y_POS = 32;
+	private final static int T183_Y_POS = 37;
 	/**
 	 * The x position for the signature required for the authorization request form.
 	 */
@@ -75,7 +75,7 @@ public final class PDFService {
 	/**
 	 * The y position for the signature required for the authorization request form.
 	 */
-	private final static int AUTH_Y_POS = 170;
+	private final static int AUTH_Y_POS = 155;
 
 	/**
 	 * Creates an authorization request form filled in with the user's name and sin number.
@@ -176,9 +176,9 @@ public final class PDFService {
 			if (list.get(0).getPartialName().equals(FIELD_SIN)) {
 				sigX = AUTH_X_POS;
 				sigY = AUTH_Y_POS;
-				contentStream.drawImage(pdImage, sigX, sigY, 270, 70);
+				contentStream.drawImage(pdImage, sigX, sigY, 216, 56); //scale for auth form
 			} else {
-				contentStream.drawImage(pdImage, sigX, sigY, 200, 52); //scale may be different
+				contentStream.drawImage(pdImage, sigX, sigY, 160, 42); //scale for T183
 			}
 			
 			//THIS LINE DOESNT BREAK IT

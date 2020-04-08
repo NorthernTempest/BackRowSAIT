@@ -7,7 +7,7 @@ import bean.PaymentBean;
 
 /**
  * 
- * Class Description: Class defining attributes and method for a single payment.
+ * Class Description: Class defining attributes and methods for a single payment.
  *
  * @author Tristen Kreutz
  *
@@ -126,22 +126,42 @@ public final class Payment {
 		this.billingInfo = billingInfo;
 	}
 
+	/**
+	 * Returns the year.
+	 * @return year
+	 */
 	public int getYear() {
 		return year;
 	}
 
+	/**
+	 * Sets the year of the Payment.
+	 * @param year to set
+	 */
 	public void setYear(int year) {
 		this.year = year;
 	}
 
+	/**
+	 * Returns the email.
+	 * @return email
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * Sets the email of the Payment.
+	 * @param email email to set
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	
+	/**
+	 * Method to copy the values in this object to a new object that is then returned.
+	 * @return PaymentBean copy of this object
+	 */
 	public PaymentBean copy() {
 		return new PaymentBean(year, paymentType, amount, date, billingInfo);
 	}

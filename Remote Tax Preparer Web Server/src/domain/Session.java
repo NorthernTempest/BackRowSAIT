@@ -3,7 +3,7 @@ package domain;
 import java.util.Date;
 
 /**
- * Class Description:
+ * Class Description:	Class defining the attributes and methods for a Session object.
  *
  * @author Tristen Kreutz
  *

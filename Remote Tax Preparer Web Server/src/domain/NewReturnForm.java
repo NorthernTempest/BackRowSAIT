@@ -1,5 +1,10 @@
 package domain;
 
+/**
+ * Class Description:	
+ * @author Cesar Guzman
+ *
+ */
 public final class NewReturnForm {
 	// Form fields
 	private String taxYear, dateOfBirth, sin, title, fName, middleInitial, lName, gender, maritalStatus,
