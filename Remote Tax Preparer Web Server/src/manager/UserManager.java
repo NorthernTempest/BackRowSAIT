@@ -53,6 +53,10 @@ public final class UserManager {
 	 */
 	private static boolean init;
 
+	/**
+	 * Initializes values in this class with entries from the config file.
+	 * @throws ConfigException
+	 */
 	private static void init() throws ConfigException {
 		if (!init) {
 			maxLoginAttempts = Integer.parseInt(ConfigService.fetchFromConfig("MAX_LOGIN_ATTEMPTS:"));
