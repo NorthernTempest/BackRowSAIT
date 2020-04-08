@@ -101,12 +101,6 @@ CREATE TABLE session (
 	
 COMMIT;
 
-CREATE TABLE household (
-    household_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    household_name VARCHAR(30) NOT NULL);
-	
-COMMIT;
-
 CREATE TABLE preparer_tax_return (
     tax_return_email VARCHAR(100) NOT NULL,
 	tax_return_year YEAR NOT NULL,

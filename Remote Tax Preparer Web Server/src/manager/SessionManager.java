@@ -21,8 +21,14 @@ import service.ConfigService;
  */
 public final class SessionManager {
 
+	/**
+	 * Time a session can remain active/idle.
+	 */
 	private static int sessionTimeout;
 	
+	/**
+	 * Specifies whether or not the class has been initialized with values from the config.
+	 */
 	private static boolean init;
 
 	private static void init() throws ConfigException {
