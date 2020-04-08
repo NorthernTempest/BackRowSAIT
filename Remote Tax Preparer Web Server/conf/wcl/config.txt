@@ -43,4 +43,4 @@ NEW_RETURN_SUBJECT:C:\Capstone\TestFiles\newReturnSubject.txt
 NEW_RETURN_MESSAGE:C:\Capstone\TestFiles\newReturnMessage.txt
 SIGNED_DOC_SUBJECT:C:\Capstone\TestFiles\signedDocSubject.txt
 SIGNED_DOC_MESSAGE:C:\Capstone\TestFiles\signedDocMessage.txt
-standarcost:5.00
+standardcost:5.00
