@@ -11,8 +11,9 @@ The capstone project for MCL Taxes created by Kerk Day, Jesse Goerzen, Cesar Guz
 6. Unzip '\[Catalina Home\]\\wcl\\config_files.zip' in any folder of your choice. These files contain private data about your system, so consider placing these files on a removable drive or another. Remember the location where you installed your files
 7. Edit '\[Catalina Home\]\\conf\\wcl\\config.txt'
     1. Replace all instances of 'C:\Capstone\TestFiles' with the path where you unzipped 'config_files.zip'.
-    2. Replace all instances of 'C:\\Capstone\\TestFiles' with the path where you unzipped 'config_files.zip', but with double slashes.
-    3. Replace all instances of 'C:\Program Files\MySQL\MySQL Server 5.7\' with your MySql Server directory.
+    2. Replace all instances of 'C:\Capstone\BackRowSAIT\Remote Tax Preparer Web Server\res\' with the path where you unzipped 'config_files.zip'.
+    3. Replace all instances of 'C:\\Capstone\\TestFiles' with the path where you unzipped 'config_files.zip', but with double slashes.
+    4. Replace all instances of 'C:\Program Files\MySQL\MySQL Server 5.7\' with your MySql Server directory.
 8. Edit the files from 'config_files.zip'
     1. Replace the contents of 'emailpassword.txt' with the password to the account you use to email users.
     2. Replace the contents of 'emailusername.txt' with the username to the account you use to email users.
