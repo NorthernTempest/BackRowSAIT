@@ -18,6 +18,8 @@ import domain.User;
 
 /**
  * Servlet Filter implementation class AdminFilter
+ * 
+ * @author Jesse Goerzen, Tristen Kreutz
  */
 public class AdminFilter implements Filter {
 
