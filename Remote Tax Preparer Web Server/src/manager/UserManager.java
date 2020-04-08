@@ -617,6 +617,27 @@ public final class UserManager {
 		return password.equals(passwordConf);
 	}
 
+	/**
+	 * Creates a user.
+	 * @param email
+	 * @param password
+	 * @param passwordConf
+	 * @param title
+	 * @param fName
+	 * @param mName
+	 * @param lName
+	 * @param phone
+	 * @param fax
+	 * @param language
+	 * @param streetAddress
+	 * @param streetAddress2
+	 * @param city
+	 * @param province
+	 * @param country
+	 * @param postalCode
+	 * @return
+	 * @throws Exception
+	 */
 	public static boolean createUser(String email, String password, String passwordConf, String title, String fName,
 			String mName, String lName, String phone, String fax, String language, String streetAddress,
 			String streetAddress2, String city, String province, String country, String postalCode) throws Exception {
@@ -651,6 +672,11 @@ public final class UserManager {
 
 	}
 
+	/**
+	 * Resends a verification email to the email passed.
+	 * @param email email to send to
+	 * @throws MessagingException
+	 */
 	public static void resendVerificationEmail(String email) throws MessagingException {
 		User user = null;
 		UUID registrationID = UUID.randomUUID();
@@ -666,6 +692,11 @@ public final class UserManager {
 		}
 	}
 
+	/**
+	 * Verifies the email based on the registration ID passed.
+	 * @param registrationID registrationID to verify
+	 * @throws Exception
+	 */
 	public static void verifyEmail(String registrationID) throws Exception {
 		init();
 		User user = UserDB.getByVerificationID(registrationID);
@@ -693,6 +724,12 @@ public final class UserManager {
 		
 	}
   
+	/**
+	 * Returns the role/permission level of the user connected to the session ID passed
+	 * @param sessionID sessionID to retrieve permission level of
+	 * @return permission level
+	 * @throws ConfigException
+	 */
 	public static int getRole(String sessionID) throws ConfigException {
 		User user = getUser(SessionManager.getEmail(sessionID));
 		if (user == null) {
@@ -723,6 +760,12 @@ public final class UserManager {
 		}
 	}
 	
+	/**
+	 * Checks for sufficient privileges and then deactivates the account matching the email passed.
+	 * @param email email of account to deactivate
+	 * @param sessionID session ID of invoking user
+	 * @return boolean was operation successful
+	 */
 	public static boolean adminDeleteAccount(String email, String sessionID) {
 		try {
 			if (getRole(sessionID) < 2) {
@@ -746,6 +789,12 @@ public final class UserManager {
 		return false;
 	}
 	
+	/**
+	 * Checks for sufficient privileges and then reactivates the account matching the email passed.
+	 * @param email email of account to reactivate
+	 * @param sessionID session ID of invoking user
+	 * @return boolean was operation successful
+	 */
 	public static boolean adminRestoreAccount(String email, String sessionID) {
 		try {
 			if (getRole(sessionID) < 2) {
@@ -769,6 +818,20 @@ public final class UserManager {
 		return false;
 	}
 	
+	/**
+	 * Creates an employee account in the database.
+	 * @param role permission level
+	 * @param email
+	 * @param password
+	 * @param confirmPassword
+	 * @param title
+	 * @param fName
+	 * @param lName
+	 * @param phone
+	 * @param language
+	 * @return boolean was operation successful
+	 * @throws Exception
+	 */
 	public static boolean createSpecialUser(int role, String email, String password, String confirmPassword, String title, String fName,
 											String lName, String phone, String language) throws Exception {
 		User user = null;

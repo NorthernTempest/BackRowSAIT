@@ -16,13 +16,20 @@ import exception.ConfigException;
  */
 public class DocumentManager {
 
+	/**
+	 * Retrieves and returns the document with the passed file path.
+	 * @param filePath file path of document to retrieve
+	 * @return document
+	 */
 	public static Document get(String filePath) {
 		return DocumentDB.get(filePath);
 	}
 	
 	/**
-	 * @param parcelID
-	 * @return
+	 * Deletes documents from a specific parcel that is identified by the parcel ID
+	 * that is passed.
+	 * @param parcelID parcelID to set
+	 * @return boolean was operation successful
 	 */
 	public static boolean delete(String parcelID) {
 		Parcel parcel = null;
