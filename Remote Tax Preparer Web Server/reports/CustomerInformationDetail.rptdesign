@@ -1040,6 +1040,13 @@ FROM user;]]></xml-property>
                     <property name="dataType">date-time</property>
                 </structure>
             </list-property>
+            <list-property name="sort">
+                <structure>
+                    <expression name="key" type="javascript">row["name"]</expression>
+                    <property name="direction">asc</property>
+                    <property name="strength">-1</property>
+                </structure>
+            </list-property>
             <column id="157">
                 <property name="width">10%</property>
             </column>

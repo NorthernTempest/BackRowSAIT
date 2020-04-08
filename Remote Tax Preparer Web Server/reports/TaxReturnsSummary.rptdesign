@@ -5,6 +5,21 @@
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="bidiLayoutOrientation">ltr</property>
     <property name="imageDPI">96</property>
+    <parameters>
+        <scalar-parameter name="Year" id="62">
+            <text-property name="promptText">Enter the tax year:</text-property>
+            <property name="valueType">static</property>
+            <property name="dataType">date</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Custom</property>
+                <property name="pattern">yyyy</property>
+            </structure>
+        </scalar-parameter>
+    </parameters>
     <data-sources>
         <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Data Source" id="8">
             <list-property name="privateDriverProperties">
@@ -383,6 +398,23 @@ FROM user JOIN tax_return ON user.email = tax_return.email;]]></xml-property>
                     <expression name="expression" type="javascript">dataSetRow["year"]</expression>
                     <property name="dataType">date</property>
                     <property name="allowExport">true</property>
+                </structure>
+            </list-property>
+            <list-property name="sort">
+                <structure>
+                    <expression name="key" type="javascript">row["name"]</expression>
+                    <property name="direction">asc</property>
+                    <property name="strength">-1</property>
+                </structure>
+            </list-property>
+            <list-property name="filter">
+                <structure>
+                    <property name="operator">like</property>
+                    <expression name="expr" type="javascript">row["year"]</expression>
+                    <simple-property-list name="value1">
+                        <value>params["Year"].value</value>
+                    </simple-property-list>
+                    <property name="updateAggregation">true</property>
                 </structure>
             </list-property>
             <column id="59"/>
