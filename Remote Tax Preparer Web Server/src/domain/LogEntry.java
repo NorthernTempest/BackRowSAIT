@@ -2,6 +2,11 @@ package domain;
 
 import java.util.Date;
 
+/**
+ * Class Description:	Specifies the attributes for a log entry object.
+ * @author Tristen Kreutz
+ *
+ */
 public final class LogEntry {
 
 	private int logEntryID;
@@ -93,7 +98,8 @@ public final class LogEntry {
 	}
 
 	/**
-	 * Sets the value of type.
+	 * Sets the value of type. Method checks to see if the value being set
+	 * matches any of the constant values available for a log type.
 	 * @param type the type to set
 	 */
 	private void setType(char type) {
@@ -114,9 +120,5 @@ public final class LogEntry {
 				System.out.println("Incorrect type character.");
 				throw new IllegalArgumentException("Illegal log entry type");
 		}
-	}
-
-	public boolean isloggedOut(String email) {
-		return false;
 	}
 }
