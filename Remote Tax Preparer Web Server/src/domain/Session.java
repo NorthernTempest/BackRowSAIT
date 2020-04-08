@@ -3,19 +3,31 @@ package domain;
 import java.util.Date;
 
 /**
- * Class Description:	Class defining the attributes and methods for a Session object.
+ * Class Description: A record of a user's session after having logged into the system.
  *
  * @author Tristen Kreutz
- *
  */
 public final class Session {
-
+	/**
+	 * The email of the logged in user.
+	 */
 	private String email;
-	
+	/**
+	 * The ID of the user's JSession cookie.
+	 */
 	private String sessionID;
-	
+	/**
+	 * The time and date that the session times out at.
+	 */
 	private Date timeout;
 	
+	/**
+	 * Constructs a complete session record.
+	 * 
+	 * @param email The email of the logged in user.
+	 * @param sessionID The ID of the user's JSession cookie.
+	 * @param timeout The time and date that the session times out at.
+	 */
 	public Session(String email, String sessionID, Date timeout) {
 		this.email = email;
 		this.sessionID = sessionID;

@@ -313,7 +313,11 @@ public final class User {
 	public String getEmail() {
 		return email;
 	}
-
+	
+	/**
+	 * Sets the email of the user.
+	 * @param email
+	 */
 	private void setEmail(String email) {
 		if (email.length() > 100 || email.length() == 0) {
 			throw new IllegalArgumentException("Email is invalid, try again");
@@ -352,6 +356,7 @@ public final class User {
 	/**
 	 * Sets the password of this user after checking the validity based
 	 * on different security requirements.
+	 * 
 	 * @param password password to check and set
 	 * @throws NumberFormatException
 	 * @throws NoSuchAlgorithmException
