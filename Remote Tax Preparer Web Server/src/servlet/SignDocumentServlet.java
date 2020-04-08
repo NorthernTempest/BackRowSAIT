@@ -1,17 +1,14 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.Collection;
 
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 import domain.Document;
 import domain.Parcel;
@@ -22,18 +19,17 @@ import service.PDFService;
 import util.cesar.Debugger;
 
 /**
- * Servlet implementation class SignDocumentServlet
+ * Servlet handling sign document requests
  */
 @WebServlet("/parcel/signDoc")
 public final class SignDocumentServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -374026427988052768L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public SignDocumentServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -81,8 +77,10 @@ public final class SignDocumentServlet extends HttpServlet {
 			Debugger.log("we tryna sign the form");
 			signedPDF = PDFService.signForm(signatureDataURL, parcelID);
 		} catch (ConfigException e) {
-			// TODO Auto-generated catch block
+			request.setAttribute("errorMessage", "Error: Your document was not signed.");
+			getServletContext().getRequestDispatcher("/WEB-INF/inbox.jsp").forward(request, response);
 			e.printStackTrace();
+			return;
 		}
 
 		//make a parcel with preset message to taxPreparer saying its a signed document
@@ -104,7 +102,6 @@ public final class SignDocumentServlet extends HttpServlet {
 				
 				
 			} catch (ConfigException e) {
-				// TODO Auto-generated catch block
 				request.setAttribute("errorMessage", "Error: Your document was not signed.");
 				e.printStackTrace();
 			}
@@ -112,7 +109,6 @@ public final class SignDocumentServlet extends HttpServlet {
 		} else {
 			//bad bad no bad awful nightmare bad no
 			request.setAttribute("errorMessage", "Error: Your document was not signed.");
-			//TODO
 		}
 		
 		request.setAttribute("redirectTimer", 4000);

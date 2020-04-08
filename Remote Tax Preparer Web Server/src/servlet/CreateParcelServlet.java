@@ -22,7 +22,7 @@ import util.cesar.Debugger;
 /**
  * Servlet for creating and sending a message.
  * 
- * @author Cesar Guzman
+ * @author Cesar Guzman, Taylor Hanlon
  */
 @WebServlet("/parcel/create")
 @MultipartConfig(fileSizeThreshold = 0, maxFileSize = 1024 * 1024 * 25, maxRequestSize = 1024 * 1024 * 25 * 10) //0mb, 25mb, 10x 25mb
@@ -90,7 +90,7 @@ public final class CreateParcelServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
-		
+
 		//get attachments
 		Collection<Part> parts = null;
 		try {

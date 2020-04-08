@@ -14,7 +14,9 @@ import manager.LogEntryManager;
 import manager.UserManager;
 
 /**
- * Servlet implementation class RecoveryServlet
+ * Servlet for handling password recovery requests.
+ * 
+ * @author Jesse Goerzen
  */
 @WebServlet("/recover")
 public final class PassRecoveryServlet extends HttpServlet {

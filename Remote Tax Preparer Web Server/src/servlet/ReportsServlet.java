@@ -8,18 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ReportServlet
+ * Servlet handing reporting requests
+ * 
+ * @author Tristen Kreutz
  */
 @WebServlet(name = "reports", urlPatterns = { "/reports" })
 public class ReportsServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6123456789009876666L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ReportsServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -33,7 +34,6 @@ public class ReportsServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

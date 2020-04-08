@@ -26,10 +26,6 @@ import util.cesar.Debugger;
  */
 @WebServlet("/inbox")
 public final class InboxServlet extends HttpServlet {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4807630350799183535L;
 
 	/**
@@ -60,14 +56,14 @@ public final class InboxServlet extends HttpServlet {
 			parcels.addAll(ParcelManager.getParcels(null, email, null, null, -1));
 			request.setAttribute("parcels", parcels);
 			request.setAttribute("user", email);
-			for(Parcel parcel : parcels) {
+			for (Parcel parcel : parcels) {
 				Debugger.log("Parcel get: " + parcel.getSubject());
 				Debugger.log("Parcel sig: " + parcel.requiresSignature());
 				for(Document document : parcel.getDocuments()) {
 					Debugger.log("Inbox document debug: " + document.getFileName());
 				}
 			}
-			
+
 			ArrayList<TaxReturn> taxReturns = TaxReturnManager.getByEmail(email);
 			request.setAttribute("returns", taxReturns);
 		} catch (ConfigException e) {

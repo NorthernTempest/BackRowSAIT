@@ -22,9 +22,6 @@ import util.cesar.Debugger;
 @WebServlet("/login")
 public final class LoginServlet extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 9068496584070534140L;
 
 	/**
@@ -50,12 +47,12 @@ public final class LoginServlet extends HttpServlet {
 		} else {
 			String recovered = request.getParameter("recovered");
 			String registered = request.getParameter("registered");
-			
+
 			if (recovered != null) {
 				request.setAttribute("successMessage",
 						"Success! If the given email was associated with an account, we sent you an email.");
 			}
-			if (registered!=null) {
+			if (registered != null) {
 				request.setAttribute("successMessage", "Verification successful, please log in to continue");
 			}
 			// Display Login page
