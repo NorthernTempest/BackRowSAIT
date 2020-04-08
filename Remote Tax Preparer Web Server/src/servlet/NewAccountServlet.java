@@ -12,30 +12,36 @@ import javax.servlet.http.HttpServletResponse;
 import manager.UserManager;
 
 /**
- * Servlet implementation class NewAccount
+ * Servlet for creating accounts by an admin
+ * 
+ * @author Tristen Kreutz, Jesse Goerzen
  */
 @WebServlet("/newAccount")
-public class NewAccount extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public NewAccount() {
-        super();
-    }
+public class NewAccountServlet extends HttpServlet {
+	private static final long serialVersionUID = 7865429987901274652L;
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public NewAccountServlet() {
+		super();
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String email = request.getParameter("email");
 		int role = Integer.parseInt(request.getParameter("role"));
 		String password = request.getParameter("password1");
@@ -45,30 +51,27 @@ public class NewAccount extends HttpServlet {
 		String lName = request.getParameter("lName");
 		String phone = request.getParameter("phone");
 		String language = request.getParameter("language");
-		
+
 		if (UserManager.userExists(email)) {
 			setRegisterAttributes(request);
 			request.setAttribute("errorMessageEmail", "Email already in use");
 			getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
 			return;
 		}
-		
+
 		Boolean created = false;
 		try {
-			created = UserManager.createSpecialUser(role, email, password, confirmPassword, title, fName, lName, phone, language);
+			created = UserManager.createSpecialUser(role, email, password, confirmPassword, title, fName, lName, phone,
+					language);
 		} catch (MessagingException e) {
 			setRegisterAttributes(request);
-			request.setAttribute("message",
-					e.getMessage());
+			request.setAttribute("message", e.getMessage());
 			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
-			//TODO
 			e.printStackTrace();
 			return;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			setRegisterAttributes(request);
-			request.setAttribute("errorMessage",
-					e.getMessage());
-			//TODO
+			request.setAttribute("errorMessage", e.getMessage());
 			e.printStackTrace();
 			getServletContext().getRequestDispatcher("/WEB-INF/newaccount.jsp").forward(request, response);
 			return;

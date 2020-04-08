@@ -12,13 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import manager.UserManager;
 
 /**
- * Servlet for logging into the site.
+ * Servlet handling register requests
  * 
  * @author Cesar Guzman, Taylor Hanlon
  */
 @WebServlet("/register")
 public final class RegisterServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2220989876233777665L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -125,14 +125,12 @@ public final class RegisterServlet extends HttpServlet {
 			request.setAttribute("message",
 					e.getMessage());
 			getServletContext().getRequestDispatcher("/WEB-INF/message.jsp").forward(request, response);
-			//TODO
 			e.printStackTrace();
 			return;
 		}catch (Exception e) {
 			setRegisterAttributes(request);
 			request.setAttribute("errorMessage",
 					e.getMessage());
-			//TODO
 			e.printStackTrace();
 			getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
 			return;

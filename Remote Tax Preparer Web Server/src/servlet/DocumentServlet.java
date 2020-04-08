@@ -23,11 +23,13 @@ import service.EncryptionService;
 import util.cesar.Debugger;
 
 /**
- * Servlet implementation class DocumentServlet
+ * Servlet to display a document to the user
+ * 
+ * @author Cesar Guzman
  */
 @WebServlet("/parcel/document")
 public class DocumentServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6852836596546667590L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -45,7 +47,7 @@ public class DocumentServlet extends HttpServlet {
 		//Get document from parcel
 		String parcelID = request.getParameter("parcelID");
 		Parcel parcel = null;
-		
+
 		try {
 			parcel = ParcelManager.get(parcelID);
 

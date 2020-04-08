@@ -15,18 +15,19 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Servlet implementation class AdminServlet
+ * Servlet used for viewing user information
+ * 
+ * @author Kerk Day
  */
 @WebServlet("/user/view")
 public class ViewUserServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2700640209758849364L;
 
-    /**
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public ViewUserServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**

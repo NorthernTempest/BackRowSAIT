@@ -22,7 +22,9 @@ import domain.Payment;
 import manager.PaymentManager;
 
 /**
- * Servlet implementation class PaymentsServlet
+ * Servlet to handle Payment requests.
+ * 
+ * @author Jesse Goerzen
  */
 @WebServlet("/payments")
 public class PaymentsServlet extends HttpServlet {

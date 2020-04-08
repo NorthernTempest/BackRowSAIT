@@ -12,17 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet implementation class SettingsServlet
+ * Servlet handling setting change requests
  * 
  * @author Jesse Goerzen
  */
 @WebServlet(description = "Edits user's settings.", urlPatterns = { "/settings" })
 public class SettingsServlet extends HttpServlet {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3482363788811200914L;
+	private static final long serialVersionUID = -2874097712099872268L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
