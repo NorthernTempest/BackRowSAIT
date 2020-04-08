@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +26,7 @@ import util.cesar.Debugger;
 
 /**
  * Servlet implementation class CreateReturnServlet
- * 
+ *
  * @author Cesar Guzman, Taylor Hanlon
  */
 @WebServlet("/createReturn")
@@ -39,7 +38,7 @@ public class CreateReturnServlet extends HttpServlet {
 	//private String taxYear, dateOfBirth, sin, title, fName, middleInitial, lName, gender, maritalStatus, prevMaritalStatus, address, apartment, poBox, poBoxLocation, rrNum, city, region, country, postalCode, email, phone, partnerDOB, partnerSIN, partnerTitle, partnerFName, partnerInitial, partnerLName, partnerGender, partnerAddress, partnerApartment, partnerPoBox, partnerPoBoxLocation, partnerRRNum, partnerCity, partnerCountry, partnerRegion, partnerPostalCode, partnerEmailAddress, partnerMobilePhone; // TODO
 	//private boolean nameChange, maritalChange, canadianCitizen, partnerCanadianCitizen, electionsCanada, foriegnProperty, soldHome, firstTime, canadaPost, CRAOnline, alreadyRegistered;
 	NewReturnForm nrf = new NewReturnForm();
-	
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -115,14 +114,14 @@ public class CreateReturnServlet extends HttpServlet {
 		// if all info ok
 		try {
 			validateForm(request);
-			
+
 			ArrayList<Document> documents = new ArrayList<Document>();
 			documents.add(PDFService.createAuthorizationRequest(nrf.getSin(), nrf.getfName(), nrf.getlName()));
 
 			//TODO
-			if(TaxReturnManager.createNewTaxReturn(email, taxYear)) {
+			if (TaxReturnManager.createNewTaxReturn(email, taxYear)) {
 				Debugger.log("we made a tax return probably");
-				if(ParcelManager.createNewReturnParcel(documents, nrf.getfName(), nrf.getlName(), email, taxYear)) {
+				if (ParcelManager.createNewReturnParcels(documents, nrf, email)) {
 					Debugger.log("we made a new return Parcel probably");
 				} else {
 					//very bad
@@ -132,8 +131,9 @@ public class CreateReturnServlet extends HttpServlet {
 				//bad
 				Debugger.log("no tax return :( oh no bad");
 			}
-			
-			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+
+			//getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
+			response.sendRedirect("/inbox");
 		} catch (ConfigException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMessage", "Error, please try again.");
@@ -260,6 +260,7 @@ public class CreateReturnServlet extends HttpServlet {
 		}
 		nrf.setCRAOnline(false);
 		if (request.getParameter("craAssess") != null) {
+			System.out.println("HELP ME");
 			nrf.setCRAOnline(true);
 		}
 		nrf.setAlreadyRegistered(false);
@@ -294,7 +295,8 @@ public class CreateReturnServlet extends HttpServlet {
 		}
 
 		// title (Mr, Miss, Mrs, Ms)
-		if (!nrf.getTitle().equals("Mr") && !nrf.getTitle().equals("Miss") && !nrf.getTitle().equals("Mrs") && !nrf.getTitle().equals("Ms")) {
+		if (!nrf.getTitle().equals("Mr") && !nrf.getTitle().equals("Miss") && !nrf.getTitle().equals("Mrs")
+				&& !nrf.getTitle().equals("Ms")) {
 			// TODO
 			Debugger.log("title validation if statement");
 			throw new Exception("Invalid title, please try again");
@@ -322,9 +324,9 @@ public class CreateReturnServlet extends HttpServlet {
 			throw new Exception("Invalid Gender, please try again");
 		}
 		// maritalStatus (Married, Common Law, Widowed, Divorced, Separated, Single)
-		if (!nrf.getMaritalStatus().equals("Married") && !nrf.getMaritalStatus().equals("Common Law") && !nrf.getMaritalStatus().equals("Widowed")
-				&& !nrf.getMaritalStatus().equals("Divorced") && !nrf.getMaritalStatus().equals("Separated")
-				&& !nrf.getMaritalStatus().equals("Single")) {
+		if (!nrf.getMaritalStatus().equals("Married") && !nrf.getMaritalStatus().equals("Common Law")
+				&& !nrf.getMaritalStatus().equals("Widowed") && !nrf.getMaritalStatus().equals("Divorced")
+				&& !nrf.getMaritalStatus().equals("Separated") && !nrf.getMaritalStatus().equals("Single")) {
 			// TODO
 			Debugger.log("maritalStatus validation if statement");
 			throw new Exception("Invalid Marital Status, please try again");
@@ -333,7 +335,8 @@ public class CreateReturnServlet extends HttpServlet {
 		if (nrf.isMaritalChange() != false) {
 			if (!nrf.getPrevMaritalStatus().equals("Married") && !nrf.getPrevMaritalStatus().equals("Common Law")
 					&& !nrf.getPrevMaritalStatus().equals("Widowed") && !nrf.getPrevMaritalStatus().equals("Divorced")
-					&& !nrf.getPrevMaritalStatus().equals("Separated") && !nrf.getPrevMaritalStatus().equals("Single") && !nrf.getPrevMaritalStatus().equals("na")) {
+					&& !nrf.getPrevMaritalStatus().equals("Separated") && !nrf.getPrevMaritalStatus().equals("Single")
+					&& !nrf.getPrevMaritalStatus().equals("na")) {
 				// TODO
 				Debugger.log("prevMaritalStatus validation if statement");
 				throw new Exception("Invalid Previous Marital Status, please try again");
@@ -421,14 +424,15 @@ public class CreateReturnServlet extends HttpServlet {
 			}
 
 			// title (Mr, Miss, Mrs, Ms)
-			if (!nrf.getPartnerTitle().equals("Mr") && !nrf.getPartnerTitle().equals("Miss") && !nrf.getPartnerTitle().equals("Mrs")
-					&& !nrf.getPartnerTitle().equals("Ms")) {
+			if (!nrf.getPartnerTitle().equals("Mr") && !nrf.getPartnerTitle().equals("Miss")
+					&& !nrf.getPartnerTitle().equals("Mrs") && !nrf.getPartnerTitle().equals("Ms")) {
 				// TODO
 				Debugger.log("partner title validation if statement");
 				throw new Exception("Invalid partner title, please try again");
 			}
 			// fName, initial(opt), lName
-			if (nrf.getPartnerFName() == null || nrf.getPartnerFName().length() > 25 || nrf.getPartnerFName().length() == 0) {
+			if (nrf.getPartnerFName() == null || nrf.getPartnerFName().length() > 25
+					|| nrf.getPartnerFName().length() == 0) {
 				// TODO
 				Debugger.log("partner fname validation if statement");
 				throw new Exception("Invalid partner First Name, please try again");
@@ -438,19 +442,22 @@ public class CreateReturnServlet extends HttpServlet {
 				Debugger.log("partner middle initial validation if statement");
 				throw new Exception("Invalid partner Middle Initial, please try again");
 			}
-			if (nrf.getPartnerLName() == null || nrf.getPartnerLName().length() > 25 || nrf.getPartnerLName().length() == 0) {
+			if (nrf.getPartnerLName() == null || nrf.getPartnerLName().length() > 25
+					|| nrf.getPartnerLName().length() == 0) {
 				// TODO
 				Debugger.log("partner lname validation if statement");
 				throw new Exception("Invalid partner Last Name, please try again");
 			}
 			// gender (M/F)
-			if (!nrf.getPartnerGender().equals("f") && !nrf.getPartnerGender().equals("m") && !nrf.getPartnerGender().equals("x")) {
+			if (!nrf.getPartnerGender().equals("f") && !nrf.getPartnerGender().equals("m")
+					&& !nrf.getPartnerGender().equals("x")) {
 				// TODO
 				Debugger.log("partner gender validation if statement");
 				throw new Exception("Invalid partner Gender, please try again");
 			}
 
-			if (nrf.getPartnerAddress() == null || nrf.getPartnerAddress().length() > 200 || nrf.getPartnerAddress().length() == 0) {
+			if (nrf.getPartnerAddress() == null || nrf.getPartnerAddress().length() > 200
+					|| nrf.getPartnerAddress().length() == 0) {
 				// TODO
 				Debugger.log("partner address validation if statement");
 				throw new Exception("Invalid partner Address, please try again");
@@ -475,17 +482,20 @@ public class CreateReturnServlet extends HttpServlet {
 				Debugger.log("partner rr validation if statement");
 				throw new Exception("Invalid partner RR, please try again");
 			}
-			if (nrf.getPartnerCity() == null || nrf.getPartnerCity().length() > 200 || nrf.getPartnerCity().length() == 0) {
+			if (nrf.getPartnerCity() == null || nrf.getPartnerCity().length() > 200
+					|| nrf.getPartnerCity().length() == 0) {
 				// TODO
 				Debugger.log("partner city validation if statement");
 				throw new Exception("Invalid partner City, please try again");
 			}
-			if (nrf.getPartnerRegion() == null || nrf.getPartnerRegion().length() > 200 || nrf.getPartnerRegion().length() == 0) {
+			if (nrf.getPartnerRegion() == null || nrf.getPartnerRegion().length() > 200
+					|| nrf.getPartnerRegion().length() == 0) {
 				// TODO
 				Debugger.log("partner region validation if statement");
 				throw new Exception("Invalid partner Region, please try again");
 			}
-			if (nrf.getPartnerPostalCode() == null || nrf.getPartnerPostalCode().length() > 10 || nrf.getPartnerPostalCode().length() == 0) {
+			if (nrf.getPartnerPostalCode() == null || nrf.getPartnerPostalCode().length() > 10
+					|| nrf.getPartnerPostalCode().length() == 0) {
 				// TODO
 				Debugger.log("partner postalcode validation if statement");
 				throw new Exception("Invalid partner PostalCode, please try again");
@@ -498,7 +508,8 @@ public class CreateReturnServlet extends HttpServlet {
 				throw new Exception("Invalid partner Email, please try again");
 			}
 			// phone
-			if (nrf.getPartnerMobilePhone() == null || nrf.getPartnerMobilePhone().length() > 15 || nrf.getPartnerMobilePhone().length() == 0) {
+			if (nrf.getPartnerMobilePhone() == null || nrf.getPartnerMobilePhone().length() > 15
+					|| nrf.getPartnerMobilePhone().length() == 0) {
 				// TODO
 				Debugger.log("partner phone validation if statement");
 				throw new Exception("Invalid partner Phone, please try again");
@@ -512,7 +523,7 @@ public class CreateReturnServlet extends HttpServlet {
 		 * How do you want to recieve your Notice of Assessment? Mail (Canada Post)
 		 * AND/OR Register with Canada Revenue agency for online mail already registered
 		 */
-		if ((nrf.isCanadaPost() != true && nrf.isCRAOnline() != true)||(nrf.isCanadaPost() != true && nrf.isAlreadyRegistered() != true)) {
+		if ((nrf.isCanadaPost() != true && nrf.isCRAOnline() != true && !nrf.isAlreadyRegistered())||(nrf.isCRAOnline() == true && nrf.isAlreadyRegistered() == true)) {
 			// TODO
 			Debugger.log("notice of assessment validation if statement");
 			throw new Exception(
@@ -524,7 +535,7 @@ public class CreateReturnServlet extends HttpServlet {
 	}
 
 	private void backfillForm(HttpServletRequest request) {
-		request.setAttribute("taxYear",request.getParameter("taxYear"));
+		request.setAttribute("taxYear", request.getParameter("taxYear"));
 		request.setAttribute("dateOfBirth", request.getParameter("dateOfBirth")); // returned in yyyy-mm-dd format from the jsp
 		request.setAttribute("sin", request.getParameter("sin"));
 		request.setAttribute("title", request.getParameter("title"));
@@ -549,19 +560,19 @@ public class CreateReturnServlet extends HttpServlet {
 			canadianCitizen = true;
 		}
 		request.setAttribute("canadianCitizen", canadianCitizen);
-		request.setAttribute("address",request.getParameter("address"));
-		request.setAttribute("apartment",request.getParameter("apartment"));
-		request.setAttribute("po",request.getParameter("po"));
-		request.setAttribute("poLocation",request.getParameter("poLocation"));
+		request.setAttribute("address", request.getParameter("address"));
+		request.setAttribute("apartment", request.getParameter("apartment"));
+		request.setAttribute("po", request.getParameter("po"));
+		request.setAttribute("poLocation", request.getParameter("poLocation"));
 		request.setAttribute("rr", request.getParameter("rr"));
-		request.setAttribute("addressCity",request.getParameter("addressCity"));
+		request.setAttribute("addressCity", request.getParameter("addressCity"));
 		request.setAttribute("addressRegion", request.getParameter("addressRegion"));
-		request.setAttribute("addressCountry", request.getParameter("adressCountry"));
+		request.setAttribute("addressCountry", request.getParameter("addressCountry"));
 		request.setAttribute("addressPostal", request.getParameter("addressPostal"));
 
-		request.setAttribute("email",request.getParameter("email"));
-		request.setAttribute("phone",request.getParameter("phone"));
-		
+		request.setAttribute("email", request.getParameter("email"));
+		request.setAttribute("phone", request.getParameter("phone"));
+
 		//partner fields
 		request.setAttribute("partnerDateOfBirth", request.getParameter("partnerDateOfBirth"));
 		request.setAttribute("partnerSin", request.getParameter("partnerSin"));

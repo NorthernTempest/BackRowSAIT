@@ -72,10 +72,10 @@
             <label for="addressCity">City</label>
             <input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
             <label for="addressCountry">Country</label>
-			<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${addressCountry}">
+			<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" data-value="shortcode" name="addressCountry" data-default-value="${addressCountry.toUpperCase()}">
 			</select>
             <label for="addressRegion">Province/State</label>
-            <select id="addressRegion" class="form-control" data-value="shortcode" name="addressRegion" data-default-value="${addressRegion}">
+            <select id="addressRegion" class="form-control" data-value="shortcode" name="addressRegion" data-default-value="${addressRegion.toUpperCase()}">
 			</select>
             <label for="addressPostal">Postal Code</label>
             <input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}" required>

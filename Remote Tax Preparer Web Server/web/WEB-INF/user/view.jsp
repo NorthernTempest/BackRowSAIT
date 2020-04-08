@@ -118,6 +118,7 @@
             </table>
         </div>
         <div class="col-md-4 text-md-right align-content-md-end">
+
             <c:if test="${role > 1 && user.permissionLevel == 1}">
                 <a href="/return">
                     <button class="btn btn-success" type="button">Charge User</button>
@@ -125,14 +126,14 @@
                 <br>
                 <br>
             </c:if>
-            <c:if test="${role > 1}">
+
                 <a href="/settings?email=${user.email}">
-                    <button class="btn btn-primary" type="button">Edit User</button>
+                    <button class="btn btn-primary" type="button">Edit Details</button>
                 </a>
                 <br>
                 <br>
-            </c:if>
-            <c:if test="${role > 2 && !user.active}">
+
+            <c:if test="${role > 1 && !user.active}">
                 <form action="" method="post">
                     <input type="hidden" name="action" value="activate">
                     <input type="hidden" name="email" value="${user.email}">
@@ -140,7 +141,8 @@
                 </form>
                 <br>
             </c:if>
-            <c:if test="${role > 2 && user.active}">
+
+            <c:if test="${role > 1 && user.active}">
                 <form action="" method="post">
                     <input type="hidden" name="action" value="deactivate">
                     <input type="hidden" name="email" value="${user.email}">
@@ -148,6 +150,7 @@
                 </form>
                 <br>
             </c:if>
+
             <c:if test="${role == 1 && user.active}">
                 <form action="" method="post">
                     <input type="hidden" name="action" value="deactivate">

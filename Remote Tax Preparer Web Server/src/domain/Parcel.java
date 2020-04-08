@@ -77,7 +77,7 @@ public final class Parcel {
 
 		this.parcelID = parcelID;
 		this.subject = subject;
-		this.message = message;
+		this.message = message.replaceAll("'", "’");
 		this.sender = sender;
 		this.receiver = receiver;
 		this.dateSent = dateSent;

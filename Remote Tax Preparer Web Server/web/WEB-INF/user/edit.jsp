@@ -42,10 +42,14 @@
         <input id="address2" name="address2" class="form-control" value="${address2}">
 		<label for="addressCity">City</label>
 		<input id="addressCity" name="addressCity" class="form-control" value="${addressCity}" required>
-		<label for="addressCountry">Country</label>
-		<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" data-default-value="${addressCountry}" data-value="shortcode" required></select>
+
 		<label for="addressRegion">Province/State</label>
-		<select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion}" data-value="shortcode" required></select>
+		<select id="addressRegion" class="form-control" name="addressRegion" data-default-value="${addressRegion.toUpperCase()}" data-value="shortcode" required>
+		</select>
+		<label for="addressCountry">Country</label>
+		<select class="crs-country form-control" id="addressCountry" data-region-id="addressRegion" name="addressCountry" data-default-value="${addressCountry.toUpperCase()}" data-value="shortcode" required>
+		</select>
+
 		<label for="addressPostal">Postal Code</label>
 		<input class="form-control" id="addressPostal" name="addressPostal" value="${addressPostal}" required>
 	</div>
@@ -119,7 +123,29 @@
 <script type="text/javascript" src="../../template/js/country-regions.js"></script>
 
 <script>
-
+//	window.onload = function() {
+//		setInterval(function() {
+//			let countryEl = document.getElementById("addressCountry");
+//			for (let x in countryEl.options) {
+//				if(countryEl.options[x].value.toLowerCase() == "${addressCountry}") {
+//					countryEl.options[x].selected = true;
+//					console.log("Found");
+//				}
+//				console.log(countryEl.options[x].value);
+//			}
+//		}, 200);
+//
+//		setInterval(function() {
+//			let regionEl = document.getElementById("addressRegion");
+//			for (let x in regionEl.options) {
+//				if(regionEl.options[x].value.toLowerCase() == "${addressRegion}") {
+//					regionEl.options[x].selected = true;
+//					console.log("Found");
+//				}
+//				console.log(regionEl.options[x].value);
+//			}
+//		}, 300);
+//	}
 </script>
 
 <jsp:directive.include file="../../template/foot.jsp" />

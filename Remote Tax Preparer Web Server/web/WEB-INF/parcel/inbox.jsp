@@ -4,6 +4,7 @@
   Time: 3:53 PM
 --%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:directive.include file="../../template/head.jsp" />
@@ -54,7 +55,6 @@
 		</table>
 	</div>
 </div>
-
 <script>
 	const user = "${user}";
     const parcels = [
@@ -64,9 +64,9 @@
             "sender": "${parcel.sender}",
             "receiver": "${parcel.receiver}",
             "subject": "${parcel.subject}",
-            "message": "${parcel.message}",
+            "message": '${parcel.message.replaceAll("[\\n\\r\\f]{1,}[\\w\\W]*","...")}',
             "dateSent": Date.parse("${parcel.dateSent}"),
-            "dateSentString": "${parcel.dateSent}",
+            "dateSentString": "<fmt:formatDate value="${parcel.dateSent}" pattern="yyyy-MM-dd HH:mm" />",
             "noOfDocuments": "${parcel.documents.size()}",
             "documents":[
                 <c:forEach var="doc" items="${parcel.documents}">
@@ -265,7 +265,7 @@
                 row.appendChild(rowSubj);
 
                 let rowMessage = document.createElement("td");
-                rowMessage.innerText = table[parcel].message;
+                rowMessage.innerHTML = table[parcel].message;
                 row.appendChild(rowMessage);
 
                 let rowDate = document.createElement("td");

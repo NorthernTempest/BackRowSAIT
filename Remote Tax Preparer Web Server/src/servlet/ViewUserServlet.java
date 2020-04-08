@@ -42,7 +42,12 @@ public class ViewUserServlet extends HttpServlet {
 
 
         try {
-            user = UserManager.getUser(request.getParameter("email"));
+            if(request.getParameter("email") == null) {
+                user = UserManager.getUser(email);
+            } else {
+                user = UserManager.getUser(request.getParameter("email"));
+            }
+
             curUser = UserManager.getUser(email);
             if (email.equals(user.getEmail()) || curUser.getPermissionLevel() > 1) {
                 request.setAttribute("user",user);

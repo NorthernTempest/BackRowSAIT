@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -49,8 +50,8 @@ public class ParcelDB {
 			ps.setString(3, parcel.getMessage());
 			ps.setString(4, parcel.getSender());
 			ps.setString(5, parcel.getReceiver());
-			ps.setDate(6, new java.sql.Date(parcel.getDateSent().getTime()));
-			ps.setDate(7, new java.sql.Date(parcel.getExpirationDate().getTime()));
+			ps.setTimestamp(6, new Timestamp(parcel.getDateSent().getTime()));
+			ps.setTimestamp(7, new Timestamp(parcel.getExpirationDate().getTime()));
 			ps.setInt(8, parcel.getTaxReturnYear());
 			ps.setString(9, parcel.isRequiresSignature()?"T":"F");
 
@@ -101,8 +102,8 @@ public class ParcelDB {
 			ps.setString(2, parcel.getMessage());
 			ps.setString(3, parcel.getSender());
 			ps.setString(4, parcel.getReceiver());
-			ps.setDate(5, (java.sql.Date) parcel.getDateSent());
-			ps.setDate(6, (java.sql.Date) parcel.getExpirationDate());
+			ps.setTimestamp(5, new Timestamp(parcel.getDateSent().getTime()));
+			ps.setTimestamp(6, new Timestamp(parcel.getExpirationDate().getTime()));
 			ps.setInt(7, parcel.getTaxReturnYear());
 			ps.setString(8, parcel.isRequiresSignature()?"T":"F");
 			ps.setString(9, parcel.getParcelID());
@@ -204,8 +205,8 @@ public class ParcelDB {
 				}
 
 				parcel = new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
-						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
-						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
+						rs.getString("sender"), rs.getString("receiver"), rs.getTimestamp("date_sent"),
+						rs.getTimestamp("expiration_date"), rs.getInt("tax_return_year"),
 						DocumentDB.getByParcelID(rs.getString("parcel_id")), requireSignature);
 			}
 		}
@@ -253,8 +254,8 @@ public class ParcelDB {
 				}
 
 				parcels.add(new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
-						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
-						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
+						rs.getString("sender"), rs.getString("receiver"), rs.getTimestamp("date_sent"),
+						rs.getTimestamp("expiration_date"), rs.getInt("tax_return_year"),
 						DocumentDB.getByParcelID(rs.getString("parcel_id")), requireSignature));
 			}
 		}
@@ -368,8 +369,8 @@ public class ParcelDB {
 				}
 
 				parcel = new Parcel(rs.getString("parcel_id"), rs.getString("subject"), rs.getString("message"),
-						rs.getString("sender"), rs.getString("receiver"), rs.getDate("date_sent"),
-						rs.getDate("expiration_date"), rs.getInt("tax_return_year"),
+						rs.getString("sender"), rs.getString("receiver"), rs.getTimestamp("date_sent"),
+						rs.getTimestamp("expiration_date"), rs.getInt("tax_return_year"),
 						DocumentDB.getByParcelID(rs.getString("parcel_id")), requireSignature);
 				parcels.add(parcel);
 			}

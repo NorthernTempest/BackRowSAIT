@@ -21,7 +21,9 @@ import manager.UserManager;
 import service.ConfigService;
 
 /**
- * Servlet implementation class TaxReturnEditServlet
+ * Servlet to display information about the customer's tax return and allow tax preparers to edit the status of a customer's tax return
+ * 
+ * @author Jesse Goerzen
  */
 @WebServlet("/return")
 public class TaxReturnEditServlet extends HttpServlet {
@@ -113,7 +115,10 @@ public class TaxReturnEditServlet extends HttpServlet {
 			int year = Integer.parseInt(request.getParameter("year"));
 			double amount = Double.parseDouble(request.getParameter("amount"));
 			
-			TaxReturnManager.updateReturn(email, year, status, amount, request.getSession().getId());
+			if(TaxReturnManager.updateReturn(email, year, status, amount, request.getSession().getId()))
+				request.setAttribute("successMessage", "User updated!");
+			else
+				request.setAttribute("errorMessage", "Failed to update user.");
 		}
 		
 		doGet(request, response);
