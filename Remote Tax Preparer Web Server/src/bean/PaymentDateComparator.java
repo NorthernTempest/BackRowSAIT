@@ -2,6 +2,12 @@ package bean;
 
 import java.util.Comparator;
 
+/**
+ * Comparator for the payment dates of two payment beans
+ * 
+ * @author Jesse Goerzen
+ *
+ */
 public class PaymentDateComparator implements Comparator<PaymentBean> {
 
 	@Override
