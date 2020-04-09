@@ -25,16 +25,12 @@ import service.EncryptionService;
 import util.cesar.Debugger;
 
 /**
- * Servlet for logging into the site.
+ * Servlet for viewing inbox of parcel
  * 
  * @author Cesar Guzman
  */
 @WebServlet("/parcel/view")
 public final class ViewServlet extends HttpServlet {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4807630350799183535L;
 
 	/**
@@ -56,7 +52,7 @@ public final class ViewServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = SessionManager.getEmail(session.getId());
 		Debugger.log("Email: " + email);
-
+		
 		//get parcel ID
 		String parcelID = null;
 		parcelID = request.getParameter("parcelID");
@@ -105,32 +101,41 @@ public final class ViewServlet extends HttpServlet {
 		try {
 			EncryptionService.decryptDocument(file, response.getOutputStream());
 		} catch (NumberFormatException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (InvalidKeyException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (FileNotFoundException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (NoSuchAlgorithmException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (NoSuchPaddingException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (InvalidKeySpecException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (InvalidAlgorithmParameterException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (ConfigException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		} catch (IOException e) {
-			//TODO
 			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error getting document");
+			getServletContext().getRequestDispatcher("/WEB-INF/parcel/inbox.jsp").forward(request, response);
 		}
 	}
 }

@@ -305,16 +305,6 @@ public final class User {
 		setLastVerificationType(lastVerificationType);
 	}
 
-	// This constructor exists only for testing purposes.
-	public User(String email, String f_name, String l_name, String phone, String pass_hash, String pass_salt) {
-		setEmail(email);
-		setFName(f_name);
-		setLName(l_name);
-		setPhone(phone);
-		setPassHash(pass_hash);
-		setPassSalt(pass_salt);
-	}
-
 	/**
 	 * Returns the email.
 	 * 
@@ -323,7 +313,11 @@ public final class User {
 	public String getEmail() {
 		return email;
 	}
-
+	
+	/**
+	 * Sets the email of the user.
+	 * @param email
+	 */
 	private void setEmail(String email) {
 		if (email.length() > 100 || email.length() == 0) {
 			throw new IllegalArgumentException("Email is invalid, try again");
@@ -359,6 +353,16 @@ public final class User {
 		this.passSalt = passSalt;
 	}
 
+	/**
+	 * Sets the password of this user after checking the validity based
+	 * on different security requirements.
+	 * 
+	 * @param password password to check and set
+	 * @throws NumberFormatException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 * @throws ConfigException
+	 */
 	public void setPassword(String password)
 			throws NumberFormatException, NoSuchAlgorithmException, InvalidKeySpecException, ConfigException {
 		if (password == null)
@@ -596,16 +600,16 @@ public final class User {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the 2nd street address.
+	 * @return streetAddress2
 	 */
 	public String getStreetAddress2() {
 		return streetAddress2;
 	}
 
 	/**
-	 * 
-	 * @param streetAddress2
+	 * Sets the 2nd street address.
+	 * @param streetAddress2 streetAddress2 to set
 	 */
 	public void setStreetAddress2(String streetAddress2) {
 		if (streetAddress2 != null && streetAddress2.length() > 200) {
@@ -615,16 +619,16 @@ public final class User {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the city,
+	 * @return city
 	 */
 	public String getCity() {
 		return city;
 	}
 
 	/**
-	 * 
-	 * @param city
+	 * Sets the city.
+	 * @param city city to set
 	 */
 	public void setCity(String city) {
 		if (city.length() > 100 || city.length() == 0) {
@@ -634,16 +638,16 @@ public final class User {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the province.
+	 * @return province
 	 */
 	public String getProvince() {
 		return province;
 	}
 
 	/**
-	 * 
-	 * @param province
+	 * Sets the province.
+	 * @param province province to set
 	 */
 	public void setProvince(String province) {
 		if (province.length() > 20 || province.length() == 0) {
@@ -653,16 +657,16 @@ public final class User {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the country.
+	 * @return country
 	 */
 	public String getCountry() {
 		return country;
 	}
 
 	/**
-	 * 
-	 * @param country
+	 * Sets the country.
+	 * @param country country to set
 	 */
 	public void setCountry(String country) {
 		if (country.length() != 2) {
@@ -672,16 +676,16 @@ public final class User {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the postal code.
+	 * @return postal code
 	 */
 	public String getPostalCode() {
 		return postalCode;
 	}
 
 	/**
-	 * 
-	 * @param postalCode
+	 * Sets the postal code.
+	 * @param postalCode postalCode to set
 	 */
 	public void setPostalCode(String postalCode) {
 		if (postalCode.length() > 10) {
@@ -705,16 +709,16 @@ public final class User {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the verification ID
+	 * @return verificationID
 	 */
 	public String getVerificationID() {
 		return verificationID;
 	}
 
 	/**
-	 * 
-	 * @param verificationID
+	 * Sets the verification ID.
+	 * @param verificationID verificationID to set
 	 * @throws UserException
 	 */
 	public void setVerificationID(String verificationID) throws IllegalArgumentException {
@@ -728,16 +732,16 @@ public final class User {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the last verification attempt.
+	 * @return lastVerificationAttempt
 	 */
 	public Date getLastVerificationAttempt() {
 		return lastVerificationAttempt;
 	}
 
 	/**
-	 * 
-	 * @param lastVerificationAttempt
+	 * Sets the last verification attempt.
+	 * @param lastVerificationAttempt lastVerificationAttempt to set
 	 * @throws UserException
 	 */
 	public void setLastVerificationAttempt(Date lastVerificationAttempt) throws IllegalArgumentException {
@@ -755,21 +759,26 @@ public final class User {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the last verification type.
+	 * @return lastVerificationType
 	 */
 	public int getLastVerificationType() {
 		return lastVerificationType;
 	}
 
 	/**
-	 * 
-	 * @param lastVerificationType
+	 * Sets the last verification type.
+	 * @param lastVerificationType lastVerificationType to set
 	 */
 	public void setLastVerificationType(int lastVerificationType) {
 		this.lastVerificationType = lastVerificationType;
 	}
 
+	/**
+	 * Copies the attributes of this object into a new object that is then returning to the
+	 * calling method.
+	 * @return UserBean copy of this object
+	 */
 	public UserBean copy() {
 		UserBean output = new UserBean( email, title, fName, mName, lName, phone, fax, streetAddress, streetAddress2, city, province, country, postalCode, language );
 		

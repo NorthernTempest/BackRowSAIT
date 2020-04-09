@@ -19,8 +19,19 @@ import exception.ConfigException;
 import service.ConfigService;
 import service.EncryptionService;
 
+/**
+ * A set of tests for EncryptionService.java
+ * 
+ * @author Jesse Goerzen
+ */
 class EncryptionServiceTest {
-
+	
+	/**
+	 * Tests the getSalt() method from Encryption Service.
+	 * 
+	 * @throws NumberFormatException If a number from the config file is missing.
+	 * @throws ConfigException If the config is missing.
+	 */
 	@Test
 	void saltTest() throws NumberFormatException, ConfigException {
 		for (int i = 0; i < 100000; i++) {
@@ -30,7 +41,15 @@ class EncryptionServiceTest {
 			assertTrue(!salt1.equals(salt2), salt1 + " = " + salt2);
 		}
 	}
-
+	
+	/**
+	 * Tests the password hashing from the hashTest() method.
+	 * 
+	 * @throws InvalidKeySpecException If the key spec is invalid.
+	 * @throws NoSuchAlgorithmException If the key algorithm is invalid.
+	 * @throws NumberFormatException If a number from the config file is missing.
+	 * @throws ConfigException If the config is missing.
+	 */
 	@Test
 	void hashTest() throws InvalidKeySpecException, NoSuchAlgorithmException, NumberFormatException, ConfigException {
 		String salt = EncryptionService.getSalt();
@@ -53,7 +72,18 @@ class EncryptionServiceTest {
 		assertFalse(password1.equals(EncryptionService.hash(password1, salt2)));
 		assertFalse(EncryptionService.hash(password1, salt2).equals(EncryptionService.hash(password1, salt)));
 	}
-
+	
+	/**
+	 * Tests the encryption of documents.
+	 * 
+	 * @throws InvalidKeySpecException If the key spec is invalid.
+	 * @throws NoSuchAlgorithmException If the key algorithm is invalid.
+	 * @throws NoSuchPaddingException If the padding type is invalid.
+	 * @throws IOException If the file cannot be opened.
+	 * @throws InvalidAlgorithmParameterException If the cipher algorithm is invalid.
+	 * @throws ConfigException If the config is missing.
+	 * @throws InvalidKeyException If the cipher's key is invalid.
+	 */
 	@Test
 	void encryptDocTest() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, ConfigException {
@@ -65,7 +95,21 @@ class EncryptionServiceTest {
 
 		System.out.println(decryptedFilePath);
 	}
-
+	
+	/**
+	 * Tests the encryption of strings.
+	 * 
+	 * @throws NumberFormatException If a number from the config file is missing.
+	 * @throws InvalidKeyException If the cipher's key is invalid.
+	 * @throws NoSuchAlgorithmException If the key algorithm is invalid.
+	 * @throws NoSuchPaddingException If the padding type is invalid.
+	 * @throws InvalidKeySpecException If the key spec is invalid.
+	 * @throws IllegalBlockSizeException If the size of block is invalid.
+	 * @throws BadPaddingException If the padding type is invalid.
+	 * @throws ConfigException If the config is missing.
+	 * @throws InvalidAlgorithmParameterException
+	 * @throws IOException If the file cannot be opened.
+	 */
 	@Test
 	void encryptStringTest()
 			throws NumberFormatException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,

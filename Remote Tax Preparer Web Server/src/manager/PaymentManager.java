@@ -46,6 +46,12 @@ public class PaymentManager {
 		return output;
 	}
 
+	/**
+	 * Retrieves a list of tax returns from the database that are
+	 * tied to the user that is logged in with the matching session ID.
+	 * @param sessionID sessionID of user to retrieve
+	 * @return Collection<TaxReturnBean> tax returns
+	 */
 	public static Collection<TaxReturnBean> getReturns(String sessionID) {
 		ArrayList<TaxReturnBean> output = new ArrayList<>();
 

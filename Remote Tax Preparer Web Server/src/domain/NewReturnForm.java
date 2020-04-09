@@ -1,5 +1,10 @@
 package domain;
 
+/**
+ * A temporary record of a form filled out by the user.
+ * 
+ * @author Cesar Guzman
+ */
 public final class NewReturnForm {
 	// Form fields
 	private String taxYear, dateOfBirth, sin, title, fName, middleInitial, lName, gender, maritalStatus,
@@ -11,42 +16,54 @@ public final class NewReturnForm {
 			foriegnProperty, soldHome, firstTime, canadaPost, CRAOnline, alreadyRegistered;
 
 	/**
-	 * @return the taxYear
+	 * Gets the tax year of the form.
+	 * 
+	 * @return String The tax year of the form.
 	 */
 	public String getTaxYear() {
 		return taxYear;
 	}
 
 	/**
-	 * @param taxYear the taxYear to set
+	 * Sets the tax year of the form.
+	 * 
+	 * @param taxYear String The tax year of the form.
 	 */
 	public void setTaxYear(String taxYear) {
 		this.taxYear = taxYear;
 	}
 
 	/**
-	 * @return the dateOfBirth
+	 * Gets the date that the customer was born.
+	 * 
+	 * @return String The date that the customer was born.
 	 */
 	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
 
 	/**
-	 * @param dateOfBirth the dateOfBirth to set
+	 * Sets the date that the customer was born.
+	 * 
+	 * @param dateOfBirth String The date that the customer was born.
 	 */
 	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
 	/**
-	 * @return the sin
+	 * Gets the social insurance number of the customer.
+	 * 
+	 * @return String The social insurance number of the customer.
 	 */
 	public String getSin() {
 		return sin;
 	}
 
 	/**
-	 * @param sin the sin to set
+	 * Sets the social insurance number of the customer.
+	 * 
+	 * @param sin String The social insurance number of the customer.
 	 */
 	public void setSin(String sin) {
 		this.sin = sin;
@@ -683,28 +700,28 @@ public final class NewReturnForm {
 	}
 
 	/**
-	 * @return the cRAOnline
+	 * @return the CRAOnline
 	 */
 	public boolean isCRAOnline() {
 		return CRAOnline;
 	}
 
 	/**
-	 * @param cRAOnline the cRAOnline to set
+	 * @param cRAOnline the CRAOnline to set
 	 */
 	public void setCRAOnline(boolean cRAOnline) {
 		CRAOnline = cRAOnline;
 	}
 
 	/**
-	 * @return the alreadyRegistered
+	 * @return Whether the customer is already registered to CRA online.
 	 */
 	public boolean isAlreadyRegistered() {
 		return alreadyRegistered;
 	}
 
 	/**
-	 * @param alreadyRegistered the alreadyRegistered to set
+	 * @param alreadyRegistered Whether the customer is already registered to CRA online.
 	 */
 	public void setAlreadyRegistered(boolean alreadyRegistered) {
 		this.alreadyRegistered = alreadyRegistered;

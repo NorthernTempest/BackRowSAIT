@@ -16,6 +16,8 @@ import manager.SessionManager;
 
 /**
  * Servlet Filter implementation class AuthenticationFilter
+ * 
+ * @author Jesse Goerzen
  */
 public class AuthenticationFilter implements Filter {
 

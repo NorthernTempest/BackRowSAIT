@@ -33,18 +33,39 @@ import util.cesar.Debugger;
  */
 public final class ParcelManager {
 
+	/**
+	 * Specifies whether or not the class has been initialized with values from the config.
+	 */
 	private static boolean init;
 
+	/**
+	 * Days until parcels expire.
+	 */
 	private static int expirationDays;
 
+	/**
+	 * Tax Preparer constant.
+	 */
 	private final static String TAX_PREPARER = "tax_preparer";
 
+	/**
+	 * Subject contents for new return.
+	 */
 	private static String NEW_RETURN_SUBJECT;
 
+	/**
+	 * Message contents for new return.
+	 */
 	private static String NEW_RETURN_MESSAGE;
 
+	/**
+	 * Subject contents of a signed document.
+	 */
 	private static String SIGNED_DOC_SUBJECT;
 
+	/**
+	 * Message contents of a signed document.
+	 */
 	private static String SIGNED_DOC_MESSAGE;
 
 	/**
@@ -64,12 +85,14 @@ public final class ParcelManager {
 	}
 
 	/**
+	 * Checks to see if the user is an employee and then calls the parcel broker to retrieve parcels
+	 * based on passed information.
 	 * @param parcelID
 	 * @param senderEmail
 	 * @param receiverEmail
 	 * @param dateSent
 	 * @param year
-	 * @return
+	 * @return ArrayList<Parcel> parcels
 	 * @throws ConfigException
 	 */
 	public static ArrayList<Parcel> getParcels(String parcelID, String senderEmail, String receiverEmail, Date dateSent,
@@ -86,9 +109,10 @@ public final class ParcelManager {
 	}
 
 	/**
+	 * Checks to see if user is an employee and then retrieves parcels based on the year passed.
 	 * @param receiverEmail
 	 * @param year
-	 * @return
+	 * @return ArrayList<Parcel> parcels
 	 * @throws ConfigException
 	 */
 	public static ArrayList<Parcel> getByYear(String receiverEmail, int year) throws ConfigException {
@@ -102,8 +126,9 @@ public final class ParcelManager {
 	}
 
 	/**
+	 * Retrieves a specific parcel.
 	 * @param parcelID
-	 * @return
+	 * @return parcel
 	 * @throws ConfigException
 	 */
 	public static Parcel get(String parcelID) throws ConfigException {
@@ -176,6 +201,7 @@ public final class ParcelManager {
 	}
 
 	/**
+	 * Creates a parcel in the database.
 	 * @param parts
 	 * @param subject
 	 * @param message
@@ -185,7 +211,7 @@ public final class ParcelManager {
 	 * @param expiryDate
 	 * @param taxYear
 	 * @param requiresSignature
-	 * @return
+	 * @return boolean was operation successful
 	 */
 	public static boolean createParcel(Collection<Part> parts, String subject, String message, String sender,
 			String receiver, Date dateSent, Date expiryDate, int taxYear, boolean requiresSignature) {
@@ -197,11 +223,12 @@ public final class ParcelManager {
 
 			String fileName;
 			ArrayList<Document> documents = new ArrayList<>();
-
+			
+			
 			for (Part part : parts) {
 				fileName = part.getSubmittedFileName();
 				Debugger.log(fileName);
-				if (fileName != null && !fileName.equals("null")) {
+				if (fileName != null && !fileName.equals("null") && !fileName.equals("") ) {
 					documents.add(EncryptionService.encryptDocument(part.getInputStream(), fileName));
 				}
 			}
@@ -261,12 +288,13 @@ public final class ParcelManager {
 	}
 
 	/**
+	 * Creates a new return and associated parcels.
 	 * @param documents
 	 * @param fName
 	 * @param lName
 	 * @param email
 	 * @param taxYear
-	 * @return
+	 * @return boolean was operation successful
 	 * @throws ConfigException
 	 */
 	public static boolean createNewReturnParcels(ArrayList<Document> documents, NewReturnForm nrf, String email)
@@ -281,20 +309,21 @@ public final class ParcelManager {
 		c.add(Calendar.DAY_OF_MONTH, expirationDays);
 		Date expDate = c.getTime();
 
-		User u = UserManager.getUser(nrf.getEmail());
+		User u = UserManager.getUser(email);
 
 		if (u == null) {
 			return false;
 		}
 
 		//create and insert parcel to user
-		Parcel userParcel = new Parcel(NEW_RETURN_SUBJECT + " " + nrf.getTaxYear(),
-				nrf.getfName() + " " + nrf.getlName() + NEW_RETURN_MESSAGE, email, email, new Date(),
-				expDate, Integer.parseInt(nrf.getTaxYear()), documents, false);
+		Parcel userParcel = new Parcel(NEW_RETURN_SUBJECT + nrf.getTaxYear(),
+				nrf.getfName() + " " + nrf.getlName() + NEW_RETURN_MESSAGE, "preparer@test.com", email, new Date(),
+				expDate, Integer.parseInt(nrf.getTaxYear()), documents, true);
 
 		if (ParcelDB.insert(userParcel)) {
 			for (Document document : documents) {
 				if (!DocumentDB.insert(document, userParcel.getParcelID())) {
+					Debugger.log("user parcel went bad");
 					successfulInsert = false;
 				}
 			}
@@ -304,10 +333,11 @@ public final class ParcelManager {
 
 		//create and insert parcel to tax preparers
 		Parcel taxPrepParcel = new Parcel("Tax Information for " + nrf.getfName() + " " + nrf.getlName(),
-				"this is a message with nicely formatted tax info", email /*sender*/, /*receiver*/ TAX_PREPARER, /*datesent*/ new Date(),
+				"this is a message with nicely formatted tax info", email /*sender*/, /*receiver*/ null, /*datesent*/ new Date(),
 				/*expDate*/ expDate, /*taxYear*/ Integer.parseInt(nrf.getTaxYear()), null, false);
 
 		if (!ParcelDB.insert(taxPrepParcel)) {
+			Debugger.log("tax prep parcel went bad");
 			successfulInsert = false;
 		}
 
@@ -315,10 +345,11 @@ public final class ParcelManager {
 	}
 
 	/**
+	 * Creates a signed document/parcel in the database.
 	 * @param signedPDF
 	 * @param sender
 	 * @param taxYear
-	 * @return
+	 * @return boolean was operation successful
 	 */
 	public static boolean createSignedDocParcel(Document signedPDF, String sender, int taxYear) {
 		ArrayList<Document> documents = new ArrayList<Document>();
@@ -332,7 +363,7 @@ public final class ParcelManager {
 		Date expDate = c.getTime();
 
 		Parcel parcel = new Parcel(SIGNED_DOC_SUBJECT + sender, sender + SIGNED_DOC_MESSAGE + taxYear, sender,
-				TAX_PREPARER, new Date(), expDate, taxYear, documents, false);
+				null, new Date(), expDate, taxYear, documents, false);
 
 		if (ParcelDB.insert(parcel)) {
 			for (Document document : documents) {
@@ -348,8 +379,9 @@ public final class ParcelManager {
 	}
 
 	/**
-	 * @param parcelID
-	 * @return
+	 * Deletes the parcel and attached documents from the database.
+	 * @param parcelID parcelID to delete
+	 * @return boolean was operation succesful
 	 */
 	public static boolean delete(String parcelID) {
 		DocumentManager.delete(parcelID);

@@ -30,9 +30,19 @@ public final class TaxReturnManager {
 		return TaxReturnDB.getByUser(email);
 	}
 	
+	/**
+	 * Creates a new tax return in the database.
+	 * @param email email of user
+	 * @param year tax year
+	 * @return boolean was operation successful
+	 */
 	public static boolean createNewTaxReturn(String email, int year) {
-		String status = "new";
+		String status = "i";
 		TaxReturn taxReturn = new TaxReturn(email, status, year);
+		
+		System.out.println("AOSDFKASDKAHJSD");
+		
+		System.out.println(taxReturn.getStatus());
 		
 		if(TaxReturnDB.insert(taxReturn)) {
 			return true;

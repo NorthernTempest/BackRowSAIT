@@ -15,7 +15,7 @@ public final class ConfigService {
 	/**
 	 * The filepath to the config file.
 	 */
-	public static final String CONFIG_FILE_PATH = "C:\\Capstone\\BackRowSAIT\\Remote Tax Preparer Web Server\\res\\config.txt";
+	public static final String CONFIG_FILE_PATH = System.getProperty("catalina.home") + "/conf/wcl/config.txt";
 
 	/**
 	 * Fetches a <code>String</code> from the line with the given option from the config file.

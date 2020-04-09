@@ -36,7 +36,7 @@
         <p>Enter the email of the account you wish to edit:
             <input type="hidden" name="action" value="editUser">
             <input type=email name="editUser" id="editUser" maxlength=100 class=form-control required>
-            <input type=submit class="btn btn-primary" value="Restore Account"></p>
+            <input type=submit class="btn btn-primary" value="Edit Account"></p>
     </form><br>
 
 	<h4>

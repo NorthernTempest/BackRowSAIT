@@ -427,6 +427,13 @@ from user JOIN payment ON user.email = payment.email;]]></xml-property>
                     <property name="dataType">date-time</property>
                 </structure>
             </list-property>
+            <list-property name="sort">
+                <structure>
+                    <expression name="key" type="javascript">row["date"]</expression>
+                    <property name="direction">desc</property>
+                    <property name="strength">-1</property>
+                </structure>
+            </list-property>
             <column id="63"/>
             <column id="64"/>
             <column id="65"/>

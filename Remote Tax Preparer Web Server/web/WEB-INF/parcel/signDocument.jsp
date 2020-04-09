@@ -21,23 +21,18 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <p>Sign below to verify all the details above.</p>
             <div class="wrapper">
-                <canvas id="signature-pad" class="signature-pad" width=400 height=200 style="border-radius: 5px;"></canvas>
+                <canvas id="signature-pad" class="signature-pad" width=702 height=91 style="border-radius: 5px;"></canvas>
             </div>
             <form method="post" action="">
                 <input type="hidden" name="signature" id="sigData" value="">
                 <input type="hidden" name="parcelID" value="${parcelID}">
                 <button type="submit" class="btn btn-primary">Submit Signature</button>
+                <button type="button" class="btn btn-light" onclick="signaturePad.clear();">Clear</button>
             </form>
 <%--            <button type="button" class="btn btn-primary" onclick="sendSignature()">Send Signature</button>--%>
-        </div>
-        <div class="col-md-6">
-            <br>
-            <br>
-
-            <button type="button" class="btn btn-light" onclick="signaturePad.clear();">Clear</button>
         </div>
     </div>
 </div>
@@ -47,16 +42,6 @@
     let canvas = document.getElementById("signature-pad");
     let signaturePad = new SignaturePad(canvas);
     canvas.style.background = "#ffffff";
-
-    function resizeCanvas() {
-        var ratio =  Math.max(window.devicePixelRatio || 1, 1);
-        canvas.width = canvas.offsetWidth * ratio;
-        canvas.height = canvas.offsetHeight * ratio;
-        canvas.getContext("2d").scale(ratio, ratio);
-    }
-
-    window.onresize = resizeCanvas;
-    resizeCanvas();
 
     setInterval(function() {
         document.getElementById("sigData").value = signaturePad.toDataURL();
