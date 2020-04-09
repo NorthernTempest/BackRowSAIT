@@ -1,7 +1,6 @@
 package manager;
 
 import databaseAccess.DocumentDB;
-import databaseAccess.ParcelDB;
 import domain.Document;
 import domain.Parcel;
 import exception.ConfigException;

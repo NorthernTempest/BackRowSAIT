@@ -53,7 +53,7 @@ public class ParcelDB {
 			ps.setTimestamp(6, new Timestamp(parcel.getDateSent().getTime()));
 			ps.setTimestamp(7, new Timestamp(parcel.getExpirationDate().getTime()));
 			ps.setInt(8, parcel.getTaxReturnYear());
-			ps.setString(9, parcel.requiresSignature()?"T":"F");
+			ps.setString(9, parcel.isRequiresSignature()?"T":"F");
 
 			rows = ps.executeUpdate();
 		}
@@ -105,7 +105,7 @@ public class ParcelDB {
 			ps.setTimestamp(5, new Timestamp(parcel.getDateSent().getTime()));
 			ps.setTimestamp(6, new Timestamp(parcel.getExpirationDate().getTime()));
 			ps.setInt(7, parcel.getTaxReturnYear());
-			ps.setString(8, parcel.requiresSignature()?"T":"F");
+			ps.setString(8, parcel.isRequiresSignature()?"T":"F");
 			ps.setString(9, parcel.getParcelID());
 
 			rows = ps.executeUpdate();

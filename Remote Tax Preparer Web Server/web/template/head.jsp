@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>MCL Taxes &amp; Bookkeeping</title>
-<?-- CSS -->
+<?-- CSS --?>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/template/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/template/css/mcl-main.css">
-    <?-- Javascript -->
+    <?-- Javascript --?>
     <script type="text/javascript" src="${pageContext.request.contextPath}/template/js/jQuery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/template/js/bootstrap.js"></script>
     <script src="https://kit.fontawesome.com/1213a7076a.js" crossorigin="anonymous"></script>

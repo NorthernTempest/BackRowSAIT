@@ -19,22 +19,15 @@ The capstone project for MCL Taxes created by Kerk Day, Jesse Goerzen, Cesar Guz
     2. Replace the contents of 'emailusername.txt' with the username to the account you use to email users.
     3. Replace the contents of 'sqladminpassword.txt' with the password to an admin account for MySQL.
     4. Replace the contents of 'sqladminusername.txt' with the username to an admin account for MySQL.
-9. Run \[Catalina Home\]\\bin\\startup.bat
-10. On your internet browser of choice, go to the following link
-http://localhost:8080/manager/text/deploy?war=wcl
-    1. If installation and startup is successful, you will receive a response like this:
-'OK - Deployed application at context path /wcl'
-11. For reporting, BIRT runtime must also be installed. Down the zip file from the following linK: https://www.eclipse.org/downloads/download.php?file=/birt/downloads/drops/R-R1-4.8.0-201806261756/birt-runtime-4.8.0-20180626.zip
-12. Unzip the folder onto your computer.
-13. Copy the folder named WebViewerExample into the webapps directory of the Tomcat installation and rename it to "birt-viewer".
-14. Copy the files from the reports folder in the wcl_remote_tax_prep folder to the "birt-viewer/reports/" directory.
+9. Run \[Catalina Home\]\\bin\\startup.bat as an administrator.
 
 ### Startup Instructions
 1. Run \[Catalina Home\]\\bin\\startup.bat
 2. On your internet browser of choice, go to the following link
-http://localhost:8080/manager/text/start?path=/wcl
+http://localhost:8080/manager/text/start?war=wcl.war
 
 ### Shutdown Instructions
+
 1. On your internet browser of choice, go to the following link
-http://localhost:8080/manager/text/stop?path=/wcl
+http://localhost:8080/manager/text/stop?war=wcl.war
 2. Run \[Catalina Home\]\\bin\\shutdown.bat
