@@ -43,7 +43,6 @@ public class CreateReturnServlet extends HttpServlet {
 	 * a new return.
 	 */
 	NewReturnForm nrf = new NewReturnForm();
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -120,6 +119,7 @@ public class CreateReturnServlet extends HttpServlet {
 		try {
 			validateForm(request);
 
+
 			ArrayList<Document> documents = new ArrayList<Document>();
 			documents.add(PDFService.createAuthorizationRequest(nrf.getSin(), nrf.getfName(), nrf.getlName()));
 
@@ -130,6 +130,7 @@ public class CreateReturnServlet extends HttpServlet {
 				} else {
 					//very bad
 					Debugger.log("bad no parcel make ahhh");
+
 					request.setAttribute("errorMessage", "Error, please try again.");
 					getServletContext().getRequestDispatcher("/WEB-INF/parcel/createReturn.jsp").forward(request, response);
 				}
@@ -272,7 +273,6 @@ public class CreateReturnServlet extends HttpServlet {
 		}
 		nrf.setCRAOnline(false);
 		if (request.getParameter("craAssess") != null) {
-			System.out.println("HELP ME");
 			nrf.setCRAOnline(true);
 		}
 		nrf.setAlreadyRegistered(false);
@@ -304,6 +304,7 @@ public class CreateReturnServlet extends HttpServlet {
 		}
 
 		// title (Mr, Miss, Mrs, Ms)
+
 		if (!nrf.getTitle().equals("Mr") && !nrf.getTitle().equals("Miss") && !nrf.getTitle().equals("Mrs")
 				&& !nrf.getTitle().equals("Ms")) {
 			Debugger.log("title validation if statement");
@@ -549,7 +550,6 @@ public class CreateReturnServlet extends HttpServlet {
 
 		request.setAttribute("email", request.getParameter("email"));
 		request.setAttribute("phone", request.getParameter("phone"));
-
 		//partner fields
 		request.setAttribute("partnerDateOfBirth", request.getParameter("partnerDateOfBirth"));
 		request.setAttribute("partnerSin", request.getParameter("partnerSin"));
