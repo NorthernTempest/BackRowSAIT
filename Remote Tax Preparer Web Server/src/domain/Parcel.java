@@ -192,7 +192,7 @@ public final class Parcel {
 	 * Returns true if the first document of this parcel requires a signature.
 	 * @return true if the first document of this parcel requires a signature.
 	 */
-	public boolean requiresSignature() {
+	public boolean isRequiresSignature() {
 		return requiresSignature;
 	}
 }
