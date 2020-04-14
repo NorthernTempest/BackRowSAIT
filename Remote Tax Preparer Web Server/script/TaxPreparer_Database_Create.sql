@@ -136,7 +136,7 @@ CREATE EVENT delete_expired_parcels
 	STARTS (CURDATE())
 	DO
 		DELETE FROM parcel WHERE expiration_date < CURDATE();
-		
+
 COMMIT;
 
 SET GLOBAL event_scheduler = ON;
